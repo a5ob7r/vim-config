@@ -1,0 +1,239 @@
+{
+  "version": 2,
+  "current_profile_name": "main",
+  "repos": [
+    {
+      "type": "git",
+      "path": "github.com/KeitaNakamura/neodark.vim",
+      "version": "eeafb097ad5d9aa9db4ba43b8556306da9e3329f"
+    },
+    {
+      "type": "git",
+      "path": "github.com/Shougo/deoplete.nvim",
+      "version": "63fb188c547eb5ccf8cd713a33fbb7c80ac03ec9"
+    },
+    {
+      "type": "git",
+      "path": "github.com/SirVer/ultisnips",
+      "version": "1a99766b73783bafb08cfa07d7e29e5387c55189"
+    },
+    {
+      "type": "git",
+      "path": "github.com/airblade/vim-gitgutter",
+      "version": "88d396f1b49747fadbbde5c038a85067d94954e5"
+    },
+    {
+      "type": "git",
+      "path": "github.com/akemrir/asyncomplete-ruby.vim",
+      "version": "780d21d01c4b947b0b05988a979c6c68e911c7df"
+    },
+    {
+      "type": "git",
+      "path": "github.com/honza/vim-snippets",
+      "version": "5dc42dbc6c4d9b5068ddde901b79c5e483c42114"
+    },
+    {
+      "type": "git",
+      "path": "github.com/itchyny/lightline.vim",
+      "version": "8b3aa1632c08784928458b2b85faf5c89feefccf"
+    },
+    {
+      "type": "git",
+      "path": "github.com/itchyny/vim-gitbranch",
+      "version": "8118dc1cdd387bd609852be4bf350360ce881193"
+    },
+    {
+      "type": "git",
+      "path": "github.com/junegunn/fzf.vim",
+      "version": "359a80e3a34aacbd5257713b6a88aa085337166f"
+    },
+    {
+      "type": "git",
+      "path": "github.com/kannokanno/previm",
+      "version": "5775e97de90d7fbcf8a231a08afbb400d9b64af1"
+    },
+    {
+      "type": "git",
+      "path": "github.com/lervag/vimtex",
+      "version": "23a3b356ba1e90d4a9dbb085712376cab83ab19e"
+    },
+    {
+      "type": "git",
+      "path": "github.com/liuchengxu/vista.vim",
+      "version": "df66db6122d61f83658a1c9fb3ff8c6ebd7c93f6"
+    },
+    {
+      "type": "git",
+      "path": "github.com/mattn/emmet-vim",
+      "version": "10b3746ecb52064d44bbcb1fdf6b21cca551f30c"
+    },
+    {
+      "type": "git",
+      "path": "github.com/maximbaz/lightline-ale",
+      "version": "dd59077f9537b344f7ae80f713c1e4856ec1520c"
+    },
+    {
+      "type": "git",
+      "path": "github.com/mechatroner/rainbow_csv",
+      "version": "e5c2935196f1e8b71b8b476973a0d52d26abe86c"
+    },
+    {
+      "type": "git",
+      "path": "github.com/powerline/powerline",
+      "version": "616ea816c86828d3a1e846da99a958237108da55"
+    },
+    {
+      "type": "git",
+      "path": "github.com/prabirshrestha/async.vim",
+      "version": "627a8c4092df24260d3dc2104bc1d944c78f91ca"
+    },
+    {
+      "type": "git",
+      "path": "github.com/prabirshrestha/asyncomplete-buffer.vim",
+      "version": "b8f00ea28c29d776148b3380df8f739b67696f68"
+    },
+    {
+      "type": "git",
+      "path": "github.com/prabirshrestha/asyncomplete-file.vim",
+      "version": "88da0ad9381bd389e666841e991607535e0c585d"
+    },
+    {
+      "type": "git",
+      "path": "github.com/prabirshrestha/asyncomplete-lsp.vim",
+      "version": "05389e93a81aa4262355452ebdac66ae2a1939fb"
+    },
+    {
+      "type": "git",
+      "path": "github.com/prabirshrestha/asyncomplete-tags.vim",
+      "version": "95c773cc90245494dc406f94b9c79098b776cb60"
+    },
+    {
+      "type": "git",
+      "path": "github.com/prabirshrestha/asyncomplete-ultisnips.vim",
+      "version": "395f8b8381ce8e5dd265e34eb6c8e883b3b803ab"
+    },
+    {
+      "type": "git",
+      "path": "github.com/prabirshrestha/asyncomplete.vim",
+      "version": "d5b5492961cdfc8be9bbfab70b4845d5e5d51334"
+    },
+    {
+      "type": "git",
+      "path": "github.com/prabirshrestha/vim-lsp",
+      "version": "96579bd0b39def9d3a939713bb1e6a58ceb5ccb4"
+    },
+    {
+      "type": "git",
+      "path": "github.com/rhysd/git-messenger.vim",
+      "version": "72975c9be9267689cd408a5ea6a02200502217d0"
+    },
+    {
+      "type": "git",
+      "path": "github.com/roxma/nvim-yarp",
+      "version": "5443ac06b3989baa9262adec810503e0234c316e"
+    },
+    {
+      "type": "git",
+      "path": "github.com/roxma/vim-hug-neovim-rpc",
+      "version": "a8cdb6b627da3a9c4b8ea85a329112484a857cf1"
+    },
+    {
+      "type": "git",
+      "path": "github.com/scrooloose/nerdtree",
+      "version": "3d508aedce35e1d952d3ce92378ad27ea5960fa6"
+    },
+    {
+      "type": "git",
+      "path": "github.com/sheerun/vim-polyglot",
+      "version": "3ddca5da461ebfaa82104f82e3cbf19d1c326ade"
+    },
+    {
+      "type": "git",
+      "path": "github.com/tpope/vim-commentary",
+      "version": "141d9d32a9fb58fe474fcc89cd7221eb2dd57b3a"
+    },
+    {
+      "type": "git",
+      "path": "github.com/tpope/vim-endwise",
+      "version": "f67d022169bd04d3c000f47b1c03bfcbc4209470"
+    },
+    {
+      "type": "git",
+      "path": "github.com/tpope/vim-surround",
+      "version": "fab8621670f71637e9960003af28365129b1dfd0"
+    },
+    {
+      "type": "git",
+      "path": "github.com/tyru/open-browser.vim",
+      "version": "b900ff9d39bb36891704bd0fe76737ee3a7ac2b9"
+    },
+    {
+      "type": "git",
+      "path": "github.com/vivien/vim-linux-coding-style",
+      "version": "7da66c1b34dc2976a70c9393c7e0c9f47e129e89"
+    },
+    {
+      "type": "git",
+      "path": "github.com/w0rp/ale",
+      "version": "73812c3e41c1c7fcf1705811f35ac4c9ccec003e"
+    },
+    {
+      "type": "git",
+      "path": "github.com/yami-beta/asyncomplete-omni.vim",
+      "version": "4ea03f5f8320ae46557d040912e16790b6722983"
+    }
+  ],
+  "profiles": [
+    {
+      "name": "asyncs",
+      "repos_path": [
+        "github.com/prabirshrestha/async.vim",
+        "github.com/prabirshrestha/asyncomplete-buffer.vim",
+        "github.com/prabirshrestha/asyncomplete-file.vim",
+        "github.com/prabirshrestha/asyncomplete-lsp.vim",
+        "github.com/prabirshrestha/asyncomplete-tags.vim",
+        "github.com/prabirshrestha/asyncomplete.vim",
+        "github.com/prabirshrestha/vim-lsp"
+      ]
+    },
+    {
+      "name": "main",
+      "repos_path": [
+        "github.com/KeitaNakamura/neodark.vim",
+        "github.com/SirVer/ultisnips",
+        "github.com/airblade/vim-gitgutter",
+        "github.com/honza/vim-snippets",
+        "github.com/itchyny/lightline.vim",
+        "github.com/itchyny/vim-gitbranch",
+        "github.com/junegunn/fzf.vim",
+        "github.com/kannokanno/previm",
+        "github.com/lervag/vimtex",
+        "github.com/liuchengxu/vista.vim",
+        "github.com/mattn/emmet-vim",
+        "github.com/maximbaz/lightline-ale",
+        "github.com/mechatroner/rainbow_csv",
+        "github.com/prabirshrestha/async.vim",
+        "github.com/prabirshrestha/asyncomplete-buffer.vim",
+        "github.com/prabirshrestha/asyncomplete-file.vim",
+        "github.com/prabirshrestha/asyncomplete-lsp.vim",
+        "github.com/prabirshrestha/asyncomplete-tags.vim",
+        "github.com/prabirshrestha/asyncomplete-ultisnips.vim",
+        "github.com/prabirshrestha/asyncomplete.vim",
+        "github.com/prabirshrestha/vim-lsp",
+        "github.com/rhysd/git-messenger.vim",
+        "github.com/scrooloose/nerdtree",
+        "github.com/sheerun/vim-polyglot",
+        "github.com/tpope/vim-commentary",
+        "github.com/tpope/vim-endwise",
+        "github.com/tpope/vim-surround",
+        "github.com/tyru/open-browser.vim",
+        "github.com/w0rp/ale",
+        "github.com/yami-beta/asyncomplete-omni.vim"
+      ]
+    },
+    {
+      "name": "plain",
+      "repos_path": []
+    }
+  ]
+}
