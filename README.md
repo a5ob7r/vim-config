@@ -19,7 +19,7 @@ Set `VOLTPATH` as an environment variable for volt.
 
 On Linux or macOS,
 ```sh
-echo export VOLTPATH=~/.vim/volt >> ~/.zshenv.local
+echo "export VOLTPATH=~/.vim/volt >> ~/.zshenv.local"
 ```
 
 On Windows,
