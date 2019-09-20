@@ -30,6 +30,14 @@ function! s:on_load_post()
           \ 'whitelist': ['sh'],
           \ })
   endif
+  if executable('intelephense')
+    au User lsp_setup call lsp#register_server({
+          \ 'name': 'intelephense',
+          \ 'cmd': {server_info->[&shell, &shellcmdflag, 'intelephense --stdio']},
+          \ 'initialization_options': {"storagePath": $HOME . "/.cache/intelephense"},
+          \ 'whitelist': ['php'],
+          \ })
+  endif
 endfunction
 
 function! s:loaded_on()
