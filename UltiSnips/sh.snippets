@@ -1,0 +1,129 @@
+snippet tml "Code Template of Bash Script"
+#!/usr/bin/env bash
+#
+# Script purpose
+#
+
+# Set useful shell options
+set -Cueo pipefail
+
+# Fix locale
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+
+# Script name and base
+readonly FILENAME=$(basename "\${0}")
+readonly FILEBASE=$(dirname "${BASH_SOURCE[0]}")
+
+# Colorize output escaping
+TEXTRED="\e[31;1m"
+TEXTYELLOW="\e[33;1m"
+TEXTRESET="\e[m"
+
+# Un colorize output when not to strout or strerr
+if ! [[ -t 1 || -t 2 ]]; then
+  TEXTRED=""
+  TEXTYELLOW=""
+  TEXTRESET=""
+fi
+
+# Warning helper
+warning() {
+  echo -e "${TEXTYELLOW}warning: ${*}${TEXTRESET}" 1>&2
+}
+
+# Error helper
+error() {
+  echo -e "${TEXTRED}error: ${*}${TEXTRESET}" 1>&2
+  exit 1
+}
+
+usage() {
+  cat <<EOF
+Usage:
+  ${FILENAME} [FILE]
+  ${FILENAME} -h
+
+Script purpose
+
+Options:
+  -h, --help   Show this messages
+  --version    Show version
+
+EOF
+}
+
+usage_short() {
+  cat <<EOF
+Usage: ${FILENAME} [FILE]
+Try '${FILENAME} --help' for more information.
+
+EOF
+}
+
+version() {
+  echo "${FILENAME} version 1.0.0"
+}
+
+#######################################
+# Func
+# Global:
+#   None
+# Arguments:
+#   None
+# Return:
+#   None
+#######################################
+func() {
+  :
+}
+
+# Argument array
+declare -a ARGS
+
+# Parse arguments
+while [[ $# -gt 0 ]]; do
+  case \${1} in
+    --debug )
+      set -x
+      shift
+      ;;
+    -h | --help )
+      usage
+      exit 0
+      ;;
+    --version )
+      version
+      exit 0
+      ;;
+    -* )
+      echo -e "${FILENAME}: Invalid option -- '\${1}'\n" 1>&2
+      usage_short
+      exit 1
+      ;;
+    * )
+      ARGS+=("\${1}")
+      shift
+      ;;
+  esac
+done
+
+# Change current diretory to a directory where script located
+cd "${FILEBASE}"
+
+endsnippet
+
+snippet fun-cmt "Shell function with comment block"
+#######################################
+# Func
+# Global:
+#   None
+# Arguments:
+#   None
+# Return:
+#   None
+#######################################
+func() {
+  :
+}
+endsnippet
