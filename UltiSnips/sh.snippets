@@ -14,27 +14,31 @@ export LANG=en_US.UTF-8
 # Script name and base
 readonly FILENAME=$(basename "\${0}")
 readonly FILEBASE=$(dirname "${BASH_SOURCE[0]}")
+readonly DIRPATH_ONEXE=$(pwd)
 
-# Colorize output escaping
-TEXTRED="\e[31;1m"
-TEXTYELLOW="\e[33;1m"
-TEXTRESET="\e[m"
+# Change current directory to a directory where script located
+cd "${FILEBASE}"
 
-# Un colorize output when not to strout or strerr
-if ! [[ -t 1 || -t 2 ]]; then
-  TEXTRED=""
-  TEXTYELLOW=""
-  TEXTRESET=""
+if [[ -t 1 || -t 2 ]]; then
+  # Colorize output escaping when to strout or strerr
+  readonly TEXTRED="\e[31;1m"
+  readonly TEXTYELLOW="\e[33;1m"
+  readonly TEXTRESET="\e[m"
+else
+  # Un colorize output
+  readonly TEXTRED=""
+  readonly TEXTYELLOW=""
+  readonly TEXTRESET=""
 fi
 
 # Warning helper
 warning() {
-  echo -e "${TEXTYELLOW}warning: ${*}${TEXTRESET}" 1>&2
+  echo -e "${TEXTYELLOW}warning: ${*}${TEXTRESET}" >&2
 }
 
 # Error helper
 error() {
-  echo -e "${TEXTRED}error: ${*}${TEXTRESET}" 1>&2
+  echo -e "${TEXTRED}error: ${*}${TEXTRESET}" >&2
   exit 1
 }
 
@@ -79,7 +83,7 @@ func() {
 }
 
 # Argument array
-declare -a ARGS
+declare -a ARGS=()
 
 # Parse arguments
 while [[ $# -gt 0 ]]; do
@@ -97,7 +101,7 @@ while [[ $# -gt 0 ]]; do
       exit 0
       ;;
     -* )
-      echo -e "${FILENAME}: Invalid option -- '\${1}'\n" 1>&2
+      echo -e "${FILENAME}: Invalid option -- '\${1}'\n" >&2
       usage_short
       exit 1
       ;;
@@ -107,9 +111,6 @@ while [[ $# -gt 0 ]]; do
       ;;
   esac
 done
-
-# Change current diretory to a directory where script located
-cd "${FILEBASE}"
 
 endsnippet
 
