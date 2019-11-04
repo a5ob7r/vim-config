@@ -218,7 +218,6 @@
         "github.com/prabirshrestha/asyncomplete.vim",
         "github.com/prabirshrestha/vim-lsp",
         "github.com/rhysd/git-messenger.vim",
-        "github.com/scrooloose/nerdtree",
         "github.com/sheerun/vim-polyglot",
         "github.com/tpope/vim-commentary",
         "github.com/tpope/vim-endwise",
