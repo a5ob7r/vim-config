@@ -213,10 +213,7 @@
         "github.com/maximbaz/lightline-ale",
         "github.com/mechatroner/rainbow_csv",
         "github.com/prabirshrestha/async.vim",
-        "github.com/prabirshrestha/asyncomplete-buffer.vim",
-        "github.com/prabirshrestha/asyncomplete-file.vim",
         "github.com/prabirshrestha/asyncomplete-lsp.vim",
-        "github.com/prabirshrestha/asyncomplete-tags.vim",
         "github.com/prabirshrestha/asyncomplete-ultisnips.vim",
         "github.com/prabirshrestha/asyncomplete.vim",
         "github.com/prabirshrestha/vim-lsp",
@@ -227,8 +224,7 @@
         "github.com/tpope/vim-endwise",
         "github.com/tpope/vim-surround",
         "github.com/tyru/open-browser.vim",
-        "github.com/w0rp/ale",
-        "github.com/yami-beta/asyncomplete-omni.vim"
+        "github.com/w0rp/ale"
       ]
     },
     {
