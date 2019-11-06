@@ -42,6 +42,8 @@ set wrapscan
 
 runtime macros/matchit.vim
 let b:match_ignorecase = 1
+let g:netrw_liststyle = 1
+let g:netrw_sizestyle = 'H'
 
 if executable("rg")
   set grepformat=%f:%l:%c:%m,%f:%l:%m
