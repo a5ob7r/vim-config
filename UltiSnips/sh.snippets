@@ -33,12 +33,12 @@ fi
 
 # Warning helper
 warning() {
-  echo -e "${TEXTYELLOW}warning: ${*}${TEXTRESET}" >&2
+  echo -e "${TEXTYELLOW}${FILENAME}: warning: ${*}${TEXTRESET}" >&2
 }
 
 # Error helper
 error() {
-  echo -e "${TEXTRED}error: ${*}${TEXTRESET}" >&2
+  echo -e "${TEXTRED}${FILENAME}: error: ${*}${TEXTRESET}" >&2
   exit 1
 }
 
@@ -127,4 +127,8 @@ snippet fun-cmt "Shell function with comment block"
 func() {
   :
 }
+endsnippet
+
+snippet $ "Use A Variable"
+"\${$0}"
 endsnippet
