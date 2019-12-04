@@ -5,7 +5,7 @@
     {
       "type": "git",
       "path": "github.com/KeitaNakamura/neodark.vim",
-      "version": "ab86163fed0a2c2b776aff463745e792fbed01d6"
+      "version": "44919aa0bebfa60e93e653fdd2a81d1c75c2e721"
     },
     {
       "type": "git",
@@ -20,7 +20,7 @@
     {
       "type": "git",
       "path": "github.com/airblade/vim-gitgutter",
-      "version": "fa8d0feb4103f15b97e2abb4e76cbaaf03495d1d"
+      "version": "1c53af9a0d3b622af5a62d69ddfc141c841a28c1"
     },
     {
       "type": "git",
@@ -30,7 +30,7 @@
     {
       "type": "git",
       "path": "github.com/honza/vim-snippets",
-      "version": "5d259617f5198e511a759ccf4fb3000921abae21"
+      "version": "a7a7d4d2dd252b71b904d362ba74572c660da67f"
     },
     {
       "type": "git",
@@ -45,7 +45,7 @@
     {
       "type": "git",
       "path": "github.com/junegunn/fzf.vim",
-      "version": "98cf39949b617b9f3a47d2e092af573060022301"
+      "version": "65edb6ad99b51514aaf29afc25e35ce5f05281ba"
     },
     {
       "type": "git",
@@ -55,12 +55,12 @@
     {
       "type": "git",
       "path": "github.com/lervag/vimtex",
-      "version": "0647bb8991a490f92de173ca67e9b49a3f1fddcd"
+      "version": "02829dee17a3d70889b5a0151a2f747754a0e2c4"
     },
     {
       "type": "git",
       "path": "github.com/liuchengxu/vista.vim",
-      "version": "b87de3f2b61da1e3c6a9645708e471f2a146452a"
+      "version": "c1b976faa6c1e0ad6ad70604ff0b8d4b2ce626f7"
     },
     {
       "type": "git",
@@ -120,7 +120,7 @@
     {
       "type": "git",
       "path": "github.com/prabirshrestha/vim-lsp",
-      "version": "499794bb219f57b79be31e148e394dc347a2e943"
+      "version": "d537a4370af52261d0a04c1418c2d992760171dc"
     },
     {
       "type": "git",
@@ -145,7 +145,7 @@
     {
       "type": "git",
       "path": "github.com/sheerun/vim-polyglot",
-      "version": "d15651463ab5c3dd6609e548527a8ea18ab80c98"
+      "version": "15aeea662e0b08088ac7b6e3ee661c834e69106a"
     },
     {
       "type": "git",
@@ -160,7 +160,7 @@
     {
       "type": "git",
       "path": "github.com/tpope/vim-surround",
-      "version": "e4c4cc0f816515fbb7e87076a988604b2d163daa"
+      "version": "f51a26d3710629d031806305b6c8727189cd1935"
     },
     {
       "type": "git",
@@ -175,7 +175,7 @@
     {
       "type": "git",
       "path": "github.com/w0rp/ale",
-      "version": "b91d82bfaa395bb86b3ea51f63cc8cef05e90f98"
+      "version": "5f84325cd811ec179b7f3642652438c6a45b174d"
     },
     {
       "type": "git",
