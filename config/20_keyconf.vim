@@ -12,3 +12,7 @@ nnoremap <S-Left>  <C-w><<CR>
 nnoremap <S-Right> <C-w>><CR>
 nnoremap <S-Up>    <C-w>-<CR>
 nnoremap <S-Down>  <C-w>+<CR>
+
+" Don't use Ex mode, ignore Q.
+" ref. $VIMRUNTIME/defaults.vim
+map Q ''
