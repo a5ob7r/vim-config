@@ -15,7 +15,7 @@
     {
       "type": "git",
       "path": "github.com/SirVer/ultisnips",
-      "version": "c309637e0243b71f7e3265ebe3cffdfe9674cfbc"
+      "version": "3a8b0548b3efd01bff0393f8f32228786149806c"
     },
     {
       "type": "git",
@@ -30,7 +30,7 @@
     {
       "type": "git",
       "path": "github.com/honza/vim-snippets",
-      "version": "a7a7d4d2dd252b71b904d362ba74572c660da67f"
+      "version": "3ba36bb710988349140138707731baeebd6337e4"
     },
     {
       "type": "git",
@@ -55,7 +55,7 @@
     {
       "type": "git",
       "path": "github.com/lervag/vimtex",
-      "version": "02829dee17a3d70889b5a0151a2f747754a0e2c4"
+      "version": "dd8c1c7f347feeafd1e83a53d7cd35cef7033d59"
     },
     {
       "type": "git",
@@ -120,7 +120,7 @@
     {
       "type": "git",
       "path": "github.com/prabirshrestha/vim-lsp",
-      "version": "d537a4370af52261d0a04c1418c2d992760171dc"
+      "version": "d87513ff2d21a0fbfedc4f9e7e2223b14592551c"
     },
     {
       "type": "git",
@@ -145,7 +145,7 @@
     {
       "type": "git",
       "path": "github.com/sheerun/vim-polyglot",
-      "version": "15aeea662e0b08088ac7b6e3ee661c834e69106a"
+      "version": "cea0d08a062478503814e51aa21c6486a0dd1b21"
     },
     {
       "type": "git",
