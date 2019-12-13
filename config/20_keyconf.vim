@@ -15,4 +15,4 @@ nnoremap <S-Down>  <C-w>+<CR>
 
 " Don't use Ex mode, ignore Q.
 " ref. $VIMRUNTIME/defaults.vim
-map Q ''
+map Q <Nop>
