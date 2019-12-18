@@ -77,6 +77,21 @@ nnoremap <S-Down>  <C-w>+<CR>
 map Q <Nop>
 
 
+" Format Japanese text
+"
+" Before formatting
+" 私は，日本人です．
+" 好きな食べ物は，餃子です．
+" どうぞ，よろしくおねがいします．
+" 
+" After formatting
+" 私は、日本人です。好きな食べ物は、餃子です。どうぞ、よろしくおねがいします。
+command! -range FormatJapaneseText silent!
+      \   '<,'>substitute/．/。/g
+      \ | '<,'>substitute/，/、/g
+      \ | '<,'>substitute/\n//g
+
+
 " {{{ Restore last cursor position
 " This is from vim help, *restore-cursor* *last-position-jump*
 augroup KeepLastPosition
