@@ -90,6 +90,7 @@ command! -range FormatJapaneseText silent!
       \   '<,'>substitute/．/。/g
       \ | '<,'>substitute/，/、/g
       \ | '<,'>substitute/\n//g
+      \ | nohlsearch
 
 
 " {{{ Restore last cursor position
