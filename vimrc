@@ -40,10 +40,17 @@ set wildmenu
 set wildmode=longest:full,full
 set wrapscan
 
+let s:data_home_dir = expand('~/.local/share/vim/')
+
+if ! isdirectory(s:data_home_dir)
+  silent! call mkdir(s:data_home_dir, 'p', 0700)
+endif
+
 runtime macros/matchit.vim
 let b:match_ignorecase = 1
 let g:netrw_liststyle = 1
 let g:netrw_sizestyle = 'H'
+let g:netrw_home = s:data_home_dir
 
 if executable("rg")
   set grepformat=%f:%l:%c:%m,%f:%l:%m
@@ -105,9 +112,20 @@ augroup KeepLastPosition
 augroup END
 " }}}
 
+
+if has('viminfo')
+  let s:viminfo_path = s:data_home_dir . 'viminfo'
+  let s:viminfo = &g:viminfo . ',n' . s:viminfo_path
+  let &g:viminfo = s:viminfo
+endif
+
 " {{{ Save undo tree
 if has('persistent_undo')
-  set undodir=./.vimundo,~/.cache/vim/undo
+  let s:undodir = s:data_home_dir . 'undo'
+  if ! isdirectory(s:undodir)
+    silent! call mkdir(s:undodir, 'p', 0700)
+  endif
+  let &g:undodir = s:undodir
   augroup vimrc-undofile
     autocmd!
     autocmd BufReadPre ~/* setlocal undofile
@@ -115,8 +133,15 @@ if has('persistent_undo')
 endif
 " }}}
 
+let s:directory = s:data_home_dir . 'swap'
+if ! isdirectory(s:directory)
+  silent! call mkdir(s:directory, 'p', 0700)
+endif
+let &g:directory = s:directory
+
 " {{{ load local config files
-if filereadable(expand($HOME . '/.vimrc.local'))
-  source $HOME/.vimrc.local
+let s:local_rc = s:data_home_dir . 'vimrc.local'
+if filereadable(s:local_rc)
+  exec 'source ' . s:local_rc
 endif
 " }}}
