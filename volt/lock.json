@@ -15,7 +15,7 @@
     {
       "type": "git",
       "path": "github.com/SirVer/ultisnips",
-      "version": "c4bb89495a2af3ed41a510db9a2f589748643801"
+      "version": "96026a4df27899b9e4029dd3b2977ad2ed819caf"
     },
     {
       "type": "git",
@@ -30,12 +30,12 @@
     {
       "type": "git",
       "path": "github.com/honza/vim-snippets",
-      "version": "180d239935a2cb496c7b702d9fbe38f05fe3dea2"
+      "version": "2f653c1f3662cfe429e675e6dafec8ce6808bc53"
     },
     {
       "type": "git",
       "path": "github.com/itchyny/lightline.vim",
-      "version": "6daec38c1da2cbfae43d4d0d67f6a4fa7680c2b5"
+      "version": "f4fa096a67afbe593bd53cf618850c32512b5d47"
     },
     {
       "type": "git",
@@ -55,12 +55,12 @@
     {
       "type": "git",
       "path": "github.com/lervag/vimtex",
-      "version": "7c08bf73aa15bc794c79b1e8750df3c18066c6fb"
+      "version": "020206fbe1f6981855a3fe2f96ef893db782d4b8"
     },
     {
       "type": "git",
       "path": "github.com/liuchengxu/vista.vim",
-      "version": "41df3c9268c9bf523f43915875b7fabdf00ed805"
+      "version": "39a8cc2c8bc87281f2638af3c415b3871ff4d2d6"
     },
     {
       "type": "git",
@@ -85,7 +85,7 @@
     {
       "type": "git",
       "path": "github.com/prabirshrestha/async.vim",
-      "version": "627a8c4092df24260d3dc2104bc1d944c78f91ca"
+      "version": "f67ecb5a1120d0d0fb9312afcf262c829b218ca2"
     },
     {
       "type": "git",
@@ -120,12 +120,12 @@
     {
       "type": "git",
       "path": "github.com/prabirshrestha/vim-lsp",
-      "version": "abc1d83dd599730c4df6673f46d102ed5a1d8929"
+      "version": "c39127d85cc22526554243aa7641f6fcf0fdee26"
     },
     {
       "type": "git",
       "path": "github.com/rhysd/git-messenger.vim",
-      "version": "1cc53c165dc8afef1418edb14f7d3544b3aaed28"
+      "version": "0c5ef86631ea4b580c5d2e15cda2eddb610ddf26"
     },
     {
       "type": "git",
@@ -145,7 +145,7 @@
     {
       "type": "git",
       "path": "github.com/sheerun/vim-polyglot",
-      "version": "cea0d08a062478503814e51aa21c6486a0dd1b21"
+      "version": "e8454d66ab8376cf9c7e42f09749d5bd17d98f89"
     },
     {
       "type": "git",
@@ -175,7 +175,7 @@
     {
       "type": "git",
       "path": "github.com/w0rp/ale",
-      "version": "5f84325cd811ec179b7f3642652438c6a45b174d"
+      "version": "4afbf2f25dc0ce86b118261b0cfb904c80ae6ba0"
     },
     {
       "type": "git",
