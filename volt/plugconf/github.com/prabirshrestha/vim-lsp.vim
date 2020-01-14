@@ -24,6 +24,7 @@ function! s:on_load_post()
           \ 'cmd': {server_info->['clangd']},
           \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
           \ })
+    au FileType c,cpp,objc,objcpp,cc setlocal omnifunc=lsp#complete
   endif
   if executable('bash-language-server')
     au User lsp_setup call lsp#register_server({
