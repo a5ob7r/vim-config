@@ -20,7 +20,7 @@
     {
       "type": "git",
       "path": "github.com/airblade/vim-gitgutter",
-      "version": "1c53af9a0d3b622af5a62d69ddfc141c841a28c1"
+      "version": "0946c53cfc6edfb8dbf4b25a27d013c0b6ec6619"
     },
     {
       "type": "git",
@@ -30,7 +30,7 @@
     {
       "type": "git",
       "path": "github.com/honza/vim-snippets",
-      "version": "2f653c1f3662cfe429e675e6dafec8ce6808bc53"
+      "version": "5279654b3e9fc280742d02c9509d4313d9da18e9"
     },
     {
       "type": "git",
@@ -45,7 +45,7 @@
     {
       "type": "git",
       "path": "github.com/junegunn/fzf.vim",
-      "version": "76669c3c1d675833f9d89f6496f16a7accc0f40e"
+      "version": "8a6894d6a560497bd35947f55ece381bf4f2d9ed"
     },
     {
       "type": "git",
@@ -55,12 +55,12 @@
     {
       "type": "git",
       "path": "github.com/lervag/vimtex",
-      "version": "020206fbe1f6981855a3fe2f96ef893db782d4b8"
+      "version": "aabfcf9e0c95bc08125aefaeb9fdfc9be04913c5"
     },
     {
       "type": "git",
       "path": "github.com/liuchengxu/vista.vim",
-      "version": "39a8cc2c8bc87281f2638af3c415b3871ff4d2d6"
+      "version": "221893d85d2e8ed5ec51da12bf23d2e5bada57cf"
     },
     {
       "type": "git",
@@ -75,7 +75,7 @@
     {
       "type": "git",
       "path": "github.com/mechatroner/rainbow_csv",
-      "version": "03cacd8f5cb7f1d814904394b3ab979cfbb36047"
+      "version": "78e894f7dd049805fe6281b1da9242e1baffbf52"
     },
     {
       "type": "git",
@@ -120,12 +120,12 @@
     {
       "type": "git",
       "path": "github.com/prabirshrestha/vim-lsp",
-      "version": "c39127d85cc22526554243aa7641f6fcf0fdee26"
+      "version": "64d514d14f339f2e516af6f7b4417e441f7f62fa"
     },
     {
       "type": "git",
       "path": "github.com/rhysd/git-messenger.vim",
-      "version": "0c5ef86631ea4b580c5d2e15cda2eddb610ddf26"
+      "version": "6282cae117c25401c31d8cbd07b4a41744d7694d"
     },
     {
       "type": "git",
