@@ -3,6 +3,7 @@
 function! s:on_load_pre()
   " Plugin configuration like the code written in vimrc.
   let g:fzf_buffers_jump = 1
+  let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
 
   nnoremap <leader>b :Buffers<CR>
   nnoremap <leader>f :Files<CR>
