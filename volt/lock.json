@@ -15,12 +15,12 @@
     {
       "type": "git",
       "path": "github.com/SirVer/ultisnips",
-      "version": "96026a4df27899b9e4029dd3b2977ad2ed819caf"
+      "version": "e910b4fb9e276d18ed140fc492f30967ef9ace59"
     },
     {
       "type": "git",
       "path": "github.com/airblade/vim-gitgutter",
-      "version": "0946c53cfc6edfb8dbf4b25a27d013c0b6ec6619"
+      "version": "0e509fb0ac56b24203800a1fab35162c8da9c9b4"
     },
     {
       "type": "git",
@@ -30,12 +30,12 @@
     {
       "type": "git",
       "path": "github.com/honza/vim-snippets",
-      "version": "5279654b3e9fc280742d02c9509d4313d9da18e9"
+      "version": "8eafafe246152c94b64149dd04d9e03b87527eac"
     },
     {
       "type": "git",
       "path": "github.com/itchyny/lightline.vim",
-      "version": "f4fa096a67afbe593bd53cf618850c32512b5d47"
+      "version": "e8577f3654cac97ee18faae28c80a2200aaaad5a"
     },
     {
       "type": "git",
@@ -45,37 +45,42 @@
     {
       "type": "git",
       "path": "github.com/junegunn/fzf.vim",
-      "version": "8a6894d6a560497bd35947f55ece381bf4f2d9ed"
+      "version": "ed9d66c2a65333a0d49509a2d53098392683eec1"
     },
     {
       "type": "git",
       "path": "github.com/kannokanno/previm",
-      "version": "d3185a916ee386419db26e8e89b17d159f1ee7cc"
+      "version": "d405a3c2bf3bd69d947fd1ed0a485e44ea77e91d"
     },
     {
       "type": "git",
       "path": "github.com/lervag/vimtex",
-      "version": "aabfcf9e0c95bc08125aefaeb9fdfc9be04913c5"
+      "version": "903d984c1b4edbb6290689ec246d79ae4f3af6a4"
     },
     {
       "type": "git",
       "path": "github.com/liuchengxu/vista.vim",
-      "version": "221893d85d2e8ed5ec51da12bf23d2e5bada57cf"
+      "version": "f3b5bb856c2832acf2da0991ba6d8dd5bc1be842"
     },
     {
       "type": "git",
       "path": "github.com/mattn/emmet-vim",
-      "version": "5f559fae12a8babf414376906197dbd751e11380"
+      "version": "c7643e5b616430f766528b225528a5228adb43df"
+    },
+    {
+      "type": "git",
+      "path": "github.com/mattn/vim-lexiv",
+      "version": "7b80fdcc91d6e706e11c9178f220c3b7cd9c426a"
     },
     {
       "type": "git",
       "path": "github.com/maximbaz/lightline-ale",
-      "version": "dd59077f9537b344f7ae80f713c1e4856ec1520c"
+      "version": "a1931d473d6600ccf7e426158b79c9df29463dda"
     },
     {
       "type": "git",
       "path": "github.com/mechatroner/rainbow_csv",
-      "version": "78e894f7dd049805fe6281b1da9242e1baffbf52"
+      "version": "4b1d1bb775536f4402486b2b90c6fecdc6dc743f"
     },
     {
       "type": "git",
@@ -100,7 +105,7 @@
     {
       "type": "git",
       "path": "github.com/prabirshrestha/asyncomplete-lsp.vim",
-      "version": "9e7b2492578dca86ed12b6352cb56d9fc8ac9a6e"
+      "version": "5c470ae8e58c8762dc4c669b38fa5649b57f53e3"
     },
     {
       "type": "git",
@@ -115,17 +120,17 @@
     {
       "type": "git",
       "path": "github.com/prabirshrestha/asyncomplete.vim",
-      "version": "db3ab51ef6d42ac410afaea53fc0513afd0d5e25"
+      "version": "5713fa6a1ee8de62ff8f1b5f03823f1daa824ac4"
     },
     {
       "type": "git",
       "path": "github.com/prabirshrestha/vim-lsp",
-      "version": "64d514d14f339f2e516af6f7b4417e441f7f62fa"
+      "version": "2de8f4d479229eedcb9bf41a878b94fb7e2662ed"
     },
     {
       "type": "git",
       "path": "github.com/rhysd/git-messenger.vim",
-      "version": "6282cae117c25401c31d8cbd07b4a41744d7694d"
+      "version": "45869f7bbcc898f325bd4f8c95786cfd44f33155"
     },
     {
       "type": "git",
@@ -145,7 +150,7 @@
     {
       "type": "git",
       "path": "github.com/sheerun/vim-polyglot",
-      "version": "e8454d66ab8376cf9c7e42f09749d5bd17d98f89"
+      "version": "e86e0ad36ef9501acbc3e8c63a1d4fab104e47cb"
     },
     {
       "type": "git",
@@ -165,7 +170,7 @@
     {
       "type": "git",
       "path": "github.com/tyru/open-browser.vim",
-      "version": "cd29e8c8db02cd7744728a8f77a829b967e5ff31"
+      "version": "57b894d0aa5f800220d25fdeeccf28d8a7f6ac89"
     },
     {
       "type": "git",
@@ -175,7 +180,7 @@
     {
       "type": "git",
       "path": "github.com/w0rp/ale",
-      "version": "4afbf2f25dc0ce86b118261b0cfb904c80ae6ba0"
+      "version": "bbe5153fcb36dec9860ced33ae8ff0b5d76ac02a"
     },
     {
       "type": "git",
@@ -210,6 +215,7 @@
         "github.com/lervag/vimtex",
         "github.com/liuchengxu/vista.vim",
         "github.com/mattn/emmet-vim",
+        "github.com/mattn/vim-lexiv",
         "github.com/maximbaz/lightline-ale",
         "github.com/mechatroner/rainbow_csv",
         "github.com/prabirshrestha/async.vim",
