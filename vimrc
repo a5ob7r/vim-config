@@ -1,3 +1,6 @@
+set encoding=utf-8
+scriptencoding utf-8
+
 filetype indent plugin on
 syntax on
 
@@ -10,7 +13,6 @@ set cmdheight=2
 set colorcolumn=81
 set cursorline
 set display=lastline
-set encoding=utf-8
 set expandtab
 set fileencodings=utf-8,sjis,shift_jis,iso-2022-jp,euc-jp,cp932,ucs-bom
 set hidden
@@ -23,7 +25,6 @@ set lazyredraw
 set list
 set listchars=tab:▸\ ,eol:↲,extends:❯,precedes:❮
 set modeline
-" set number
 set scrolloff=4
 set shiftwidth=2
 set showbreak=>>
@@ -52,12 +53,12 @@ let g:netrw_liststyle = 1
 let g:netrw_sizestyle = 'H'
 let g:netrw_home = s:data_home_dir
 
-if executable("rg")
+if executable('rg')
   set grepformat=%f:%l:%c:%m,%f:%l:%m
   set grepprg=rg\ --vimgrep\ --no-heading
 endif
 
-if has("osxdarwin")
+if has('osxdarwin')
   set clipboard=unnamed
 else
   set clipboard=unnamedplus
