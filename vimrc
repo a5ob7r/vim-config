@@ -1,6 +1,8 @@
 set encoding=utf-8
 scriptencoding utf-8
 
+let g:mapleader=' '
+
 filetype indent plugin on
 syntax on
 
@@ -53,6 +55,17 @@ let g:netrw_liststyle = 1
 let g:netrw_sizestyle = 'H'
 let g:netrw_home = s:data_home_dir
 
+" Toggle netrw window
+function! ToggleNetrw()
+  try
+    Rexplore
+  catch
+    edit .
+  endtry
+endfunction
+
+nnoremap <leader>n :call ToggleNetrw()<CR>
+
 if executable('rg')
   set grepformat=%f:%l:%c:%m,%f:%l:%m
   set grepprg=rg\ --vimgrep\ --no-heading
@@ -63,9 +76,6 @@ if has('osxdarwin')
 else
   set clipboard=unnamedplus
 endif
-
-let g:mapleader=' '
-
 
 nnoremap j gj
 nnoremap k gk
