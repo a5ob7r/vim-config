@@ -58,8 +58,10 @@ let g:netrw_home = s:data_home_dir
 " Toggle netrw window
 function! ToggleNetrw()
   try
+    " Open existing a netrw window
     Rexplore
   catch
+    " Open new a netrw window if no exist
     edit .
   endtry
 endfunction
