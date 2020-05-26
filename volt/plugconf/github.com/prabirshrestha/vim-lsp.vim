@@ -41,6 +41,17 @@ function! s:on_load_post()
           \ 'whitelist': ['php'],
           \ })
   endif
+
+  augroup LSP_HLS_SETUP
+    if !executable('haskell-language-server-wrapper') | return | endif
+    if !executable('haskell-language-server') | return | endif
+
+    au User lsp_setup call lsp#register_server({
+          \ 'name': 'hls',
+          \ 'cmd': {server_info->[&shell, &shellcmdflag, 'haskell-language-server-wrapper --lsp']},
+          \ 'whitelist': ['haskell'],
+          \ })
+  augroup end
 endfunction
 
 function! s:loaded_on()
