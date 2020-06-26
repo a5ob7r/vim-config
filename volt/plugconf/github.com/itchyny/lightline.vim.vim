@@ -15,8 +15,8 @@ function! s:on_load_pre()
     \   'gitbranch': 'gitbranch#name'
     \   },
     \ 'colorscheme': 'neodark',
-    \ 'separator': { 'left': "\ue0b0", 'right': "\ue0b2" },
-    \ 'subseparator': { 'left': "\ue0b1", 'right': "\ue0b3" }
+    \ 'separator': { 'left': "\ue0b8", 'right': "\ue0ba" },
+    \ 'subseparator': { 'left': "\ue0b9", 'right': "\ue0bb" }
     \ }
 endfunction
 
