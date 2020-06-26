@@ -8,6 +8,10 @@ endfunction
 " Plugin configuration like the code written in vimrc.
 " This configuration is executed *after* a plugin is loaded.
 function! s:on_load_post()
+  augroup USE_RSPEC_AS_RUBY
+    au!
+    autocmd Filetype rspec UltiSnipsAddFiletypes ruby
+  augroup end
 endfunction
 
 function! s:loaded_on()
