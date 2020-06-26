@@ -129,6 +129,11 @@ augroup KeepLastPosition
 augroup END
 " }}}
 
+augroup QuickFixCmd
+  autocmd!
+  autocmd QuickFixCmdPost *grep* cwindow
+augroup end
+
 
 if has('viminfo')
   let s:viminfo_path = s:data_home_dir . 'viminfo'
