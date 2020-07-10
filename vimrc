@@ -171,4 +171,8 @@ let s:local_rc = s:data_home_dir . 'vimrc.local'
 if filereadable(s:local_rc)
   exec 'source ' . s:local_rc
 endif
+
+" To use truecolor on tmux
+let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 " }}}
