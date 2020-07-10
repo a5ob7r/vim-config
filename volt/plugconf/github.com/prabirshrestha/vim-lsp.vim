@@ -1,5 +1,6 @@
 function! s:on_lsp_buffer_enabled() abort
   setlocal omnifunc=lsp#complete
+  if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
   nmap gd <plug>(lsp-definition)
   nmap <buffer> <f2> <plug>(lsp-rename)
 endfunction
@@ -7,6 +8,8 @@ endfunction
 function! s:on_load_pre()
   let g:lsp_diagnostics_float_cursor = 1
   let g:lsp_diagnostics_float_delay = 200
+  let g:lsp_highlight_references_enabled = 1
+  let g:lsp_semantic_enabled = 1
 
   augroup LSP_INSTALL
     au!
