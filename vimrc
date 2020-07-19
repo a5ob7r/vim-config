@@ -42,9 +42,7 @@ set wrapscan
 " {{{ Tab char
 set expandtab
 set tabstop=2
-set softtabstop=2
 set shiftwidth=2
-set vartabstop=8,4,4,2
 " }}}
 
 let s:data_home_dir = expand('~/.local/share/vim/')
