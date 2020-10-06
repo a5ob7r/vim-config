@@ -11,7 +11,6 @@ set backspace=indent,eol,start
 set breakindent
 set breakindentopt=shift:2,sbr
 set cindent
-set cmdheight=2
 set colorcolumn=81
 set cursorline
 set display=lastline
