@@ -58,13 +58,11 @@ let g:netrw_home = s:data_home_dir
 
 " Toggle netrw window
 function! ToggleNetrw()
-  try
-    " Open existing a netrw window
+  if &filetype == 'netrw'
     Rexplore
-  catch
-    " Open new a netrw window if no exist
-    edit .
-  endtry
+  else
+    Explore
+  endif
 endfunction
 
 nnoremap <leader>n :call ToggleNetrw()<CR>
