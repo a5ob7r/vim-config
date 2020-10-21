@@ -1,8 +1,8 @@
 function! s:on_lsp_buffer_enabled() abort
   setlocal omnifunc=lsp#complete
   if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
-  nmap gd <plug>(lsp-definition)
-  nmap <buffer> <f2> <plug>(lsp-rename)
+  nmap <buffer> gd <plug>(lsp-definition)
+  nmap <buffer> <leader><Space> <plug>(lsp-hover)
 endfunction
 
 function! s:on_load_pre()
