@@ -3,21 +3,11 @@
 function! s:on_load_pre()
   " Plugin configuration like the code written in vimrc.
   let g:fzf_buffers_jump = 1
-  " let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
 
   nnoremap <leader>b :Buffers<CR>
   nnoremap <leader>f :Files<CR>
   nnoremap <leader>/ :BLines<CR>
-
-  if executable("rg")
-    command! -bang -nargs=* Rg
-          \ call fzf#vim#grep(
-          \   'rg --hidden --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
-          \   <bang>0 ? fzf#vim#with_preview('up:60%')
-          \           : fzf#vim#with_preview('right:50%:hidden', '?'),
-          \   <bang>0)
-    nnoremap <leader>g :Rg<CR>
-  endif
+  nnoremap <leader>g :Rg<CR>
 endfunction
 
 " Plugin configuration like the code written in vimrc.
