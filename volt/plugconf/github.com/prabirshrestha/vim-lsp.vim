@@ -69,6 +69,14 @@ function! s:on_load_post()
             \ 'whitelist': ['haskell'],
             \ })
     endif
+
+    if executable('solargraph')
+      au User lsp_setup call lsp#register_server({
+            \ 'name': 'solargraph',
+            \ 'cmd': {server_info->['solargraph', 'stdio']},
+            \ 'whitelist': ['ruby'],
+            \ })
+    endif
   augroup end
 endfunction
 
