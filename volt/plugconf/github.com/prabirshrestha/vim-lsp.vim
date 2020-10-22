@@ -45,14 +45,6 @@ function! s:on_load_post()
             \ })
     endif
 
-    if executable('bash-language-server')
-      au User lsp_setup call lsp#register_server({
-            \ 'name': 'bash-language-server',
-            \ 'cmd': {server_info->[&shell, &shellcmdflag, 'bash-language-server start']},
-            \ 'whitelist': ['sh'],
-            \ })
-    endif
-
     if executable('intelephense')
       au User lsp_setup call lsp#register_server({
             \ 'name': 'intelephense',
@@ -70,6 +62,11 @@ function! s:on_load_post()
             \ })
     endif
 
+    " au User lsp_setup call lsp#register_server({
+    "       \ 'name': 'solargraph',
+    "       \ 'cmd': {server_info->['socat', '-', 'TCP:localhost:7658,shut-none']},
+    "       \ 'whitelist': ['ruby'],
+    "       \ })
     if executable('solargraph')
       au User lsp_setup call lsp#register_server({
             \ 'name': 'solargraph',
