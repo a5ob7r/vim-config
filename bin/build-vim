@@ -12,7 +12,8 @@ cd "${VIM_REPO_PATH}"
 if [[ -f "${CONFIG_CACHE}" ]]; then
   sudo make uninstall
   rm src/auto/config.cache
-  git pull
+  git fetch -v
+  git switch -d origin/master
 fi
 
 ./configure \
