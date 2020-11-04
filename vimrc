@@ -44,17 +44,10 @@ set tabstop=2
 set shiftwidth=2
 " }}}
 
-let s:data_home_dir = expand('~/.local/share/vim/')
-
-if ! isdirectory(s:data_home_dir)
-  silent! call mkdir(s:data_home_dir, 'p', 0700)
-endif
-
 runtime macros/matchit.vim
 let b:match_ignorecase = 1
 let g:netrw_liststyle = 1
 let g:netrw_sizestyle = 'H'
-let g:netrw_home = s:data_home_dir
 
 " Toggle netrw window
 function! ToggleNetrw()
@@ -132,32 +125,14 @@ augroup QuickFixCmd
   autocmd QuickFixCmdPost *grep* cwindow
 augroup end
 
-
-if has('viminfo')
-  let s:viminfo_path = s:data_home_dir . 'viminfo'
-  let s:viminfo = &g:viminfo . ',n' . s:viminfo_path
-  let &g:viminfo = s:viminfo
-endif
-
 " {{{ Save undo tree
 if has('persistent_undo')
-  let s:undodir = s:data_home_dir . 'undo'
-  if ! isdirectory(s:undodir)
-    silent! call mkdir(s:undodir, 'p', 0700)
-  endif
-  let &g:undodir = s:undodir
-  augroup vimrc-undofile
+  augroup Undofile
     autocmd!
     autocmd BufReadPre ~/* setlocal undofile
   augroup END
 endif
 " }}}
-
-let s:directory = s:data_home_dir . 'swap'
-if ! isdirectory(s:directory)
-  silent! call mkdir(s:directory, 'p', 0700)
-endif
-let &g:directory = s:directory
 
 " To use truecolor on tmux
 let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
