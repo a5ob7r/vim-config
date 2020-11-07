@@ -14,9 +14,7 @@ function! s:on_load_pre()
     \ 'component_function': {
     \   'gitbranch': 'gitbranch#name'
     \   },
-    \ 'colorscheme': 'neodark',
-    \ 'separator': { 'left': "\ue0b8", 'right': "\ue0ba" },
-    \ 'subseparator': { 'left': "\ue0b9", 'right': "\ue0bb" }
+    \ 'colorscheme': 'neodark'
     \ }
 endfunction
 
