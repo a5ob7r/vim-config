@@ -98,7 +98,7 @@ map Q <Nop>
 " 私は，日本人です．
 " 好きな食べ物は，餃子です．
 " どうぞ，よろしくおねがいします．
-" 
+"
 " After formatting
 " 私は、日本人です。好きな食べ物は、餃子です。どうぞ、よろしくおねがいします。
 command! -range FormatJapaneseText silent!
@@ -111,6 +111,7 @@ command! -range FormatJapaneseText silent!
 " {{{ Restore last cursor position
 " This is from vim help, *restore-cursor* *last-position-jump*
 augroup KeepLastPosition
+  autocmd!
   autocmd BufReadPost *
         \ if line("'\"") >= 1
         \   && line("'\"") <= line("$")
