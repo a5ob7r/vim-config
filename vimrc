@@ -29,7 +29,6 @@ set scrolloff=4
 set showbreak=>>
 set showmatch
 set smartcase
-set termguicolors
 set ttyfast
 set updatetime=100
 set virtualedit+=onemore
@@ -37,6 +36,11 @@ set visualbell
 set wildmenu
 set wildmode=longest:full,full
 set wrapscan
+
+" To use truecolor on not xterm* terminal type
+set termguicolors
+let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 
 " {{{ Tab char
 set expandtab
@@ -133,9 +137,4 @@ if has('persistent_undo')
     autocmd BufReadPre ~/* setlocal undofile
   augroup END
 endif
-" }}}
-
-" To use truecolor on tmux
-let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 " }}}
