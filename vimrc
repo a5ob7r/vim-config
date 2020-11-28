@@ -81,10 +81,10 @@ nnoremap <Esc><Esc> :nohlsearch<CR><Esc>
 
 nnoremap <leader><Enter> o<Esc>
 
-nnoremap <S-Left>  <C-w><<CR>
-nnoremap <S-Right> <C-w>><CR>
-nnoremap <S-Up>    <C-w>-<CR>
-nnoremap <S-Down>  <C-w>+<CR>
+nnoremap <Left>  :vertical resize -1<CR>
+nnoremap <Right> :vertical resize +1<CR>
+nnoremap <Up>    :resize +1<CR>
+nnoremap <Down>  :resize -1<CR>
 
 nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
