@@ -3,6 +3,10 @@ function! s:on_lsp_buffer_enabled() abort
   if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
   nmap <buffer> gd <plug>(lsp-definition)
   nmap <buffer> <leader><Space> <plug>(lsp-hover)
+  nmap <buffer> <C-p> <plug>(lsp-previous-diagnostic)
+  nmap <buffer> <C-n> <plug>(lsp-next-diagnostic)
+
+  ALEDisableBuffer
 endfunction
 
 function! s:on_load_pre()
