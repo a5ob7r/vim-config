@@ -62,15 +62,15 @@ function! s:on_load_post()
             \ })
     endif
 
-    " au User lsp_setup call lsp#register_server({
-    "       \ 'name': 'solargraph',
-    "       \ 'cmd': {server_info->['socat', '-', 'TCP:localhost:7658,shut-none']},
-    "       \ 'whitelist': ['ruby'],
-    "       \ })
     if executable('solargraph')
       au User lsp_setup call lsp#register_server({
             \ 'name': 'solargraph',
             \ 'cmd': {server_info->['solargraph', 'stdio']},
+            \ 'initialization_options': {
+            \   "diagnostics": "true",
+            \   "rename": "true",
+            \   "useBundler": "true"
+            \ },
             \ 'whitelist': ['ruby'],
             \ })
     endif
