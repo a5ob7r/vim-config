@@ -22,6 +22,7 @@ set colorcolumn=81,101,121
 set cursorline
 set display=lastline
 set fileencodings=utf-8,sjis,shift_jis,iso-2022-jp,euc-jp,cp932,ucs-bom
+set foldmethod=marker
 set hidden
 set history=10000
 set hlsearch
