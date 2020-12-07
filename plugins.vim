@@ -7,6 +7,7 @@ function! PackInit() abort
   call minpac#add('SirVer/ultisnips')
   call minpac#add('airblade/vim-gitgutter')
   call minpac#add('bronson/vim-trailing-whitespace')
+  call minpac#add('editorconfig/editorconfig-vim')
   call minpac#add('honza/vim-snippets')
   call minpac#add('itchyny/lightline.vim')
   call minpac#add('itchyny/vim-gitbranch')
