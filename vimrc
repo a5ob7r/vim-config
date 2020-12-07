@@ -152,3 +152,9 @@ if has('persistent_undo')
   augroup END
 endif
 " }}}
+
+packadd minpac
+
+if exists('g:loaded_minpac')
+  runtime! plugins.vim
+endif
