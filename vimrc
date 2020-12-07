@@ -57,6 +57,8 @@ set shiftwidth=2
 
 runtime macros/matchit.vim
 let b:match_ignorecase = 1
+" WIP: Must match to line not but filename when `g:netrw_liststyle = 1`.
+let g:netrw_list_hide = '^\..*\~ *'
 let g:netrw_liststyle = 1
 let g:netrw_sizestyle = 'H'
 
