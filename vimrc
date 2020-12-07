@@ -13,6 +13,7 @@ let g:mapleader=' '
 filetype indent plugin on
 syntax on
 
+" Options {{{
 set background=light
 set backspace=indent,eol,start
 set breakindent
@@ -62,6 +63,7 @@ let b:match_ignorecase = 1
 let g:netrw_list_hide = '^\..*\~ *'
 let g:netrw_liststyle = 1
 let g:netrw_sizestyle = 'H'
+" }}}
 
 " Toggle netrw window
 function! ToggleNetrw()
@@ -85,6 +87,7 @@ else
   set clipboard=unnamedplus
 endif
 
+" Key mappings {{{
 nnoremap j gj
 nnoremap k gk
 nnoremap <Esc><Esc> :nohlsearch<CR><Esc>
@@ -104,6 +107,7 @@ nnoremap <C-l> <C-w>l
 " Don't use Ex mode, ignore Q.
 " ref. $VIMRUNTIME/defaults.vim
 map Q <Nop>
+" }}}
 
 
 " Format Japanese text
