@@ -1,6 +1,13 @@
 set encoding=utf-8
 scriptencoding utf-8
 
+" Disable some standard plugins which are not necessary. {{{
+let g:loaded_vimball = 1
+let g:loaded_vimballPlugin = 1
+let g:loaded_getscript = 1
+let g:loaded_getscriptPlugin = 1
+" }}}
+
 let g:mapleader=' '
 
 filetype indent plugin on
