@@ -2,9 +2,7 @@
 
 set -Ceuo pipefail
 
-readonly GHQ_ROOT="$(ghq root)"
-readonly VIM_REPO="$(ghq list | grep vim/vim)"
-readonly VIM_REPO_PATH="${GHQ_ROOT}/${VIM_REPO}"
+readonly VIM_REPO_PATH="$(ghq list -p | grep -m 1 'vim/vim')"
 readonly CONFIG_CACHE='src/auto/config.cache'
 
 cd "${VIM_REPO_PATH}"
@@ -17,15 +15,16 @@ if [[ -f "${CONFIG_CACHE}" ]]; then
 fi
 
 ./configure \
+  --disable-gui \
   --enable-fail-if-missing \
-  --enable-python3interp=dynamic \
-  --enable-perlinterp=dynamic \
-  --enable-rubyinterp=dynamic \
   --enable-luainterp=dynamic \
+  --enable-perlinterp=dynamic \
+  --enable-python3interp=dynamic \
+  --enable-rubyinterp=dynamic \
   --enable-tclinterp=dynamic \
-  --disable-gui
+  ;
 
-make -j8
+make -j"$(nproc)"
 sudo make install
 
 echo
