@@ -8,8 +8,6 @@ let g:loaded_getscript = 1
 let g:loaded_getscriptPlugin = 1
 " }}}
 
-let g:mapleader=' '
-
 filetype indent plugin on
 syntax on
 
@@ -57,12 +55,25 @@ set tabstop=2
 set shiftwidth=2
 " }}}
 
+if executable('rg')
+  set grepformat=%f:%l:%c:%m,%f:%l:%m
+  set grepprg=rg\ --vimgrep\ --no-heading
+endif
+
+if has('osxdarwin')
+  set clipboard=unnamed
+else
+  set clipboard=unnamedplus
+endif
+
 runtime macros/matchit.vim
 let b:match_ignorecase = 1
 " WIP: Must match to line not but filename when `g:netrw_liststyle = 1`.
 let g:netrw_list_hide = '^\..*\~ *'
 let g:netrw_liststyle = 1
 let g:netrw_sizestyle = 'H'
+
+let g:mapleader=' '
 " }}}
 
 " Toggle netrw window
@@ -75,17 +86,6 @@ function! ToggleNetrw()
 endfunction
 
 nnoremap <leader>n :call ToggleNetrw()<CR>
-
-if executable('rg')
-  set grepformat=%f:%l:%c:%m,%f:%l:%m
-  set grepprg=rg\ --vimgrep\ --no-heading
-endif
-
-if has('osxdarwin')
-  set clipboard=unnamed
-else
-  set clipboard=unnamedplus
-endif
 
 " Key mappings {{{
 nnoremap j gj
