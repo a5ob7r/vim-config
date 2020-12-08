@@ -195,13 +195,6 @@ let g:git_messenger_always_into_popup = v:true
 let g:git_messenger_max_popup_height = 15
 " }}}
 
-" sheerun/vim-polyglot {{{
-let g:polyglot_disabled = [
-      \ 'latex',
-      \ 'dockerfile'
-      \ ]
-" }}}
-
 " w0rp/ale {{{
 highlight ALEErrorSign ctermfg=9 guifg=#C30500
 highlight ALEWarningSign ctermfg=11 guifg=#ED6237
