@@ -1,8 +1,15 @@
+"
+" vimrc
+"
+
 source $VIMRUNTIME/defaults.vim
 
+" Encoding {{{
 set encoding=utf-8
 scriptencoding utf-8
+" }}}
 
+" Options {{{
 " Disable some standard plugins which are not necessary. {{{
 let g:loaded_vimball = 1
 let g:loaded_vimballPlugin = 1
@@ -10,7 +17,6 @@ let g:loaded_getscript = 1
 let g:loaded_getscriptPlugin = 1
 " }}}
 
-" Options {{{
 set background=light
 set backspace=indent,eol,start
 set breakindent
@@ -76,17 +82,6 @@ let g:netrw_sizestyle = 'H'
 let g:mapleader=' '
 " }}}
 
-" Toggle netrw window
-function! ToggleNetrw()
-  if &filetype == 'netrw'
-    Rexplore
-  else
-    Explore
-  endif
-endfunction
-
-nnoremap <leader>n :call ToggleNetrw()<CR>
-
 " Key mappings {{{
 nnoremap j gj
 nnoremap k gk
@@ -104,11 +99,22 @@ nnoremap <C-k> <C-w>k
 nnoremap <C-h> <C-w>h
 nnoremap <C-l> <C-w>l
 
+nnoremap <leader>n :call ToggleNetrw()<CR>
+
 " Don't use Ex mode, ignore Q.
 " ref. $VIMRUNTIME/defaults.vim
 map Q <Nop>
 " }}}
 
+" Others {{{
+" Toggle netrw window
+function! ToggleNetrw()
+  if &filetype == 'netrw'
+    Rexplore
+  else
+    Explore
+  endif
+endfunction
 
 " Format Japanese text
 "
@@ -138,9 +144,12 @@ if has('persistent_undo')
   augroup END
 endif
 " }}}
+" }}}
 
+" Plugins {{{
 packadd minpac
 
 if exists('g:loaded_minpac')
   runtime! plugins.vim
 endif
+" }}}
