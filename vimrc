@@ -42,6 +42,12 @@ set visualbell
 set wildmode=longest:full,full
 set wrapscan
 
+" {{{ Tab char
+set expandtab
+set tabstop=2
+set shiftwidth=2
+" }}}
+
 if has('virtualedit')
   set virtualedit=block
 endif
@@ -53,21 +59,15 @@ if has('termguicolors')
   let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 endif
 
-" {{{ Tab char
-set expandtab
-set tabstop=2
-set shiftwidth=2
-" }}}
-
-if executable('rg')
-  set grepformat=%f:%l:%c:%m,%f:%l:%m
-  set grepprg=rg\ --vimgrep\ --no-heading
-endif
-
 if has('osxdarwin')
   set clipboard=unnamed
 else
   set clipboard=unnamedplus
+endif
+
+if executable('rg')
+  set grepformat=%f:%l:%c:%m,%f:%l:%m
+  set grepprg=rg\ --vimgrep\ --no-heading
 endif
 
 let g:mapleader=' '
