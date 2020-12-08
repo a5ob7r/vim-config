@@ -10,13 +10,6 @@ scriptencoding utf-8
 " }}}
 
 " Options {{{
-" Disable some standard plugins which are not necessary. {{{
-let g:loaded_vimball = 1
-let g:loaded_vimballPlugin = 1
-let g:loaded_getscript = 1
-let g:loaded_getscriptPlugin = 1
-" }}}
-
 " Override some options on defaults.vim {{{
 set history=10000
 set mouse=
@@ -76,12 +69,6 @@ if has('osxdarwin')
 else
   set clipboard=unnamedplus
 endif
-
-" WIP: Must match to line not but filename when `g:netrw_liststyle = 1`, on
-" the commit hash of vim/vim: a452b808b4da2d272ca4a50865eb8ca89a58f239
-let g:netrw_list_hide = '^\..*\~ *'
-let g:netrw_liststyle = 1
-let g:netrw_sizestyle = 'H'
 
 let g:mapleader=' '
 " }}}
@@ -151,6 +138,21 @@ endif
 " }}}
 
 " Plugins {{{
+" Disable some standard plugins which are not necessary. {{{
+let g:loaded_vimball = 1
+let g:loaded_vimballPlugin = 1
+let g:loaded_getscript = 1
+let g:loaded_getscriptPlugin = 1
+" }}}
+
+" newrw {{{
+" WIP: Must match to line not but filename when `g:netrw_liststyle = 1`, on
+" the commit hash of vim/vim: a452b808b4da2d272ca4a50865eb8ca89a58f239
+let g:netrw_list_hide = '^\..*\~ *'
+let g:netrw_liststyle = 1
+let g:netrw_sizestyle = 'H'
+" }}}
+
 " matchit {{{
 packadd! matchit
 let b:match_ignorecase = 1
