@@ -1,3 +1,5 @@
+source $VIMRUNTIME/defaults.vim
+
 set encoding=utf-8
 scriptencoding utf-8
 
@@ -7,9 +9,6 @@ let g:loaded_vimballPlugin = 1
 let g:loaded_getscript = 1
 let g:loaded_getscriptPlugin = 1
 " }}}
-
-filetype indent plugin on
-syntax on
 
 " Options {{{
 set background=light
@@ -125,20 +124,6 @@ command! -range FormatJapaneseText silent!
       \ | '<,'>substitute/，/、/g
       \ | '<,'>substitute/\n//g
       \ | nohlsearch
-
-
-" {{{ Restore last cursor position
-" This is from vim help, *restore-cursor* *last-position-jump*
-augroup KeepLastPosition
-  autocmd!
-  autocmd BufReadPost *
-        \ if line("'\"") >= 1
-        \   && line("'\"") <= line("$")
-        \   && &ft !~# 'commit'
-        \ |   exe "normal! g`\""
-        \ | endif
-augroup END
-" }}}
 
 augroup QuickFixCmd
   autocmd!
