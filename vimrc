@@ -45,10 +45,13 @@ set showmatch
 set smartcase
 set ttyfast
 set updatetime=100
-set virtualedit+=onemore
 set visualbell
 set wildmode=longest:full,full
 set wrapscan
+
+if has('virtualedit')
+  set virtualedit=block
+endif
 
 " To use truecolor on not xterm* terminal type
 set termguicolors
