@@ -17,8 +17,13 @@ let g:loaded_getscript = 1
 let g:loaded_getscriptPlugin = 1
 " }}}
 
+" Override some options on defaults.vim {{{
+set history=10000
+set mouse=
+set scrolloff=4
+" }}}
+
 set background=light
-set backspace=indent,eol,start
 set breakindent
 set breakindentopt=shift:2,sbr
 set cindent
@@ -28,16 +33,13 @@ set display=lastline
 set fileencodings=utf-8,sjis,shift_jis,iso-2022-jp,euc-jp,cp932,ucs-bom
 set foldmethod=marker
 set hidden
-set history=10000
 set hlsearch
 set ignorecase
-set incsearch
 set laststatus=2
 set lazyredraw
 set list
 set listchars=tab:▸\ ,eol:↲,extends:❯,precedes:❮
 set modeline
-set scrolloff=4
 set showbreak=>>
 set showmatch
 set smartcase
@@ -45,7 +47,6 @@ set ttyfast
 set updatetime=100
 set virtualedit+=onemore
 set visualbell
-set wildmenu
 set wildmode=longest:full,full
 set wrapscan
 
