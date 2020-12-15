@@ -13,7 +13,6 @@ scriptencoding utf-8
 " Override some options on defaults.vim {{{
 set history=10000
 set mouse=
-set scrolloff=4
 " }}}
 
 set background=light
@@ -91,10 +90,6 @@ nnoremap <C-h> <C-w>h
 nnoremap <C-l> <C-w>l
 
 nnoremap <leader>n :call ToggleNetrw()<CR>
-
-" Don't use Ex mode, ignore Q.
-" ref. $VIMRUNTIME/defaults.vim
-map Q <Nop>
 " }}}
 
 " Others {{{
