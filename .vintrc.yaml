@@ -1,10 +1,14 @@
 cmdargs:
-  # Checking more strictly
   severity: style_problem
-
-  # Enable coloring
+  stat: true
   color: true
 
-  # Enable Neovim syntax
-  env:
-    neovim: false
+policies:
+  ProhibitAbbreviationOption:
+    enabled: true
+
+  ProhibitImplicitScopeVariable:
+    enabled: true
+
+  # ProhibitUnusedVariable:
+  #   enabled: true
