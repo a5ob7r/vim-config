@@ -102,6 +102,13 @@ function! ToggleNetrw()
   endif
 endfunction
 
+" Write a buffer to a file whether or not parent directories.
+function! DrillWrite()
+  let l:parentDirPathOfcurrentBuf = expand('%:h')
+  call mkdir(l:parentDirPathOfcurrentBuf, 'p')
+  write
+endfunction
+
 " Format Japanese text
 "
 " Before formatting
