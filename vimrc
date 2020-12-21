@@ -95,7 +95,7 @@ nnoremap <leader>n :call ToggleNetrw()<CR>
 " Others {{{
 " Toggle netrw window
 function! ToggleNetrw()
-  if &filetype == 'netrw'
+  if &filetype ==# 'netrw'
     Rexplore
   else
     Explore
