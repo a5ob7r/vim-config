@@ -1,15 +1,20 @@
-# My Vim Configures
-## Plugin manager
-- [minpac](https://github.com/k-takata/minpac) - vim plugin manager
+# My Vim Config
 
 ## Setup
-### Link this directory to HOME
-On Linux os macOS,
+
+### Linux or macOS
+
 ```sh
-ln -sfv $PWD ~/.vim
+$ ln -sfv $PWD ~/.vim
+
+$ ln -sfv $PWD/.ctags.d ~
+$ ln -sfv $PWD/.vintrc.yaml ~
+
+$ git clone https://github.com/k-takata/minpac.git ~/.vim/pack/minpac/opt/minpac
 ```
 
-On Windows,
+### Windows
+
 ```bat
 mklink /D %HOMEPATH%\vimfiles %CD%
 ```
