@@ -18,7 +18,6 @@ set mouse=
 set background=light
 set breakindent
 set breakindentopt=shift:2,sbr
-set cindent
 set colorcolumn=81,101,121
 set cursorline
 set display=lastline
@@ -46,6 +45,10 @@ set expandtab
 set tabstop=2
 set shiftwidth=2
 " }}}
+
+if has('cindent')
+  set cindent
+endif
 
 if has('virtualedit')
   set virtualedit=block
