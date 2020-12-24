@@ -15,7 +15,6 @@ set history=10000
 set mouse=
 " }}}
 
-set background=light
 set breakindent
 set breakindentopt=shift:2,sbr
 set colorcolumn=81,101,121
