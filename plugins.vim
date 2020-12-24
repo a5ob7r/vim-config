@@ -65,12 +65,35 @@ let g:lightline = {
       \   'left': [
       \       [ 'mode', 'paste' ],
       \       [ 'gitbranch', 'readonly', 'relativepath', 'modified' ],
-      \       [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok' ]
+      \       [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok' ],
+      \       [ 'lsp_errors', 'lsp_warnings', 'lsp_informations', 'lsp_hints', 'lsp_ok' ]
       \     ]
       \   },
       \ 'component_function': {
       \   'gitbranch': 'gitbranch#name'
       \   },
+      \ 'component_expand': {
+      \   'linter_checking': 'lightline#ale#checking',
+      \   'linter_warnings': 'lightline#ale#warnings',
+      \   'linter_errors': 'lightline#ale#errors',
+      \   'linter_ok': 'lightline#ale#ok',
+      \   'lsp_errors': 'LspErrorCount',
+      \   'lsp_warnings': 'LspWarningCount',
+      \   'lsp_informations': 'LspInformationCount',
+      \   'lsp_hints': 'LspHintCount',
+      \   'lsp_ok': 'LspOk'
+      \ },
+      \ 'component_type': {
+      \   'linter_checking': 'left',
+      \   'linter_warnings': 'warning',
+      \   'linter_errors': 'error',
+      \   'linter_ok': 'left',
+      \   'lsp_errors': 'error',
+      \   'lsp_warnings': 'warning',
+      \   'lsp_informations': 'left',
+      \   'lsp_hints': 'left',
+      \   'lsp_ok': 'left'
+      \ },
       \ 'colorscheme': 'neodark'
       \ }
 " }}}
@@ -93,21 +116,6 @@ let g:vista_sidebar_width = 50
 nnoremap <leader>v :Vista!!<CR>
 " }}}
 
-" maximbaz/lightline-ale {{{
-let g:lightline.component_expand = {
-      \ 'linter_checking': 'lightline#ale#checking',
-      \ 'linter_warnings': 'lightline#ale#warnings',
-      \ 'linter_errors': 'lightline#ale#errors',
-      \ 'linter_ok': 'lightline#ale#ok',
-      \ }
-let g:lightline.component_type = {
-      \ 'linter_checking': 'left',
-      \ 'linter_warnings': 'warning',
-      \ 'linter_errors': 'error',
-      \ 'linter_ok': 'left',
-      \ }
-" }}}
-
 " prabirshrestha/vim-lsp {{{
 function! s:on_lsp_buffer_enabled() abort
   setlocal omnifunc=lsp#complete
@@ -128,6 +136,11 @@ let g:lsp_semantic_enabled = 1
 augroup LSP_INSTALL
   au!
   au User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
+augroup end
+
+augroup OnLSP
+  au!
+  au User lsp_diagnostics_updated call lightline#update()
 augroup end
 
 augroup REGISTER_LSPS
@@ -187,6 +200,37 @@ augroup REGISTER_LSPS
           \ })
   endif
 augroup end
+
+function! LspErrorCount() abort
+  let l:errors = lsp#get_buffer_diagnostics_counts().error
+  if l:errors == 0 | return '' | endif
+  return 'E: ' . l:errors
+endfunction
+
+function LspWarningCount() abort
+  let l:warnings = lsp#get_buffer_diagnostics_counts().warning
+  if l:warnings == 0 | return '' | endif
+  return 'W: ' . l:warnings
+endfunction
+
+function! LspInformationCount() abort
+  let l:informations = lsp#get_buffer_diagnostics_counts().information
+  if l:informations == 0 | return '' | endif
+  return 'I: ' . l:informations
+endfunction
+
+function! LspHintCount() abort
+  let l:hints = lsp#get_buffer_diagnostics_counts().hint
+  if l:hints == 0 | return '' | endif
+  return 'H: ' . l:hints
+endfunction
+
+function! LspOk() abort
+  let l:counts = lsp#get_buffer_diagnostics_counts()
+  let l:ok = filter(l:counts, 'v:val != 0')->len() == 0
+  if l:ok | return 'OK' | endif
+  return ''
+endfunction
 " }}}
 
 " rhysd/git-messenger.vim {{{
