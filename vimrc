@@ -11,47 +11,43 @@ scriptencoding utf-8
 
 " Options {{{
 " Override some options on defaults.vim {{{
+set display=lastline
 set history=10000
 set mouse=
 " }}}
 
-set breakindent
-set breakindentopt=shift:2,sbr
+set cindent
 set colorcolumn=81,101,121
 set cursorline
-set display=lastline
 set fileencodings=utf-8,sjis,shift_jis,iso-2022-jp,euc-jp,cp932,ucs-bom
 set foldmethod=marker
 set hidden
 set hlsearch
-set ignorecase
 set laststatus=2
-set lazyredraw
 set list
 set listchars=tab:▸\ ,eol:↲,extends:❯,precedes:❮
-set modeline
-set showbreak=>>
 set showmatch
-set smartcase
-set ttyfast
-set updatetime=100
-set visualbell
+set virtualedit=block
 set wildmode=longest:full,full
-set wrapscan
 
-" {{{ Tab char
+set nowrapscan
+
+" Tab char {{{
 set expandtab
 set tabstop=2
 set shiftwidth=2
 " }}}
 
-if has('cindent')
-  set cindent
-endif
+" Wrap {{{
+set breakindent
+set breakindentopt=shift:2,sbr
+set showbreak=>>
+" }}}
 
-if has('virtualedit')
-  set virtualedit=block
-endif
+" Case {{{
+set ignorecase
+set smartcase
+" }}}
 
 if has('termguicolors')
   " To use truecolor on not xterm* terminal type
