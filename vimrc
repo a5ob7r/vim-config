@@ -107,6 +107,12 @@ function! DrillWrite() abort
   write
 endfunction
 
+function! SearchEnglishWord(word) abort
+  let l:searchUrl = 'https://dictionary.cambridge.org/dictionary/english/'
+  let l:url = l:searchUrl . a:word
+  call openbrowser#open(l:url)
+endfunction
+
 " Format Japanese text
 "
 " Before formatting
