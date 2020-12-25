@@ -92,7 +92,7 @@ nnoremap <leader>n :call ToggleNetrw()<CR>
 
 " Others {{{
 " Toggle netrw window
-function! ToggleNetrw()
+function! ToggleNetrw() abort
   if &filetype ==# 'netrw'
     Rexplore
   else
@@ -101,7 +101,7 @@ function! ToggleNetrw()
 endfunction
 
 " Write a buffer to a file whether or not parent directories.
-function! DrillWrite()
+function! DrillWrite() abort
   let l:parentDirPathOfcurrentBuf = expand('%:h')
   call mkdir(l:parentDirPathOfcurrentBuf, 'p')
   write
