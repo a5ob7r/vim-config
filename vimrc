@@ -88,6 +88,8 @@ nnoremap <C-h> <C-w>h
 nnoremap <C-l> <C-w>l
 
 nnoremap <leader>n :call ToggleNetrw()<CR>
+nnoremap <leader>k :call SearchUnderCursorEnglishWord()<CR>
+nnoremap <leader>r :source $MYVIMRC<CR>
 " }}}
 
 " Others {{{
@@ -111,6 +113,11 @@ function! SearchEnglishWord(word) abort
   let l:searchUrl = 'https://dictionary.cambridge.org/dictionary/english/'
   let l:url = l:searchUrl . a:word
   call openbrowser#open(l:url)
+endfunction
+
+function! SearchUnderCursorEnglishWord() abort
+  let l:word = expand('<cword>')
+  call SearchEnglishWord(l:word)
 endfunction
 
 " Format Japanese text
