@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+#
+# A wrapper script to measure startup time of vim.
+#
+# Arguments of this script will be passes to a vim command to measuree startup time.
+#
+# $ vim-startuptime -u NONE
+#
+
+set -Ceuo pipefail
+
+readonly startuplog="$(command mktemp /tmp/vimstartup_XXXXXXXX.log)"
+command vim "${@}" -c quit --startuptime "${startuplog}"
+command view -c 'nnoremap q :q<CR>' "${startuplog}"
+command rm "${startuplog}"
