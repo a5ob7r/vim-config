@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+#
+# Setup script.
+#
+
+set -Ceuo pipefail
+
+readonly FILEBASE=$(dirname "${BASH_SOURCE[0]}")
+
+cd "${FILEBASE}/.."
+
+#######################################
+# `ln` wrapper.
+# Global:
+#   None.
+# Arguments:
+#   src:
+#     Source file path.
+#   dst:
+#     Destination file path, which should be *full path*. Maybe work to create
+#     link correctly if it is not full path, but some output messages are not
+#     correct.
+# Return:
+#   None.
+#######################################
+setup::ln() {
+  local -r src="${1}" dst="${2}"
+  local -r dst_dir=$(command dirname "${dst}")
+
+  if [[ -e "$dst" ]]; then
+    echo "already exist: ${dst}" 1>&2
+    return
+  fi
+
+  command mkdir -p "$dst_dir"
+  command ln -sv "$src" "$dst"
+}
+
+setup::ln "$PWD" ~/.vim
+setup::ln "$PWD/.ctags.d" ~/.ctags.d
+setup::ln "$PWD/.vintrc.yaml" ~/.vintrc.yaml
+setup::ln "$PWD/bin/build" ~/bin/vimbuild
+setup::ln "$PWD/bin/startuptime" ~/bin/vimstartuptime
+
+git clone https://github.com/k-takata/minpac.git ~/.vim/pack/minpac/opt/minpac
