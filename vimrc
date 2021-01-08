@@ -24,13 +24,17 @@ set foldmethod=marker
 set hidden
 set hlsearch
 set laststatus=2
-set list
-set listchars=tab:▸\ ,eol:↲,extends:❯,precedes:❮
 set showmatch
 set virtualedit=block
 set wildmode=longest:full,full
 
 set nowrapscan
+
+" Invisible chars {{{
+set list
+set listchars&
+set listchars+=tab:>\ \|,extends:>,precedes:<
+" }}}
 
 " Tab char {{{
 set expandtab
