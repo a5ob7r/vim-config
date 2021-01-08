@@ -270,3 +270,5 @@ call asyncomplete#register_source(asyncomplete#sources#ultisnips#get_source_opti
       \ }))
 " }}}
 " }}}
+
+" vim:set expandtab tabstop=2 shiftwidth=2 foldmethod=marker:
