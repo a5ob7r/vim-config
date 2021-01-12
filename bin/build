@@ -1,31 +1,36 @@
 #!/usr/bin/env bash
+#
+# Vim build script.
+#
+# NOTE: Work correctly on Linux. Building maybe success on macOS, but builded
+# vim will be break. Especially, the vim can not find external interpreters.
+#
 
 set -Ceuo pipefail
 
-readonly VIM_REPO_PATH="$(ghq list -p | grep -m 1 'vim/vim')"
+readonly VIM_REPO_PATH="${VIM_REPO_PATH:-$(ghq list -p | grep -m 1 'vim/vim')}"
 readonly CONFIG_CACHE='src/auto/config.cache'
 
-cd "${VIM_REPO_PATH}"
+cd "$VIM_REPO_PATH"
 
-if [[ -f "${CONFIG_CACHE}" ]]; then
-  sudo make uninstall
-  rm src/auto/config.cache
+if [[ -f "$CONFIG_CACHE" ]]; then
+  sudo make --quiet uninstall
   git fetch -v
   git switch -d origin/master
 fi
 
+export CFLAGS='-march=native'
+
 ./configure \
+  --quiet \
   --disable-gui \
   --enable-fail-if-missing \
   --enable-luainterp=dynamic \
-  --enable-perlinterp=dynamic \
   --enable-python3interp=dynamic \
-  --enable-rubyinterp=dynamic \
-  --enable-tclinterp=dynamic \
   ;
 
-make -j"$(nproc)"
-sudo make install
+make --quiet -j"$(nproc)"
+sudo make --quiet install
 
 echo
 vim --version | head -n 2
