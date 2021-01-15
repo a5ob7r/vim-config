@@ -109,6 +109,10 @@ nnoremap <leader>g :Rg<CR>
 
 " lervag/vimtex {{{
 let g:tex_flavor = 'latex'
+
+if has('linux')
+  let g:vimtex_view_method = 'zathura'
+endif
 " }}}
 
 " liuchengxu/vista.vim {{{
