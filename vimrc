@@ -148,21 +148,6 @@ endfunction
 
 command! -range SubstJPuncts silent! <line1>,<line2>call SubstituteJapanesePunctuationsInRange()
 
-" Format Japanese text
-"
-" Before formatting
-" 私は，日本人です．
-" 好きな食べ物は，餃子です．
-" どうぞ，よろしくおねがいします．
-"
-" After formatting
-" 私は、日本人です。好きな食べ物は、餃子です。どうぞ、よろしくおねがいします。
-command! -range FormatJapaneseText silent!
-      \   '<,'>substitute/．/。/g
-      \ | '<,'>substitute/，/、/g
-      \ | '<,'>substitute/\n//g
-      \ | nohlsearch
-
 augroup QuickFixCmd
   autocmd!
   autocmd QuickFixCmdPost *grep* cwindow
