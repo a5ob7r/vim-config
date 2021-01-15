@@ -124,6 +124,30 @@ function! SearchUnderCursorEnglishWord() abort
   call SearchEnglishWord(l:word)
 endfunction
 
+function! SubstituteStringsWith(dict, line) abort
+  let l:repl = a:line
+  for [l:k, l:v] in items(a:dict)
+    let l:repl = substitute(l:repl, l:k, l:v, 'g')
+  endfor
+  return l:repl
+endfunction
+
+function! SubstituteJapanesePunctuations(line) abort
+  let l:dict = {
+        \ '。':  '．',
+        \ '、':  '，'
+        \ }
+  return SubstituteStringsWith(l:dict, a:line)
+endfunction
+
+function! SubstituteJapanesePunctuationsInRange() abort range
+  let l:lines = getline(a:firstline, a:lastline)
+  let l:repls = map(l:lines, 'SubstituteJapanesePunctuations(v:val)')
+  call setline(a:firstline, l:repls)
+endfunction
+
+command! -range SubstJPuncts silent! <line1>,<line2>call SubstituteJapanesePunctuationsInRange()
+
 " Format Japanese text
 "
 " Before formatting
