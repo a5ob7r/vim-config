@@ -94,6 +94,7 @@ nnoremap <C-l> <C-w>l
 nnoremap <leader>n :call ToggleNetrw()<CR>
 nnoremap <leader>k :call SearchUnderCursorEnglishWord()<CR>
 nnoremap <leader>r :source $MYVIMRC<CR>
+nnoremap <F2> :edit $MYVIMRC<CR>
 " }}}
 
 " Others {{{
@@ -296,6 +297,7 @@ nnoremap <leader>b :Buffers<CR>
 nnoremap <leader>f :Files<CR>
 nnoremap <leader>/ :BLines<CR>
 nnoremap <leader>g :Rg<CR>
+nnoremap <leader>c :Commands<CR>
 " }}}
 
 " lervag/vimtex {{{
