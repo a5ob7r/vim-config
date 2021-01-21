@@ -36,12 +36,6 @@ set listchars&
 set listchars+=tab:>\ \|,extends:>,precedes:<
 " }}}
 
-" Tab char {{{
-set expandtab
-set tabstop=2
-set shiftwidth=2
-" }}}
-
 " Wrap {{{
 set breakindent
 set breakindentopt=shift:2,sbr
