@@ -219,7 +219,6 @@ function! PackInit() abort
   call minpac#add('liuchengxu/vista.vim')
   call minpac#add('mattn/emmet-vim')
   call minpac#add('mattn/vim-lexiv')
-  call minpac#add('maximbaz/lightline-ale')
   call minpac#add('mechatroner/rainbow_csv')
   call minpac#add('prabirshrestha/async.vim')
   call minpac#add('prabirshrestha/asyncomplete-lsp.vim')
@@ -275,10 +274,6 @@ let g:lightline = {
       \   'gitbranch': 'gitbranch#name'
       \   },
       \ 'component_expand': {
-      \   'linter_checking': 'lightline#ale#checking',
-      \   'linter_warnings': 'lightline#ale#warnings',
-      \   'linter_errors': 'lightline#ale#errors',
-      \   'linter_ok': 'lightline#ale#ok',
       \   'lsp_errors': 'LspErrorCount',
       \   'lsp_warnings': 'LspWarningCount',
       \   'lsp_informations': 'LspInformationCount',
