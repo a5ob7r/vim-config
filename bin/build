@@ -19,7 +19,8 @@ if [[ -f "$CONFIG_CACHE" ]]; then
   git switch -d origin/master
 fi
 
-export CFLAGS='-march=native'
+export CFLAGS='-g -O2 -march=native -Wall -Wshadow -Wmissing-prototypes'
+export CPPFLAGS="$CFLAGS"
 
 ./configure \
   --quiet \
