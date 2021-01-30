@@ -205,6 +205,7 @@ function! PackInit() abort
   call minpac#init()
 
   call minpac#add('t-takata/minpac', { 'type': 'opt' })
+
   call minpac#add('KeitaNakamura/neodark.vim')
   call minpac#add('SirVer/ultisnips')
   call minpac#add('airblade/vim-gitgutter')
@@ -215,10 +216,10 @@ function! PackInit() abort
   call minpac#add('itchyny/vim-gitbranch')
   call minpac#add('junegunn/fzf.vim')
   call minpac#add('kannokanno/previm')
-  call minpac#add('lervag/vimtex')
   call minpac#add('liuchengxu/vista.vim')
   call minpac#add('mattn/emmet-vim')
   call minpac#add('mattn/vim-lexiv')
+  call minpac#add('mattn/vim-lsp-settings')
   call minpac#add('mechatroner/rainbow_csv')
   call minpac#add('prabirshrestha/async.vim')
   call minpac#add('prabirshrestha/asyncomplete-lsp.vim')
@@ -233,7 +234,6 @@ function! PackInit() abort
   call minpac#add('tpope/vim-surround')
   call minpac#add('tyru/open-browser.vim')
   call minpac#add('w0rp/ale')
-  call minpac#add('mattn/vim-lsp-settings')
 endfunction
 
 command! PackUpdate call PackInit() | call minpac#update()
@@ -304,14 +304,6 @@ nnoremap <leader>f :Files<CR>
 nnoremap <leader>/ :BLines<CR>
 nnoremap <leader>g :Rg<CR>
 nnoremap <leader>c :Commands<CR>
-" }}}
-
-" lervag/vimtex {{{
-let g:tex_flavor = 'latex'
-
-if has('linux')
-  let g:vimtex_view_method = 'zathura'
-endif
 " }}}
 
 " liuchengxu/vista.vim {{{
@@ -402,6 +394,27 @@ let g:ale_disable_lsp = 1
 
 nmap <silent> <C-p> <Plug>(ale_previous_wrap)
 nmap <silent> <C-n> <Plug>(ale_next_wrap)
+" }}}
+
+" mattn/vim-lsp-settings {{{
+let g:lsp_settings_enable_suggestions = 0
+let g:lsp_settings = {
+      \ 'texlab': {
+      \   'workspace_config': {
+      \     'latex': {
+      \       'build': {
+      \         'args': ['%f'],
+      \         'onSave': v:true,
+      \         'forwardSearchAfter': v:true
+      \         },
+      \       'forwardSearch': {
+      \         'executable': 'zathura',
+      \         'args': ['--synctex-forward', '%l:1:%f', '%p']
+      \         }
+      \       }
+      \     }
+      \   }
+      \ }
 " }}}
 
 packloadall
