@@ -233,6 +233,7 @@ function! PackInit() abort
   call minpac#add('tpope/vim-surround')
   call minpac#add('tyru/open-browser.vim')
   call minpac#add('w0rp/ale')
+  call minpac#add('mattn/vim-lsp-settings')
 endfunction
 
 command! PackUpdate call PackInit() | call minpac#update()
@@ -343,64 +344,6 @@ augroup end
 augroup OnLSP
   au!
   au User lsp_diagnostics_updated call lightline#update()
-augroup end
-
-augroup REGISTER_LSPS
-  au!
-
-  if executable('pyls')
-    au User lsp_setup call lsp#register_server({
-          \ 'name': 'pyls',
-          \ 'cmd': {server_info->['pyls']},
-          \ 'whitelist': ['python'],
-          \ })
-  endif
-
-  if executable('clangd')
-    au User lsp_setup call lsp#register_server({
-          \ 'name': 'clangd',
-          \ 'cmd': {server_info->['clangd']},
-          \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
-          \ })
-  endif
-
-  if executable('bash-language-server')
-    au User lsp_setup call lsp#register_server({
-          \ 'name': 'bash-language-server',
-          \ 'cmd': {server_info->[&shell, &shellcmdflag, 'bash-language-server start']},
-          \ 'whitelist': ['sh'],
-          \ })
-  endif
-
-  if executable('intelephense')
-    au User lsp_setup call lsp#register_server({
-          \ 'name': 'intelephense',
-          \ 'cmd': {server_info->[&shell, &shellcmdflag, 'intelephense --stdio']},
-          \ 'initialization_options': {"storagePath": $HOME . "/.cache/intelephense"},
-          \ 'whitelist': ['php'],
-          \ })
-  endif
-
-  if executable('haskell-language-server-wrapper') && executable('haskell-language-server')
-    au User lsp_setup call lsp#register_server({
-          \ 'name': 'hls',
-          \ 'cmd': {server_info->[&shell, &shellcmdflag, 'haskell-language-server-wrapper --lsp']},
-          \ 'whitelist': ['haskell'],
-          \ })
-  endif
-
-  if executable('solargraph')
-    au User lsp_setup call lsp#register_server({
-          \ 'name': 'solargraph',
-          \ 'cmd': {server_info->['solargraph', 'stdio']},
-          \ 'initialization_options': {
-          \   "diagnostics": "true",
-          \   "rename": "true",
-          \   "useBundler": "true"
-          \ },
-          \ 'whitelist': ['ruby'],
-          \ })
-  endif
 augroup end
 
 function! LspErrorCount() abort
