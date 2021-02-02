@@ -86,8 +86,8 @@ nnoremap <C-l> <C-w>l
 
 nnoremap <leader>n :call ToggleNetrw()<CR>
 nnoremap <leader>k :call SearchUnderCursorEnglishWord()<CR>
-nnoremap <leader>r :source $MYVIMRC<CR>
-nnoremap <F2> :edit $MYVIMRC<CR>
+nnoremap <F2> :source $MYVIMRC<CR>
+nnoremap <leader><F2> :edit $MYVIMRC<CR>
 " }}}
 
 " Others {{{
@@ -314,10 +314,15 @@ nnoremap <leader>v :Vista!!<CR>
 function! s:on_lsp_buffer_enabled() abort
   setlocal omnifunc=lsp#complete
   if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
+
   nmap <buffer> gd <plug>(lsp-definition)
+  nmap <buffer> <leader>r <plug>(lsp-rename)
   nmap <buffer> <leader><Space> <plug>(lsp-hover)
   nmap <buffer> <C-p> <plug>(lsp-previous-diagnostic)
   nmap <buffer> <C-n> <plug>(lsp-next-diagnostic)
+
+  nmap <buffer> <leader>lf <plug>(lsp-document-format)
+  nmap <buffer> <leader>la <plug>(lsp-code-action)
 
   ALEDisableBuffer
 endfunction
