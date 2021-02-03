@@ -213,7 +213,6 @@ function! PackInit() abort
   call minpac#add('honza/vim-snippets')
   call minpac#add('itchyny/lightline.vim')
   call minpac#add('itchyny/vim-gitbranch')
-  call minpac#add('junegunn/fzf.vim')
   call minpac#add('kannokanno/previm')
   call minpac#add('liuchengxu/vista.vim')
   call minpac#add('mattn/emmet-vim')
@@ -293,16 +292,6 @@ let g:lightline = {
       \ },
       \ 'colorscheme': 'neodark'
       \ }
-" }}}
-
-" junegunn/fzf.vim {{{
-let g:fzf_buffers_jump = 1
-
-nnoremap <leader>b :Buffers<CR>
-nnoremap <leader>f :Files<CR>
-nnoremap <leader>/ :BLines<CR>
-nnoremap <leader>g :Rg<CR>
-nnoremap <leader>c :Commands<CR>
 " }}}
 
 " liuchengxu/vista.vim {{{
