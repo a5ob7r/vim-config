@@ -357,7 +357,8 @@ endfunction
 
 function! LspOk() abort
   let l:counts = lsp#get_buffer_diagnostics_counts()
-  let l:ok = filter(l:counts, 'v:val != 0')->len() == 0
+  let l:not_zero_counts = filter(l:counts, 'v:val != 0')
+  let l:ok = len(l:not_zero_counts) == 0
   if l:ok | return 'OK' | endif
   return ''
 endfunction
