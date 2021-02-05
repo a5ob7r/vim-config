@@ -205,6 +205,7 @@ function! PackInit() abort
 
   call minpac#add('t-takata/minpac', { 'type': 'opt' })
 
+  call minpac#add('lambdalisue/gina.vim')
   call minpac#add('KeitaNakamura/neodark.vim')
   call minpac#add('SirVer/ultisnips')
   call minpac#add('airblade/vim-gitgutter')
@@ -391,6 +392,12 @@ let g:ale_disable_lsp = 1
 
 nmap <silent> <C-p> <Plug>(ale_previous_wrap)
 nmap <silent> <C-n> <Plug>(ale_next_wrap)
+" }}}
+
+" lambdalisue/gina.vim {{{
+nmap <leader>gl :Gina log<CR>
+nmap <leader>gs :Gina status<CR>
+nmap <leader>gc :Gina commit<CR>
 " }}}
 
 " mattn/vim-lsp-settings {{{
