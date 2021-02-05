@@ -232,6 +232,9 @@ function! PackInit() abort
   call minpac#add('tpope/vim-surround')
   call minpac#add('tyru/open-browser.vim')
   call minpac#add('w0rp/ale')
+
+  call minpac#add('ctrlpvim/ctrlp.vim')
+  call minpac#add('mattn/ctrlp-matchfuzzy')
 endfunction
 
 command! PackUpdate call PackInit() | call minpac#update()
@@ -409,6 +412,20 @@ let g:lsp_settings = {
       \     }
       \   }
       \ }
+" }}}
+
+" ctrlpvim/ctrlp.vim {{{
+let g:ctrlp_map = '<leader><Space>'
+let g:ctrlp_show_hidden = 1
+
+if executable('rg')
+  let g:ctrlp_use_caching = 0
+  let g:ctrlp_user_command = "rg --files --hidden --glob='!.git'"
+endif
+" }}}
+
+" mattn/ctrlp-matchfuzzy {{{
+let g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
 " }}}
 
 packloadall
