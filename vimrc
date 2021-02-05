@@ -309,7 +309,7 @@ function! s:on_lsp_buffer_enabled() abort
 
   nmap <buffer> gd <plug>(lsp-definition)
   nmap <buffer> <leader>r <plug>(lsp-rename)
-  nmap <buffer> <leader><Space> <plug>(lsp-hover)
+  nmap <buffer> <leader>h <plug>(lsp-hover)
   nmap <buffer> <C-p> <plug>(lsp-previous-diagnostic)
   nmap <buffer> <C-n> <plug>(lsp-next-diagnostic)
 
