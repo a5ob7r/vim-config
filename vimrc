@@ -215,7 +215,6 @@ function! PackInit() abort
   call minpac#add('itchyny/lightline.vim')
   call minpac#add('itchyny/vim-gitbranch')
   call minpac#add('kannokanno/previm')
-  call minpac#add('liuchengxu/vista.vim')
   call minpac#add('mattn/emmet-vim')
   call minpac#add('mattn/vim-lexiv')
   call minpac#add('mattn/vim-lsp-settings')
@@ -296,11 +295,6 @@ let g:lightline = {
       \ },
       \ 'colorscheme': 'neodark'
       \ }
-" }}}
-
-" liuchengxu/vista.vim {{{
-let g:vista_sidebar_width = 50
-nnoremap <leader>v :Vista!!<CR>
 " }}}
 
 " prabirshrestha/vim-lsp {{{
