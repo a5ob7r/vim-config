@@ -369,7 +369,8 @@ let g:git_messenger_max_popup_height = 15
 " }}}
 
 " sheerun/vim-polyglot {{{
-let g:polyglot_disabled = ['sensible']
+" Disable polyglot's ftdetect to use my ftdetect.
+let g:polyglot_disabled = ['ftdetect', 'sensible']
 " }}}
 
 " w0rp/ale {{{
