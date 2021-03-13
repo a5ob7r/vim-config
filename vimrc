@@ -107,17 +107,6 @@ function! DrillWrite() abort
   write
 endfunction
 
-function! SearchEnglishWord(word) abort
-  let l:searchUrl = 'https://dictionary.cambridge.org/dictionary/english/'
-  let l:url = l:searchUrl . a:word
-  call openbrowser#open(l:url)
-endfunction
-
-function! SearchUnderCursorEnglishWord() abort
-  let l:word = expand('<cword>')
-  call SearchEnglishWord(l:word)
-endfunction
-
 function! SubstituteStringsWith(dict, line) abort
   let l:repl = a:line
   for [l:k, l:v] in items(a:dict)
@@ -428,6 +417,21 @@ endif
 
 " mattn/ctrlp-matchfuzzy {{{
 let g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
+" }}}
+
+" tyru/open-browser.vim {{{
+nmap <leader>K <Plug>(openbrowser-smart-search)
+
+function! SearchEnglishWord(word) abort
+  let l:searchUrl = 'https://dictionary.cambridge.org/dictionary/english/'
+  let l:url = l:searchUrl . a:word
+  call openbrowser#open(l:url)
+endfunction
+
+function! SearchUnderCursorEnglishWord() abort
+  let l:word = expand('<cword>')
+  call SearchEnglishWord(l:word)
+endfunction
 " }}}
 
 packloadall
