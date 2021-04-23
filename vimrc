@@ -294,6 +294,8 @@ function! s:on_lsp_buffer_enabled() abort
 
   nmap <buffer> <leader>lf <plug>(lsp-document-format)
   nmap <buffer> <leader>la <plug>(lsp-code-action)
+  nmap <buffer> <leader>ll <plug>(lsp-code-lens)
+  nmap <buffer> <leader>lr <plug>(lsp-references)
 
   ALEDisableBuffer
 endfunction
