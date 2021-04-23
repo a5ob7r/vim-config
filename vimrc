@@ -83,6 +83,8 @@ nnoremap <leader>n :call ToggleNetrw()<CR>
 nnoremap <leader>k :call SearchUnderCursorEnglishWord()<CR>
 nnoremap <F2> :source $MYVIMRC<CR>
 nnoremap <leader><F2> :edit $MYVIMRC<CR>
+
+inoremap <expr> <C-L> PreviousStringPadding()
 " }}}
 
 " Others {{{
@@ -125,6 +127,14 @@ function! SubstituteJapanesePunctuationsInRange() abort range
 endfunction
 
 command! -range SubstJPuncts silent! <line1>,<line2>call SubstituteJapanesePunctuationsInRange()
+
+" Make a newline and insert some whitespaces which have same length of
+" previous charactors on cursor. This function contains side effect.
+function! PreviousStringPadding() abort
+  let l:padding = repeat(' ', col('.') - 1)
+
+  return "\n" . l:padding
+endfunction
 
 augroup QuickFixCmd
   autocmd!
