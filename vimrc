@@ -309,6 +309,8 @@ function! s:on_lsp_buffer_enabled() abort
   nmap <buffer> <leader>lr <plug>(lsp-references)
 
   ALEDisableBuffer
+
+  autocmd! BufWritePre *.hs call execute('LspDocumentFormatSync')
 endfunction
 
 let g:lsp_diagnostics_float_cursor = 1
