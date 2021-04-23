@@ -214,6 +214,7 @@ function! PackInit() abort
   call minpac#add('tpope/vim-commentary')
   call minpac#add('tpope/vim-endwise')
   call minpac#add('tpope/vim-surround')
+  call minpac#add('tyru/eskk.vim')
   call minpac#add('tyru/open-browser.vim')
   call minpac#add('w0rp/ale')
 
@@ -429,6 +430,15 @@ function! SearchUnderCursorEnglishWord() abort
   let l:word = expand('<cword>')
   call SearchEnglishWord(l:word)
 endfunction
+" }}}
+
+" tyru/eskk.vim {{{
+imap <C-J> <Plug>(eskk:toggle)
+let g:eskk#large_dictionary = {
+      \ 'path': '/usr/share/skk/SKK-JISYO.L',
+      \ 'sorted': 1,
+      \ 'encoding': 'euc-jp',
+      \ }
 " }}}
 
 packloadall
