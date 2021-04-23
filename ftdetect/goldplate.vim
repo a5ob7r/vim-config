@@ -1,3 +1,6 @@
 " https://github.com/fugue/goldplate
 " Golden test runner.
-autocmd BufRead,BufNewFile *.goldplate setlocal filetype=json
+augroup GOLDPLATE
+  autocmd!
+  autocmd BufRead,BufNewFile *.goldplate setlocal filetype=json
+augroup END
