@@ -310,7 +310,10 @@ function! s:on_lsp_buffer_enabled() abort
 
   ALEDisableBuffer
 
-  autocmd! BufWritePre *.hs call execute('LspDocumentFormatSync')
+  augroup LSP_AUTO_FORMAT
+    autocmd!
+    autocmd! BufWritePre *.hs call execute('LspDocumentFormatSync')
+  augroup END
 endfunction
 
 let g:lsp_diagnostics_float_cursor = 1
