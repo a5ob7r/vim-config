@@ -135,9 +135,11 @@ nnoremap <leader><F2> :edit $MYVIMRC<CR>
 inoremap <expr> <C-L> PreviousStringPadding()
 " }}}
 
-" Others {{{
+" Commands {{{
 command! -range SubstJPuncts silent! <line1>,<line2>call SubstituteJapanesePunctuationsInRange()
+" }}}
 
+" Auto commands {{{
 augroup QuickFixCmd
   autocmd!
   autocmd QuickFixCmdPost *grep* cwindow
@@ -169,7 +171,7 @@ endif
 " }}}
 " }}}
 
-" Plugins {{{
+" Default plugins {{{
 " Disable some standard plugins which are not necessary. {{{
 let g:loaded_vimball = 1
 let g:loaded_vimballPlugin = 1
@@ -189,6 +191,9 @@ packadd! matchit
 let b:match_ignorecase = 1
 " }}}
 
+" }}}
+
+" Plugins {{{
 " t-takata/minpac {{{
 silent! packadd minpac
 
