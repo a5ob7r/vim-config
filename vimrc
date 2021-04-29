@@ -2,8 +2,6 @@
 " vimrc
 "
 
-source $VIMRUNTIME/defaults.vim
-
 " Encoding {{{
 set encoding=utf-8
 scriptencoding utf-8
@@ -58,21 +56,23 @@ endfunction
 " }}}
 
 " Options {{{
-" Override some options on defaults.vim {{{
-set display=lastline
-set history=10000
-set mouse=
-" }}}
-
+set backspace=indent,eol,start
 set cindent
 set colorcolumn=81,101,121
 set cursorline
+set display=lastline
 set fileencodings=utf-8,sjis,shift_jis,iso-2022-jp,euc-jp,cp932,ucs-bom
 set hidden
+set history=10000
 set hlsearch
+set incsearch
 set laststatus=2
+set ruler
+set scrolloff=5
+set showcmd
 set showmatch
 set virtualedit=block
+set wildmenu
 set wildmode=longest:full,full
 
 set nowrapscan
@@ -116,6 +116,8 @@ let g:mapleader=' '
 " }}}
 
 " Key mappings {{{
+map Q <Nop>
+
 nnoremap j gj
 nnoremap k gk
 nnoremap <Esc><Esc> :nohlsearch<CR><Esc>
@@ -169,6 +171,22 @@ if has('persistent_undo')
   augroup END
 endif
 " }}}
+
+augroup vimStartup
+  autocmd!
+
+  " From vim/runtime/defaults.vim
+  " Jump cursor to last editting line.
+  autocmd BufReadPost *
+    \ if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
+    \ |   exe "normal! g`\""
+    \ | endif
+augroup END
+" }}}
+
+" Others {{{
+filetype plugin indent on
+syntax on
 " }}}
 
 " Default plugins {{{
