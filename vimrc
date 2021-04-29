@@ -135,6 +135,15 @@ nnoremap <F2> :source $MYVIMRC<CR>
 nnoremap <leader><F2> :edit $MYVIMRC<CR>
 
 inoremap <expr> <C-L> PreviousStringPadding()
+
+" From vim/runtime/mswin.vim
+" Save with Ctrl + s on normal mode and insert mode.
+"
+" I usually save to file per every line editing by doing to go to normal mode
+" and run ":w". But doing this by hand per every editing is a little
+" borthersome.
+nnoremap <C-s> :update<CR>
+inoremap <C-s> <Esc>:update<CR>gi
 " }}}
 
 " Commands {{{
