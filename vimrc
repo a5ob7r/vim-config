@@ -241,10 +241,7 @@ function! PackInit() abort
   call minpac#add('editorconfig/editorconfig-vim')
   call minpac#add('honza/vim-snippets')
   call minpac#add('itchyny/lightline.vim')
-  call minpac#add('itchyny/vim-gitbranch')
   call minpac#add('kannokanno/previm')
-  call minpac#add('mattn/emmet-vim')
-  call minpac#add('mattn/vim-lexiv')
   call minpac#add('mattn/vim-lsp-settings')
   call minpac#add('mechatroner/rainbow_csv')
   call minpac#add('prabirshrestha/async.vim')
@@ -296,13 +293,10 @@ let g:lightline = {
       \ 'active': {
       \   'left': [
       \       [ 'mode', 'paste' ],
-      \       [ 'gitbranch', 'readonly', 'relativepath', 'modified' ],
+      \       [ 'readonly', 'relativepath', 'modified' ],
       \       [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok' ],
       \       [ 'lsp_errors', 'lsp_warnings', 'lsp_informations', 'lsp_hints', 'lsp_ok' ]
       \     ]
-      \   },
-      \ 'component_function': {
-      \   'gitbranch': 'gitbranch#name'
       \   },
       \ 'component_expand': {
       \   'lsp_errors': 'LspErrorCount',
