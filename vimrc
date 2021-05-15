@@ -450,13 +450,28 @@ let g:lsp_settings = {
 " }}}
 
 " ctrlpvim/ctrlp.vim {{{
-let g:ctrlp_map = '<leader><Space>'
+" Disable CtrlP's key mapping. Use wrapper function and map new key instead.
+let g:ctrlp_map = ''
 let g:ctrlp_show_hidden = 1
 
 if executable('rg')
   let g:ctrlp_use_caching = 0
   let g:ctrlp_user_command = "rg --files --hidden --glob='!.git'"
 endif
+
+function! CtrlPWrapper() abort
+  let l:homed = expand('~')
+  let l:cwd = getcwd()
+
+  " Make vim heavy to run CtrlP on home directory.
+  if l:homed == l:cwd
+    throw 'Forbidden to run CtrlP on home directory'
+  endif
+
+  CtrlP
+endfunction
+
+nnoremap <leader><Space> :call CtrlPWrapper()<CR>
 " }}}
 
 " mattn/ctrlp-matchfuzzy {{{
