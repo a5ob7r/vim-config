@@ -218,6 +218,9 @@ packadd! matchit
 let b:match_ignorecase = 1
 " }}}
 
+" rust {{{
+let g:rustfmt_autosave = 1
+" }}}
 " }}}
 
 " Plugins {{{
