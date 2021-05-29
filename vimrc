@@ -122,6 +122,8 @@ nnoremap j gj
 nnoremap k gk
 nnoremap <Esc><Esc> :nohlsearch<CR><Esc>
 
+noremap Y y$
+
 nnoremap <leader><Enter> o<Esc>
 
 nnoremap <C-j> <C-w>j
