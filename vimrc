@@ -484,6 +484,7 @@ function! CtrlPWrapper() abort
 endfunction
 
 nnoremap <leader><Space> :call CtrlPWrapper()<CR>
+nnoremap <leader>b :CtrlPBuffer<CR>
 " }}}
 
 " mattn/ctrlp-matchfuzzy {{{
