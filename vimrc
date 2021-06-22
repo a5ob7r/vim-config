@@ -361,7 +361,6 @@ endfunction
 
 let g:lsp_diagnostics_float_cursor = 1
 let g:lsp_diagnostics_float_delay = 200
-let g:lsp_highlight_references_enabled = 1
 let g:lsp_semantic_enabled = 1
 
 augroup LSP_INSTALL
