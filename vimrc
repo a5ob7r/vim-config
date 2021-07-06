@@ -146,6 +146,11 @@ inoremap <expr> <C-L> PreviousStringPadding()
 " borthersome.
 nnoremap <C-s> :update<CR>
 inoremap <C-s> <Esc>:update<CR>gi
+
+" Tmux like window(pane) splitting. In this case assume the prefix key is
+" Ctrl-Q.
+nnoremap <C-Q>" :terminal<CR>
+nnoremap <C-Q>% :vertical terminal<CR>
 " }}}
 
 " Commands {{{
