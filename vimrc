@@ -479,7 +479,7 @@ nmap <silent> <C-n> <Plug>(ale_next_wrap)
 " }}}
 
 " lambdalisue/gina.vim {{{
-nmap <leader>gl :Gina log --graph<CR>
+nmap <leader>gl :Gina log --graph --all<CR>
 nmap <leader>gs :Gina status<CR>
 nmap <leader>gc :Gina commit<CR>
 " }}}
