@@ -509,13 +509,13 @@ endif
 function! CtrlPWrapper() abort
   let l:home = expand('~')
   let l:cwd = getcwd()
-  " Basename of current file name.
-  let l:cbn = expand('%:p:h')
+  " Dirname of current file name.
+  let l:cdn = expand('%:p:h')
 
   " Make vim heavy or freeze to run CtrlP to search many files. For example
   " this is caused when run `CtrlP` on home directory or edit a file on home
   " directory.
-  if l:home ==# l:cwd || l:home ==# l:cbn
+  if l:home ==# l:cwd || l:home ==# l:cdn
     throw 'Forbidden to run CtrlP on home directory'
   endif
 
