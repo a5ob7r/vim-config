@@ -9,7 +9,7 @@ scriptencoding utf-8
 
 " Functions {{{
 " Toggle netrw window
-function! ToggleNetrw() abort
+function! s:toggle_newrw() abort
   if &filetype ==# 'netrw'
     Rexplore
   else
@@ -156,7 +156,7 @@ nnoremap <C-k> <C-w>k
 nnoremap <C-h> <C-w>h
 nnoremap <C-l> <C-w>l
 
-nnoremap <leader>n :call ToggleNetrw()<CR>
+nnoremap <leader>n :ToggleNetrw<CR>
 nnoremap <leader>k :call SearchUnderCursorEnglishWord()<CR>
 nnoremap <F2> :source $MYVIMRC<CR>
 nnoremap <leader><F2> :edit $MYVIMRC<CR>
@@ -188,6 +188,7 @@ command! -nargs=? -range Rg call s:ripgrep(<f-args>)
 command! -range Rgv call s:ripgrep_visual()
 
 command! WriteP call s:write_parent()
+command! ToggleNetrw call s:toggle_newrw()
 " }}}
 
 " Auto commands {{{
