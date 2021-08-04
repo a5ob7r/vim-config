@@ -18,9 +18,9 @@ function! ToggleNetrw() abort
 endfunction
 
 " Write a buffer to a file whether or not parent directories.
-function! DrillWrite() abort
-  let l:parentDirPathOfcurrentBuf = expand('%:h')
-  call mkdir(l:parentDirPathOfcurrentBuf, 'p')
+function! s:write_parent() abort
+  let l:cdn = expand('%:h')
+  call mkdir(l:cdn, 'p')
   write
 endfunction
 
@@ -186,6 +186,8 @@ command! -nargs=? -range Rg call s:ripgrep(<f-args>)
 " This does not use any replacement text provided by `-range` attribute but
 " needs it to update '< and '> marks to get visual selected text.
 command! -range Rgv call s:ripgrep_visual()
+
+command! WriteP call s:write_parent()
 " }}}
 
 " Auto commands {{{
