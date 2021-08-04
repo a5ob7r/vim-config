@@ -46,14 +46,6 @@ function! SubstituteJapanesePunctuationsInRange() abort range
   call setline(a:firstline, l:repls)
 endfunction
 
-" Make a newline and insert some whitespaces which have same length of
-" previous charactors on cursor. This function contains side effect.
-function! PreviousStringPadding() abort
-  let l:padding = repeat(' ', col('.') - 1)
-
-  return "\n" . l:padding
-endfunction
-
 " https://stackoverflow.com/questions/1533565/how-to-get-visually-selected-text-in-vimscript
 function! s:get_visual_selection()
   let [l:line_start, l:column_start] = getpos("'<")[1:2]
@@ -169,7 +161,6 @@ nnoremap <leader>k :call SearchUnderCursorEnglishWord()<CR>
 nnoremap <F2> :source $MYVIMRC<CR>
 nnoremap <leader><F2> :edit $MYVIMRC<CR>
 
-inoremap <expr> <C-L> PreviousStringPadding()
 nnoremap <leader>f :Rg<CR>
 vnoremap <leader>f :Rgv<CR>
 
