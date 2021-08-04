@@ -516,11 +516,15 @@ if executable('rg')
 endif
 
 function! CtrlPWrapper() abort
-  let l:homed = expand('~')
+  let l:home = expand('~')
   let l:cwd = getcwd()
+  " Basename of current file name.
+  let l:cbn = expand('%:p:h')
 
-  " Make vim heavy to run CtrlP on home directory.
-  if l:homed == l:cwd
+  " Make vim heavy or freeze to run CtrlP to search many files. For example
+  " this is caused when run `CtrlP` on home directory or edit a file on home
+  " directory.
+  if l:home ==# l:cwd || l:home ==# l:cbn
     throw 'Forbidden to run CtrlP on home directory'
   endif
 
