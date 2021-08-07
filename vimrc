@@ -500,8 +500,8 @@ let g:lsp_settings = {
 " }}}
 
 " ctrlpvim/ctrlp.vim {{{
-" Disable CtrlP's key mapping. Use wrapper function and map new key instead.
-let g:ctrlp_map = ''
+let g:ctrlp_map = '<leader><Space>'
+let g:ctrlp_cmd = 'CtrlPp'
 let g:ctrlp_show_hidden = 1
 
 if executable('rg')
@@ -509,7 +509,7 @@ if executable('rg')
   let g:ctrlp_user_command = "rg --files --hidden --glob='!.git'"
 endif
 
-function! CtrlPWrapper() abort
+function! s:ctrlp_proxy() abort
   let l:home = expand('~')
   let l:cwd = getcwd()
   " Dirname of current file name.
@@ -525,7 +525,8 @@ function! CtrlPWrapper() abort
   CtrlP
 endfunction
 
-nnoremap <leader><Space> :call CtrlPWrapper()<CR>
+command! CtrlPp call s:ctrlp_proxy()
+
 nnoremap <leader>b :CtrlPBuffer<CR>
 " }}}
 
