@@ -70,7 +70,7 @@ function! s:ripgrep(...) abort
 
   let l:query = shellescape(l:q)
 
-  cexpr system("rg --vimgrep " . l:query)
+  cexpr system("rg --vimgrep --hidden " . l:query)
   copen
 endfunction
 
