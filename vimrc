@@ -75,8 +75,8 @@ function! s:ripgrep(...) abort
 endfunction
 
 function! s:ripgrep_visual() abort
-  let s:q = s:get_visual_selection()
-  call s:ripgrep(s:q)
+  let l:q = s:get_visual_selection()
+  call s:ripgrep(l:q)
 endfunction
 " }}}
 
