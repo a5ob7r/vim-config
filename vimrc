@@ -298,10 +298,6 @@ function! PackInit() abort
   call minpac#add('kannokanno/previm')
   call minpac#add('mattn/vim-lsp-settings')
   call minpac#add('mechatroner/rainbow_csv')
-  call minpac#add('prabirshrestha/async.vim')
-  call minpac#add('prabirshrestha/asyncomplete-lsp.vim')
-  call minpac#add('prabirshrestha/asyncomplete-ultisnips.vim')
-  call minpac#add('prabirshrestha/asyncomplete.vim')
   call minpac#add('prabirshrestha/vim-lsp')
   call minpac#add('rhysd/git-messenger.vim')
   call minpac#add('sheerun/vim-polyglot')
@@ -559,16 +555,6 @@ let g:eskk#large_dictionary = {
 " }}}
 
 packloadall
-
-" After plugin loaded {{{
-" prabirshrestha/asyncomplete-ultisnips.vim {{{
-call asyncomplete#register_source(asyncomplete#sources#ultisnips#get_source_options({
-      \ 'name': 'ultisnips',
-      \ 'whitelist': ['*'],
-      \ 'completor': function('asyncomplete#sources#ultisnips#completor'),
-      \ }))
-" }}}
-" }}}
 " }}}
 
 " vim:set expandtab tabstop=2 shiftwidth=2 foldmethod=marker:
