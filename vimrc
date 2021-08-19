@@ -11,7 +11,11 @@ scriptencoding utf-8
 " Toggle netrw window
 function! s:toggle_newrw() abort
   if &filetype ==# 'netrw'
-    Rexplore
+    " NOTE: To ignore warning "warning (netrw) win#n not a former netrw
+    " window".
+    try
+      Rexplore
+    endtry
   else
     Explore
   endif
