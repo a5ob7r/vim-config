@@ -10,7 +10,14 @@ scriptencoding utf-8
 " Functions {{{
 " Toggle netrw window
 function! s:toggle_newrw() abort
-  if &filetype ==# 'netrw'
+  " Capture Ex command output into a variable.
+  redir => l:bufs
+  silent! buffers %a
+  redir END
+
+  if empty(l:bufs)
+    edit .
+  elseif &filetype ==# 'netrw'
     " NOTE: To ignore warning "warning (netrw) win#n not a former netrw
     " window".
     try
