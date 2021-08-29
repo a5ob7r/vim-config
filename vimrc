@@ -89,6 +89,10 @@ function! s:ripgrep_visual() abort
   let l:q = s:get_visual_selection()
   call s:ripgrep(l:q)
 endfunction
+
+function! s:is_linux_console() abort
+  return $TERM ==# 'linux'
+endfunction
 " }}}
 
 " Options {{{
@@ -331,7 +335,10 @@ command! PackStatus call minpac#status()
 
 " KeitaNakamura/neodark.vim {{{
 let g:neodark#background='#202020'
-colorscheme neodark
+
+if ! s:is_linux_console()
+  colorscheme neodark
+endif
 " }}}
 
 " SirVer/ultisnips {{{
@@ -376,9 +383,12 @@ let g:lightline = {
       \   'lsp_informations': 'left',
       \   'lsp_hints': 'left',
       \   'lsp_ok': 'left'
-      \ },
-      \ 'colorscheme': 'neodark'
       \ }
+      \ }
+
+if ! s:is_linux_console()
+  let g:lightline.colorscheme = 'neodark'
+endif
 " }}}
 
 " prabirshrestha/vim-lsp {{{
