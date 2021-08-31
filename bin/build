@@ -57,7 +57,7 @@ if is_macos; then
   fi
 
   if has lua; then
-    prefix
+    declare prefix
     prefix="$(cmdpath lua)"
     prefix="${prefix%/bin/lua}"
 
