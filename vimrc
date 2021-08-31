@@ -326,6 +326,7 @@ function! PackInit() abort
 
   call minpac#add('ctrlpvim/ctrlp.vim')
   call minpac#add('mattn/ctrlp-matchfuzzy')
+  call minpac#add('a5ob7r/ctrlp-man')
 endfunction
 
 command! PackUpdate call PackInit() | call minpac#update()
