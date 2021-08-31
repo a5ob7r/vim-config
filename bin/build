@@ -8,6 +8,14 @@
 
 set -Ceuo pipefail
 
+function cmdpath () {
+  command -v "$1"
+}
+
+function has () {
+  cmdpath "$1" &>/dev/null
+}
+
 function is_macos () {
   [[ "$OSTYPE" =~ ^darwin ]]
 }
@@ -20,7 +28,7 @@ function sudo::proxy () {
   fi
 }
 
-readonly VIM_REPO_PATH="${VIM_REPO_PATH:-$(ghq list -p | grep -m 1 'vim/vim')}"
+readonly VIM_REPO_PATH="${VIM_REPO_PATH:-$(ghq list --full-path --exact 'vim/vim')}"
 readonly CONFIG_CACHE='src/auto/config.cache'
 
 cd "$VIM_REPO_PATH"
@@ -34,13 +42,43 @@ fi
 export CFLAGS='-g -O2 -march=native -Wall -Wshadow -Wmissing-prototypes'
 export CPPFLAGS="$CFLAGS"
 
-./configure \
-  --quiet \
-  --disable-gui \
-  --enable-fail-if-missing \
-  --enable-luainterp=dynamic \
-  --enable-python3interp=dynamic \
-  ;
+declare -a opts=(
+  --quiet
+  --disable-gui
+  --enable-fail-if-missing
+)
+
+if is_macos; then
+  if has python3; then
+    opts+=(
+      --enable-python3interp
+      --with-python3-command="$(cmdpath python3)"
+    )
+  fi
+
+  if has lua; then
+    prefix
+    prefix="$(cmdpath lua)"
+    prefix="${prefix%/bin/lua}"
+
+    opts+=(
+      --enable-luainterp
+      --with-lua-prefix="$prefix"
+    )
+
+    unset prefix
+  fi
+else
+  if has python3; then
+    opts+=(--enable-python3interp=dynamic)
+  fi
+
+  if has lua; then
+    opts+=(--enable-luainterp=dynamic)
+  fi
+fi
+
+./configure "${opts[@]}"
 
 make --quiet -j"$(nproc)"
 sudo::proxy make --quiet install
