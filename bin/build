@@ -28,6 +28,16 @@ function sudo::proxy () {
   fi
 }
 
+function nproc::proxy () {
+  if is_macos; then
+    sysctl -n hw.ncpu
+  elif has nproc; then
+    nproc
+  else
+    echo 1
+  fi
+}
+
 readonly VIM_REPO_PATH="${VIM_REPO_PATH:-$(ghq list --full-path --exact 'vim/vim')}"
 readonly CONFIG_CACHE='src/auto/config.cache'
 
@@ -80,7 +90,7 @@ fi
 
 ./configure "${opts[@]}"
 
-make --quiet -j"$(nproc)"
+make --quiet --jobs="$(nproc::proxy)"
 sudo::proxy make --quiet install
 
 echo
