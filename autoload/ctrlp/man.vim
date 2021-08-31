@@ -48,7 +48,10 @@ endfunction
 
 function! ctrlp#man#run(...) abort
   let l:q = get(a:, '1', '.')
-  let l:cmd = printf('apropos %s', l:q)
+
+  let l:opts = get(g:, 'ctrlp_man_apropos_options', '')
+
+  let l:cmd = printf('apropos %s %s', l:opts, l:q)
 
   let s:candidates = systemlist(l:cmd)
 
