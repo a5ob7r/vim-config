@@ -8,13 +8,25 @@
 
 set -Ceuo pipefail
 
+function is_macos () {
+  [[ "$OSTYPE" =~ ^darwin ]]
+}
+
+function sudo::proxy () {
+  if is_macos; then
+    "$@"
+  else
+    sudo "$@"
+  fi
+}
+
 readonly VIM_REPO_PATH="${VIM_REPO_PATH:-$(ghq list -p | grep -m 1 'vim/vim')}"
 readonly CONFIG_CACHE='src/auto/config.cache'
 
 cd "$VIM_REPO_PATH"
 
 if [[ -f "$CONFIG_CACHE" ]]; then
-  sudo make --quiet uninstall
+  sudo::proxy make --quiet uninstall
   git fetch -v
   git switch -d origin/master
 fi
@@ -31,7 +43,7 @@ export CPPFLAGS="$CFLAGS"
   ;
 
 make --quiet -j"$(nproc)"
-sudo make --quiet install
+sudo::proxy make --quiet install
 
 echo
 vim --version | head -n 2
