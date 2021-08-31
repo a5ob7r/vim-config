@@ -1,0 +1,30 @@
+*ctrlp-man.txt*  ctrlp-man
+
+CtrlP Extension for man(1)
+
+===============================================================================
+INTRODUCTION
+
+Find man page with CtrlP and open it on Vim.
+
+===============================================================================
+COMMANDS
+
+								*:CtrlPMan*
+:CtrlPMan[!] ...
+	Start fuzzy man page finder.
+
+	This command can take optional arguments, which are "keyword" to be
+	used to filter man page in advance. Each man pages must match all the
+	keywords. Also if no argument all man pages are selected.
+
+	If run this command with |bang| modifier, all arguments are passed to
+	"apropos" command, which is an external command to lookup man page and
+	is equal to "man -k", directly.
+
+	NOTE: Maybe :CtrlPMan without argument makes Vim so heavy because so
+	many man pages are found by it. So recommend to restrict number of
+	entries by giving it some arguments.
+
+===============================================================================
+vim:tw=78:ts=8:noet:ft=help:norl:
