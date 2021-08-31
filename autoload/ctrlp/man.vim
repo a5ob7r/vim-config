@@ -46,14 +46,16 @@ function! ctrlp#man#id() abort
   return s:id
 endfunction
 
-function! ctrlp#man#run(...) abort
-  let l:q = get(a:, '1', '.')
+function! ctrlp#man#run(bang, ...) abort
+  if empty(a:bang)
+    let s:candidates = systemlist('apropos .')
 
-  let l:opts = get(g:, 'ctrlp_man_apropos_options', '')
-
-  let l:cmd = printf('apropos %s %s', l:opts, l:q)
-
-  let s:candidates = systemlist(l:cmd)
+    for l:word in a:000
+      call filter(s:candidates, "v:val =~? '.*" . l:word . ".*'")
+    endfor
+  else
+    let s:candidates = systemlist('apropos ' . join(a:000, ' '))
+  endif
 
   call ctrlp#init(ctrlp#man#id())
 endfunction
