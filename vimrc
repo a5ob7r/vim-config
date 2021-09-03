@@ -290,49 +290,9 @@ let g:rustfmt_autosave = 1
 " }}}
 
 " Plugins {{{
-" t-takata/minpac {{{
-silent! packadd minpac
-
-if !exists('g:loaded_minpac')
+if ! minpac#extra#setup()
   finish
 endif
-
-function! PackInit() abort
-  call minpac#init()
-
-  call minpac#add('t-takata/minpac', { 'type': 'opt' })
-
-  call minpac#add('lambdalisue/gina.vim')
-  call minpac#add('KeitaNakamura/neodark.vim')
-  call minpac#add('SirVer/ultisnips')
-  call minpac#add('airblade/vim-gitgutter')
-  call minpac#add('bronson/vim-trailing-whitespace')
-  call minpac#add('editorconfig/editorconfig-vim')
-  call minpac#add('honza/vim-snippets')
-  call minpac#add('itchyny/lightline.vim')
-  call minpac#add('kannokanno/previm')
-  call minpac#add('mattn/vim-lsp-settings')
-  call minpac#add('mechatroner/rainbow_csv')
-  call minpac#add('prabirshrestha/vim-lsp')
-  call minpac#add('rhysd/git-messenger.vim')
-  call minpac#add('sheerun/vim-polyglot')
-  call minpac#add('thinca/vim-localrc')
-  call minpac#add('tpope/vim-commentary')
-  call minpac#add('tpope/vim-endwise')
-  call minpac#add('tpope/vim-surround')
-  call minpac#add('tyru/eskk.vim')
-  call minpac#add('tyru/open-browser.vim')
-  call minpac#add('w0rp/ale')
-
-  call minpac#add('ctrlpvim/ctrlp.vim')
-  call minpac#add('mattn/ctrlp-matchfuzzy')
-  call minpac#add('a5ob7r/ctrlp-man')
-endfunction
-
-command! PackUpdate call PackInit() | call minpac#update()
-command! PackClean call PackInit() | call minpac#clean()
-command! PackStatus call minpac#status()
-" }}}
 
 " KeitaNakamura/neodark.vim {{{
 let g:neodark#background='#202020'
@@ -575,6 +535,33 @@ let g:eskk#large_dictionary = {
       \ 'encoding': 'euc-jp',
       \ }
 " }}}
+
+call minpac#extra#add('t-takata/minpac')
+call minpac#extra#add('lambdalisue/gina.vim')
+call minpac#extra#add('KeitaNakamura/neodark.vim')
+call minpac#extra#add('SirVer/ultisnips')
+call minpac#extra#add('airblade/vim-gitgutter')
+call minpac#extra#add('bronson/vim-trailing-whitespace')
+call minpac#extra#add('editorconfig/editorconfig-vim')
+call minpac#extra#add('honza/vim-snippets')
+call minpac#extra#add('itchyny/lightline.vim')
+call minpac#extra#add('kannokanno/previm')
+call minpac#extra#add('mattn/vim-lsp-settings')
+call minpac#extra#add('mechatroner/rainbow_csv')
+call minpac#extra#add('prabirshrestha/vim-lsp')
+call minpac#extra#add('rhysd/git-messenger.vim')
+call minpac#extra#add('sheerun/vim-polyglot')
+call minpac#extra#add('thinca/vim-localrc')
+call minpac#extra#add('tpope/vim-commentary')
+call minpac#extra#add('tpope/vim-endwise')
+call minpac#extra#add('tpope/vim-surround')
+call minpac#extra#add('tyru/eskk.vim')
+call minpac#extra#add('tyru/open-browser.vim')
+call minpac#extra#add('w0rp/ale')
+
+call minpac#extra#add('ctrlpvim/ctrlp.vim')
+call minpac#extra#add('mattn/ctrlp-matchfuzzy')
+call minpac#extra#add('a5ob7r/ctrlp-man')
 " }}}
 
 " vim:set expandtab tabstop=2 shiftwidth=2 foldmethod=marker:
