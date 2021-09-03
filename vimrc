@@ -575,8 +575,6 @@ let g:eskk#large_dictionary = {
       \ 'encoding': 'euc-jp',
       \ }
 " }}}
-
-packloadall
 " }}}
 
 " vim:set expandtab tabstop=2 shiftwidth=2 foldmethod=marker:
