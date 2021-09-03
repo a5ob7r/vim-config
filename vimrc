@@ -539,11 +539,9 @@ let g:eskk#large_dictionary = {
 call minpac#extra#add('t-takata/minpac')
 call minpac#extra#add('lambdalisue/gina.vim')
 call minpac#extra#add('KeitaNakamura/neodark.vim')
-call minpac#extra#add('SirVer/ultisnips')
 call minpac#extra#add('airblade/vim-gitgutter')
 call minpac#extra#add('bronson/vim-trailing-whitespace')
 call minpac#extra#add('editorconfig/editorconfig-vim')
-call minpac#extra#add('honza/vim-snippets')
 call minpac#extra#add('itchyny/lightline.vim')
 call minpac#extra#add('kannokanno/previm')
 call minpac#extra#add('mattn/vim-lsp-settings')
@@ -562,6 +560,11 @@ call minpac#extra#add('w0rp/ale')
 call minpac#extra#add('ctrlpvim/ctrlp.vim')
 call minpac#extra#add('mattn/ctrlp-matchfuzzy')
 call minpac#extra#add('a5ob7r/ctrlp-man')
+
+if has('python3')
+  call minpac#extra#add('SirVer/ultisnips')
+  call minpac#extra#add('honza/vim-snippets')
+endif
 " }}}
 
 " vim:set expandtab tabstop=2 shiftwidth=2 foldmethod=marker:
