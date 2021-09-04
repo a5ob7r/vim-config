@@ -69,13 +69,13 @@ function! minpac#extra#add(url, config = { 'type': 'opt' })
   call minpac#add(a:url, a:config)
 
   let l:name = s:url2name(a:url)
-  silent! execute printf('packadd %s', l:name)
+  silent! execute 'packadd' l:name
 endfunction
 
 " Load all opt plugins.
 function! minpac#extra#load_opt_plugins()
   for l:pack in minpac#getpackages('minpac', 'opt', '*', v:true)
-    execute printf('packadd %s', l:pack)
+    execute 'packadd' l:pack
   endfor
 endfunction
 
