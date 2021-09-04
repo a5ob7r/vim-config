@@ -118,11 +118,11 @@ if executable('rg')
   set grepformat=%f:%l:%c:%m,%f:%l:%m
   set grepprg=rg\ --vimgrep\ --no-heading
 endif
-
-let g:mapleader=' '
 " }}}
 
 " Key mappings {{{
+let g:mapleader=' '
+
 map Q <Nop>
 
 nnoremap j gj
