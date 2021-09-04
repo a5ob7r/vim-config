@@ -57,39 +57,6 @@ function! SubstituteJapanesePunctuationsInRange() abort range
   call setline(a:firstline, l:repls)
 endfunction
 
-" https://stackoverflow.com/questions/1533565/how-to-get-visually-selected-text-in-vimscript
-function! s:get_visual_selection()
-  let [l:line_start, l:column_start] = getpos("'<")[1:2]
-  let [l:line_end, l:column_end] = getpos("'>")[1:2]
-  let l:lines = getline(l:line_start, l:line_end)
-  if len(l:lines) == 0
-    return ''
-  endif
-  let l:lines[-1] = l:lines[-1][: l:column_end - (&selection ==# 'inclusive' ? 1 : 2)]
-  let l:lines[0] = l:lines[0][l:column_start - 1:]
-  return join(l:lines, "\n")
-endfunction
-
-function! s:ripgrep(...) abort
-  let l:q = ''
-
-  if a:0 == 0
-    let l:q = expand('<cword>')
-  else
-    let l:q = a:1
-  endif
-
-  let l:query = shellescape(l:q)
-
-  cexpr system("rg --vimgrep --hidden " . l:query)
-  copen
-endfunction
-
-function! s:ripgrep_visual() abort
-  let l:q = s:get_visual_selection()
-  call s:ripgrep(l:q)
-endfunction
-
 function! s:is_linux_console() abort
   return $TERM ==# 'linux'
 endfunction
@@ -196,11 +163,6 @@ nnoremap <C-Q>% :vertical terminal<CR>
 
 " Commands {{{
 command! -range SubstJPuncts silent! <line1>,<line2>call SubstituteJapanesePunctuationsInRange()
-" This is true command I want.
-command! -nargs=? -range Rg call s:ripgrep(<f-args>)
-" This does not use any replacement text provided by `-range` attribute but
-" needs it to update '< and '> marks to get visual selected text.
-command! -range Rgv call s:ripgrep_visual()
 
 command! WriteP call s:write_parent()
 command! ToggleNetrw call s:toggle_newrw()
