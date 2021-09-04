@@ -41,5 +41,3 @@ setup::ln "$PWD/.ctags.d" ~/.ctags.d
 setup::ln "$PWD/.vintrc.yaml" ~/.vintrc.yaml
 setup::ln "$PWD/bin/build" ~/bin/vimbuild
 setup::ln "$PWD/bin/startuptime" ~/bin/vimstartuptime
-
-git clone https://github.com/k-takata/minpac.git ~/.vim/pack/minpac/opt/minpac

@@ -290,16 +290,39 @@ let g:rustfmt_autosave = 1
 " }}}
 
 " Plugins {{{
-if ! minpac#extra#setup()
-  finish
-endif
+while ! minpac#extra#setup()
+  if ! exists('g:install_minpac')
+    finish
+  endif
+
+  call minpac#extra#install()
+  unlet g:install_minpac
+
+  augroup install_plugins_with_minpac
+    autocmd!
+    autocmd VimEnter * call minpac#extra#install_and_load_plugins()
+  augroup END
+endwhile
 
 " KeitaNakamura/neodark.vim {{{
 let g:neodark#background='#202020'
 
-if ! s:is_linux_console()
+function! s:enable_colorscheme()
+  if ! minpac#extra#exists('KeitaNakamura/neodark.vim') || s:is_linux_console()
+    return
+  endif
+
+  if exists('g:lightline')
+    let g:lightline.colorscheme = 'neodark'
+  endif
+
   colorscheme neodark
-endif
+endfunction
+
+augroup apply_colorscheme
+  autocmd!
+  autocmd VimEnter * ++nested call s:enable_colorscheme()
+augroup END
 " }}}
 
 " SirVer/ultisnips {{{
@@ -347,9 +370,20 @@ let g:lightline = {
       \ }
       \ }
 
-if ! s:is_linux_console()
-  let g:lightline.colorscheme = 'neodark'
-endif
+function! s:update_lightline()
+  if ! exists('g:loaded_lightline')
+    return
+  endif
+
+  call lightline#init()
+  call lightline#colorscheme()
+  call lightline#update()
+endfunction
+
+augroup update_lightline_colorscheme
+  autocmd!
+  autocmd ColorScheme * call s:update_lightline()
+augroup END
 " }}}
 
 " prabirshrestha/vim-lsp {{{

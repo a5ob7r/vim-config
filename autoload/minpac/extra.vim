@@ -1,5 +1,20 @@
 " minpac-extra
 
+function! s:pack_home() abort
+  return split(&packpath, ',')[0] . '/pack'
+endfunction
+
+function! minpac#extra#install() abort
+  let l:minpac_path = s:pack_home() . '/minpac/opt/minpac'
+  let l:minpac_url = 'https://github.com/k-takata/minpac.git'
+
+  if isdirectory(l:minpac_path) || ! executable('git')
+    return
+  endif
+
+  call system(printf('git clone %s %s', l:minpac_url, l:minpac_path))
+endfunction
+
 " Convert URL to plugin name.
 function! s:url2name(url)
   return split(a:url, '/')[-1]
@@ -54,5 +69,18 @@ function! minpac#extra#add(url, config = { 'type': 'opt' })
   call minpac#add(a:url, a:config)
 
   let l:name = s:url2name(a:url)
-  execute printf('packadd %s', l:name)
+  silent! execute printf('packadd %s', l:name)
+endfunction
+
+" Load all opt plugins.
+function! minpac#extra#load_opt_plugins()
+  for l:pack in minpac#getpackages('minpac', 'opt', '*', v:true)
+    execute printf('packadd %s', l:pack)
+  endfor
+endfunction
+
+function! minpac#extra#install_and_load_plugins()
+  " NOTE: Must specify not '*' but empty string or omit it as first argument
+  " to install all registered plugins.
+  call minpac#update('', { 'do': 'call minpac#extra#load_opt_plugins()' })
 endfunction
