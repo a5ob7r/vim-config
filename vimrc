@@ -279,6 +279,9 @@ function! s:enable_colorscheme()
   endif
 
   colorscheme neodark
+
+  " Adjust autosuggestioned text color for zsh.
+  let g:terminal_ansi_colors[8] = '#5f5f5f'
 endfunction
 
 augroup apply_colorscheme
