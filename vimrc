@@ -434,9 +434,6 @@ highlight ALEWarningSign ctermfg=11 guifg=#ED6237
 let g:ale_lint_on_insert_leave = 1
 let g:ale_lint_on_text_changed = 0
 let g:ale_lint_on_enter = 0
-let g:ale_linters = {
-      \ 'zsh': ['shellcheck']
-      \}
 let g:ale_python_auto_pipenv = 1
 let g:ale_disable_lsp = 1
 
