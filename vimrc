@@ -113,11 +113,6 @@ if has('osxdarwin')
 else
   set clipboard=unnamedplus
 endif
-
-if executable('rg')
-  set grepformat=%f:%l:%c:%m,%f:%l:%m
-  set grepprg=rg\ --vimgrep\ --no-heading
-endif
 " }}}
 
 " Key mappings {{{
