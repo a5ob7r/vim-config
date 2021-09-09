@@ -5,9 +5,9 @@
 
 set -Ceuo pipefail
 
-readonly FILEBASE=$(dirname "${BASH_SOURCE[0]}")
+parent="${0%/*}"
 
-cd "${FILEBASE}/.."
+cd "$parent/.."
 
 #######################################
 # `ln` wrapper.
@@ -23,12 +23,12 @@ cd "${FILEBASE}/.."
 # Return:
 #   None.
 #######################################
-setup::ln() {
-  local -r src="${1}" dst="${2}"
-  local -r dst_dir=$(command dirname "${dst}")
+setup::ln () {
+  local -r src="$1" dst="$2"
+  local -r dst_dir="${dst%/*}"
 
   if [[ -e "$dst" ]]; then
-    echo "already exist: ${dst}" 1>&2
+    echo "already exist: $dst" 1>&2
     return
   fi
 
