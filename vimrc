@@ -549,6 +549,7 @@ call minpac#extra#add('w0rp/ale')
 
 call minpac#extra#add('ctrlpvim/ctrlp.vim')
 call minpac#extra#add('mattn/ctrlp-matchfuzzy')
+call minpac#extra#add('mattn/ctrlp-ghq')
 call minpac#extra#add('a5ob7r/ctrlp-man')
 
 if has('python3')
