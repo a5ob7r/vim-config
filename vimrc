@@ -275,6 +275,9 @@ function! s:enable_colorscheme()
 
   colorscheme neodark
 
+  " Cyan, but default is orange in a strange way.
+  let g:terminal_ansi_colors[6] = '#72c7d1'
+  " Light black
   " Adjust autosuggestioned text color for zsh.
   let g:terminal_ansi_colors[8] = '#5f5f5f'
 endfunction
