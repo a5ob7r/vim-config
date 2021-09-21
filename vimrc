@@ -522,7 +522,6 @@ endfunction
 " }}}
 
 " tyru/eskk.vim {{{
-imap <C-J> <Plug>(eskk:toggle)
 let g:eskk#large_dictionary = {
       \ 'path': '/usr/share/skk/SKK-JISYO.L',
       \ 'sorted': 1,
