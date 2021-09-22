@@ -452,6 +452,11 @@ nmap <silent> <C-n> <Plug>(ale_next_wrap)
 nmap <leader>gl :Gina log --graph --all<CR>
 nmap <leader>gs :Gina status<CR>
 nmap <leader>gc :Gina commit<CR>
+
+call minpac#extra#add('lambdalisue/gina.vim')
+
+call gina#custom#mapping#nmap('log', 'q', '<C-W>c', { 'noremap': 1, 'silent': 1 })
+call gina#custom#mapping#nmap('status', 'q', '<C-W>c', { 'noremap': 1, 'silent': 1 })
 " }}}
 
 " mattn/vim-lsp-settings {{{
@@ -534,7 +539,6 @@ let g:eskk#large_dictionary = {
 " }}}
 
 call minpac#extra#add('t-takata/minpac')
-call minpac#extra#add('lambdalisue/gina.vim')
 call minpac#extra#add('KeitaNakamura/neodark.vim')
 call minpac#extra#add('airblade/vim-gitgutter')
 call minpac#extra#add('bronson/vim-trailing-whitespace')
