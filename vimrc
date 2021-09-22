@@ -161,6 +161,10 @@ command! -range SubstJPuncts silent! <line1>,<line2>call SubstituteJapanesePunct
 
 command! WriteP call s:write_parent()
 command! ToggleNetrw call s:toggle_newrw()
+
+" Tig
+command! -nargs=* Tig terminal ++close tig <args>
+command! -nargs=* Tiga Tig <args> --all
 " }}}
 
 " Auto commands {{{
