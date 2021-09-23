@@ -154,6 +154,8 @@ inoremap <C-s> <Esc>:update<CR>gi
 " Ctrl-Q.
 nnoremap <C-Q>" :terminal<CR>
 nnoremap <C-Q>% :vertical terminal<CR>
+
+nnoremap <silent> <leader>t :tabnew<CR>
 " }}}
 
 " Commands {{{
