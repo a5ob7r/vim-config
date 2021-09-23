@@ -515,6 +515,10 @@ nnoremap <leader>b :CtrlPBuffer<CR>
 let g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
 " }}}
 
+" mattn/ctrlp-ghq {{{
+nnoremap <silent> <leader>gq :CtrlPGhq<CR>
+" }}}
+
 " tyru/open-browser.vim {{{
 nmap <leader>K <Plug>(openbrowser-smart-search)
 
