@@ -172,22 +172,6 @@ augroup QuickFixCmd
   autocmd QuickFixCmdPost *grep* cwindow
 augroup end
 
-" NOTE: If set hotkeys to escape key or ctrl+[ on fcitx(5), it catches the key
-" sequence without passing through it to applications.
-augroup AUTO_INACTIVATE_IME
-  autocmd!
-
-  if executable('fcitx-remote')
-    autocmd InsertLeave * :call system('pgrep fcitx5 >/dev/null 2>&1 && fcitx-remote -c')
-    autocmd CmdlineLeave * :call system('pgrep fcitx5 >/dev/null 2>&1 && fcitx-remote -c')
-  endif
-
-  if executable('fcitx5-remote')
-    autocmd InsertLeave * :call system('pgrep fcitx5 >/dev/null 2>&1 && fcitx5-remote -c')
-    autocmd CmdlineLeave * :call system('pgrep fcitx5 >/dev/null 2>&1 && fcitx5-remote -c')
-  endif
-augroup end
-
 " {{{ Save undo tree
 if has('persistent_undo')
   augroup Undofile
