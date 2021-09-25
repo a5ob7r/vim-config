@@ -1,4 +1,5 @@
 nmap <leader>K <Plug>(openbrowser-smart-search)
+nnoremap <leader>k :call SearchUnderCursorEnglishWord()<CR>
 
 function! SearchEnglishWord(word) abort
   let l:searchUrl = 'https://dictionary.cambridge.org/dictionary/english/'

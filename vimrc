@@ -128,7 +128,6 @@ nnoremap <C-h> <C-w>h
 nnoremap <C-l> <C-w>l
 
 nnoremap <leader>n :ToggleNetrw<CR>
-nnoremap <leader>k :call SearchUnderCursorEnglishWord()<CR>
 nnoremap <F2> :source $MYVIMRC<CR>
 nnoremap <leader><F2> :edit $MYVIMRC<CR>
 
