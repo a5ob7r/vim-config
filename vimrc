@@ -28,11 +28,24 @@ function! s:toggle_newrw() abort
   endif
 endfunction
 
-" Write a buffer to a file whether or not parent directories.
-function! s:write_parent() abort
-  let l:cdn = expand('%:h')
-  call mkdir(l:cdn, 'p')
-  write
+" The name is from 'all right' and 'write'. Write a buffer to a file whether
+" or not parent directories exist. This means that create parent directories
+" if there are no them.
+function! s:alwrite() abort
+  let l:parent = expand('%:h')
+
+  if empty(glob(l:parent))
+    call mkdir(l:parent, 'p')
+  endif
+
+  " NOTE: Execute :write if writes to a new file instead of :update because it
+  " does not write to a new file, which the corresponding buffer is empty and
+  " is no modified.
+  if empty(glob(expand('%')))
+    write
+  else
+    update
+  endif
 endfunction
 
 function! SubstituteStringsWith(dict, line) abort
@@ -143,8 +156,8 @@ vnoremap <leader>f :Rgv<CR>
 " I usually save to file per every line editing by doing to go to normal mode
 " and run ":w". But doing this by hand per every editing is a little
 " borthersome.
-nnoremap <C-s> :update<CR>
-inoremap <C-s> <Esc>:update<CR>gi
+nnoremap <C-s> :Update<CR>
+inoremap <C-s> <Esc>:Update<CR>gi
 
 " Tmux like window(pane) splitting. In this case assume the prefix key is
 " Ctrl-Q.
@@ -157,7 +170,7 @@ nnoremap <silent> <leader>t :tabnew<CR>
 " Commands {{{
 command! -range SubstJPuncts silent! <line1>,<line2>call SubstituteJapanesePunctuationsInRange()
 
-command! WriteP call s:write_parent()
+command! Update call s:alwrite()
 command! ToggleNetrw call s:toggle_newrw()
 
 " Tig
