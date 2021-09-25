@@ -1,0 +1,5 @@
+let g:gitgutter_sign_added = 'A'
+let g:gitgutter_sign_modified = 'M'
+let g:gitgutter_sign_removed = 'D'
+let g:gitgutter_sign_removed_first_line = 'd'
+let g:gitgutter_sign_modified_removed = 'm'

@@ -1,7 +1,28 @@
 " minpac-extra
 
+let s:vim_root = expand('<sfile>:p:h:h:h')
+let s:minpac_extra_plugconf_root = get(g:, 'minpac_extra_plugconf_root', 'plugconf')
+
+" Convert URL to separated plugin config path.
+function! s:plugconf_from(url)
+  let l:plugconf = substitute(a:url, '^https\{,1}://', '', '')
+  let l:plugconf = substitute(l:plugconf, '\.git$', '', '')
+
+  return join([s:vim_root, minpac#extra#plugconf_root(), l:plugconf . '.vim'], '/')
+endfunction
+
+" Convert URL to plugin name.
+function! s:plugname_from(url)
+  let l:tail = split(a:url, '/')[-1]
+  return substitute(l:tail, '.git$', '', '')
+endfunction
+
 function! s:pack_home() abort
   return split(&packpath, ',')[0] . '/pack'
+endfunction
+
+function! minpac#extra#plugconf_root()
+  return s:minpac_extra_plugconf_root
 endfunction
 
 function! minpac#extra#install() abort
@@ -15,14 +36,9 @@ function! minpac#extra#install() abort
   call system(printf('git clone %s %s', l:minpac_url, l:minpac_path))
 endfunction
 
-" Convert URL to plugin name.
-function! s:url2name(url)
-  return split(a:url, '/')[-1]
-endfunction
-
 " Whether or not the plugin is installed.
 function! minpac#extra#exists(url)
-  let l:name = s:url2name(a:url)
+  let l:name = s:plugname_from(a:url)
 
   return ! empty(minpac#getpackages('minpac', '*', l:name))
 endfunction
@@ -68,8 +84,17 @@ function! minpac#extra#add(url, config = { 'type': 'opt' })
   " Register plugin to minpac to update.
   call minpac#add(a:url, a:config)
 
-  let l:name = s:url2name(a:url)
-  silent! execute 'packadd' l:name
+  let l:name = s:plugname_from(a:url)
+  let l:url = minpac#getpluginfo(l:name).url
+  let l:plugconf = s:plugconf_from(l:url)
+
+  if filereadable(l:plugconf)
+    execute 'source' l:plugconf
+  endif
+
+  if ! utils#is_packadded(l:name)
+    execute 'packadd' l:name
+  endif
 endfunction
 
 " Load all opt plugins.

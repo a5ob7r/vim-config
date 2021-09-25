@@ -10,3 +10,11 @@ function! utils#get_visual_selection()
   let l:lines[0] = l:lines[0][l:column_start - 1:]
   return join(l:lines, "\n")
 endfunction
+
+function! utils#is_packadded(name)
+  return printf(',%s,', &runtimepath) =~# printf(',/[^,]*/%s,', a:name)
+endfunction
+
+function! utils#is_linux_console()
+  return $TERM ==# 'linux'
+endfunction

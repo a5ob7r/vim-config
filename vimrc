@@ -56,10 +56,6 @@ function! SubstituteJapanesePunctuationsInRange() abort range
   let l:repls = map(l:lines, 'SubstituteJapanesePunctuations(v:val)')
   call setline(a:firstline, l:repls)
 endfunction
-
-function! s:is_linux_console() abort
-  return $TERM ==# 'linux'
-endfunction
 " }}}
 
 " Options {{{
@@ -267,294 +263,37 @@ while ! minpac#extra#setup()
   augroup END
 endwhile
 
-" KeitaNakamura/neodark.vim {{{
-let g:neodark#background='#202020'
+" UI
+call minpac#extra#add('KeitaNakamura/neodark.vim')
+call minpac#extra#add('itchyny/lightline.vim')
 
-function! s:enable_colorscheme()
-  if ! minpac#extra#exists('KeitaNakamura/neodark.vim') || s:is_linux_console()
-    return
-  endif
-
-  if exists('g:lightline')
-    let g:lightline.colorscheme = 'neodark'
-  endif
-
-  colorscheme neodark
-
-  " Cyan, but default is orange in a strange way.
-  let g:terminal_ansi_colors[6] = '#72c7d1'
-  " Light black
-  " Adjust autosuggestioned text color for zsh.
-  let g:terminal_ansi_colors[8] = '#5f5f5f'
-endfunction
-
-augroup apply_colorscheme
-  autocmd!
-  autocmd VimEnter * ++nested call s:enable_colorscheme()
-augroup END
-" }}}
-
-" SirVer/ultisnips {{{
-augroup USE_RSPEC_AS_RUBY
-  au!
-  autocmd Filetype rspec UltiSnipsAddFiletypes ruby
-augroup end
-" }}}
-
-" airblade/vim-gitgutter {{{
-let g:gitgutter_sign_added = 'A'
-let g:gitgutter_sign_modified = 'M'
-let g:gitgutter_sign_removed = 'D'
-let g:gitgutter_sign_removed_first_line = 'd'
-let g:gitgutter_sign_modified_removed = 'm'
-" }}}
-
-" itchyny/lightline.vim {{{
-let g:lightline = {
-      \ 'active': {
-      \   'left': [
-      \       [ 'mode', 'paste' ],
-      \       [ 'readonly', 'relativepath', 'modified' ],
-      \       [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok' ],
-      \       [ 'lsp_errors', 'lsp_warnings', 'lsp_informations', 'lsp_hints', 'lsp_ok' ]
-      \     ]
-      \   },
-      \ 'component_expand': {
-      \   'lsp_errors': 'LspErrorCount',
-      \   'lsp_warnings': 'LspWarningCount',
-      \   'lsp_informations': 'LspInformationCount',
-      \   'lsp_hints': 'LspHintCount',
-      \   'lsp_ok': 'LspOk'
-      \ },
-      \ 'component_type': {
-      \   'linter_checking': 'left',
-      \   'linter_warnings': 'warning',
-      \   'linter_errors': 'error',
-      \   'linter_ok': 'left',
-      \   'lsp_errors': 'error',
-      \   'lsp_warnings': 'warning',
-      \   'lsp_informations': 'left',
-      \   'lsp_hints': 'left',
-      \   'lsp_ok': 'left'
-      \ }
-      \ }
-
-function! s:update_lightline()
-  if ! exists('g:loaded_lightline')
-    return
-  endif
-
-  call lightline#init()
-  call lightline#colorscheme()
-  call lightline#update()
-endfunction
-
-augroup update_lightline_colorscheme
-  autocmd!
-  autocmd ColorScheme * call s:update_lightline()
-augroup END
-" }}}
-
-" prabirshrestha/vim-lsp {{{
-function! s:on_lsp_buffer_enabled() abort
-  setlocal omnifunc=lsp#complete
-  if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
-
-  nmap <buffer> gd <plug>(lsp-definition)
-  nmap <buffer> <leader>r <plug>(lsp-rename)
-  nmap <buffer> <leader>h <plug>(lsp-hover)
-  nmap <buffer> <C-p> <plug>(lsp-previous-diagnostic)
-  nmap <buffer> <C-n> <plug>(lsp-next-diagnostic)
-
-  nmap <buffer> <leader>lf <plug>(lsp-document-format)
-  nmap <buffer> <leader>la <plug>(lsp-code-action)
-  nmap <buffer> <leader>ll <plug>(lsp-code-lens)
-  nmap <buffer> <leader>lr <plug>(lsp-references)
-
-  ALEDisableBuffer
-
-  augroup LSP_AUTO_FORMAT
-    autocmd!
-    autocmd! BufWritePre *.hs call execute('LspDocumentFormatSync')
-  augroup END
-endfunction
-
-let g:lsp_diagnostics_float_cursor = 1
-let g:lsp_diagnostics_float_delay = 200
-let g:lsp_semantic_enabled = 1
-
-augroup LSP_INSTALL
-  au!
-  au User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
-augroup end
-
-augroup OnLSP
-  au!
-  au User lsp_diagnostics_updated call lightline#update()
-augroup end
-
-function! LspErrorCount() abort
-  let l:errors = lsp#get_buffer_diagnostics_counts().error
-  if l:errors == 0 | return '' | endif
-  return 'E: ' . l:errors
-endfunction
-
-function LspWarningCount() abort
-  let l:warnings = lsp#get_buffer_diagnostics_counts().warning
-  if l:warnings == 0 | return '' | endif
-  return 'W: ' . l:warnings
-endfunction
-
-function! LspInformationCount() abort
-  let l:informations = lsp#get_buffer_diagnostics_counts().information
-  if l:informations == 0 | return '' | endif
-  return 'I: ' . l:informations
-endfunction
-
-function! LspHintCount() abort
-  let l:hints = lsp#get_buffer_diagnostics_counts().hint
-  if l:hints == 0 | return '' | endif
-  return 'H: ' . l:hints
-endfunction
-
-function! LspOk() abort
-  let l:counts = lsp#get_buffer_diagnostics_counts()
-  let l:not_zero_counts = filter(l:counts, 'v:val != 0')
-  let l:ok = len(l:not_zero_counts) == 0
-  if l:ok | return 'OK' | endif
-  return ''
-endfunction
-" }}}
-
-" rhysd/git-messenger.vim {{{
-let g:git_messenger_include_diff = 'all'
-let g:git_messenger_always_into_popup = v:true
-let g:git_messenger_max_popup_height = 15
-" }}}
-
-" sheerun/vim-polyglot {{{
-" Disable polyglot's ftdetect to use my ftdetect.
-let g:polyglot_disabled = ['ftdetect', 'sensible']
-" }}}
-
-" w0rp/ale {{{
-highlight ALEErrorSign ctermfg=9 guifg=#C30500
-highlight ALEWarningSign ctermfg=11 guifg=#ED6237
-let g:ale_lint_on_insert_leave = 1
-let g:ale_lint_on_text_changed = 0
-let g:ale_lint_on_enter = 0
-let g:ale_python_auto_pipenv = 1
-let g:ale_disable_lsp = 1
-
-nmap <silent> <C-p> <Plug>(ale_previous_wrap)
-nmap <silent> <C-n> <Plug>(ale_next_wrap)
-" }}}
-
-" lambdalisue/gina.vim {{{
-nmap <leader>gl :Gina log --graph --all<CR>
-nmap <leader>gs :Gina status<CR>
-nmap <leader>gc :Gina commit<CR>
-
+" Git
+call minpac#extra#add('airblade/vim-gitgutter')
 call minpac#extra#add('lambdalisue/gina.vim')
+call minpac#extra#add('rhysd/git-messenger.vim')
 
-call gina#custom#mapping#nmap('log', 'q', '<C-W>c', { 'noremap': 1, 'silent': 1 })
-call gina#custom#mapping#nmap('status', 'q', '<C-W>c', { 'noremap': 1, 'silent': 1 })
-" }}}
+" CtrlP
+call minpac#extra#add('ctrlpvim/ctrlp.vim')
+call minpac#extra#add('mattn/ctrlp-matchfuzzy')
+call minpac#extra#add('mattn/ctrlp-ghq')
+call minpac#extra#add('a5ob7r/ctrlp-man')
 
-" mattn/vim-lsp-settings {{{
-let g:lsp_settings_enable_suggestions = 0
-let g:lsp_settings = {
-      \ 'texlab': {
-      \   'workspace_config': {
-      \     'latex': {
-      \       'build': {
-      \         'args': ['%f'],
-      \         'onSave': v:true,
-      \         'forwardSearchAfter': v:true
-      \         },
-      \       'forwardSearch': {
-      \         'executable': 'zathura',
-      \         'args': ['--synctex-forward', '%l:1:%f', '%p']
-      \         }
-      \       }
-      \     }
-      \   }
-      \ }
-" }}}
+" LSP
+call minpac#extra#add('prabirshrestha/vim-lsp')
+call minpac#extra#add('mattn/vim-lsp-settings')
 
-" ctrlpvim/ctrlp.vim {{{
-let g:ctrlp_map = '<leader><Space>'
-let g:ctrlp_cmd = 'CtrlPp'
-let g:ctrlp_show_hidden = 1
-
-if executable('rg')
-  let g:ctrlp_use_caching = 0
-  let g:ctrlp_user_command = "rg --files --hidden --glob='!.git'"
+if has('python3')
+  " Snippet
+  call minpac#extra#add('SirVer/ultisnips')
+  call minpac#extra#add('honza/vim-snippets')
 endif
 
-function! s:ctrlp_proxy() abort
-  let l:home = expand('~')
-  let l:cwd = getcwd()
-  " Dirname of current file name.
-  let l:cdn = expand('%:p:h')
-
-  " Make vim heavy or freeze to run CtrlP to search many files. For example
-  " this is caused when run `CtrlP` on home directory or edit a file on home
-  " directory.
-  if l:home ==# l:cwd || l:home ==# l:cdn
-    throw 'Forbidden to run CtrlP on home directory'
-  endif
-
-  CtrlP
-endfunction
-
-command! CtrlPp call s:ctrlp_proxy()
-
-nnoremap <leader>b :CtrlPBuffer<CR>
-" }}}
-
-" mattn/ctrlp-matchfuzzy {{{
-let g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
-" }}}
-
-" mattn/ctrlp-ghq {{{
-nnoremap <silent> <leader>gq :CtrlPGhq<CR>
-" }}}
-
-" tyru/open-browser.vim {{{
-nmap <leader>K <Plug>(openbrowser-smart-search)
-
-function! SearchEnglishWord(word) abort
-  let l:searchUrl = 'https://dictionary.cambridge.org/dictionary/english/'
-  let l:url = l:searchUrl . a:word
-  call openbrowser#open(l:url)
-endfunction
-
-function! SearchUnderCursorEnglishWord() abort
-  let l:word = expand('<cword>')
-  call SearchEnglishWord(l:word)
-endfunction
-" }}}
-
-" tyru/eskk.vim {{{
-let g:eskk#large_dictionary = {
-      \ 'path': '/usr/share/skk/SKK-JISYO.L',
-      \ 'sorted': 1,
-      \ 'encoding': 'euc-jp',
-      \ }
-" }}}
-
-call minpac#extra#add('t-takata/minpac')
-call minpac#extra#add('KeitaNakamura/neodark.vim')
-call minpac#extra#add('airblade/vim-gitgutter')
+" Misc
 call minpac#extra#add('bronson/vim-trailing-whitespace')
 call minpac#extra#add('editorconfig/editorconfig-vim')
-call minpac#extra#add('itchyny/lightline.vim')
 call minpac#extra#add('kannokanno/previm')
-call minpac#extra#add('mattn/vim-lsp-settings')
-call minpac#extra#add('prabirshrestha/vim-lsp')
-call minpac#extra#add('rhysd/git-messenger.vim')
 call minpac#extra#add('sheerun/vim-polyglot')
+call minpac#extra#add('t-takata/minpac')
 call minpac#extra#add('thinca/vim-localrc')
 call minpac#extra#add('tpope/vim-commentary')
 call minpac#extra#add('tpope/vim-endwise')
@@ -562,16 +301,6 @@ call minpac#extra#add('tpope/vim-surround')
 call minpac#extra#add('tyru/eskk.vim')
 call minpac#extra#add('tyru/open-browser.vim')
 call minpac#extra#add('w0rp/ale')
-
-call minpac#extra#add('ctrlpvim/ctrlp.vim')
-call minpac#extra#add('mattn/ctrlp-matchfuzzy')
-call minpac#extra#add('mattn/ctrlp-ghq')
-call minpac#extra#add('a5ob7r/ctrlp-man')
-
-if has('python3')
-  call minpac#extra#add('SirVer/ultisnips')
-  call minpac#extra#add('honza/vim-snippets')
-endif
 " }}}
 
 " vim:set expandtab tabstop=2 shiftwidth=2 foldmethod=marker:
