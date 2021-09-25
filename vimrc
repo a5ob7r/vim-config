@@ -143,11 +143,6 @@ vnoremap <leader>f :Rgv<CR>
 nnoremap <C-s> :Update<CR>
 inoremap <C-s> <Esc>:Update<CR>gi
 
-" Tmux like window(pane) splitting. In this case assume the prefix key is
-" Ctrl-Q.
-nnoremap <C-Q>" :terminal<CR>
-nnoremap <C-Q>% :vertical terminal<CR>
-
 nnoremap <silent> <leader>t :tabnew<CR>
 
 nnoremap <silent> <leader>y :YankComments<CR>
