@@ -58,11 +58,13 @@ function! utils#extract_comment(line, commentstring = &commentstring)
   " NOTE: Don't use regex to remove comment prefix or suffix because they may
   " contain special characters for regex. If so, maybe cause unexpected
   " behavior.
-  if len(l:line) >= len(l:prefix)
-    let l:line = utils#strip_whitespaces(l:line[len(l:prefix):])
+  let l:prefix_len = len(l:prefix)
+  if l:prefix_len > 0 && l:line[:l:prefix_len-1] ==# l:prefix
+    let l:line = utils#strip_whitespaces(l:line[l:prefix_len:])
   endif
-  if len(l:line) >= len(l:suffix)
-    let l:line = utils#strip_whitespaces(l:line[:-1-len(l:suffix)])
+  let l:suffix_len = len(l:suffix)
+  if l:suffix_len > 0 && l:line[-l:suffix_len:] ==# l:suffix
+    let l:line = utils#strip_whitespaces(l:line[:-1-l:suffix_len])
   endif
 
   return l:line
