@@ -22,3 +22,65 @@ endfunction
 function! utils#is_direct_color_enablable()
   return has('termguicolors') && ($COLORTERM ==# 'truecolor' || $TERM ==# 'st-256color')
 endfunction
+
+function! utils#strip_whitespaces(line)
+  " NOTE: '\S' preceding '\ze' is so important to prevent '.*' from consuming
+  " trailing whitespaces. If does not match to this, it means all characters
+  " are whitespaces and they should be stripped. In fact, return empty string
+  " by nomatching instead of stripping.
+  return matchstr(a:line, '^\s*\zs.*\S\ze\s*$')
+endfunction
+
+" Strip comment prefix (and suffix if it exists).
+function! utils#extract_comment(line, commentstring = &commentstring)
+  let l:commentstring = utils#strip_whitespaces(a:commentstring)
+  let l:line = utils#strip_whitespaces(a:line)
+
+  " Accept a string which contains one '%s' only and has comment prefix at
+  " least.
+  "
+  " Valid string.
+  " - '" %s'
+  " - '/*%s*/'
+  "
+  " Invalid string.
+  " - ''
+  " - ' %s '
+  " - '%s %s'
+  if ! (l:commentstring =~# '^\S\+\s*%s' && count(l:commentstring, '%s') == 1)
+    return l:line
+  endif
+
+  let l:arr = split(l:commentstring, '%s')
+  let l:prefix = utils#strip_whitespaces(get(l:arr, 0, ''))
+  let l:suffix = utils#strip_whitespaces(get(l:arr, 1, ''))
+
+  " NOTE: Don't use regex to remove comment prefix or suffix because they may
+  " contain special characters for regex. If so, maybe cause unexpected
+  " behavior.
+  if len(l:line) >= len(l:prefix)
+    let l:line = utils#strip_whitespaces(l:line[len(l:prefix):])
+  endif
+  if len(l:line) >= len(l:suffix)
+    let l:line = utils#strip_whitespaces(l:line[:-1-len(l:suffix)])
+  endif
+
+  return l:line
+endfunction
+
+" Appropriate clipboard register.
+function! utils#clipboard_register()
+  if ! has('clipboard')
+    return '"'
+  endif
+
+  let l:clipboard = printf(',%s,', &clipboard)
+
+  if l:clipboard =~# ',unnamed,'
+    return '*'
+  elseif l:clipboard =~# ',unnamedplus,'
+    return '+'
+  else
+    return '"'
+  endif
+endfunction

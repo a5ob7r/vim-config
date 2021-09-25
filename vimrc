@@ -8,6 +8,13 @@ scriptencoding utf-8
 " }}}
 
 " Functions {{{
+function! s:yank_comments() abort range
+  let l:lines = getline(a:firstline, a:lastline)
+  let l:lines = map(l:lines, 'utils#extract_comment(v:val)')
+
+  call setreg(utils#clipboard_register(), join(l:lines))
+endfunction
+
 " Toggle netrw window
 function! s:toggle_newrw() abort
   " Capture Ex command output into a variable.
@@ -165,10 +172,14 @@ nnoremap <C-Q>" :terminal<CR>
 nnoremap <C-Q>% :vertical terminal<CR>
 
 nnoremap <silent> <leader>t :tabnew<CR>
+
+nnoremap <silent> <leader>y :YankComments<CR>
+vnoremap <silent> <leader>y :YankComments<CR>
 " }}}
 
 " Commands {{{
 command! -range SubstJPuncts silent! <line1>,<line2>call SubstituteJapanesePunctuationsInRange()
+command! -range YankComments <line1>,<line2>call s:yank_comments()
 
 command! Update call s:alwrite()
 command! ToggleNetrw call s:toggle_newrw()
