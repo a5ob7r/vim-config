@@ -97,7 +97,7 @@ set ignorecase
 set smartcase
 " }}}
 
-if has('termguicolors') && ($COLORTERM ==# 'truecolor' || $TERM ==# 'st-256color')
+if utils#is_direct_color_enablable()
   " To use truecolor on not xterm* terminal type
   set termguicolors
   let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
