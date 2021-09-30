@@ -2,9 +2,8 @@ let g:ctrlp_map = '<leader><Space>'
 let g:ctrlp_cmd = 'CtrlPp'
 let g:ctrlp_show_hidden = 1
 
-if executable('rg')
-  let g:ctrlp_use_caching = 0
-  let g:ctrlp_user_command = "rg --files --hidden --glob='!.git'"
+if executable('git')
+  let g:ctrlp_user_command = ['.git', 'git -C %s ls-files -co --exclude-standard']
 endif
 
 function! s:ctrlp_proxy() abort
