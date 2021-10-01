@@ -225,6 +225,16 @@ let b:match_ignorecase = 1
 " rust {{{
 let g:rustfmt_autosave = 1
 " }}}
+
+" man.vim {{{
+" Enable :Man command.
+"
+" NOTE: An recommended way to enable :Man command on vim help page is to
+" source default ftplugin for man by "runtime ftplugin/man.vim" in vimrc. But
+" maybe it sources another file if another fplugin/man.vim file on
+" runtimepath's directories. So specify default ftplugin for man explicitly.
+source $VIMRUNTIME/ftplugin/man.vim
+" }}}
 " }}}
 
 " Plugins {{{
