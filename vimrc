@@ -116,7 +116,9 @@ map Q <Nop>
 
 nnoremap j gj
 nnoremap k gk
-nnoremap <Esc><Esc> :nohlsearch<CR><Esc>
+
+" Reset screen.
+nnoremap <silent> <Esc><Esc> :nohlsearch<CR>:redraw!<CR><Esc>
 
 noremap Y y$
 
