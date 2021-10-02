@@ -151,7 +151,10 @@ vnoremap <silent> <leader>y :YankComments<CR>
 
 " Commands {{{
 command! -range YankComments <line1>,<line2>call s:yank_comments()
-
+command! -nargs=1 -complete=file Readonly
+      \ edit <args>
+      \ | setlocal readonly nomodifiable noswapfile nowrite
+command! Runtimepath echo substitute(&runtimepath, ',', "\n", 'g')
 command! Update call s:alwrite()
 command! ToggleNetrw call s:toggle_newrw()
 
