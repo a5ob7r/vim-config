@@ -1,5 +1,5 @@
 function! s:lookup_manual() abort
-  let l:q = input('keyword> ')
+  let l:q = input('keyword> ', '', 'shellcmd')
 
   if empty(l:q)
     return
