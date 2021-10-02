@@ -1,6 +1,7 @@
 let g:ctrlp_map = '<leader><Space>'
 let g:ctrlp_cmd = 'CtrlPp'
 let g:ctrlp_show_hidden = 1
+let g:ctrlp_lazy_update = 150
 
 if executable('git')
   let g:ctrlp_user_command = ['.git', 'git -C %s ls-files -co --exclude-standard']
