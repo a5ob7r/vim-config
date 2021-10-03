@@ -58,31 +58,34 @@ function! minpac#extra#load()
 endfunction
 
 " Initialize minpac if it has not been done yet.
-function! minpac#extra#init(config = {})
+function! minpac#extra#init(...)
+  let l:config = get(a:, 1, {})
   " If minpac has not been initialized.
   if !exists('g:minpac#opt')
-    call minpac#init(a:config)
+    call minpac#init(l:config)
   endif
 endfunction
 
 " Source and initialize minpac.
-function! minpac#extra#setup(config = {})
+function! minpac#extra#setup(...)
+  let l:config = get(a:, 1, {})
   if ! minpac#extra#load()
     return v:false
   endif
 
-  call minpac#extra#init(a:config)
+  call minpac#extra#init(l:config)
   return v:true
 endfunction
 
 " minpac#add with extra. Do nothing if no minpac is installed.
-function! minpac#extra#add(url, config = { 'type': 'opt' })
+function! minpac#extra#add(url, ...)
+  let l:config = get(a:, 1, { 'type': 'opt' })
   if ! minpac#extra#setup()
     return
   endif
 
   " Register plugin to minpac to update.
-  call minpac#add(a:url, a:config)
+  call minpac#add(a:url, l:config)
 
   let l:name = s:plugname_from(a:url)
   let l:url = minpac#getpluginfo(l:name).url

@@ -32,8 +32,10 @@ function! utils#strip_whitespaces(line)
 endfunction
 
 " Strip comment prefix (and suffix if it exists).
-function! utils#extract_comment(line, commentstring = &commentstring)
-  let l:commentstring = utils#strip_whitespaces(a:commentstring)
+" NOTE: Optional argument with default value is introduced on patch-8.1.1310.
+function! utils#extract_comment(line, ...)
+  let l:commentstring = get(a:, 1, &commentstring)
+  let l:commentstring = utils#strip_whitespaces(l:commentstring)
   let l:line = utils#strip_whitespaces(a:line)
 
   " Accept a string which contains one '%s' only and has comment prefix at
