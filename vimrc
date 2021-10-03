@@ -81,7 +81,12 @@ set nowrapscan
 " Invisible chars {{{
 set list
 set listchars&
-set listchars+=tab:>\ \|,extends:>,precedes:<
+
+if has('patch-8.1.0759')
+  set listchars+=tab:>\ \|,extends:>,precedes:<
+else
+  set listchars+=tab:>\ ,extends:>,precedes:<
+endif
 " }}}
 
 " Wrap {{{
