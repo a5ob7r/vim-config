@@ -91,6 +91,10 @@ function! minpac#extra#add(url, ...)
   let l:url = minpac#getpluginfo(l:name).url
   let l:plugconf = s:plugconf_from(l:url)
 
+  if ! minpac#extra#exists(l:url)
+    return
+  endif
+
   if filereadable(l:plugconf)
     execute 'source' l:plugconf
   endif
@@ -102,8 +106,9 @@ endfunction
 
 " Load all opt plugins.
 function! minpac#extra#load_opt_plugins()
-  for l:pack in minpac#getpackages('minpac', 'opt', '*', v:true)
-    execute 'packadd' l:pack
+  for l:name in minpac#getpackages('minpac', 'opt', '*', v:true)
+    let l:url = minpac#getpluginfo(l:name).url
+    call minpac#extra#add(l:url)
   endfor
 endfunction
 
