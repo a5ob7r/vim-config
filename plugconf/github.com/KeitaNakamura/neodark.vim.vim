@@ -20,5 +20,10 @@ endfunction
 
 augroup apply_colorscheme
   autocmd!
-  autocmd VimEnter * ++nested call s:enable_colorscheme()
+
+  if has('patch-8.1.1113')
+    autocmd VimEnter * ++nested call s:enable_colorscheme()
+  else
+    autocmd VimEnter * nested call s:enable_colorscheme()
+  endif
 augroup END
