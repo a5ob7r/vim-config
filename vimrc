@@ -54,6 +54,22 @@ function! s:alwrite() abort
     update
   endif
 endfunction
+
+" Open single window terminal on new tabpage.
+function! s:open_terminal_on_newtab(...) abort
+  let l:dir = get(a:, 1, $HOME)
+
+  if has('patch-8.1.1113')
+    execute 'autocmd TabNew * ++once tcd' l:dir
+  else
+    augroup open_terminal_on_newtab
+      autocmd!
+      execute printf('autocmd TabNew * tcd %s | autocmd! open_terminal_on_newtab TabNew *', l:dir)
+    augroup END
+  endif
+
+  tab terminal
+endfunction
 " }}}
 
 " Options {{{
@@ -161,6 +177,7 @@ command! -range YankComments <line1>,<line2>call s:yank_comments()
 command! -nargs=1 -complete=file Readonly
       \ edit <args>
       \ | setlocal readonly nomodifiable noswapfile nowrite
+command! -nargs=? -complete=dir Terminal call s:open_terminal_on_newtab(<f-args>)
 command! Runtimepath echo substitute(&runtimepath, ',', "\n", 'g')
 command! Update call s:alwrite()
 command! ToggleNetrw call s:toggle_newrw()
