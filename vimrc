@@ -170,6 +170,31 @@ nnoremap <silent> <leader>t :tabnew<CR>
 
 nnoremap <silent> <leader>y :YankComments<CR>
 vnoremap <silent> <leader>y :YankComments<CR>
+
+" Emulate linefeed without carrige return.
+"
+" Example:
+" | indicates cursor position. It is zero width in fact.
+"
+" From
+" aaa|bbb
+"
+" To
+" aaa
+"    |bbb
+"
+" TODO: Try to do this without global variable.
+" TODO: Indent style with tab char.
+" TODO: No <Cmd>...<CR> version.
+if has('patch-8.2.1978')
+  inoremap <C-L> <Cmd>let g:previous_cursor_column = getcurpos()[4]<CR>
+        \<Cmd>set paste<CR>
+        \<CR>
+        \<Cmd>call setline('.', repeat(' ', g:previous_cursor_column - 1) . getline('.'))<CR>
+        \<Cmd>call setcursorcharpos('.', g:previous_cursor_column)<CR>
+        \<Cmd>unlet g:previous_cursor_column<CR>
+        \<Cmd>set nopaste<CR>
+endif
 " }}}
 
 " Commands {{{
