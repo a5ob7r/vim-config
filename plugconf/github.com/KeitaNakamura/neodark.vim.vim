@@ -1,7 +1,7 @@
 let g:neodark#background='#202020'
 
 function! s:enable_colorscheme()
-  if ! minpac#extra#exists('KeitaNakamura/neodark.vim') || utils#is_linux_console()
+  if utils#is_linux_console()
     return
   endif
 
