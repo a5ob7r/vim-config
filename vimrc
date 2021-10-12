@@ -137,7 +137,9 @@ endif
 " Key mappings {{{
 let g:mapleader=' '
 
-map Q <Nop>
+" Use "Q" as typed key recording starter and terminator instead of "q".
+noremap Q q
+map q <Nop>
 
 nnoremap j gj
 nnoremap k gk
