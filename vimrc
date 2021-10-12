@@ -81,7 +81,6 @@ endfunction
 
 " Options {{{
 set backspace=indent,eol,start
-set cindent
 set colorcolumn=81,101,121
 set cursorline
 set display=lastline
@@ -104,6 +103,16 @@ set wildmenu
 set wildmode=longest:full,full
 
 set nowrapscan
+
+" Indent {{{
+" This should be on when "smartindent" is on accoding to manual. Why?
+set autoindent
+
+" NOTE: This has no effect when "cindent" is on or "indentexpr" is set.
+set smartindent
+
+set cindent
+" }}}
 
 " Invisible chars {{{
 set list
