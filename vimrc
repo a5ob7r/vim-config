@@ -2,9 +2,16 @@
 " vimrc
 "
 
-" Encoding {{{
+" Boilerplate {{{
 set encoding=utf-8
 scriptencoding utf-8
+
+" NOTE: No need this basically in user vimrc because "compatible" option turns
+" into off automatically when vim find user "vimrc" or "gvimrc", but it is
+" said that system vimrc on some distributions contains "set compatible".
+if &compatible
+  set nocompatible
+endif
 " }}}
 
 " Functions {{{
