@@ -78,7 +78,11 @@ set cindent
 set colorcolumn=81,101,121
 set cursorline
 set display=lastline
-set fileencodings=utf-8,sjis,shift_jis,iso-2022-jp,euc-jp,cp932,ucs-bom
+
+" Maybe SKK dictionaries are encoded by "enc-jp".
+" NOTE: "usc-bom" must precede "utf-8" to recognize BOM.
+set fileencodings=ucs-bom,utf-8,iso-2022-jp,euc-jp,cp932,latin1
+
 set hidden
 set history=10000
 set hlsearch
