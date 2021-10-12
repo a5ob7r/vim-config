@@ -226,40 +226,32 @@ command! -nargs=* Tiga Tig <args> --all
 " }}}
 
 " Auto commands {{{
-augroup QuickFixCmd
-  autocmd!
-  autocmd QuickFixCmdPost *grep* cwindow
-augroup end
+" Helper
+command! -nargs=+ Autocmd autocmd vimrc <args>
 
-" {{{ Save undo tree
+augroup vimrc
+  autocmd!
+augroup END
+
+Autocmd QuickFixCmdPost *grep* cwindow
+
 if has('persistent_undo')
-  augroup Undofile
-    autocmd!
-    autocmd BufReadPre ~/* setlocal undofile
-  augroup END
+  Autocmd BufReadPre ~/* setlocal undofile
 endif
-" }}}
 
-augroup vimStartup
-  autocmd!
+" From vim/runtime/defaults.vim
+" Jump cursor to last editting line.
+Autocmd BufReadPost *
+      \ if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
+      \ |   exe "normal! g`\""
+      \ | endif
 
-  " From vim/runtime/defaults.vim
-  " Jump cursor to last editting line.
-  autocmd BufReadPost *
-    \ if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
-    \ |   exe "normal! g`\""
-    \ | endif
-augroup END
-
-augroup EditBinary
-  autocmd!
-  autocmd BufReadPost * if &binary | silent %!xxd -g 1
-  autocmd BufReadPost * set filetype=xxd | endif
-  autocmd BufWritePre * if &binary | %!xxd -r
-  autocmd BufWritePre * endif
-  autocmd BufWritePost * if &binary | silent %!xxd -g 1
-  autocmd BufWritePost * set nomod | endif
-augroup END
+Autocmd BufReadPost * if &binary | silent %!xxd -g 1
+Autocmd BufReadPost * set filetype=xxd | endif
+Autocmd BufWritePre * if &binary | %!xxd -r
+Autocmd BufWritePre * endif
+Autocmd BufWritePost * if &binary | silent %!xxd -g 1
+Autocmd BufWritePost * set nomod | endif
 " }}}
 
 " Others {{{
@@ -311,10 +303,7 @@ while ! minpac#extra#setup()
   call minpac#extra#install()
   unlet g:install_minpac
 
-  augroup install_plugins_with_minpac
-    autocmd!
-    autocmd VimEnter * call minpac#extra#install_and_load_plugins()
-  augroup END
+  Autocmd VimEnter * call minpac#extra#install_and_load_plugins()
 endwhile
 
 " UI
