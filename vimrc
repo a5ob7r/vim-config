@@ -214,7 +214,7 @@ endif
 command! -range YankComments <line1>,<line2>call s:yank_comments()
 command! -nargs=1 -complete=file Readonly
       \ edit <args>
-      \ | setlocal readonly nomodifiable noswapfile nowrite
+      \ | setlocal readonly nomodifiable noswapfile
 command! -nargs=? -complete=dir Terminal call s:open_terminal_on_newtab(<f-args>)
 command! Runtimepath echo substitute(&runtimepath, ',', "\n", 'g')
 command! Update call s:alwrite()
