@@ -63,7 +63,7 @@ function! s:alwrite() abort
 endfunction
 
 " Open single window terminal on new tabpage.
-function! s:open_terminal_on_newtab(...) abort
+function! s:open_terminal_on_newtab(count, ...) abort
   let l:dir = get(a:, 1, $HOME)
 
   if has('patch-8.1.1113')
@@ -75,7 +75,13 @@ function! s:open_terminal_on_newtab(...) abort
     augroup END
   endif
 
-  tab terminal
+  " NOTE: -1 is supplied if no range is specified on a command with "-range"
+  " attr.
+  if a:count > -1
+    execute printf('%dtab terminal', a:count)
+  else
+    tab terminal
+  endif
 endfunction
 " }}}
 
@@ -224,7 +230,8 @@ command! -range YankComments <line1>,<line2>call s:yank_comments()
 command! -nargs=1 -complete=file Readonly
       \ edit <args>
       \ | setlocal readonly nomodifiable noswapfile
-command! -nargs=? -complete=dir Terminal call s:open_terminal_on_newtab(<f-args>)
+command! -range -addr=tabs -nargs=? -complete=dir Terminal
+      \ call s:open_terminal_on_newtab(<count>, <f-args>)
 command! Runtimepath echo substitute(&runtimepath, ',', "\n", 'g')
 command! Update call s:alwrite()
 command! ToggleNetrw call s:toggle_newrw()
