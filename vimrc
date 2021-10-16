@@ -238,8 +238,10 @@ command! Update call s:alwrite()
 command! ToggleNetrw call s:toggle_newrw()
 
 " Tig
-command! -nargs=* Tig terminal ++close tig <args>
-command! -nargs=* Tiga Tig <args> --all
+command! -bang -nargs=* Tig
+      \ execute printf('%s terminal ++close tig %s', empty(<q-bang>) ? '' : 'vertical', <q-args>)
+command! -bang -nargs=* Tiga
+      \ Tig<bang> <args> --all
 " }}}
 
 " Auto commands {{{
