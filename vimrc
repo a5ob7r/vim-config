@@ -71,7 +71,8 @@ function! s:open_terminal_on_newtab(count, ...) abort
   else
     augroup open_terminal_on_newtab
       autocmd!
-      execute printf('autocmd TabNew * tcd %s | autocmd! open_terminal_on_newtab TabNew *', l:dir)
+      execute 'autocmd TabNew * tcd' l:dir
+      autocmd autocmd! open_terminal_on_newtab TabNew *
     augroup END
   endif
 
