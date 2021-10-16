@@ -8,3 +8,8 @@ let g:ale_disable_lsp = 1
 
 nmap <silent> <C-p> <Plug>(ale_previous_wrap)
 nmap <silent> <C-n> <Plug>(ale_next_wrap)
+
+augroup disable_ale_if_vim_lsp_enabled
+  autocmd!
+  autocmd User lsp_buffer_enabled ALEDisableBuffer
+augroup END

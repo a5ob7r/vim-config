@@ -13,8 +13,6 @@ function! s:on_lsp_buffer_enabled() abort
   nmap <buffer> <leader>ll <plug>(lsp-code-lens)
   nmap <buffer> <leader>lr <plug>(lsp-references)
 
-  ALEDisableBuffer
-
   augroup LSP_AUTO_FORMAT
     autocmd!
     autocmd! BufWritePre *.hs call execute('LspDocumentFormatSync')
