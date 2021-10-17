@@ -503,7 +503,7 @@ let g:netrw_sizestyle = 'H'
 
 " matchit {{{
 packadd! matchit
-let b:match_ignorecase = 1
+Autocmd BufEnter * let b:match_ignorecase = 1
 " }}}
 
 " rust {{{
