@@ -12,6 +12,9 @@ scriptencoding utf-8
 if &compatible
   set nocompatible
 endif
+
+filetype plugin indent on
+syntax on
 " }}}
 
 " Functions {{{
@@ -481,11 +484,6 @@ Autocmd BufWritePre * if &binary | %!xxd -r
 Autocmd BufWritePre * endif
 Autocmd BufWritePost * if &binary | silent %!xxd -g 1
 Autocmd BufWritePost * set nomod | endif
-" }}}
-
-" Others {{{
-filetype plugin indent on
-syntax on
 " }}}
 
 " Default plugins {{{
