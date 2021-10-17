@@ -42,23 +42,23 @@ function! s:toggle_newrw() abort
   endif
 endfunction
 
-" The name is from 'all right' and 'write'. Write a buffer to a file whether
-" or not parent directories exist. This means that create parent directories
-" if there are no them.
-function! s:alwrite() abort
+" Run :update, but instead :write if no current buffer's file exists because
+" :update doesn't write to a new file, which the corresponding buffer is empty
+" and is no modified.
+function! s:update() abort
+  if filewritable(expand('%'))
+    update
+  else
+    write
+  endif
+endfunction
+
+" Create parent directories for current buffer's file.
+function! s:make_parent() abort
   let l:parent = expand('%:h')
 
-  if empty(glob(l:parent))
+  if ! isdirectory(l:parent)
     call mkdir(l:parent, 'p')
-  endif
-
-  " NOTE: Execute :write if writes to a new file instead of :update because it
-  " does not write to a new file, which the corresponding buffer is empty and
-  " is no modified.
-  if empty(glob(expand('%')))
-    write
-  else
-    update
   endif
 endfunction
 
@@ -442,7 +442,7 @@ command! -nargs=1 -complete=file Readonly
 command! -range -addr=tabs -nargs=? -complete=dir Terminal
       \ call s:open_terminal_on_newtab(<count>, <f-args>)
 command! Runtimepath echo substitute(&runtimepath, ',', "\n", 'g')
-command! Update call s:alwrite()
+command! Update call s:update()
 command! ToggleNetrw call s:toggle_newrw()
 
 " Tig
@@ -461,6 +461,8 @@ augroup vimrc
 augroup END
 
 Autocmd QuickFixCmdPost *grep* cwindow
+
+Autocmd BufWritePre * call s:make_parent()
 
 if has('persistent_undo')
   Autocmd BufReadPre ~/* setlocal undofile
