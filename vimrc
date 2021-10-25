@@ -410,6 +410,7 @@ nnoremap <C-s> :Update<CR>
 inoremap <C-s> <Esc>:Update<CR>gi
 
 nnoremap <silent> <leader>t :tabnew<CR>
+nnoremap <silent> <leader>" :terminal<CR>
 
 nnoremap <silent> <leader>y :YankComments<CR>
 vnoremap <silent> <leader>y :YankComments<CR>
