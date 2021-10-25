@@ -375,6 +375,9 @@ let g:mapleader=' '
 noremap Q q
 map q <Nop>
 
+map <F1> <Nop>
+map! <F1> <Nop>
+
 nnoremap j gj
 nnoremap k gk
 
