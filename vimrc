@@ -453,10 +453,10 @@ command! Update call s:update()
 command! ToggleNetrw call s:toggle_newrw()
 
 " Tig
-command! -bang -nargs=* -complete=customlist,s:tig_complete Tig
-      \ execute printf('%s terminal ++close tig %s', empty(<q-bang>) ? '' : 'vertical', <q-args>)
-command! -bang -nargs=* -complete=customlist,s:tig_complete Tiga
-      \ Tig<bang> <args> --all
+command! -nargs=* -complete=customlist,s:tig_complete Tig
+      \ <mods> terminal ++close tig <args>
+command! -nargs=* -complete=customlist,s:tig_complete Tiga
+      \ <mods> Tig <args> --all
 " }}}
 
 " Auto commands {{{
