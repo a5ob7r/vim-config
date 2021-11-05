@@ -295,6 +295,40 @@ function! s:tig_complete(arg_lead, cmd_line, cursor_pos)
 
   return filter(l:candidates, printf("v:val =~# '^%s'", a:arg_lead))
 endfunction
+
+" Like 'export' which is shell's builtin command with filter.
+function! s:environments(bang, ...)
+  let l:env = environ()
+  let l:keys = sort(keys(l:env))
+
+  let l:regex = a:0 > 0 ? a:1 : ''
+
+  for l:k in l:keys
+    if empty(a:bang)
+      if l:k !~# l:regex
+        continue
+      endif
+    else
+      if l:k !~? l:regex
+        continue
+      endif
+    endif
+
+    let l:v = l:env[l:k]
+
+    if l:v =~# "'"
+      if l:v =~# '"'
+        let l:v = substitute(l:v, '"', '\\"', 'g')
+      endif
+
+      echo printf('%s="%s"', l:k, l:v)
+    elseif l:v =~# '\m\(\s\|\r\|\n\|["!#\^\$\&|=?\\\*\[\]\{\}()<>]\)'
+      echo printf("%s='%s'", l:k, l:v)
+    else
+      echo printf('%s=%s', l:k, l:v)
+    endif
+  endfor
+endfunction
 " }}}
 
 " Options {{{
@@ -451,6 +485,7 @@ command! -range -addr=tabs -nargs=? -complete=dir Terminal
 command! Runtimepath echo substitute(&runtimepath, ',', "\n", 'g')
 command! Update call s:update()
 command! ToggleNetrw call s:toggle_newrw()
+command! -bang -nargs=* Environments call s:environments(<q-bang>, <q-args>)
 
 " Tig
 command! -nargs=* -complete=customlist,s:tig_complete Tig
