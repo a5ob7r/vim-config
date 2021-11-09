@@ -428,8 +428,8 @@ nnoremap <C-h> <C-w>h
 nnoremap <C-l> <C-w>l
 
 nnoremap <leader>n :ToggleNetrw<CR>
-nnoremap <F2> :source $MYVIMRC<CR>
-nnoremap <leader><F2> :edit $MYVIMRC<CR>
+nnoremap <F2> :ReloadVimrc<CR>
+nnoremap <leader><F2> :Vimrc<CR>
 
 nnoremap <leader>f :Rg<CR>
 vnoremap <leader>f :Rgv<CR>
@@ -490,6 +490,8 @@ command! Runtimepath echo substitute(&runtimepath, ',', "\n", 'g')
 command! Update call s:update()
 command! ToggleNetrw call s:toggle_newrw()
 command! -bang -nargs=* Environments call s:environments(<q-bang>, <q-args>)
+command! Vimrc edit $MYVIMRC
+command! ReloadVimrc source $MYVIMRC
 
 " Tig
 command! -nargs=* -complete=customlist,s:tig_complete Tig
