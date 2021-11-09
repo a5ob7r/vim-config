@@ -510,6 +510,9 @@ Autocmd QuickFixCmdPost *grep* cwindow
 
 Autocmd BufWritePre * call s:make_parent()
 
+" Hide extras on normal mode of terminal.
+Autocmd TerminalOpen * setlocal nolist nonumber colorcolumn=
+
 if has('persistent_undo')
   Autocmd BufReadPre ~/* setlocal undofile
 endif
