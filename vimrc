@@ -618,6 +618,9 @@ while ! minpac#extra#setup()
   Autocmd VimEnter * call minpac#extra#install_and_load_plugins()
 endwhile
 
+" NOTE: Call this ASAP!
+call minpac#extra#add('thinca/vim-singleton')
+
 " UI
 call minpac#extra#add('KeitaNakamura/neodark.vim')
 call minpac#extra#add('itchyny/lightline.vim')
