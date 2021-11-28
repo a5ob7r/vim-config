@@ -12,6 +12,7 @@ function! s:on_lsp_buffer_enabled() abort
   nmap <buffer> <leader>la <plug>(lsp-code-action)
   nmap <buffer> <leader>ll <plug>(lsp-code-lens)
   nmap <buffer> <leader>lr <plug>(lsp-references)
+  nmap <buffer> <leader>li <plug>(lsp-implementation)
 
   augroup LSP_AUTO_FORMAT
     autocmd!
