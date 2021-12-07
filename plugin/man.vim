@@ -13,7 +13,7 @@ function! s:man_complete(arg_lead, cmd_line, cursor_pos) abort
   endif
 
   " A man entry lookup command.
-  let l:cmd = ['apropos', '.']
+  let l:cmd = 'apropos'
 
   let l:section = l:words[-1]
 
@@ -23,9 +23,19 @@ function! s:man_complete(arg_lead, cmd_line, cursor_pos) abort
   endif
 
   " Specify a section number.
-  let l:cmd += ['-s', l:section]
+  let l:args = ['-s', l:section, '.']
 
-  let l:candidates = map(systemlist(join(l:cmd)), printf("matchstr(v:val, '%s')", '[[:alnum:]\._-]\+'))
+  let l:candidates = systemlist(join([l:cmd] + l:args))
+
+  " Fallback to a no option lookup if `-s` option isn't provided.
+  " NOTE: This may be slow due to full search.
+  if v:shell_error
+    let l:args = [printf("'(%s)'", l:section)]
+
+    let l:candidates = systemlist(join([l:cmd] + l:args))
+  endif
+
+  let l:candidates = map(l:candidates, printf("matchstr(v:val, '%s')", '[[:alnum:]\._-]\+'))
 
   if !empty(a:arg_lead)
     let l:candidates = filter(l:candidates, printf("v:val[:%d] ==# '%s'", strlen(a:arg_lead) - 1, a:arg_lead))
