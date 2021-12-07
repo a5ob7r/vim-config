@@ -88,3 +88,13 @@ function! utils#clipboard_register()
     return '"'
   endif
 endfunction
+
+function! utils#drop_while(predicate, list)
+  for l:i in range(len(a:list))
+    if !a:predicate(a:list[l:i])
+      return a:list[l:i:]
+    endif
+  endfor
+
+  return []
+endfunction
