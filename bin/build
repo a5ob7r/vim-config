@@ -8,19 +8,19 @@
 
 set -Ceuo pipefail
 
-function cmdpath () {
+cmdpath () {
   command -v "$1"
 }
 
-function has () {
+has () {
   cmdpath "$1" &>/dev/null
 }
 
-function is_macos () {
+is_macos () {
   [[ "$OSTYPE" =~ ^darwin ]]
 }
 
-function sudo::proxy () {
+sudo::proxy () {
   if is_macos; then
     "$@"
   else
@@ -28,7 +28,7 @@ function sudo::proxy () {
   fi
 }
 
-function nproc::proxy () {
+nproc::proxy () {
   if is_macos; then
     sysctl -n hw.ncpu
   elif has nproc; then
