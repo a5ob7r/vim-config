@@ -48,9 +48,27 @@ function! s:man_complete(arg_lead, cmd_line, cursor_pos) abort
   return l:candidates
 endfunction
 
+function! s:man(mods, count, ...)
+  let l:section = a:count
+  let l:name = ""
+
+  if a:0 == 1
+    let l:name = a:1
+  elseif a:0 >= 2
+    let l:section = a:1
+    let l:name = a:2
+  endif
+
+  if l:section == 0
+    execute a:mods 'Man' l:name
+  else
+    execute a:mods 'Man' l:section l:name
+  endif
+endfunction
+
 " Load :Man command.
 source $VIMRUNTIME/ftplugin/man.vim
 
 " Define completion enhanced :Man.
-command! -nargs=+ -complete=customlist,s:man_complete M
-      \ <mods> Man <args>
+command! -nargs=+ -complete=customlist,s:man_complete -count M
+      \ call s:man(<q-mods>, <count>, <f-args>)
