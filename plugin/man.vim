@@ -1,3 +1,18 @@
+" Enable :Man command.
+"
+" NOTE: An recommended way to enable :Man command on vim help page is to
+" source default ftplugin for man by "runtime ftplugin/man.vim" in vimrc. But
+" maybe it sources another file if another fplugin/man.vim file on
+" runtimepath's directories. So specify default ftplugin for man explicitly.
+if exists(':Man') != 2
+  try
+    source $VIMRUNTIME/ftplugin/man.vim
+  catch
+    echoerr v:exception
+    finish
+  endtry
+endif
+
 " Enhanced completion for :Man.
 "
 " :M
@@ -65,9 +80,6 @@ function! s:man(mods, count, ...)
     execute a:mods 'Man' l:section l:name
   endif
 endfunction
-
-" Load :Man command.
-source $VIMRUNTIME/ftplugin/man.vim
 
 " Define completion enhanced :Man.
 command! -nargs=+ -complete=customlist,s:man_complete -count M
