@@ -84,3 +84,5 @@ endfunction
 " Define completion enhanced :Man.
 command! -nargs=+ -complete=customlist,s:man_complete -count M
       \ call s:man(<q-mods>, <count>, <f-args>)
+
+set keywordprg=:Man
