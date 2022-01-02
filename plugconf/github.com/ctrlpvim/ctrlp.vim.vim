@@ -1,4 +1,5 @@
-let g:ctrlp_map = '<leader><Space>'
+" NOTE: <Nul> is sent when Ctrl and Space are typed.
+let g:ctrlp_map = '<Nul>'
 let g:ctrlp_cmd = 'CtrlPp'
 let g:ctrlp_show_hidden = 1
 let g:ctrlp_lazy_update = 150
