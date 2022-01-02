@@ -3,6 +3,7 @@ function! s:on_lsp_buffer_enabled() abort
   if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
 
   nmap <buffer> gd <plug>(lsp-definition)
+  nmap <buffer> gD <plug>(lsp-implementation)
   nmap <buffer> <leader>r <plug>(lsp-rename)
   nmap <buffer> <leader>h <plug>(lsp-hover)
   nmap <buffer> <C-p> <plug>(lsp-previous-diagnostic)
@@ -12,7 +13,6 @@ function! s:on_lsp_buffer_enabled() abort
   nmap <buffer> <leader>la <plug>(lsp-code-action)
   nmap <buffer> <leader>ll <plug>(lsp-code-lens)
   nmap <buffer> <leader>lr <plug>(lsp-references)
-  nmap <buffer> <leader>li <plug>(lsp-implementation)
 
   augroup LSP_AUTO_FORMAT
     autocmd!
