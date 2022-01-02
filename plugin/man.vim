@@ -74,7 +74,7 @@ function! s:man(mods, count, ...)
     let l:name = a:2
   endif
 
-  if l:section == 0
+  if empty(l:section)
     execute a:mods 'Man' l:name
   else
     execute a:mods 'Man' l:section l:name
@@ -82,7 +82,7 @@ function! s:man(mods, count, ...)
 endfunction
 
 " Define completion enhanced :Man.
-command! -nargs=+ -complete=customlist,s:man_complete -count M
+command! -nargs=+ -complete=customlist,s:man_complete -range=0 M
       \ call s:man(<q-mods>, <count>, <f-args>)
 
 set keywordprg=:Man
