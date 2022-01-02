@@ -121,6 +121,20 @@ function! s:environments(bang, ...)
     endif
   endfor
 endfunction
+
+function! s:readonly(bang, mods, ...)
+  if !empty(a:0)
+    if empty(a:bang)
+      let l:open_cmd = 'edit'
+    else
+      let l:open_cmd = 'split'
+    endif
+
+    execute a:mods l:open_cmd a:1
+  endif
+
+  setlocal readonly nomodifiable noswapfile
+endfunction
 " }}}
 
 " Options {{{
@@ -273,9 +287,8 @@ endif
 
 " Commands {{{
 command! -range YankComments <line1>,<line2>call s:yank_comments()
-command! -nargs=1 -complete=file Readonly
-      \ edit <args>
-      \ | setlocal readonly nomodifiable noswapfile
+command! -bang -nargs=? -complete=file Readonly
+      \ call s:readonly(<q-bang>, <q-mods>, <q-args>)
 command! -range -addr=tabs -nargs=? -complete=dir Terminal
       \ call s:open_terminal_on_newtab(<count>, <f-args>)
 command! Runtimepath echo substitute(&runtimepath, ',', "\n", 'g')
