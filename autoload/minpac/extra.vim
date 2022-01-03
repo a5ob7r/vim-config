@@ -107,8 +107,12 @@ endfunction
 " Load all opt plugins.
 function! minpac#extra#load_opt_plugins()
   for l:name in minpac#getpackages('minpac', 'opt', '*', v:true)
-    let l:url = minpac#getpluginfo(l:name).url
-    call minpac#extra#add(l:url)
+    try
+      let l:url = minpac#getpluginfo(l:name).url
+      call minpac#extra#add(l:url)
+    catch /^Vim\%((\a\+)\)\=:E716:/
+      " Ignore a disabled plugin.
+    endtry
   endfor
 endfunction
 
