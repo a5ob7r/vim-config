@@ -394,6 +394,7 @@ call minpac#extra#add('mattn/vim-lsp-settings')
 
 " Snippet
 call minpac#extra#add('hrsh7th/vim-vsnip')
+call minpac#extra#add('hrsh7th/vim-vsnip-integ')
 call minpac#extra#add('rafamadriz/friendly-snippets')
 
 " Misc
