@@ -1,0 +1,12 @@
+{
+  "date": {
+    "prefix": "date",
+    "body": "$CURRENT_YEAR-$CURRENT_MONTH-$CURRENT_DATE",
+    "description": "date"
+  },
+  "datetime": {
+    "prefix": "datetime",
+    "body": "$CURRENT_YEAR-$CURRENT_MONTH-$CURRENT_DATE $CURRENT_HOUR:$CURRENT_MINUTE",
+    "description": "datetime"
+  }
+}

@@ -392,11 +392,9 @@ call minpac#extra#add('a5ob7r/ctrlp-man')
 call minpac#extra#add('prabirshrestha/vim-lsp')
 call minpac#extra#add('mattn/vim-lsp-settings')
 
-if has('python3')
-  " Snippet
-  call minpac#extra#add('SirVer/ultisnips')
-  call minpac#extra#add('honza/vim-snippets')
-endif
+" Snippet
+call minpac#extra#add('hrsh7th/vim-vsnip')
+call minpac#extra#add('rafamadriz/friendly-snippets')
 
 " Misc
 call minpac#extra#add('bronson/vim-trailing-whitespace')
