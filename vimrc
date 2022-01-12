@@ -256,6 +256,10 @@ nnoremap <silent> <leader>" :terminal<CR>
 nnoremap <silent> <leader>% :vertical terminal<CR>
 nnoremap <silent> <leader>c :Terminal<CR>
 
+tnoremap <silent> <C-W>" <C-W>:terminal<CR>
+tnoremap <silent> <C-W>% <C-W>:vertical terminal<CR>
+tnoremap <silent> <C-W>c <C-W>:Terminal<CR>
+
 nnoremap <silent> <leader>y :YankComments<CR>
 vnoremap <silent> <leader>y :YankComments<CR>
 
