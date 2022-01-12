@@ -27,21 +27,14 @@ endfunction
 
 " Toggle netrw window
 function! s:toggle_newrw() abort
-  " Capture Ex command output into a variable.
-  redir => l:bufs
-  silent! buffers %a
-  redir END
-
-  if empty(l:bufs)
-    edit .
-  elseif &filetype ==# 'netrw'
+  if &filetype ==# 'netrw'
     " NOTE: To ignore warning "warning (netrw) win#n not a former netrw
     " window".
     try
       Rexplore
     endtry
   else
-    Explore
+    Explore .
   endif
 endfunction
 
