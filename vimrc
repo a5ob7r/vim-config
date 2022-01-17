@@ -226,12 +226,12 @@ nnoremap <C-k> <C-w>k
 nnoremap <C-h> <C-w>h
 nnoremap <C-l> <C-w>l
 
-nnoremap <leader>n :ToggleNetrw<CR>
-nnoremap <F2> :ReloadVimrc<CR>
-nnoremap <leader><F2> :Vimrc<CR>
+nnoremap <silent> <leader>n :<C-U>ToggleNetrw<CR>
+nnoremap <silent> <F2> :<C-U>ReloadVimrc<CR>
+nnoremap <silent> <leader><F2> :<C-U>Vimrc<CR>
 
-nnoremap <leader>f :Rg<CR>
-vnoremap <leader>f :Rgv<CR>
+nnoremap <silent> <leader>f :<C-U>Rg<CR>
+vnoremap <silent> <leader>f :Rgv<CR>
 
 " From vim/runtime/mswin.vim
 " Save with Ctrl + s on normal mode and insert mode.
@@ -239,15 +239,15 @@ vnoremap <leader>f :Rgv<CR>
 " I usually save to file per every line editing by doing to go to normal mode
 " and run ":w". But doing this by hand per every editing is a little
 " borthersome.
-nnoremap <C-s> :Update<CR>
-inoremap <C-s> <Esc>:Update<CR>gi
+nnoremap <silent> <C-s> :<C-U>Update<CR>
+inoremap <silent> <C-s> <Esc>:Update<CR>gi
 
-nnoremap <silent> <leader>t :tabnew<CR>
+nnoremap <silent> <leader>t :<C-U>tabnew<CR>
 
 " Like default configurations of Tmux.
-nnoremap <silent> <leader>" :terminal<CR>
-nnoremap <silent> <leader>% :vertical terminal<CR>
-nnoremap <silent> <leader>c :Terminal<CR>
+nnoremap <silent> <leader>" :<C-U>terminal<CR>
+nnoremap <silent> <leader>% :<C-U>vertical terminal<CR>
+nnoremap <silent> <leader>c :<C-U>Terminal<CR>
 
 tnoremap <silent> <C-W>" <C-W>:terminal<CR>
 tnoremap <silent> <C-W>% <C-W>:vertical terminal<CR>
