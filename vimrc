@@ -395,6 +395,8 @@ call minpac#extra#add('hrsh7th/vim-vsnip-integ')
 call minpac#extra#add('rafamadriz/friendly-snippets')
 
 " Misc
+call minpac#extra#add('a5ob7r/shellcheckrc.vim')
+call minpac#extra#add('a5ob7r/tig.vim')
 call minpac#extra#add('bronson/vim-trailing-whitespace')
 call minpac#extra#add('editorconfig/editorconfig-vim')
 call minpac#extra#add('kannokanno/previm')
