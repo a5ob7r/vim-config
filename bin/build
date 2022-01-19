@@ -163,7 +163,8 @@ fi
 
 ./configure "${opts[@]}"
 
-make --quiet --jobs="$(nproc::proxy)"
+njob="$(nproc::proxy)"
+make --quiet --jobs="$njob"
 sudo::proxy make --quiet install
 
 echo
