@@ -69,6 +69,8 @@ Options:
   --with-lua
   --with-python
   --with-gui
+  --latest
+  -f, --force
   -h, --help
 "
 }
@@ -76,6 +78,8 @@ Options:
 declare -i with_lua=0
 declare -i with_python=0
 declare -i with_gui=0
+declare -i latest=0
+declare -i force=0
 
 while (( $# )); do
   case "$1" in
@@ -89,6 +93,14 @@ while (( $# )); do
       ;;
     --with-gui )
       with_gui=1
+      shift
+      ;;
+    --latest )
+      latest=1
+      shift
+      ;;
+    -f | --force )
+      force=1
       shift
       ;;
     -h | --help )
@@ -109,6 +121,13 @@ cd "$VIM_REPO_PATH"
 
 if [[ -f "$CONFIG_CACHE" ]]; then
   sudo::proxy make --quiet uninstall
+fi
+
+if [[ -f "$CONFIG_CACHE" && $force -ge 1 ]]; then
+  make distclean
+fi
+
+if (( latest )); then
   git fetch -v
   git switch -d origin/master
 fi
