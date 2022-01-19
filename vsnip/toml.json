@@ -1,0 +1,22 @@
+{
+  "words": {
+    "prefix": "words",
+    "body": [
+      "[[words]]",
+      "word = \"$1\""
+    ],
+    "description": "words entry for my discrionary"
+  },
+  "meanings": {
+    "prefix": "meanings",
+    "body": [
+      "[[words.meanings]]",
+      "type = \"$1\"",
+      "meaning = \"$2\"",
+      "sentences = [",
+      "  \"$3\"",
+      "]"
+    ],
+    "description": "words.meanings entry for my discrionary"
+  }
+}
