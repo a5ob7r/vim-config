@@ -113,9 +113,6 @@ if [[ -f "$CONFIG_CACHE" ]]; then
   git switch -d origin/master
 fi
 
-export CFLAGS='-g -O2 -march=native -Wall -Wshadow -Wmissing-prototypes'
-export CPPFLAGS="$CFLAGS"
-
 declare -a opts=(
   --quiet
   --enable-fail-if-missing
@@ -160,6 +157,8 @@ if (( with_python )); then
     warning 'Not found: A python3 executable.'
   fi
 fi
+
+export CFLAGS="${CFLAGS:--O2 -march=native}"
 
 ./configure "${opts[@]}"
 
