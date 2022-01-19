@@ -8,6 +8,25 @@
 
 set -Ceuo pipefail
 
+wrap () {
+  local left="$1"
+  local right="$2"
+
+  echo -n -e "$left"
+  while read -r; do
+    echo -e "$REPLY"
+  done
+  echo -n -e "$right"
+}
+
+warning () {
+  wrap '\033[33m' '\033[0m' <<<"$*" >&2
+}
+
+error () {
+  wrap '\033[31m' '\033[0m' <<<"$*" >&2
+}
+
 cmdpath () {
   command -v "$1"
 }
@@ -38,6 +57,51 @@ nproc::proxy () {
   fi
 }
 
+build::help () {
+  echo -n "\
+Descriptions:
+  Build helper for Vim.
+
+Usages:
+  build <options...>
+
+Options:
+  --with-lua
+  --with-python
+  --with-gui
+  -h, --help
+"
+}
+
+declare -i with_lua=0
+declare -i with_python=0
+declare -i with_gui=0
+
+while (( $# )); do
+  case "$1" in
+    --with-lua )
+      with_lua=1
+      shift
+      ;;
+    --with-python )
+      with_python=1
+      shift
+      ;;
+    --with-gui )
+      with_gui=1
+      shift
+      ;;
+    -h | --help )
+      build::help
+      exit 0
+      ;;
+    * )
+      error "An unknown option: $1."
+      exit 1
+      ;;
+  esac
+done
+
 readonly VIM_REPO_PATH="${VIM_REPO_PATH:-$(ghq list --full-path --exact 'vim/vim')}"
 readonly CONFIG_CACHE='src/auto/config.cache'
 
@@ -54,37 +118,46 @@ export CPPFLAGS="$CFLAGS"
 
 declare -a opts=(
   --quiet
-  --disable-gui
   --enable-fail-if-missing
 )
 
-if is_macos; then
-  if has python3; then
-    opts+=(
-      --enable-python3interp
-      --with-python3-command="$(cmdpath python3)"
-    )
-  fi
+if ! (( with_gui )); then
+  opts+=(--disable-gui)
+fi
 
+if (( with_lua )); then
   if has lua; then
-    declare prefix
-    prefix="$(cmdpath lua)"
-    prefix="${prefix%/bin/lua}"
+    if is_macos; then
+      declare prefix
+      prefix="$(cmdpath lua)"
+      prefix="${prefix%/bin/lua}"
 
-    opts+=(
-      --enable-luainterp
-      --with-lua-prefix="$prefix"
-    )
+      opts+=(
+        --enable-luainterp
+        --with-lua-prefix="$prefix"
+      )
 
-    unset prefix
+      unset prefix
+    else
+      opts+=(--enable-luainterp=dynamic)
+    fi
+  else
+    warning 'Not found: A lua executable.'
   fi
-else
+fi
+
+if (( with_python )); then
   if has python3; then
-    opts+=(--enable-python3interp=dynamic)
-  fi
-
-  if has lua; then
-    opts+=(--enable-luainterp=dynamic)
+    if is_macos; then
+      opts+=(
+        --enable-python3interp
+        --with-python3-command="$(cmdpath python3)"
+      )
+    else
+      opts+=(--enable-python3interp=dynamic)
+    fi
+  else
+    warning 'Not found: A python3 executable.'
   fi
 fi
 
