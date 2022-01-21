@@ -26,4 +26,4 @@ endfunction
 
 command! -bang -nargs=? -complete=dir CtrlPp call s:ctrlp_proxy(<q-bang>, <f-args>)
 
-nnoremap <leader>b :CtrlPBuffer<CR>
+nnoremap <silent> <leader>b :<C-U>CtrlPBuffer<CR>
