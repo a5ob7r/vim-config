@@ -62,15 +62,7 @@ endfunction
 function! s:open_terminal_on_newtab(count, ...) abort
   let l:dir = get(a:, 1, $HOME)
 
-  if has('patch-8.1.1113')
-    execute 'autocmd TabNew * ++once tcd' l:dir
-  else
-    augroup open_terminal_on_newtab
-      autocmd!
-      execute 'autocmd TabNew * tcd' l:dir
-      autocmd autocmd! open_terminal_on_newtab TabNew *
-    augroup END
-  endif
+  execute 'Autocmd TabNew * ++once tcd' l:dir
 
   " NOTE: -1 is supplied if no range is specified on a command with "-range"
   " attr.
@@ -127,6 +119,51 @@ function! s:readonly(bang, mods, ...)
   endif
 
   setlocal readonly nomodifiable noswapfile
+endfunction
+
+function! s:autocmd(group, autocmd) abort
+  let l:group = a:group
+
+  let l:once = 0
+  let l:nested = 0
+  let l:attrs = []
+
+  let l:idx = match(a:autocmd, '^\s*\S\+\s\+\%(\\ \|[^[:space:]]\)\+\s\+\zs')
+  " Events and patterns.
+  let l:left = slice(a:autocmd, 0, l:idx)
+  " Attribute arguments(++once, ++nested) and commands.
+  let l:right = slice(a:autocmd, l:idx)
+
+  let l:idx = match(l:right, '^\s*\%(\%(\%(++\)\=nested\|++once\)\s\+\)\+\zs')
+  if l:idx >= 0
+    let l:attrs = split(slice(l:right, 0, l:idx))
+    " Commands only.
+    let l:right = slice(l:right, l:idx)
+  endif
+
+  let l:once = index(l:attrs, '++once') >= 0
+  let l:nested = match(l:attrs, '^\%(++\)\=nested$') >= 0
+
+  if has('patch-8.1.1113')
+    let l:nested_arg = l:nested ? '++nested' : ''
+    let l:once_arg = l:once ? '++once' : ''
+
+    execute printf('autocmd %s %s %s %s %s', l:group, l:left, l:nested_arg, l:once_arg, l:right)
+  else
+    let l:nested_arg = l:nested ? 'nested' : ''
+
+    if l:once
+      let l:group = printf('vimrc_autocmd_once_%s', rand())
+
+      execute 'augroup' l:group
+        autocmd!
+        execute 'autocmd' l:left l:nested_arg l:right
+        execute 'autocmd' l:left 'autocmd!' l:group l:left
+      augroup END
+    else
+      execute 'autocmd' l:left l:nested_arg l:right
+    endif
+  endif
 endfunction
 " }}}
 
@@ -297,8 +334,15 @@ command! ReloadVimrc source $MYVIMRC
 " }}}
 
 " Auto commands {{{
-" Helper
-command! -nargs=+ Autocmd autocmd vimrc <args>
+" An attribute(++once, ++nested) compatible :autocmd helper.
+"
+" :Autocmd TabNew * tcd ~
+" :Autocmd TabNew * nested tcd ~
+" :Autocmd TabNew * ++nested tcd ~
+" :Autocmd TabNew * ++once tcd ~
+" :Autocmd TabNew * ++once nested tcd ~
+" :Autocmd TabNew * ++once ++nested tcd ~
+command! -nargs=+ Autocmd call s:autocmd('vimrc', <q-args>)
 
 augroup vimrc
   autocmd!

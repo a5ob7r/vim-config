@@ -1,7 +1,9 @@
 let g:neodark#background='#202020'
 
-function! s:enable_colorscheme()
-  if utils#is_linux_console()
+function! s:enable_colorscheme(bang)
+  let l:bang = empty(a:bang) ? '' : '!'
+
+  if empty(l:bang) && utils#is_linux_console()
     return
   endif
 
@@ -18,12 +20,6 @@ function! s:enable_colorscheme()
   let g:terminal_ansi_colors[8] = '#5f5f5f'
 endfunction
 
-augroup apply_colorscheme
-  autocmd!
+command! -bang Neodark call s:enable_colorscheme(<q-bang>)
 
-  if has('patch-8.1.1113')
-    autocmd VimEnter * ++nested call s:enable_colorscheme()
-  else
-    autocmd VimEnter * nested call s:enable_colorscheme()
-  endif
-augroup END
+Autocmd VimEnter * ++nested Neodark
