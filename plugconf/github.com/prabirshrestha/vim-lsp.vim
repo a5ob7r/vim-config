@@ -13,11 +13,6 @@ function! s:on_lsp_buffer_enabled() abort
   nmap <buffer> <leader>la <plug>(lsp-code-action)
   nmap <buffer> <leader>ll <plug>(lsp-code-lens)
   nmap <buffer> <leader>lr <plug>(lsp-references)
-
-  augroup LSP_AUTO_FORMAT
-    autocmd!
-    autocmd! BufWritePre *.hs call execute('LspDocumentFormatSync')
-  augroup END
 endfunction
 
 let g:lsp_diagnostics_float_cursor = 1
