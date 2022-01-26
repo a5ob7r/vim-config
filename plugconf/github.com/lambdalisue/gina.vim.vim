@@ -1,6 +1,6 @@
-nmap <leader>gl :Gina log --graph --all<CR>
-nmap <leader>gs :Gina status<CR>
-nmap <leader>gc :Gina commit<CR>
+nmap <silent> <leader>gl :<C-U>Gina log --graph --all<CR>
+nmap <silent> <leader>gs :<C-U>Gina status<CR>
+nmap <silent> <leader>gc :<C-U>Gina commit<CR>
 
 execute 'packadd' expand('<sfile>:t:r')
 
