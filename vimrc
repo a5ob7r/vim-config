@@ -234,7 +234,11 @@ endif
 if has('osxdarwin')
   set clipboard=unnamed
 else
-  set clipboard=unnamedplus
+  set clipboard=exclude:cons\|linux
+
+  if has('unnamedplus')
+    set clipboard^=unnamedplus
+  endif
 endif
 " }}}
 
