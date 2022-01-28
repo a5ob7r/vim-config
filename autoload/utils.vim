@@ -72,23 +72,6 @@ function! utils#extract_comment(line, ...)
   return l:line
 endfunction
 
-" Appropriate clipboard register.
-function! utils#clipboard_register()
-  if ! has('clipboard')
-    return '"'
-  endif
-
-  let l:clipboard = printf(',%s,', &clipboard)
-
-  if l:clipboard =~# ',unnamed,'
-    return '*'
-  elseif l:clipboard =~# ',unnamedplus,'
-    return '+'
-  else
-    return '"'
-  endif
-endfunction
-
 function! utils#drop_while(predicate, list)
   for l:i in range(len(a:list))
     if !a:predicate(a:list[l:i])

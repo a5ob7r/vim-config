@@ -18,11 +18,13 @@ syntax on
 " }}}
 
 " Functions {{{
-function! s:yank_comments() abort range
+function! s:yank_comments(reg) abort range
+  let l:reg = a:reg
+
   let l:lines = getline(a:firstline, a:lastline)
   let l:lines = map(l:lines, 'utils#extract_comment(v:val)')
 
-  call setreg(utils#clipboard_register(), join(l:lines))
+  call setreg(l:reg, join(l:lines))
 endfunction
 
 " Toggle netrw window
@@ -324,7 +326,7 @@ endif
 " }}}
 
 " Commands {{{
-command! -range YankComments <line1>,<line2>call s:yank_comments()
+command! -range YankComments <line1>,<line2>call s:yank_comments(v:register)
 command! -bang -nargs=? -complete=file Readonly
       \ call s:readonly(<q-bang>, <q-mods>, <q-args>)
 command! -range -addr=tabs -nargs=? -complete=dir Terminal
