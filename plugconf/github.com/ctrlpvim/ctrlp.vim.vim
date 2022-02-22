@@ -3,6 +3,7 @@ let g:ctrlp_map = '<Nul>'
 let g:ctrlp_cmd = 'CtrlPp'
 let g:ctrlp_show_hidden = 1
 let g:ctrlp_lazy_update = 150
+let g:ctrlp_reuse_window = '.*'
 
 if executable('git')
   let g:ctrlp_user_command = ['.git', 'git -C %s ls-files -co --exclude-standard']
