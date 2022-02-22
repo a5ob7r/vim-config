@@ -399,10 +399,6 @@ let g:netrw_sizestyle = 'H'
 packadd! matchit
 Autocmd BufEnter * let b:match_ignorecase = 1
 " }}}
-
-" rust {{{
-let g:rustfmt_autosave = 1
-" }}}
 " }}}
 
 " Plugins {{{
