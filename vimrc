@@ -200,6 +200,33 @@ function! s:put(bang, reg, count) abort
 
   execute printf('normal! %s"%s%s', l:count, l:reg, l:put)
 endfunction
+
+" Capture Ex command outputs and redirect it to a new empty buffer.
+function! s:capture(bang, mods, command) abort
+  let l:bang = empty(a:bang) ? '' : '!'
+  let l:command = empty(a:command) ? @: : a:command
+  let l:words = split(l:command)
+
+  if empty(l:words)
+    echoerr 'Not found a capturable command. Run a command which you want to capture before run :Capture.'
+    return
+  elseif fullcommand(l:words[0]) ==# 'Capture'
+    echoerr ':Capture does not capture itself.'
+    return
+  endif
+
+  let l:bufs = split(execute(l:command, printf('silent%s', l:bang)), '\n')
+
+  execute a:mods 'new'
+  setlocal buftype=nofile
+  setlocal bufhidden=hide
+  setlocal noswapfile
+
+  call append('.', l:bufs)
+
+  setlocal readonly
+  setlocal nomodifiable
+endfunction
 " }}}
 
 " Options {{{
@@ -361,6 +388,8 @@ endif
 " }}}
 
 " Commands {{{
+command! -nargs=* -complete=command -bang Capture
+      \ call s:capture(<q-bang>, <q-mods>, <q-args>)
 command! -range YankComments <line1>,<line2>call s:yank_comments(v:register)
 command! -bang -nargs=? -complete=file Readonly
       \ call s:readonly(<q-bang>, <q-mods>, <q-args>)
