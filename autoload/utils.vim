@@ -81,3 +81,35 @@ function! utils#drop_while(predicate, list)
 
   return []
 endfunction
+
+" NOTE: This returns an empty string if causes out of index.
+function! utils#strcharat(s, i) abort
+  return strcharpart(a:s, a:i, 1)
+endfunction
+
+" Calculate Levenshtein distance.
+function! utils#edit_distance(a, b) abort
+  let l:insert_cost = 1
+  let l:delete_cost = 1
+
+  let l:len_a = strchars(a:a)
+  let l:len_b = strchars(a:b)
+
+  let l:d = [range(l:len_b + 1)]
+  for l:i in range(1, l:len_a)
+    let l:d += [[l:i] + map(range(l:len_b), 'v:null')]
+  endfor
+
+  for l:i in range(1, l:len_a)
+    for l:j in range(1, l:len_b)
+      let subst_cost = utils#strcharat(a:a , l:i - 1) ==# utils#strcharat(a:b, l:j - 1) ? 0 : 1
+      let l:d[l:i][l:j] = min([
+            \ d[l:i - 1][l:j] + l:delete_cost,
+            \ d[l:i][l:j - 1] + l:insert_cost,
+            \ d[l:i - 1][l:j - 1] + subst_cost
+            \ ])
+    endfor
+  endfor
+
+  return l:d[-1][-1]
+endfunction
