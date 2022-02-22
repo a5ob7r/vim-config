@@ -192,6 +192,10 @@ set virtualedit=block
 set wildmenu
 set wildmode=longest:full,full
 
+if has('patch-8.2.4325')
+  set wildoptions+=pum
+endif
+
 set nowrapscan
 
 " Indent {{{
