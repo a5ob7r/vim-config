@@ -264,11 +264,6 @@ noremap Y y$
 
 nnoremap <leader><Enter> o<Esc>
 
-nnoremap <C-j> <C-w>j
-nnoremap <C-k> <C-w>k
-nnoremap <C-h> <C-w>h
-nnoremap <C-l> <C-w>l
-
 nnoremap <silent> <leader>n :<C-U>ToggleNetrw<CR>
 nnoremap <silent> <F2> :<C-U>ReloadVimrc<CR>
 nnoremap <silent> <leader><F2> :<C-U>Vimrc<CR>
