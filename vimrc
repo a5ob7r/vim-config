@@ -226,6 +226,16 @@ function! s:capture(bang, mods, command) abort
   setlocal readonly
   setlocal nomodifiable
 endfunction
+
+function! s:indent_spaces(n)
+  let l:line = utils#indent_spaces(a:n)
+
+  if type(l:line) == 1
+    return l:line
+  else
+    return ''
+  endif
+endfunction
 " }}}
 
 " Options {{{
@@ -372,18 +382,12 @@ vnoremap <silent> <leader>y :YankComments<CR>
 " aaa
 "    |bbb
 "
-" TODO: Try to do this without global variable.
-" TODO: Indent style with tab char.
-" TODO: No <Cmd>...<CR> version.
-if has('patch-8.2.1978')
-  inoremap <C-L> <Cmd>let g:previous_cursor_column = getcurpos()[4]<CR>
-        \<Cmd>set paste<CR>
-        \<CR>
-        \<Cmd>call setline('.', repeat(' ', g:previous_cursor_column - 1) . getline('.'))<CR>
-        \<Cmd>call setcursorcharpos('.', g:previous_cursor_column)<CR>
-        \<Cmd>unlet g:previous_cursor_column<CR>
-        \<Cmd>set nopaste<CR>
-endif
+inoremap <silent> <C-L>
+      \ 
+      \<C-O>:let b:linefeed_column = getcurpos()[4]<CR>
+      \<CR> <C-U>
+      \<C-R>=<SID>indent_spaces(b:linefeed_column - 1)<CR>
+      \<C-O>:unlet b:linefeed_column<CR>
 " }}}
 
 " Commands {{{
