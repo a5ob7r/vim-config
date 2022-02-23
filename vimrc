@@ -221,7 +221,7 @@ function! s:capture(bang, mods, command) abort
   setlocal bufhidden=hide
   setlocal noswapfile
 
-  call append('.', l:bufs)
+  call setline('.', l:bufs)
 
   setlocal readonly
   setlocal nomodifiable
