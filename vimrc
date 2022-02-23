@@ -203,7 +203,6 @@ endfunction
 
 " Capture Ex command outputs and redirect it to a new empty buffer.
 function! s:capture(bang, mods, command) abort
-  let l:bang = empty(a:bang) ? '' : '!'
   let l:command = empty(a:command) ? @: : a:command
   let l:words = split(l:command)
 
@@ -215,7 +214,7 @@ function! s:capture(bang, mods, command) abort
     return
   endif
 
-  let l:bufs = split(execute(l:command, printf('silent%s', l:bang)), '\n')
+  let l:bufs = utils#redirect(a:bang, l:command)
 
   execute a:mods 'new'
   setlocal buftype=nofile

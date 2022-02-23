@@ -113,3 +113,10 @@ function! utils#edit_distance(a, b) abort
 
   return l:d[-1][-1]
 endfunction
+
+" A wrapper for execute().
+function! utils#redirect(bang, command) abort
+  let l:bang = empty(a:bang) ? '' : '!'
+
+  return split(execute(a:command, printf('silent%s', l:bang)), '\n')
+endfunction
