@@ -29,14 +29,15 @@ endfunction
 
 " Toggle netrw window
 function! s:toggle_newrw() abort
-  if &filetype ==# 'netrw'
-    " NOTE: To ignore warning "warning (netrw) win#n not a former netrw
-    " window".
-    try
-      Rexplore
-    endtry
+  let l:cwd = getcwd()
+
+  " Prefer the current working directory.
+  if get(b:, 'netrw_curdir', '') !=# l:cwd
+    execute 'Explore' l:cwd
+  elseif exists(':Rexplore') && exists('w:netrw_rexlocal')
+    Rexplore
   else
-    Explore .
+    Explore
   endif
 endfunction
 
