@@ -531,6 +531,7 @@ call minpac#extra#add('tpope/vim-surround')
 call minpac#extra#add('tyru/eskk.vim')
 call minpac#extra#add('tyru/open-browser.vim')
 call minpac#extra#add('w0rp/ale')
+call minpac#extra#add('yasuhiroki/github-actions-yaml.vim')
 " }}}
 
 " vim:set expandtab tabstop=2 shiftwidth=2 foldmethod=marker:

@@ -1,0 +1,9 @@
+{
+  "Dollar syntax": {
+    "prefix": "$",
+    "body": [
+      "\\${{ ${0:expression} }}"
+    ],
+    "description": "Dollar syntax for GitHub Actions"
+  }
+}
