@@ -7,6 +7,7 @@ unlet! b:current_syntax
 syntax include @Tex syntax/tex.vim
 let b:current_syntax = s:save_current_syntax
 unlet! s:save_current_syntax
+syntax iskeyword clear
 
 " Haddock comment
 syntax region haskellHaddockLineComment matchgroup=haskellHaddockLineComment start=/\s*-- \%(|\|\^\)/ end=/^\s*\%(--\)\@!/ contains=@haskellHaddockMarkup,@Spell
