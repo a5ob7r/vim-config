@@ -13,6 +13,8 @@ function! s:on_lsp_buffer_enabled() abort
   nmap <buffer> <leader>la <plug>(lsp-code-action)
   nmap <buffer> <leader>ll <plug>(lsp-code-lens)
   nmap <buffer> <leader>lr <plug>(lsp-references)
+
+  let b:vim_lsp_enabled = 1
 endfunction
 
 let g:lsp_diagnostics_float_cursor = 1
@@ -54,6 +56,10 @@ function! LspHintCount() abort
 endfunction
 
 function! LspOk() abort
+  if !get(b:, 'vim_lsp_enabled', 0)
+    return ''
+  endif
+
   let l:counts = lsp#get_buffer_diagnostics_counts()
   let l:not_zero_counts = filter(l:counts, 'v:val != 0')
   let l:ok = len(l:not_zero_counts) == 0
