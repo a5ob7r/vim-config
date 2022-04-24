@@ -266,6 +266,10 @@ if has('patch-8.2.4325')
   set wildoptions+=pum
 endif
 
+if has('patch-8.2.4463')
+  set wildoptions+=fuzzy
+endif
+
 set nowrapscan
 
 " Indent {{{
