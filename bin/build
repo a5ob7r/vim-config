@@ -114,7 +114,8 @@ while (( $# )); do
   esac
 done
 
-readonly VIM_REPO_PATH="${VIM_REPO_PATH:-$(ghq list --full-path --exact 'vim/vim')}"
+VIM_REPO_PATH=${VIM_REPO_PATH:-$(ghq list --full-path --exact 'vim/vim')}
+readonly VIM_REPO_PATH
 readonly CONFIG_CACHE='src/auto/config.cache'
 
 cd "$VIM_REPO_PATH"
