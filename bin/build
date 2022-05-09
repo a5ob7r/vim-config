@@ -9,8 +9,8 @@
 set -Ceuo pipefail
 
 wrap () {
-  local left="$1"
-  local right="$2"
+  local left=$1
+  local right=$2
 
   echo -n -e "$left"
   while read -r; do
@@ -36,7 +36,7 @@ has () {
 }
 
 is_macos () {
-  [[ "$OSTYPE" =~ ^darwin ]]
+  [[ $OSTYPE =~ ^darwin ]]
 }
 
 sudo::proxy () {
@@ -114,17 +114,17 @@ while (( $# )); do
   esac
 done
 
-VIM_REPO_PATH=${VIM_REPO_PATH:-$(ghq list --full-path --exact 'vim/vim')}
+VIM_REPO_PATH=${VIM_REPO_PATH:-$(ghq list --full-path --exact vim/vim)}
 readonly VIM_REPO_PATH
-readonly CONFIG_CACHE='src/auto/config.cache'
+readonly CONFIG_CACHE=src/auto/config.cache
 
 cd "$VIM_REPO_PATH"
 
-if [[ -f "$CONFIG_CACHE" ]]; then
+if [[ -f $CONFIG_CACHE ]]; then
   sudo::proxy make --quiet uninstall
 fi
 
-if [[ -f "$CONFIG_CACHE" && $force -ge 1 ]]; then
+if [[ -f $CONFIG_CACHE && $force -ge 1 ]]; then
   make distclean
 fi
 
@@ -146,8 +146,8 @@ if (( with_lua )); then
   if has lua; then
     if is_macos; then
       declare prefix
-      prefix="$(cmdpath lua)"
-      prefix="${prefix%/bin/lua}"
+      prefix=$(cmdpath lua)
+      prefix=${prefix%/bin/lua}
 
       opts+=(
         --enable-luainterp
@@ -178,11 +178,11 @@ if (( with_python )); then
   fi
 fi
 
-export CFLAGS="${CFLAGS:--O2 -march=native}"
+export CFLAGS=${CFLAGS:--O2 -march=native}
 
 ./configure "${opts[@]}"
 
-njob="$(nproc::proxy)"
+njob=$(nproc::proxy)
 make --quiet --jobs="$njob"
 sudo::proxy make --quiet install
 
