@@ -502,7 +502,7 @@ endwhile
 " NOTE: Maybe `+clientserver` is disabled on macOS even if a Vim is compiled
 " with `--with-features=huge`.
 if has('clientserver')
-  call minpac#extra#add('thinca/vim-singleton')
+  " call minpac#extra#add('thinca/vim-singleton')
 endif
 
 " UI
