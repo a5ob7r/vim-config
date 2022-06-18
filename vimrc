@@ -550,6 +550,10 @@ call minpac#extra#add('tyru/eskk.vim')
 call minpac#extra#add('tyru/open-browser.vim')
 call minpac#extra#add('w0rp/ale')
 call minpac#extra#add('yasuhiroki/github-actions-yaml.vim')
+
+call minpac#extra#add('lambdalisue/fern.vim')
+call minpac#extra#add('lambdalisue/fern-git-status.vim')
+call minpac#extra#add('a5ob7r/fern-renderer-lsflavor.vim')
 " }}}
 
 " vim:set expandtab tabstop=2 shiftwidth=2 foldmethod=marker:
