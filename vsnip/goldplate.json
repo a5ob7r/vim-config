@@ -1,0 +1,18 @@
+{
+  "Template": {
+    "prefix": "tmp",
+    "body": [
+      "{",
+      "  \"command\": \"${0:command}\",",
+      "  \"arguments\": [],",
+      "  \"stdin\": [],",
+      "  \"asserts\": [",
+      "    {\"exit_code\": 0},",
+      "    {\"stdout\": \"\\${GOLDPLATE_NAME}.stdout\"},",
+      "    {\"stderr\": \"\\${GOLDPLATE_NAME}.stderr\"}",
+      "  ]",
+      "}"
+    ],
+    "description": "A template for goldplate."
+  }
+}
