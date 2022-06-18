@@ -24,7 +24,20 @@ function! s:yank_comments(reg) abort range
   let l:lines = getline(a:firstline, a:lastline)
   let l:lines = map(l:lines, 'utils#extract_comment(v:val)')
 
-  call setreg(l:reg, join(l:lines))
+  let l:prev = v:null
+  let l:s = ''
+  for l:line in l:lines
+    if empty(l:line)
+      let l:s .= "\n"
+    elseif empty(l:prev)
+      let l:s .= l:line
+    else
+      let l:s .= ' ' . l:line
+    endif
+
+    let l:prev = l:line
+  endfor
+  call setreg(l:reg, l:s)
 endfunction
 
 " Toggle netrw window
