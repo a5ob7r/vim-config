@@ -283,6 +283,7 @@ if has('patch-8.2.4463')
   set wildoptions+=fuzzy
 endif
 
+set nojoinspaces
 set nowrapscan
 
 " Indent {{{
