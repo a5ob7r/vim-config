@@ -66,3 +66,8 @@ function! LspOk() abort
   if l:ok | return 'OK' | endif
   return ''
 endfunction
+
+command! CurrentLspLogging echo get(g:, 'lsp_log_file', '')
+command! -nargs=* -complete=file EnableLspLogging
+      \ let g:lsp_log_file = empty(<q-args>) ? expand('~/vim-lsp.log') : <q-args>
+command! DisableLspLogging let g:lsp_log_file = ''
