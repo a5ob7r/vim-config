@@ -16,6 +16,3 @@ let g:lsp_settings['texlab'] = {
       \     }
       \   }
       \ }
-let g:lsp_settings['haskell-language-server'] = {
-      \ 'cmd': ['haskell-language-server-wrapper', '--lsp']
-      \ }
