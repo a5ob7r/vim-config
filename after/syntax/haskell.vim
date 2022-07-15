@@ -1,3 +1,5 @@
+" These syntaxes depend on https://github.com/neovimhaskell/haskell-vim.
+
 syntax match haskellTodo /\<\%(TODO\|NOTE\|XXX\|FIXME\|NB\)\>/ contained
 
 " Experimeltal Haddock syntax highlightings.
@@ -33,7 +35,7 @@ syntax region haskellHaddockProperty matchgroup=haskellHaddockDelimiter start=/p
 
 " Hyperlinked Identifiers
 " https://haskell-haddock.readthedocs.io/en/latest/markup.html#hyperlinked-identifiers
-syntax match haskellHaddockHyperlinkedIdentifier "['`][[:alnum:]_'!#$%*+./<=>?@\^|\-~:`\(\)]*['`]" contained contains=@haskellHaddockModule,@haskellHaddockCode
+syntax match haskellHaddockHyperlinkedIdentifier "['`]\zs[[:alnum:]_'!#$%*+./<=>?@\^|\-~:`\(\)]*\ze['`]" keepend contained contains=@haskellHaddockModule,@haskellHaddockCode
 
 " Emphasis, Bold and Monospaced Text
 " https://haskell-haddock.readthedocs.io/en/latest/markup.html#emphasis-bold-and-monospaced-text
@@ -44,7 +46,7 @@ syntax region haskellHaddockMonospace matchgroup=haskellHaddockDelimiter start=/
 " Linking to Modules
 " https://haskell-haddock.readthedocs.io/en/latest/markup.html#linking-to-modules
 syntax match haskellHaddockLindingToModule /"\u[[:alnum:]_'\.]*"/ contained contains=@haskellHaddockModule
-syntax cluster haskellHaddockModule contains=haskellType,haskellOperators
+syntax cluster haskellHaddockModule contains=haskellType,haskellQuotedType,haskellOperators
 
 " Itemized and Enumerated Lists
 " https://haskell-haddock.readthedocs.io/en/latest/markup.html#itemized-and-enumerated-lists
@@ -91,7 +93,7 @@ syntax region haskellHaddockSince start=/@since\s\+/ end=/$/ oneline contained c
 syntax match haskellHaddockSinceNumber /[0-9]\+\%(\.[0-9]\+\)*/ contained
 
 syntax cluster haskellHaddockMarkup contains=haskellHaddockCharacterReference,haskellHaddockCodeBlock,haskellHaddockExample,haskellHaddockProperty,haskellHaddockLindingToModule,haskellHaddockItemizedList,haskellHaddockEnumeratedList,haskellHaddockHyperlinkedIdentifier,haskellHaddockEmphasis,haskellHaddockBold,haskellHaddockMonospace,haskellHaddockDefinitionList,haskellHaddockUrl,haskellHaddockLink,haskellHaddockLaTex,haskellHaddockGridTable,haskellHaddockAnchor,haskellHaddockLinkToAnchor,haskellHaddockHeading,haskellHaddockSince
-syntax cluster haskellHaddockCode contains=haskellOperators,haskellSeparator,haskellParens,haskellWhere,haskellLet,haskellDefault,haskellTypeSig,haskellType,haskellDerive,haskellDeclKeyword,haskellDecl,haskellString,haskellForeignImport,haskellPragma,haskellImport,haskellKeyword,haskellConditional,haskellNumber,haskellNumber,haskellBrackets,haskellInfix,haskellInfix,haskellQuoted,haskellBacktick,haskellChar,haskellLiquid,haskellPreProc,haskellShebang,haskellQuasiQuote,haskellTHBlock
+syntax cluster haskellHaddockCode contains=haskellIdentifier,haskellOperators,haskellSeparator,haskellParens,haskellWhere,haskellLet,haskellDefault,haskellTypeSig,haskellType,haskellDerive,haskellDeclKeyword,haskellDecl,haskellString,haskellForeignImport,haskellPragma,haskellImport,haskellKeyword,haskellConditional,haskellNumber,haskellNumber,haskellBrackets,haskellInfix,haskellInfix,haskellQuoted,haskellBacktick,haskellChar,haskellLiquid,haskellPreProc,haskellShebang,haskellQuasiQuote,haskellTHBlock
 syntax match haskellHaddockCodeLeader /^\s*\zs--/ contained
 
 highlight default link haskellHaddockLineComment SpecialComment
