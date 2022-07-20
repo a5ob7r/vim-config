@@ -120,18 +120,3 @@ function! utils#redirect(bang, command) abort
 
   return split(execute(a:command, printf('silent%s', l:bang)), '\n')
 endfunction
-
-function! utils#indent_spaces(n) abort
-  let l:tab = '	'
-  let l:space = ' '
-
-  if &expandtab
-    let l:tabs = 0
-    let l:spaces = a:n
-  else
-    let l:tabs = a:n / &tabstop
-    let l:spaces = a:n % &tabstop
-  endif
-
-  return repeat(l:tab, l:tabs) . repeat(l:space, l:spaces)
-endfunction

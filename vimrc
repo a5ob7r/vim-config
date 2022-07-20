@@ -240,16 +240,6 @@ function! s:capture(bang, mods, command) abort
   setlocal readonly
   setlocal nomodifiable
 endfunction
-
-function! s:indent_spaces(n)
-  let l:line = utils#indent_spaces(a:n)
-
-  if type(l:line) == 1
-    return l:line
-  else
-    return ''
-  endif
-endfunction
 " }}}
 
 " Options {{{
@@ -389,24 +379,7 @@ tnoremap <silent> <C-W>c <C-W>:Terminal<CR>
 nnoremap <silent> <leader>y :YankComments<CR>
 vnoremap <silent> <leader>y :YankComments<CR>
 
-" Emulate linefeed without carrige return.
-"
-" Example:
-" | indicates cursor position. It is zero width in fact.
-"
-" From
-" aaa|bbb
-"
-" To
-" aaa
-"    |bbb
-"
-inoremap <silent> <C-L>
-      \ 
-      \<C-O>:let b:linefeed_column = getcurpos()[4]<CR>
-      \<CR> <C-U>
-      \<C-R>=<SID>indent_spaces(b:linefeed_column - 1)<CR>
-      \<C-O>:unlet b:linefeed_column<CR>
+inoremap <silent> <C-L> <Plug>(linefeed)
 " }}}
 
 " Commands {{{
