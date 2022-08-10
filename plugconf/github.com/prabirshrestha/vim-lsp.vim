@@ -21,6 +21,8 @@ let g:lsp_diagnostics_float_cursor = 1
 let g:lsp_diagnostics_float_delay = 200
 let g:lsp_semantic_enabled = 1
 
+let g:lsp_experimental_workspace_folders = 1
+
 augroup LSP_INSTALL
   au!
   au User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
@@ -67,7 +69,36 @@ function! LspOk() abort
   return ''
 endfunction
 
-command! CurrentLspLogging echo get(g:, 'lsp_log_file', '')
+function! s:lsp_log_file()
+  return get(g:, 'lsp_log_file', '')
+endfunction
+
+command! CurrentLspLogging echo s:lsp_log_file()
 command! -nargs=* -complete=file EnableLspLogging
       \ let g:lsp_log_file = empty(<q-args>) ? expand('~/vim-lsp.log') : <q-args>
 command! DisableLspLogging let g:lsp_log_file = ''
+
+function! s:view_lsp_log()
+  let l:log = s:lsp_log_file()
+
+  if filereadable(l:log)
+    call term_start(
+          \ printf('less %s', l:log),
+          \ {
+          \   'env': { 'LESS': '' },
+          \   'term_finish': 'close',
+          \ })
+  endif
+endfunction
+
+command! ViewLspLog call s:view_lsp_log()
+
+function! s:clear_lsp_log()
+  let l:log = s:lsp_log_file()
+
+  if filewritable(l:log)
+    call writefile([], l:log)
+  endif
+endfunction
+
+command! ClearLspLog call s:clear_lsp_log()
