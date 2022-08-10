@@ -23,14 +23,6 @@ function! utils#is_direct_color_enablable()
   return has('termguicolors') && ($COLORTERM ==# 'truecolor' || $TERM ==# 'st-256color')
 endfunction
 
-function! utils#strip_whitespaces(line)
-  " NOTE: '\S' preceding '\ze' is so important to prevent '.*' from consuming
-  " trailing whitespaces. If does not match to this, it means all characters
-  " are whitespaces and they should be stripped. In fact, return empty string
-  " by nomatching instead of stripping.
-  return matchstr(a:line, '^\s*\zs.*\S\ze\s*$')
-endfunction
-
 function! utils#drop_while(predicate, list)
   for l:i in range(len(a:list))
     if !a:predicate(a:list[l:i])

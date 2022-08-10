@@ -5,6 +5,7 @@
       "{",
       "  \"command\": \"${0:command}\",",
       "  \"arguments\": [],",
+      "  \"environment\": {},",
       "  \"stdin\": [],",
       "  \"asserts\": [",
       "    {\"exit_code\": 0},",
