@@ -31,47 +31,6 @@ function! utils#strip_whitespaces(line)
   return matchstr(a:line, '^\s*\zs.*\S\ze\s*$')
 endfunction
 
-" Strip comment prefix (and suffix if it exists).
-" NOTE: Optional argument with default value is introduced on patch-8.1.1310.
-function! utils#extract_comment(line, ...)
-  let l:commentstring = get(a:, 1, &commentstring)
-  let l:commentstring = utils#strip_whitespaces(l:commentstring)
-  let l:line = utils#strip_whitespaces(a:line)
-
-  " Accept a string which contains one '%s' only and has comment prefix at
-  " least.
-  "
-  " Valid string.
-  " - '" %s'
-  " - '/*%s*/'
-  "
-  " Invalid string.
-  " - ''
-  " - ' %s '
-  " - '%s %s'
-  if ! (l:commentstring =~# '^\S\+\s*%s' && count(l:commentstring, '%s') == 1)
-    return l:line
-  endif
-
-  let l:arr = split(l:commentstring, '%s')
-  let l:prefix = utils#strip_whitespaces(get(l:arr, 0, ''))
-  let l:suffix = utils#strip_whitespaces(get(l:arr, 1, ''))
-
-  " NOTE: Don't use regex to remove comment prefix or suffix because they may
-  " contain special characters for regex. If so, maybe cause unexpected
-  " behavior.
-  let l:prefix_len = len(l:prefix)
-  if l:prefix_len > 0 && l:line[:l:prefix_len-1] ==# l:prefix
-    let l:line = utils#strip_whitespaces(l:line[l:prefix_len:])
-  endif
-  let l:suffix_len = len(l:suffix)
-  if l:suffix_len > 0 && l:line[-l:suffix_len:] ==# l:suffix
-    let l:line = utils#strip_whitespaces(l:line[:-1-l:suffix_len])
-  endif
-
-  return l:line
-endfunction
-
 function! utils#drop_while(predicate, list)
   for l:i in range(len(a:list))
     if !a:predicate(a:list[l:i])
@@ -112,11 +71,4 @@ function! utils#edit_distance(a, b) abort
   endfor
 
   return l:d[-1][-1]
-endfunction
-
-" A wrapper for execute().
-function! utils#redirect(bang, command) abort
-  let l:bang = empty(a:bang) ? '' : '!'
-
-  return split(execute(a:command, printf('silent%s', l:bang)), '\n')
 endfunction

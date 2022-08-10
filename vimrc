@@ -18,28 +18,6 @@ syntax enable
 " }}}
 
 " Functions {{{
-function! s:yank_comments(reg) abort range
-  let l:reg = a:reg
-
-  let l:lines = getline(a:firstline, a:lastline)
-  let l:lines = map(l:lines, 'utils#extract_comment(v:val)')
-
-  let l:prev = v:null
-  let l:s = ''
-  for l:line in l:lines
-    if empty(l:line)
-      let l:s .= "\n"
-    elseif empty(l:prev)
-      let l:s .= l:line
-    else
-      let l:s .= ' ' . l:line
-    endif
-
-    let l:prev = l:line
-  endfor
-  call setreg(l:reg, l:s)
-endfunction
-
 " Toggle netrw window
 function! s:toggle_newrw() abort
   let l:cwd = getcwd()
@@ -123,20 +101,6 @@ function! s:environments(bang, ...)
   endfor
 endfunction
 
-function! s:readonly(bang, mods, ...)
-  if !empty(a:0)
-    if empty(a:bang)
-      let l:open_cmd = 'edit'
-    else
-      let l:open_cmd = 'split'
-    endif
-
-    execute a:mods l:open_cmd a:1
-  endif
-
-  setlocal readonly nomodifiable noswapfile
-endfunction
-
 function! s:autocmd(group, autocmd) abort
   let l:group = a:group
 
@@ -213,32 +177,6 @@ function! s:put(bang, reg, count) abort
   let l:put = empty(a:bang) ? 'p' : 'P'
 
   execute printf('normal! %s"%s%s', l:count, l:reg, l:put)
-endfunction
-
-" Capture Ex command outputs and redirect it to a new empty buffer.
-function! s:capture(bang, mods, command) abort
-  let l:command = empty(a:command) ? @: : a:command
-  let l:words = split(l:command)
-
-  if empty(l:words)
-    echoerr 'Not found a capturable command. Run a command which you want to capture before run :Capture.'
-    return
-  elseif fullcommand(l:words[0]) ==# 'Capture'
-    echoerr ':Capture does not capture itself.'
-    return
-  endif
-
-  let l:bufs = utils#redirect(a:bang, l:command)
-
-  execute a:mods 'new'
-  setlocal buftype=nofile
-  setlocal bufhidden=hide
-  setlocal noswapfile
-
-  call setline('.', l:bufs)
-
-  setlocal readonly
-  setlocal nomodifiable
 endfunction
 " }}}
 
@@ -383,11 +321,6 @@ inoremap <silent> <C-L> <Plug>(linefeed)
 " }}}
 
 " Commands {{{
-command! -nargs=* -complete=command -bang Capture
-      \ call s:capture(<q-bang>, <q-mods>, <q-args>)
-command! -range YankComments <line1>,<line2>call s:yank_comments(v:register)
-command! -bang -nargs=? -complete=file Readonly
-      \ call s:readonly(<q-bang>, <q-mods>, <q-args>)
 command! -range -addr=tabs -nargs=? -complete=dir Terminal
       \ call s:open_terminal_on_newtab(<count>, <f-args>)
 command! Runtimepath echo substitute(&runtimepath, ',', "\n", 'g')
