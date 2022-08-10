@@ -45,7 +45,7 @@ syntax region haskellHaddockMonospace matchgroup=haskellHaddockDelimiter start=/
 
 " Linking to Modules
 " https://haskell-haddock.readthedocs.io/en/latest/markup.html#linking-to-modules
-syntax match haskellHaddockLindingToModule /"\u[[:alnum:]_'\.]*"/ contained contains=@haskellHaddockModule
+syntax match haskellHaddockLindingToModule /"\zs\u[[:alnum:]_'\.]*\ze"/ contained contains=@haskellHaddockModule
 syntax cluster haskellHaddockModule contains=haskellType,haskellQuotedType,haskellOperators
 
 " Itemized and Enumerated Lists
@@ -99,6 +99,8 @@ syntax match haskellHaddockCodeLeader /^\s*\zs--/ contained
 highlight default link haskellHaddockLineComment SpecialComment
 highlight default link haskellHaddockBlockComment SpecialComment
 highlight default link haskellHaddockDelimiter Delimiter
+highlight default haskellHaddockEmphasis cterm=italic gui=italic
+highlight default haskellHaddockBold cterm=bold gui=bold
 highlight default link haskellHaddockRawUrl Underlined
 highlight default link haskellHaddockCodeLeader haskellHaddockLineComment
 highlight default link haskellHaddockItemizedList haskellHaddockDelimiter
