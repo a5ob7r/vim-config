@@ -1,12 +1,24 @@
 " NOTE: <Nul> is sent when Ctrl and Space are typed.
 let g:ctrlp_map = '<Nul>'
-let g:ctrlp_cmd = 'CtrlPp'
 let g:ctrlp_show_hidden = 1
 let g:ctrlp_lazy_update = 150
 let g:ctrlp_reuse_window = '.*'
+let g:ctrlp_use_caching = 0
+
+let g:ctrlp_user_command = {}
+let g:ctrlp_user_command['types'] = {}
 
 if executable('git')
-  let g:ctrlp_user_command = ['.git', 'git -C %s ls-files -co --exclude-standard']
+  let g:ctrlp_user_command['types'][1] = ['.git', 'git -C %s ls-files -co --exclude-standard']
+endif
+
+if executable('fd')
+  let g:ctrlp_user_command['fallback'] = 'fd --type=file --type=symlink --hidden . %s'
+elseif executable('find')
+  let g:ctrlp_user_command['fallback'] = 'find %s -type f'
+else
+  let g:ctrlp_use_caching = 1
+  let g:ctrlp_cmd = 'CtrlPp'
 endif
 
 function! s:ctrlp_proxy(bang, ...) abort
