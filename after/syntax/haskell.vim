@@ -12,8 +12,8 @@ unlet! s:save_current_syntax
 syntax iskeyword clear
 
 " Haddock comment
-syntax region haskellHaddockLineComment matchgroup=haskellHaddockLineComment start=/\s*-- \%(|\|\^\)/ end=/^\s*\%(--\)\@!/ contains=@haskellHaddockMarkup,@Spell
-syntax region haskellHaddockBlockComment matchgroup=haskellHaddockLineComment start=/\s*{-|/ end=/-}/ contains=@haskellHaddockMarkup,@Spell
+syntax region haskellHaddockLineComment matchgroup=haskellHaddockLineComment start=/\s*-- \%(|\|\^\|\*\|\$\)/ end=/\n\(\s*--\)\@!/ contains=@haskellHaddockMarkup,@Spell,haskellTodo
+syntax region haskellHaddockBlockComment matchgroup=haskellHaddockLineComment start=/\s*{-|/ end=/-}/ contains=@haskellHaddockMarkup,@Spell,haskellTodo
 
 " Character References
 " https://haskell-haddock.readthedocs.io/en/latest/markup.html#character-references
@@ -23,7 +23,7 @@ syntax match haskellHaddockCharacterReference /&#x\x\+;/ contained
 " Code Blocks
 " https://haskell-haddock.readthedocs.io/en/latest/markup.html#code-blocks
 syntax region haskellHaddockCodeBlock matchgroup=haskellHaddockDelimiter start=/@$/ end=/@$/ contained contains=haskellHaddockCodeLeader,@haskellHaddockCode
-syntax region haskellHaddockCodeBlock matchgroup=haskellHaddockDelimiter start=/>/ end=/$/ oneline contained contains=@haskellHaddockCode
+syntax region haskellHaddockCodeBlock matchgroup=haskellHaddockDelimiter start=/>/ end=/$/ oneline keepend contained contains=@haskellHaddockCode
 
 " Examples
 " https://haskell-haddock.readthedocs.io/en/latest/markup.html#examples
@@ -35,7 +35,8 @@ syntax region haskellHaddockProperty matchgroup=haskellHaddockDelimiter start=/p
 
 " Hyperlinked Identifiers
 " https://haskell-haddock.readthedocs.io/en/latest/markup.html#hyperlinked-identifiers
-syntax match haskellHaddockHyperlinkedIdentifier "['`]\zs[[:alnum:]_'!#$%*+./<=>?@\^|\-~:`\(\)]*\ze['`]" keepend contained contains=@haskellHaddockModule,@haskellHaddockCode
+syntax match haskellHaddockHyperlinkedIdentifier "['`][[:alnum:]_'!#$%*+./<=>?@\^|\-~:`\(\)]*['`]" keepend contained contains=haskellHaddockHyperlinkedIdentifierInternal
+syntax region haskellHaddockHyperlinkedIdentifierInternal matchgroup=haskellHaddockDelimiter start=/['`]/ end=/['`]/ keepend contained contains=@haskellHaddockModule,@haskellHaddockCode
 
 " Emphasis, Bold and Monospaced Text
 " https://haskell-haddock.readthedocs.io/en/latest/markup.html#emphasis-bold-and-monospaced-text
@@ -45,7 +46,8 @@ syntax region haskellHaddockMonospace matchgroup=haskellHaddockDelimiter start=/
 
 " Linking to Modules
 " https://haskell-haddock.readthedocs.io/en/latest/markup.html#linking-to-modules
-syntax match haskellHaddockLindingToModule /"\zs\u[[:alnum:]_'\.]*\ze"/ contained contains=@haskellHaddockModule
+syntax match haskellHaddockLindingToModule /"\u[[:alnum:]_'\.]*"/ contained contains=haskellHaddockLindingToModuleInternal
+syntax region haskellHaddockLindingToModuleInternal matchgroup=haskellHaddockDelimiter start=/"/ end=/"/ contained contains=@haskellHaddockModule
 syntax cluster haskellHaddockModule contains=haskellType,haskellQuotedType,haskellOperators
 
 " Itemized and Enumerated Lists
@@ -93,7 +95,7 @@ syntax region haskellHaddockSince start=/@since\s\+/ end=/$/ oneline contained c
 syntax match haskellHaddockSinceNumber /[0-9]\+\%(\.[0-9]\+\)*/ contained
 
 syntax cluster haskellHaddockMarkup contains=haskellHaddockCharacterReference,haskellHaddockCodeBlock,haskellHaddockExample,haskellHaddockProperty,haskellHaddockLindingToModule,haskellHaddockItemizedList,haskellHaddockEnumeratedList,haskellHaddockHyperlinkedIdentifier,haskellHaddockEmphasis,haskellHaddockBold,haskellHaddockMonospace,haskellHaddockDefinitionList,haskellHaddockUrl,haskellHaddockLink,haskellHaddockLaTex,haskellHaddockGridTable,haskellHaddockAnchor,haskellHaddockLinkToAnchor,haskellHaddockHeading,haskellHaddockSince
-syntax cluster haskellHaddockCode contains=haskellIdentifier,haskellOperators,haskellSeparator,haskellParens,haskellWhere,haskellLet,haskellDefault,haskellTypeSig,haskellType,haskellDerive,haskellDeclKeyword,haskellDecl,haskellString,haskellForeignImport,haskellPragma,haskellImport,haskellKeyword,haskellConditional,haskellNumber,haskellNumber,haskellBrackets,haskellInfix,haskellInfix,haskellQuoted,haskellBacktick,haskellChar,haskellLiquid,haskellPreProc,haskellShebang,haskellQuasiQuote,haskellTHBlock
+syntax cluster haskellHaddockCode contains=haskellLineComment,haskellIdentifier,haskellOperators,haskellSeparator,haskellParens,haskellWhere,haskellLet,haskellDefault,haskellTypeSig,haskellType,haskellDerive,haskellDeclKeyword,haskellDecl,haskellString,haskellForeignImport,haskellPragma,haskellImportKeywords,haskellImport,haskellKeyword,haskellConditional,haskellNumber,haskellNumber,haskellBrackets,haskellInfix,haskellInfix,haskellQuoted,haskellBacktick,haskellChar,haskellLiquid,haskellPreProc,haskellShebang,haskellQuasiQuote,haskellTHBlock
 syntax match haskellHaddockCodeLeader /^\s*\zs--/ contained
 
 highlight default link haskellHaddockLineComment SpecialComment
