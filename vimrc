@@ -294,14 +294,19 @@ nnoremap <silent> <leader><F2> :<C-U>Vimrc<CR>
 nnoremap <silent> <leader>f :<C-U>Rg<CR>
 vnoremap <silent> <leader>f :Rgv<CR>
 
-" From vim/runtime/mswin.vim
-" Save with Ctrl + s on normal mode and insert mode.
+" From $VIMRUNTIME/mswin.vim
+" Save with "CTRL-S" on normal mode and insert mode.
 "
-" I usually save to file per every line editing by doing to go to normal mode
-" and run ":w". But doing this by hand per every editing is a little
-" borthersome.
+" I usually save buffers to files every line editing by switching to the
+" normal mode and typing ":w". However doing them every editing is a little
+" bit bothersome. So I want to use these shortcuts which are often used to
+" save files by GUI editros.
 nnoremap <silent> <C-s> :<C-U>Update<CR>
-inoremap <silent> <C-s> <Esc>:Update<CR>gi
+if has('patch-8.2.1978')
+  inoremap <silent> <C-s> <Cmd>Update<CR>
+else
+  inoremap <silent> <C-s> <Esc>:Update<CR>gi
+endif
 
 nnoremap <silent> <leader>t :<C-U>tabnew<CR>
 
