@@ -206,7 +206,41 @@ function! s:tig_complete(arg_lead, cmd_line, cursor_pos)
   return filter(l:candidates, printf("v:val =~# '^%s'", a:arg_lead))
 endfunction
 
-command! -nargs=* -complete=customlist,s:tig_complete Tig
-      \ <mods> terminal ++close tig <args>
-command! -nargs=* -complete=customlist,s:tig_complete Tiga
-      \ <mods> Tig <args> --all
+function! s:tig(bang, mods, args) abort
+  let l:editor = printf("printf '%s%s%s'", '\\033]51;', '["call", "Tapi_TigEditor", ["%s", "%s"]]', '\\x07')
+
+  let l:cmd = join(['tig'] + a:args)
+  let l:options = {
+    \ 'curwin': !empty(a:bang),
+    \ 'term_finish': 'close',
+    \ 'env': { 'TIG_EDITOR': l:editor }
+    \ }
+
+  execute join(a:mods) 'call term_start(l:cmd, l:options)'
+endfunction
+
+function! Tapi_TigEditor(bufnum, arglist) abort
+  if len(a:arglist) != 2
+    echoerr '[Tapi_TigEditor] Invalid number of arguments.'
+    return
+  endif
+
+  let l:lineno = '+1'
+
+  if empty(a:arglist[1])
+    let l:filename = fnameescape(a:arglist[0])
+  else
+    if a:arglist[0] =~# '^+[1-9]\d*$'
+      let l:lineno = a:arglist[0]
+    endif
+
+    let l:filename = fnameescape(a:arglist[1])
+  endif
+
+  execute 'rightbelow split' l:lineno l:filename
+endfunction
+
+command! -bang -nargs=* -complete=customlist,s:tig_complete Tig
+  \ call s:tig(<q-bang>, [<f-mods>], [<f-args>])
+command! -bang -nargs=* -complete=customlist,s:tig_complete Tiga
+  \ <mods> Tig<bang> <args> --all
