@@ -19,10 +19,6 @@ function! utils#is_linux_console()
   return $TERM ==# 'linux'
 endfunction
 
-function! utils#is_direct_color_enablable()
-  return has('termguicolors') && ($COLORTERM ==# 'truecolor' || $TERM ==# 'st-256color')
-endfunction
-
 function! utils#drop_while(predicate, list)
   for l:i in range(len(a:list))
     if !a:predicate(a:list[l:i])

@@ -178,6 +178,15 @@ function! s:put(bang, reg, count) abort
 
   execute printf('normal! %s"%s%s', l:count, l:reg, l:put)
 endfunction
+
+function! s:capable_truecolor()
+  let l:terms = [
+    \ 'xterm',
+    \ 'st-256color',
+    \ ]
+
+  return $COLORTERM ==# 'truecolor' || index(l:terms, $TERM) > -1
+endfunction
 " }}}
 
 " Options {{{
@@ -246,9 +255,11 @@ set ignorecase
 set smartcase
 " }}}
 
-if utils#is_direct_color_enablable()
-  " To use truecolor on not xterm* terminal type
+if has('termguicolors') && s:capable_truecolor()
   set termguicolors
+
+  " Vim sets these configs below only if the value of `$TERM` is `xterm`.
+  " Otherwise we manually need to set them to work true color well.
   let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
   let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 endif
