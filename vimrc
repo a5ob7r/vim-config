@@ -43,12 +43,15 @@ function! s:update() abort
   endif
 endfunction
 
-" Create parent directories for current buffer's file.
-function! s:make_parent() abort
-  let l:parent = expand('%:h')
+" A backward comaptible "mkdir" for patch-8.0.1708, that "mkdir" with "p" flag
+" throws no error even if the directory already exists.
+function! s:mkdir(name, ...)
+  let l:name = a:name
+  let l:path = get(a:, '1', '')
+  let l:prot = get(a:, '2', '0o755')
 
-  if ! isdirectory(l:parent)
-    call mkdir(l:parent, 'p')
+  if !(l:path =~# 'p' && isdirectory(l:name))
+    call mkdir(l:name, l:path, l:prot)
   endif
 endfunction
 
@@ -364,7 +367,9 @@ augroup END
 
 Autocmd QuickFixCmdPost *grep* cwindow
 
-Autocmd BufWritePre * call s:make_parent()
+" Make parent directories of the file which the written buffer is corresponing
+" if these directories are missing.
+Autocmd BufWritePre * silent call s:mkdir(expand('<afile>:p:h'), 'p')
 
 " Hide extras on normal mode of terminal.
 Autocmd TerminalOpen * setlocal nolist nonumber colorcolumn=
