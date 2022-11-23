@@ -14,6 +14,9 @@ function! s:on_lsp_buffer_enabled() abort
   nmap <buffer> <leader>ll <plug>(lsp-code-lens)
   nmap <buffer> <leader>lr <plug>(lsp-references)
 
+  nnoremap <silent><buffer><expr> <C-j> lsp#scroll(+1)
+  nnoremap <silent><buffer><expr> <C-k> lsp#scroll(-1)
+
   let b:vim_lsp_enabled = 1
 endfunction
 
