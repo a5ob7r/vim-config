@@ -32,17 +32,6 @@ function! s:toggle_newrw() abort
   endif
 endfunction
 
-" Run :update, but instead :write if no current buffer's file exists because
-" :update doesn't write to a new file, which the corresponding buffer is empty
-" and is no modified.
-function! s:update() abort
-  if filewritable(expand('%'))
-    update
-  else
-    write
-  endif
-endfunction
-
 " A backward comaptible "mkdir" for patch-8.0.1708, that "mkdir" with "p" flag
 " throws no error even if the directory already exists.
 function! s:mkdir(name, ...)
@@ -357,7 +346,17 @@ inoremap <silent> <C-L> <Plug>(linefeed)
 command! -range -addr=tabs -nargs=? -complete=dir Terminal
       \ call s:open_terminal_on_newtab(<count>, <f-args>)
 command! Runtimepath echo substitute(&runtimepath, ',', "\n", 'g')
-command! Update call s:update()
+
+" ":update" with new empty file creations for the current buffer.
+"
+" Run ":update" if the file which the current buffer is corresponding exists,
+" otherwise run ":write" instead. This is because ":update" doesn't create a
+" new empty file if the corresponding buffer is empty and unmodified.
+"
+" This is an auxiliary command for keyboard shortcuts.
+command! -bang -bar -range=% Update
+  \ execute printf('<mods> <line1>,<line2>%s<bang>', filewritable(expand('%')) ? 'update' : 'write')
+
 command! ToggleNetrw call s:toggle_newrw()
 command! -bang -nargs=* Environments call s:environments(<q-bang>, <q-args>)
 command! Vimrc edit $MYVIMRC
