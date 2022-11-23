@@ -276,6 +276,20 @@ else
     set clipboard^=unnamedplus
   endif
 endif
+
+" Create temporary files(backup, swap, undo) under secure locations to avoid
+" CVE-2017-1000382.
+"
+" https://github.com/archlinux/svntogit-packages/blob/68635a69f0c5525210adca6ff277dc13c590399b/trunk/archlinux.vim#L22
+let s:directory = get(environ(), 'XDG_CACHE_HOME', expand('~/.cache'))
+
+let &g:backupdir = s:directory . '/vim/backup//'
+let &g:directory = s:directory . '/vim/swap//'
+let &g:undodir = s:directory . '/vim/undo//'
+
+silent call s:mkdir(expand(&g:backupdir), 'p', 0700)
+silent call s:mkdir(expand(&g:directory), 'p', 0700)
+silent call s:mkdir(expand(&g:undodir), 'p', 0700)
 " }}}
 
 " Key mappings {{{
