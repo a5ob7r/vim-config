@@ -199,6 +199,19 @@ function! s:install_minpac() abort
     call system(l:command)
   endif
 endfunction
+
+" https://stackoverflow.com/questions/1533565/how-to-get-visually-selected-text-in-vimscript
+function! s:get_visual_selection()
+  let [l:line_start, l:column_start] = getpos("'<")[1:2]
+  let [l:line_end, l:column_end] = getpos("'>")[1:2]
+  let l:lines = getline(l:line_start, l:line_end)
+  if len(l:lines) == 0
+    return ''
+  endif
+  let l:lines[-1] = l:lines[-1][: l:column_end - (&selection ==# 'inclusive' ? 1 : 2)]
+  let l:lines[0] = l:lines[0][l:column_start - 1:]
+  return join(l:lines, "\n")
+endfunction
 " }}}
 
 " Options {{{
@@ -944,6 +957,21 @@ endfunction
 call maxpac#add(s:ale)
 
 call maxpac#add('yasuhiroki/github-actions-yaml.vim')
+
+let s:ripgrep = maxpac#plugconf('kyoh86/vim-ripgrep')
+
+function! s:ripgrep.post() abort
+  command! -nargs=+ -complete=file Rg call ripgrep#search(<q-args>)
+
+  " This does not use any replacement text provided by "-range" attribute, but
+  " we need it to update "'<" and "'>" marks to get a visual selected text.
+  command! -range Rgv call ripgrep#search(s:get_visual_selection()->escape('"')->printf('"%s"'))
+
+  nnoremap <silent> <leader>f :<C-U>call ripgrep#search(expand('<cword>')->escape('"')->printf('"%s"'))<CR>
+  vnoremap <silent> <leader>f :Rgv<CR>
+endfunction
+
+call maxpac#add(s:ripgrep)
 
 let s:fern = maxpac#plugconf('lambdalisue/fern.vim')
 
