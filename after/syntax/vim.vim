@@ -1,4 +1,5 @@
-" For :Autocmd, which ishelper command in my vimrc.
-" TODO: This should be enabled only in but my vimrc not other vimscript file.
-syntax keyword myVimAutoCmd Autocmd skipwhite nextgroup=vimAutoEventList
-highlight link myVimAutoCmd vimCommand
+" Also highlight ":Autocmd" like ":autocmd", which is a helper command defined
+" in my vimrc.
+"
+" TODO: This should only be enabled in my vimrc using "autocommand".
+syntax keyword vimAutoCmd Autocmd skipwhite nextgroup=vimAutoEventList
