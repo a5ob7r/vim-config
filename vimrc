@@ -179,6 +179,26 @@ function! s:capable_truecolor()
 
   return $COLORTERM ==# 'truecolor' || index(l:terms, $TERM) > -1
 endfunction
+
+function! s:install_minpac() abort
+  " A root directory path of vim packages.
+  let l:packhome = split(&packpath, ',')[0] . '/pack'
+
+  let l:minpac_path = l:packhome . '/minpac/opt/minpac'
+  let l:minpac_url = 'https://github.com/k-takata/minpac.git'
+
+  if isdirectory(l:minpac_path) || ! executable('git')
+    return
+  endif
+
+  let l:command = printf('git clone %s %s', l:minpac_url, l:minpac_path)
+
+  if has('terminal')
+    execute 'terminal' l:command
+  else
+    call system(l:command)
+  endif
+endfunction
 " }}}
 
 " Options {{{
@@ -361,6 +381,8 @@ command! ToggleNetrw call s:toggle_newrw()
 command! -bang -nargs=* Environments call s:environments(<q-bang>, <q-args>)
 command! Vimrc edit $MYVIMRC
 command! ReloadVimrc source $MYVIMRC
+
+command! InstallMinpac call s:install_minpac()
 " }}}
 
 " Auto commands {{{
@@ -428,83 +450,526 @@ Autocmd BufEnter * let b:match_ignorecase = 1
 " }}}
 
 " Plugins {{{
-while ! minpac#extra#setup()
-  if ! exists('g:install_minpac')
-    finish
-  endif
+if !maxpac#begin()
+  finish
+endif
 
-  call minpac#extra#install()
-  unlet g:install_minpac
+let s:singleton = maxpac#plugconf('thinca/vim-singleton')
 
-  Autocmd VimEnter * call minpac#extra#install_and_load_plugins()
-endwhile
+function! s:singleton.post() abort
+  call singleton#enable()
+endfunction
 
 " NOTE: Call this ASAP!
 " NOTE: Maybe `+clientserver` is disabled on macOS even if a Vim is compiled
 " with `--with-features=huge`.
 if has('clientserver')
-  " call minpac#extra#add('thinca/vim-singleton')
+  " call maxpac#add(s:singleton)
 endif
 
-" UI
-call minpac#extra#add('KeitaNakamura/neodark.vim')
-call minpac#extra#add('itchyny/lightline.vim')
+let s:minpac = maxpac#plugconf('k-takata/minpac')
 
-" Git
-call minpac#extra#add('airblade/vim-gitgutter')
-call minpac#extra#add('lambdalisue/gina.vim')
-call minpac#extra#add('rhysd/git-messenger.vim')
+function! s:minpac.post() abort
+  command! PackInit call minpac#init()
+  command! PackUpdate call minpac#update()
+  command! PackInstall PackUpdate
+  command! PackClean call minpac#clean()
+  command! PackStatus call minpac#status()
+endfunction
 
-" CtrlP
-call minpac#extra#add('ctrlpvim/ctrlp.vim')
-call minpac#extra#add('mattn/ctrlp-matchfuzzy')
-call minpac#extra#add('mattn/ctrlp-ghq')
-call minpac#extra#add('a5ob7r/ctrlp-man')
+call maxpac#add(s:minpac)
 
-" LSP
-call minpac#extra#add('prabirshrestha/vim-lsp')
-call minpac#extra#add('mattn/vim-lsp-settings')
+let s:neodark = maxpac#plugconf('KeitaNakamura/neodark.vim')
 
-" Snippet
-call minpac#extra#add('hrsh7th/vim-vsnip')
-call minpac#extra#add('hrsh7th/vim-vsnip-integ')
-call minpac#extra#add('rafamadriz/friendly-snippets')
+function! s:neodark.pre() abort
+  let g:neodark#background='#202020'
+endfunction
 
-" Operator
-call minpac#extra#add('kana/vim-operator-user')
-call minpac#extra#add('kana/vim-operator-replace')
+function! s:neodark.post() abort
+  function! s:enable_colorscheme(bang)
+    let l:bang = empty(a:bang) ? '' : '!'
 
-" Misc
-call minpac#extra#add('LumaKernel/coqpit.vim')
-call minpac#extra#add('a5ob7r/shellcheckrc.vim')
-call minpac#extra#add('a5ob7r/tig.vim')
-call minpac#extra#add('aliou/bats.vim')
-call minpac#extra#add('bronson/vim-trailing-whitespace')
-call minpac#extra#add('editorconfig/editorconfig-vim')
-call minpac#extra#add('fladson/vim-kitty')
-call minpac#extra#add('junegunn/vader.vim')
-call minpac#extra#add('kannokanno/previm')
-call minpac#extra#add('machakann/vim-highlightedyank')
-call minpac#extra#add('machakann/vim-swap')
-call minpac#extra#add('preservim/vim-markdown')
-call minpac#extra#add('sheerun/vim-polyglot')
-call minpac#extra#add('t-takata/minpac')
-call minpac#extra#add('thinca/vim-localrc')
-call minpac#extra#add('thinca/vim-prettyprint')
-call minpac#extra#add('thinca/vim-themis')
-call minpac#extra#add('tpope/vim-commentary')
-call minpac#extra#add('tpope/vim-endwise')
-call minpac#extra#add('tpope/vim-repeat')
-call minpac#extra#add('tpope/vim-surround')
-call minpac#extra#add('tyru/eskk.vim')
-call minpac#extra#add('tyru/open-browser.vim')
-call minpac#extra#add('vim-jp/vital.vim')
-call minpac#extra#add('w0rp/ale')
-call minpac#extra#add('yasuhiroki/github-actions-yaml.vim')
+    if empty(l:bang) && utils#is_linux_console()
+      return
+    endif
 
-call minpac#extra#add('lambdalisue/fern.vim')
-call minpac#extra#add('lambdalisue/fern-git-status.vim')
-call minpac#extra#add('a5ob7r/fern-renderer-lsflavor.vim')
+    if exists('g:lightline')
+      let g:lightline.colorscheme = 'neodark'
+    endif
+
+    colorscheme neodark
+
+    " Cyan, but default is orange in a strange way.
+    let g:terminal_ansi_colors[6] = '#72c7d1'
+    " Light black
+    " Adjust autosuggestioned text color for zsh.
+    let g:terminal_ansi_colors[8] = '#5f5f5f'
+  endfunction
+
+  command! -bang Neodark call s:enable_colorscheme(<q-bang>)
+
+  Autocmd VimEnter * ++nested Neodark
+endfunction
+
+call maxpac#add(s:neodark)
+
+let s:lightline = maxpac#plugconf('itchyny/lightline.vim')
+
+function! s:lightline.pre() abort
+  let g:lightline = {
+    \ 'active': {
+    \   'left': [
+    \     [ 'mode', 'paste' ],
+    \     [ 'readonly', 'relativepath', 'modified' ],
+    \     [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok' ],
+    \     [ 'lsp_errors', 'lsp_warnings', 'lsp_informations', 'lsp_hints', 'lsp_ok' ]
+    \   ]
+    \ },
+    \ 'component_expand': {
+    \   'lsp_errors': 'LspErrorCount',
+    \   'lsp_warnings': 'LspWarningCount',
+    \   'lsp_informations': 'LspInformationCount',
+    \   'lsp_hints': 'LspHintCount',
+    \   'lsp_ok': 'LspOk'
+    \ },
+    \ 'component_type': {
+    \   'linter_checking': 'left',
+    \   'linter_warnings': 'warning',
+    \   'linter_errors': 'error',
+    \   'linter_ok': 'left',
+    \   'lsp_errors': 'error',
+    \   'lsp_warnings': 'warning',
+    \   'lsp_informations': 'left',
+    \   'lsp_hints': 'left',
+    \   'lsp_ok': 'left'
+    \ }
+    \ }
+
+  function! s:update_lightline()
+    if ! exists('g:loaded_lightline')
+      return
+    endif
+
+    call lightline#init()
+    call lightline#colorscheme()
+    call lightline#update()
+  endfunction
+
+  Autocmd ColorScheme * call s:update_lightline()
+endfunction
+
+call maxpac#add(s:lightline)
+
+let s:gitgutter = maxpac#plugconf('airblade/vim-gitgutter')
+
+function! s:gitgutter.pre() abort
+  let g:gitgutter_sign_added = 'A'
+  let g:gitgutter_sign_modified = 'M'
+  let g:gitgutter_sign_removed = 'D'
+  let g:gitgutter_sign_removed_first_line = 'd'
+  let g:gitgutter_sign_modified_removed = 'm'
+endfunction
+
+call maxpac#add(s:gitgutter)
+
+let s:gina = maxpac#plugconf('lambdalisue/gina.vim')
+
+function! s:gina.post() abort
+  nmap <silent> <leader>gl :<C-U>Gina log --graph --all<CR>
+  nmap <silent> <leader>gs :<C-U>Gina status<CR>
+  nmap <silent> <leader>gc :<C-U>Gina commit<CR>
+
+  call gina#custom#mapping#nmap('log', 'q', '<C-W>c', { 'noremap': 1, 'silent': 1 })
+  call gina#custom#mapping#nmap('status', 'q', '<C-W>c', { 'noremap': 1, 'silent': 1 })
+  call gina#custom#mapping#nmap('status', 'yy', '<Plug>(gina-yank-path)', { 'silent': 1 })
+endfunction
+
+call maxpac#add(s:gina)
+
+let s:git_messenger = maxpac#plugconf('rhysd/git-messenger.vim')
+
+function! s:git_messenger.post() abort
+  let g:git_messenger_include_diff = 'all'
+  let g:git_messenger_always_into_popup = v:true
+  let g:git_messenger_max_popup_height = 15
+endfunction
+
+call maxpac#add(s:git_messenger)
+
+let s:ctrlp = maxpac#plugconf('ctrlpvim/ctrlp.vim')
+
+function! s:ctrlp.pre() abort
+  " NOTE: <Nul> is sent when Ctrl and Space are typed.
+  let g:ctrlp_map = '<Nul>'
+  let g:ctrlp_show_hidden = 1
+  let g:ctrlp_lazy_update = 150
+  let g:ctrlp_reuse_window = '.*'
+  let g:ctrlp_use_caching = 0
+
+  let g:ctrlp_user_command = {}
+  let g:ctrlp_user_command['types'] = {}
+
+  if executable('git')
+    let g:ctrlp_user_command['types'][1] = ['.git', 'git -C %s ls-files -co --exclude-standard']
+  endif
+
+  if executable('fd')
+    let g:ctrlp_user_command['fallback'] = 'fd --type=file --type=symlink --hidden . %s'
+  elseif executable('find')
+    let g:ctrlp_user_command['fallback'] = 'find %s -type f'
+  else
+    let g:ctrlp_use_caching = 1
+    let g:ctrlp_cmd = 'CtrlPp'
+  endif
+
+  function! s:ctrlp_proxy(bang, ...) abort
+    let l:bang = empty(a:bang) ? '' : '!'
+    let l:dir = a:0 ? a:1 : getcwd()
+
+    let l:home = expand('~')
+
+    " Make vim heavy or freeze to run CtrlP to search many files. For example
+    " this is caused when run `CtrlP` on home directory or edit a file on home
+    " directory.
+    if empty(l:bang) && l:home ==# l:dir
+      throw 'Forbidden to run CtrlP on home directory'
+    endif
+
+    CtrlP l:dir
+  endfunction
+
+  command! -bang -nargs=? -complete=dir CtrlPp call s:ctrlp_proxy(<q-bang>, <f-args>)
+
+  nnoremap <silent> <leader>b :<C-U>CtrlPBuffer<CR>
+endfunction
+
+call maxpac#add(s:ctrlp)
+
+let s:ctrlp_matchfuzzy = maxpac#plugconf('mattn/ctrlp-matchfuzzy')
+
+function! s:ctrlp_matchfuzzy.post() abort
+  let g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
+endfunction
+
+call maxpac#add(s:ctrlp_matchfuzzy)
+
+let s:ctrlp_ghq = maxpac#plugconf('mattn/ctrlp-ghq')
+
+function! s:ctrlp_ghq.post() abort
+  nnoremap <silent> <leader>gq :CtrlPGhq<CR>
+endfunction
+
+call maxpac#add(s:ctrlp_ghq)
+
+let s:ctrlp_man = maxpac#plugconf('a5ob7r/ctrlp-man')
+
+function! s:ctrlp_man.post() abort
+  function! s:lookup_manual() abort
+    let l:q = input('keyword> ', '', 'shellcmd')
+
+    if empty(l:q)
+      return
+    endif
+
+    execute 'CtrlPMan' l:q
+  endfunction
+
+  command! LookupManual call s:lookup_manual()
+
+  nnoremap <silent> <leader>m :LookupManual<CR>
+endfunction
+
+call maxpac#add(s:ctrlp_man)
+
+let s:vim_lsp = maxpac#plugconf('prabirshrestha/vim-lsp')
+
+function! s:vim_lsp.pre() abort
+  let g:lsp_diagnostics_float_cursor = 1
+  let g:lsp_diagnostics_float_delay = 200
+  let g:lsp_semantic_enabled = 1
+
+  let g:lsp_experimental_workspace_folders = 1
+
+  function! s:on_lsp_buffer_enabled() abort
+    setlocal omnifunc=lsp#complete
+    if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
+
+    nmap <buffer> gd <plug>(lsp-definition)
+    nmap <buffer> gD <plug>(lsp-implementation)
+    nmap <buffer> <leader>r <plug>(lsp-rename)
+    nmap <buffer> <leader>h <plug>(lsp-hover)
+    nmap <buffer> <C-p> <plug>(lsp-previous-diagnostic)
+    nmap <buffer> <C-n> <plug>(lsp-next-diagnostic)
+
+    nmap <buffer> <leader>lf <plug>(lsp-document-format)
+    nmap <buffer> <leader>la <plug>(lsp-code-action)
+    nmap <buffer> <leader>ll <plug>(lsp-code-lens)
+    nmap <buffer> <leader>lr <plug>(lsp-references)
+
+    nnoremap <silent><buffer><expr> <C-j> lsp#scroll(+1)
+    nnoremap <silent><buffer><expr> <C-k> lsp#scroll(-1)
+
+    let b:vim_lsp_enabled = 1
+  endfunction
+
+  Autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
+
+  Autocmd User lsp_diagnostics_updated call lightline#update()
+
+  function! LspErrorCount() abort
+    let l:errors = lsp#get_buffer_diagnostics_counts().error
+    if l:errors == 0 | return '' | endif
+    return 'E: ' . l:errors
+  endfunction
+
+  function LspWarningCount() abort
+    let l:warnings = lsp#get_buffer_diagnostics_counts().warning
+    if l:warnings == 0 | return '' | endif
+    return 'W: ' . l:warnings
+  endfunction
+
+  function! LspInformationCount() abort
+    let l:informations = lsp#get_buffer_diagnostics_counts().information
+    if l:informations == 0 | return '' | endif
+    return 'I: ' . l:informations
+  endfunction
+
+  function! LspHintCount() abort
+    let l:hints = lsp#get_buffer_diagnostics_counts().hint
+    if l:hints == 0 | return '' | endif
+    return 'H: ' . l:hints
+  endfunction
+
+  function! LspOk() abort
+    if !get(b:, 'vim_lsp_enabled', 0)
+      return ''
+    endif
+
+    let l:counts = lsp#get_buffer_diagnostics_counts()
+    let l:not_zero_counts = filter(l:counts, 'v:val != 0')
+    let l:ok = len(l:not_zero_counts) == 0
+    if l:ok | return 'OK' | endif
+    return ''
+  endfunction
+
+  function! s:lsp_log_file()
+    return get(g:, 'lsp_log_file', '')
+  endfunction
+
+  command! CurrentLspLogging echo s:lsp_log_file()
+  command! -nargs=* -complete=file EnableLspLogging
+        \ let g:lsp_log_file = empty(<q-args>) ? expand('~/vim-lsp.log') : <q-args>
+  command! DisableLspLogging let g:lsp_log_file = ''
+
+  function! s:view_lsp_log()
+    let l:log = s:lsp_log_file()
+
+    if filereadable(l:log)
+      call term_start(
+        \ printf('less %s', l:log),
+        \ {
+        \   'env': { 'LESS': '' },
+        \   'term_finish': 'close',
+        \ })
+    endif
+  endfunction
+
+  command! ViewLspLog call s:view_lsp_log()
+
+  function! s:clear_lsp_log()
+    let l:log = s:lsp_log_file()
+
+    if filewritable(l:log)
+      call writefile([], l:log)
+    endif
+  endfunction
+
+  command! ClearLspLog call s:clear_lsp_log()
+endfunction
+
+call maxpac#add(s:vim_lsp)
+
+let s:vim_lsp_settings = maxpac#plugconf('mattn/vim-lsp-settings')
+
+function! s:vim_lsp_settings.pre() abort
+  let g:lsp_settings_enable_suggestions = 0
+
+  let g:lsp_settings = get(g:, 'lsp_settings', {})
+  let g:lsp_settings['texlab'] = {
+    \ 'workspace_config': {
+    \   'latex': {
+    \     'build': {
+    \       'args': ['%f'],
+    \       'onSave': v:true,
+    \       'forwardSearchAfter': v:true
+    \       },
+    \     'forwardSearch': {
+    \       'executable': 'zathura',
+    \       'args': ['--synctex-forward', '%l:1:%f', '%p']
+    \       }
+    \     }
+    \   }
+    \ }
+endfunction
+
+call maxpac#add(s:vim_lsp_settings)
+
+let s:vsnip = maxpac#plugconf('hrsh7th/vim-vsnip')
+
+function! s:vsnip.pre() abort
+  let g:vsnip_snippet_dir = expand('~/.vim/vsnip')
+endfunction
+
+function! s:vsnip.post() abort
+  imap <expr> <Tab> vsnip#expandable() ? '<Plug>(vsnip-expand)' : '<Tab>'
+endfunction
+
+call maxpac#add(s:vsnip)
+
+call maxpac#add('hrsh7th/vim-vsnip-integ')
+call maxpac#add('rafamadriz/friendly-snippets')
+
+call maxpac#add('kana/vim-operator-user')
+
+let s:replace = maxpac#plugconf('kana/vim-operator-replace')
+
+function! s:replace.post() abort
+  map _ <Plug>(operator-replace)
+endfunction
+
+call maxpac#add(s:replace)
+
+call maxpac#add('LumaKernel/coqpit.vim')
+
+let s:shellcheckrc = maxpac#plugconf('a5ob7r/shellcheckrc.vim')
+
+function! s:shellcheckrc.pre() abort
+  let g:shellcheck_directive_highlight = 1
+endfunction
+
+call maxpac#add(s:shellcheckrc)
+
+call maxpac#add('a5ob7r/tig.vim')
+call maxpac#add('aliou/bats.vim')
+call maxpac#add('bronson/vim-trailing-whitespace')
+call maxpac#add('editorconfig/editorconfig-vim')
+call maxpac#add('fladson/vim-kitty')
+call maxpac#add('junegunn/vader.vim')
+call maxpac#add('kannokanno/previm')
+call maxpac#add('machakann/vim-highlightedyank')
+call maxpac#add('machakann/vim-swap')
+
+let s:markdown = maxpac#plugconf('preservim/vim-markdown')
+
+function! s:markdown.pre() abort
+  let g:vim_markdown_folding_disabled = 1
+endfunction
+
+call maxpac#add(s:markdown)
+
+let s:polyglot = maxpac#plugconf('sheerun/vim-polyglot')
+
+function! s:polyglot.pre() abort
+  " Disable polyglot's ftdetect to use my ftdetect.
+  let g:polyglot_disabled = ['ftdetect', 'sensible', 'markdown']
+endfunction
+
+call maxpac#add(s:polyglot)
+
+call maxpac#add('thinca/vim-localrc')
+call maxpac#add('thinca/vim-prettyprint')
+call maxpac#add('thinca/vim-themis')
+call maxpac#add('tpope/vim-commentary')
+call maxpac#add('tpope/vim-endwise')
+call maxpac#add('tpope/vim-repeat')
+call maxpac#add('tpope/vim-surround')
+
+let s:eskk = maxpac#plugconf('tyru/eskk.vim')
+
+function! s:eskk.pre() abort
+  let g:eskk#large_dictionary = {
+    \ 'path': '/usr/share/skk/SKK-JISYO.L',
+    \ 'sorted': 1,
+    \ 'encoding': 'euc-jp',
+    \ }
+endfunction
+
+call maxpac#add(s:eskk)
+
+let s:open_browser = maxpac#plugconf('tyru/open-browser.vim')
+
+function! s:open_browser.post() abort
+  nmap <leader>K <Plug>(openbrowser-smart-search)
+  nnoremap <leader>k :call SearchUnderCursorEnglishWord()<CR>
+
+  function! SearchEnglishWord(word) abort
+    let l:searchUrl = 'https://dictionary.cambridge.org/dictionary/english/'
+    let l:url = l:searchUrl . a:word
+    call openbrowser#open(l:url)
+  endfunction
+
+  function! SearchUnderCursorEnglishWord() abort
+    let l:word = expand('<cword>')
+    call SearchEnglishWord(l:word)
+  endfunction
+endfunction
+
+call maxpac#add(s:open_browser)
+
+call maxpac#add('vim-jp/vital.vim')
+
+let s:ale = maxpac#plugconf('w0rp/ale')
+
+function! s:ale.pre() abort
+  highlight ALEErrorSign ctermfg=9 guifg=#C30500
+  highlight ALEWarningSign ctermfg=11 guifg=#ED6237
+  let g:ale_lint_on_insert_leave = 1
+  let g:ale_lint_on_text_changed = 0
+  let g:ale_lint_on_enter = 0
+  let g:ale_python_auto_pipenv = 1
+  let g:ale_disable_lsp = 1
+
+  nmap <silent> <C-p> <Plug>(ale_previous_wrap)
+  nmap <silent> <C-n> <Plug>(ale_next_wrap)
+
+  Autocmd User lsp_buffer_enabled ALEDisableBuffer
+endfunction
+
+call maxpac#add(s:ale)
+
+call maxpac#add('yasuhiroki/github-actions-yaml.vim')
+
+let s:fern = maxpac#plugconf('lambdalisue/fern.vim')
+
+function! s:fern.pre() abort
+  let g:fern#default_hidden = 1
+  let g:fern#default_exclude = '.*\~$'
+
+  command! CurrentFernLogging echo get(g:, 'fern#logfile', v:null)
+  command! -nargs=* -complete=file EnableFernLogging
+        \ let g:fern#logfile = empty(<q-args>) ? '~/fern.tsv' : <q-args>
+  command! DisableFernLogging let g:fern#logfile = v:null
+  command! FernLogDebug let g:fern#loglevel = g:fern#DEBUG
+  command! FernLogInfo let g:fern#loglevel = g:fern#INFO
+  command! FernLogWARN let g:fern#loglevel = g:fern#WARN
+  command! FernLogError let g:fern#loglevel = g:fern#Error
+endfunction
+
+call maxpac#add(s:fern)
+
+call maxpac#add('lambdalisue/fern-git-status.vim')
+
+call maxpac#add('a5ob7r/fern-renderer-lsflavor.vim')
+
+let s:lsflavor = maxpac#plugconf('a5ob7r/fern-renderer-lsflavor.vim')
+
+function! s:lsflavor.pre() abort
+  let g:fern#renderer = 'lsflavor'
+endfunction
+
+call maxpac#add(s:lsflavor)
+
+call maxpac#end()
 " }}}
 
 " vim:set expandtab tabstop=2 shiftwidth=2 foldmethod=marker:

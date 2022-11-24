@@ -16,6 +16,9 @@ mklink /D %HOMEPATH%\vimfiles %CD%
 
 ## Install plugins
 
-```sh
-$ vim --cmd 'let g:install_minpac = 1'
+```vim
+:InstallMinpac
+:ReloadVimrc
+:PackUpdate
+:ReloadVimrc
 ```
