@@ -11,20 +11,6 @@ function! utils#get_visual_selection()
   return join(l:lines, "\n")
 endfunction
 
-function! utils#is_linux_console()
-  return $TERM ==# 'linux'
-endfunction
-
-function! utils#drop_while(predicate, list)
-  for l:i in range(len(a:list))
-    if !a:predicate(a:list[l:i])
-      return a:list[l:i:]
-    endif
-  endfor
-
-  return []
-endfunction
-
 " NOTE: This returns an empty string if causes out of index.
 function! utils#strcharat(s, i) abort
   return strcharpart(a:s, a:i, 1)

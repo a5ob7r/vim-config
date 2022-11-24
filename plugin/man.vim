@@ -13,6 +13,16 @@ if exists(':Man') != 2
   endtry
 endif
 
+function! s:drop_while(predicate, list)
+  for l:i in range(len(a:list))
+    if !a:predicate(a:list[l:i])
+      return a:list[l:i:]
+    endif
+  endfor
+
+  return []
+endfunction
+
 " Enhanced completion for :Man.
 "
 " :M
@@ -23,7 +33,7 @@ function! s:man_complete(arg_lead, cmd_line, cursor_pos) abort
   let l:words = split(a:cmd_line, '[[:space:]]')
 
   " Trim command modifiers.
-  let l:words = utils#drop_while({x -> x =~# '^[^A-Z]'}, l:words)
+  let l:words = s:drop_while({x -> x =~# '^[^A-Z]'}, l:words)
 
   " Trim a incomplate word.
   if !empty(a:arg_lead) && len(l:words) >= 2

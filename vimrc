@@ -494,7 +494,8 @@ function! s:neodark.post() abort
   function! s:enable_colorscheme(bang)
     let l:bang = empty(a:bang) ? '' : '!'
 
-    if empty(l:bang) && utils#is_linux_console()
+    " Linux console only works with a very few colors.
+    if empty(l:bang) && $TERM ==# 'linux'
       return
     endif
 
