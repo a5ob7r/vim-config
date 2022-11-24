@@ -379,7 +379,12 @@ command! -bang -bar -range=% Update
 
 command! ToggleNetrw call s:toggle_newrw()
 command! -bang -nargs=* Environments call s:environments(<q-bang>, <q-args>)
-command! Vimrc edit $MYVIMRC
+
+" A helper command to open a file in a split window, or the current one (if it
+" is invoked with a bang mark).
+command! -bang -bar -nargs=1 -complete=file Open execute <q-mods> (empty(<q-bang>) ? 'split' : 'edit') <q-args>
+
+command! -bang -bar Vimrc <mods> Open<bang> $MYVIMRC
 command! ReloadVimrc source $MYVIMRC
 
 command! InstallMinpac call s:install_minpac()
