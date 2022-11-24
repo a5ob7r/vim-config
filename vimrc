@@ -34,7 +34,7 @@ endfunction
 
 " A backward comaptible "mkdir" for patch-8.0.1708, that "mkdir" with "p" flag
 " throws no error even if the directory already exists.
-function! s:mkdir(name, ...)
+function! s:mkdir(name, ...) abort
   let l:name = a:name
   let l:path = get(a:, '1', '')
   let l:prot = get(a:, '2', '0o755')
@@ -60,7 +60,7 @@ function! s:open_terminal_on_newtab(count, ...) abort
 endfunction
 
 " Like 'export' which is shell's builtin command with filter.
-function! s:environments(bang, ...)
+function! s:environments(bang, ...) abort
   let l:env = environ()
   let l:keys = sort(keys(l:env))
 
@@ -171,7 +171,7 @@ function! s:put(bang, reg, count) abort
   execute printf('normal! %s"%s%s', l:count, l:reg, l:put)
 endfunction
 
-function! s:capable_truecolor()
+function! s:capable_truecolor() abort
   let l:terms = [
     \ 'xterm',
     \ 'st-256color',
