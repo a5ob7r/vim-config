@@ -270,10 +270,8 @@ set breakindentopt=shift:2,sbr
 set showbreak=>>
 " }}}
 
-" Case {{{
-set ignorecase
-set smartcase
-" }}}
+" "smartcase" works only if "ignorecase" is on.
+set ignorecase smartcase
 
 if has('termguicolors') && s:capable_truecolor()
   set termguicolors
