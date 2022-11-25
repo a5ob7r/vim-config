@@ -248,15 +248,10 @@ endif
 set nojoinspaces
 set nowrapscan
 
-" Indent {{{
-" This should be on when "smartindent" is on accoding to manual. Why?
-set autoindent
-
-" NOTE: This has no effect when "cindent" is on or "indentexpr" is set.
-set smartindent
-
-set cindent
-" }}}
+" "smartindent" isn't a super option for "autoindent", and the two of options
+" work in a complement way for each other. So these options should be on at
+" the same time. This is recommended in the help too.
+set autoindent smartindent
 
 " Invisible chars {{{
 set list
