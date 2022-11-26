@@ -313,20 +313,31 @@ silent call s:mkdir(expand(&g:undodir), 'p', 0700)
 " Key mappings {{{
 let g:mapleader=' '
 
-" Use "Q" as typed key recording starter and terminator instead of "q".
+" Use "Q" as the typed key recording starter and the terminator instead of
+" "q".
 noremap Q q
 map q <Nop>
 
+" Do not anything even if type "<F1>". I sometimes mistype it instead of
+" typing "<ESC>".
 map <F1> <Nop>
 map! <F1> <Nop>
 
+" Swap keybingings of 'j/k' and 'gj/gk' with each other.
 nnoremap j gj
 nnoremap k gk
+nnoremap gj j
+nnoremap gk k
+
+" Change the current window height instantly.
+nnoremap + <C-W>+
+nnoremap - <C-W>-
+
+" By default, "Y" is a synonym of "yy" for Vi-compatibilities.
+noremap Y y$
 
 " Reset screen.
 nnoremap <silent> <Esc><Esc> :nohlsearch<CR>:redraw!<CR><Esc>
-
-noremap Y y$
 
 nnoremap <leader><Enter> o<Esc>
 
