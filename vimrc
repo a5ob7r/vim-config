@@ -534,6 +534,8 @@ endfunction
 
 call maxpac#add(s:lightline)
 
+call maxpac#add('andymass/vim-matchup')
+
 let s:gitgutter = maxpac#plugconf('airblade/vim-gitgutter')
 
 function! s:gitgutter.pre() abort
