@@ -336,8 +336,11 @@ nnoremap - <C-W>-
 " By default, "Y" is a synonym of "yy" for Vi-compatibilities.
 noremap Y y$
 
-" Reset screen.
-nnoremap <silent> <Esc><Esc> :nohlsearch<CR>:redraw!<CR><Esc>
+" Clear the highlightings for pattern searching.
+nnoremap <silent> <C-L> :<C-U>nohlsearch<CR>
+
+" Quit Visual mode.
+vnoremap <C-L> <ESC>
 
 nnoremap <leader><Enter> o<Esc>
 
