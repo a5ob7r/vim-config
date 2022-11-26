@@ -302,9 +302,6 @@ nnoremap <silent> <leader>n :<C-U>ToggleNetrw<CR>
 nnoremap <silent> <F2> :<C-U>ReloadVimrc<CR>
 nnoremap <silent> <leader><F2> :<C-U>Vimrc<CR>
 
-nnoremap <silent> <leader>f :<C-U>Rg<CR>
-vnoremap <silent> <leader>f :Rgv<CR>
-
 " From $VIMRUNTIME/mswin.vim
 " Save with "CTRL-S" on normal mode and insert mode.
 "
