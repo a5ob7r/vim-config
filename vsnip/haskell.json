@@ -1,0 +1,9 @@
+{
+  "INLINE": {
+    "prefix": "inline",
+    "body": [
+      "{-# INLINE ${1:function} #-}$0"
+    ],
+    "description": "INLINE pragma"
+  }
+}
