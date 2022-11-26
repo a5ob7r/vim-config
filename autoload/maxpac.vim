@@ -8,6 +8,17 @@ function! s:plugname(url) abort
   return substitute(l:tail, '.git$', '', '')
 endfunction
 
+" Whether or not the plugin is loadable.
+function! s:loadable(name) abort
+  for l:path in split(&packpath, ',')
+    if !globpath(l:path, 'pack/*/opt/' . a:name)->empty()
+      return v:true
+    endif
+  endfor
+
+  return v:false
+endfunction
+
 " Initialize a configuration store of maxpac.
 function! maxpac#initialize() abort
   let s:maxpac = {
@@ -25,6 +36,7 @@ function! maxpac#plugconf(...) abort
     \ 'config': { 'type': 'opt' },
     \ 'pre': { -> v:null },
     \ 'post': { -> v:null },
+    \ 'fallback': { -> v:null },
     \ 'deps': []
     \ }
 endfunction
@@ -38,6 +50,9 @@ endfunction
 
 " Load "minpac" and initialize "maxpac".
 function! maxpac#begin(...) abort
+  " Initialize maxmac.
+  call maxpac#initialize()
+
   try
     packadd minpac
   catch
@@ -49,9 +64,6 @@ function! maxpac#begin(...) abort
   " Initialize minpac.
   call maxpac#init(l:config)
 
-  " Initialize maxmac.
-  call maxpac#initialize()
-
   return v:true
 endfunction
 
@@ -61,11 +73,15 @@ function! maxpac#end() abort
   for l:name in s:maxpac.names
     let l:conf = s:maxpac.confs[l:name]
 
-    if type(l:conf.pre) == type(function('tr'))
+    if s:loadable(s:plugname(l:name)) && type(l:conf.pre) == type(function('tr'))
       call l:conf.pre()
     endif
 
     if !maxpac#load(l:name, l:conf.config)
+      if type(l:conf.fallback) == type(function('tr'))
+        call l:conf.fallback()
+      endif
+
       continue
     endif
 

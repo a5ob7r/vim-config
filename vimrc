@@ -421,9 +421,7 @@ packadd! matchit
 " }}}
 
 " Plugins {{{
-if !maxpac#begin()
-  finish
-endif
+call maxpac#begin()
 
 let s:singleton = maxpac#plugconf('thinca/vim-singleton')
 
