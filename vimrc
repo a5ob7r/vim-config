@@ -59,40 +59,6 @@ function! s:open_terminal_on_newtab(count, ...) abort
   endif
 endfunction
 
-" Like 'export' which is shell's builtin command with filter.
-function! s:environments(bang, ...) abort
-  let l:env = environ()
-  let l:keys = sort(keys(l:env))
-
-  let l:regex = a:0 > 0 ? a:1 : ''
-
-  for l:k in l:keys
-    if empty(a:bang)
-      if l:k !~# l:regex
-        continue
-      endif
-    else
-      if l:k !~? l:regex
-        continue
-      endif
-    endif
-
-    let l:v = l:env[l:k]
-
-    if l:v =~# "'"
-      if l:v =~# '"'
-        let l:v = substitute(l:v, '"', '\\"', 'g')
-      endif
-
-      echo printf('%s="%s"', l:k, l:v)
-    elseif l:v =~# '\m\(\s\|\r\|\n\|["!#\^\$\&|=?\\\*\[\]\{\}()<>]\)'
-      echo printf("%s='%s'", l:k, l:v)
-    else
-      echo printf('%s=%s', l:k, l:v)
-    endif
-  endfor
-endfunction
-
 function! s:autocmd(group, autocmd) abort
   let l:group = a:group
 
@@ -401,7 +367,6 @@ command! -bang -bar -range=% Update
   \ execute printf('<mods> <line1>,<line2>%s<bang>', filewritable(expand('%')) ? 'update' : 'write')
 
 command! ToggleNetrw call s:toggle_newrw()
-command! -bang -nargs=* Environments call s:environments(<q-bang>, <q-args>)
 
 " A helper command to open a file in a split window, or the current one (if it
 " is invoked with a bang mark).
