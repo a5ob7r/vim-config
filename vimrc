@@ -264,11 +264,14 @@ else
 endif
 " }}}
 
-" Wrap {{{
-set breakindent
-set breakindentopt=shift:2,sbr
-set showbreak=>>
-" }}}
+if has('linebreak')
+  " Strings that start with '>' isn't compatible with the block quotation
+  " syntax of markdown.
+  set showbreak=+++\ 
+
+  set breakindent
+  set breakindentopt=shift:2,sbr
+endif
 
 " "smartcase" works only if "ignorecase" is on.
 set ignorecase smartcase
