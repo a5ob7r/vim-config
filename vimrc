@@ -416,10 +416,8 @@ let g:netrw_list_hide = '^\..*\~ *'
 let g:netrw_sizestyle = 'H'
 " }}}
 
-" matchit {{{
+" The enhanced "%", to find many extra matchings and jump the cursor to them.
 packadd! matchit
-Autocmd BufEnter * let b:match_ignorecase = 1
-" }}}
 " }}}
 
 " Plugins {{{
