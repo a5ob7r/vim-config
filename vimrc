@@ -44,21 +44,6 @@ function! s:mkdir(name, ...) abort
   endif
 endfunction
 
-" Open single window terminal on new tabpage.
-function! s:open_terminal_on_newtab(count, ...) abort
-  let l:dir = get(a:, 1, $HOME)
-
-  execute 'Autocmd TabNew * ++once tcd' l:dir
-
-  " NOTE: -1 is supplied if no range is specified on a command with "-range"
-  " attr.
-  if a:count > -1
-    execute printf('%dtab terminal', a:count)
-  else
-    tab terminal
-  endif
-endfunction
-
 function! s:autocmd(group, autocmd) abort
   let l:group = a:group
 
@@ -352,8 +337,6 @@ inoremap <silent> <C-L> <Plug>(linefeed)
 " }}}
 
 " Commands {{{
-command! -range -addr=tabs -nargs=? -complete=dir Terminal
-      \ call s:open_terminal_on_newtab(<count>, <f-args>)
 command! Runtimepath echo substitute(&runtimepath, ',', "\n", 'g')
 
 " ":update" with new empty file creations for the current buffer.
