@@ -204,16 +204,16 @@ set nowrapscan
 " the same time. This is recommended in the help too.
 set autoindent smartindent
 
-" Invisible chars {{{
+" List mode, which renders alternative characters instead of invisible
+" (non-printable, out of screen or concealed) them.
+"
+" "extends" is only used when "wrap" is off.
 set list
-set listchars&
+set listchars+=tab:>\ ,extends:>,precedes:<
 
 if has('patch-8.1.0759')
-  set listchars+=tab:>\ \|,extends:>,precedes:<
-else
-  set listchars+=tab:>\ ,extends:>,precedes:<
+  set listchars+=tab:>\ \|
 endif
-" }}}
 
 if has('linebreak')
   " Strings that start with '>' isn't compatible with the block quotation
