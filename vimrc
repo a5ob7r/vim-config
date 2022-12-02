@@ -166,25 +166,50 @@ endfunction
 " }}}
 
 " Options {{{
+" Allow to delete everything in Insert Mode.
 set backspace=indent,eol,start
-set colorcolumn=81,101,121
-set cursorline
+
+if has('syntax')
+  set colorcolumn=81,101,121
+  set cursorline
+endif
+
+" Show characters to fill the screen as much as possible when some characters
+" are out of the screen.
 set display=lastline
 
 " Maybe SKK dictionaries are encoded by "enc-jp".
 " NOTE: "usc-bom" must precede "utf-8" to recognize BOM.
 set fileencodings=ucs-bom,utf-8,iso-2022-jp,euc-jp,cp932,latin1
 
+" Allow to hide buffers even if they are still modified.
 set hidden
+
+" The number of history of commands (":") and previous search patterns ("/").
+"
+" 10000 is the maximum value.
 set history=10000
-set hlsearch
-set incsearch
+
+if has('extra_search')
+  set hlsearch
+  set incsearch
+endif
+
+" Render "statusline" for all of windows, to show window statuses not to
+" separate windows.
 set laststatus=2
+
+" This option has no effect when "statusline" is not empty.
 set ruler
+
+" The cursor offset value around both of window edges.
 set scrolloff=5
+
 set showcmd
 set showmatch
 set virtualedit=block
+
+" A command mode with an enhanced completion.
 set wildmenu
 set wildmode=longest:full,full
 
