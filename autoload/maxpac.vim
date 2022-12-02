@@ -107,7 +107,7 @@ function! maxpac#add(conf) abort
 endfunction
 
 " Load a standalone plugin. The plugin is only managed by minpac, but maxpac.
-" This function works as a synonym of "minpc#add()" and "packadd".
+" This function works as a synonym of "minpac#add()" and "packadd".
 "
 " NOTE: This function initializes minpac without any arguments if minpac isn't
 " initialized yet. If you want to initialize with non-default value,
