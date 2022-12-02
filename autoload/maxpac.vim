@@ -113,9 +113,13 @@ endfunction
 " initialized yet. If you want to initialize with non-default value,
 " initialize with the value beforehand.
 function! maxpac#load(url, ...) abort
-  if !exists('g:minpac#opt')
-    call maxpac#init()
-  endif
+  try
+    if !exists('g:minpac#opt')
+      call maxpac#init()
+    endif
+  catch /^Vim\%((\a\+)\)\=:E117:/
+    return v:false
+  endtry
 
   let l:config = get(a:, 1, { 'type': 'opt' })
   let l:name = s:plugname(a:url)
