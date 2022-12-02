@@ -53,15 +53,15 @@ function! s:autocmd(group, autocmd) abort
 
   let l:idx = match(a:autocmd, '^\s*\S\+\s\+\%(\\ \|[^[:space:]]\)\+\s\+\zs')
   " Events and patterns.
-  let l:left = slice(a:autocmd, 0, l:idx)
+  let l:left = a:autocmd[0:l:idx][0:-2]
   " Attribute arguments(++once, ++nested) and commands.
-  let l:right = slice(a:autocmd, l:idx)
+  let l:right = a:autocmd[l:idx:]
 
   let l:idx = match(l:right, '^\s*\%(\%(\%(++\)\=nested\|++once\)\s\+\)\+\zs')
   if l:idx >= 0
-    let l:attrs = split(slice(l:right, 0, l:idx))
+    let l:attrs = split(l:right[0:l:idx][0:-2])
     " Commands only.
-    let l:right = slice(l:right, l:idx)
+    let l:right = l:right[l:idx:]
   endif
 
   let l:once = index(l:attrs, '++once') >= 0
