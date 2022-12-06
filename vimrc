@@ -603,8 +603,10 @@ call maxpac#add(s:git_messenger)
 let s:ctrlp = maxpac#plugconf('ctrlpvim/ctrlp.vim')
 
 function! s:ctrlp.pre() abort
-  " NOTE: <Nul> is sent when Ctrl and Space are typed.
-  let g:ctrlp_map = '<Nul>'
+  " "<Nul>" is sent instead of "<C-Space>" when type the "CTRL" key and the
+  " "SPACE" one as once if in a terminal emulator or a console.
+  let g:ctrlp_map = has('gui') ? '<C-Space>' : '<Nul>'
+
   let g:ctrlp_show_hidden = 1
   let g:ctrlp_lazy_update = 150
   let g:ctrlp_reuse_window = '.*'
