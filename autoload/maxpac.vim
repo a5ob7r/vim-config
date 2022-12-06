@@ -10,13 +10,12 @@ endfunction
 
 " Whether or not the plugin is loadable.
 function! s:loadable(name) abort
-  for l:path in split(&packpath, ',')
-    if !globpath(l:path, 'pack/*/opt/' . a:name)->empty()
-      return v:true
-    endif
-  endfor
+  return !empty(globpath(&packpath, 'pack/*/opt/' . a:name))
+endfunction
 
-  return v:false
+" Whether or not the plugin is loaded.
+function! s:loaded(name) abort
+  return !empty(globpath(&runtimepath, 'pack/*/opt/' . a:name))
 endfunction
 
 " Initialize a configuration store of maxpac.
@@ -134,6 +133,5 @@ function! maxpac#load(url, ...) abort
     " Ignore any errors.
   endtry
 
-  " Whether or not the plugin is added.
-  return printf(',%s,', &runtimepath) =~# printf(',/[^,]*/%s,', l:name)
+  return s:loaded(l:name)
 endfunction
