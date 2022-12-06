@@ -261,12 +261,19 @@ if has('termguicolors') && s:capable_truecolor()
   let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 endif
 
-if has('osxdarwin')
+if has('win32') || has('osxdarwin')
+  " Use the "*" register as a default one, for yank, delete, change and put
+  " operations instead of the '"' unnamed one. The contents of the "*"
+  " register is synchronous with the system clipboard's them.
   set clipboard=unnamed
 else
+  " No connection to the X server if in a console.
   set clipboard=exclude:cons\|linux
 
   if has('unnamedplus')
+    " This is similar to "unnamed", but use the "+" register instead. The
+    " register is used for reading and writing of the CLIPBOARD selection but
+    " not the PRIMARY one.
     set clipboard^=unnamedplus
   endif
 endif
