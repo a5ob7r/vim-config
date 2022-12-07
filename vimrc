@@ -182,6 +182,9 @@ set display=lastline
 " NOTE: "usc-bom" must precede "utf-8" to recognize BOM.
 set fileencodings=ucs-bom,utf-8,iso-2022-jp,euc-jp,cp932,latin1
 
+" Prefer "<NL>" as "<EOL>" even if it is on Windows.
+set fileformats=unix,dos,mac
+
 " Allow to hide buffers even if they are still modified.
 set hidden
 
