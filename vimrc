@@ -608,7 +608,7 @@ let s:ctrlp = maxpac#plugconf('ctrlpvim/ctrlp.vim')
 function! s:ctrlp.pre() abort
   " "<Nul>" is sent instead of "<C-Space>" when type the "CTRL" key and the
   " "SPACE" one as once if in a terminal emulator or a console.
-  let g:ctrlp_map = has('gui') ? '<C-Space>' : '<Nul>'
+  let g:ctrlp_map = has('gui_running') ? '<C-Space>' : '<Nul>'
 
   let g:ctrlp_show_hidden = 1
   let g:ctrlp_lazy_update = 150
