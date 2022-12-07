@@ -326,9 +326,9 @@ noremap Y y$
 nnoremap <silent> <C-L> :<C-U>nohlsearch<CR>
 
 " Quit Visual mode.
-vnoremap <C-L> <ESC>
+vnoremap <C-L> <Esc>
 
-nnoremap <leader><Enter> o<Esc>
+nnoremap <leader><CR> o<Esc>
 
 noremap <silent> p :<C-U>call <SID>put('', v:register, v:count1)<CR>
 noremap <silent> P :<C-U>call <SID>put('!', v:register, v:count1)<CR>
@@ -344,11 +344,11 @@ nnoremap <silent> <leader><F2> :<C-U>Vimrc<CR>
 " normal mode and typing ":w". However doing them every editing is a little
 " bit bothersome. So I want to use these shortcuts which are often used to
 " save files by GUI editros.
-nnoremap <silent> <C-s> :<C-U>Update<CR>
+nnoremap <silent> <C-S> :<C-U>Update<CR>
 if has('patch-8.2.1978')
-  inoremap <silent> <C-s> <Cmd>Update<CR>
+  inoremap <silent> <C-S> <Cmd>Update<CR>
 else
-  inoremap <silent> <C-s> <Esc>:Update<CR>gi
+  inoremap <silent> <C-S> <Esc>:Update<CR>gi
 endif
 
 nnoremap <silent> <leader>t :<C-U>tabnew<CR>
@@ -707,16 +707,16 @@ function! s:vim_lsp.pre() abort
     nmap <buffer> gD <plug>(lsp-implementation)
     nmap <buffer> <leader>r <plug>(lsp-rename)
     nmap <buffer> <leader>h <plug>(lsp-hover)
-    nmap <buffer> <C-p> <plug>(lsp-previous-diagnostic)
-    nmap <buffer> <C-n> <plug>(lsp-next-diagnostic)
+    nmap <buffer> <C-P> <plug>(lsp-previous-diagnostic)
+    nmap <buffer> <C-N> <plug>(lsp-next-diagnostic)
 
     nmap <buffer> <leader>lf <plug>(lsp-document-format)
     nmap <buffer> <leader>la <plug>(lsp-code-action)
     nmap <buffer> <leader>ll <plug>(lsp-code-lens)
     nmap <buffer> <leader>lr <plug>(lsp-references)
 
-    nnoremap <silent><buffer><expr> <C-j> lsp#scroll(+1)
-    nnoremap <silent><buffer><expr> <C-k> lsp#scroll(-1)
+    nnoremap <silent><buffer><expr> <C-J> lsp#scroll(+1)
+    nnoremap <silent><buffer><expr> <C-K> lsp#scroll(-1)
 
     let b:vim_lsp_enabled = 1
   endfunction
@@ -938,8 +938,8 @@ function! s:ale.pre() abort
   let g:ale_python_auto_pipenv = 1
   let g:ale_disable_lsp = 1
 
-  nmap <silent> <C-p> <Plug>(ale_previous_wrap)
-  nmap <silent> <C-n> <Plug>(ale_next_wrap)
+  nmap <silent> <C-P> <Plug>(ale_previous_wrap)
+  nmap <silent> <C-N> <Plug>(ale_next_wrap)
 
   Autocmd User lsp_buffer_enabled ALEDisableBuffer
 endfunction
