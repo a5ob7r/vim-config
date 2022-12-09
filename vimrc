@@ -1,21 +1,43 @@
 "
 " vimrc
 "
+" - WIP: The minimal requirement version is 7.4.0000.
+" - WIP: Work well even if a tiny version.
+" - Work well even if no (non-default) plugin is installed.
+" - Work well with plugins since 8.0.0050.
+" - Support Unix and Windows.
+" - No support Neovim.
+"
 
-" Boilerplate {{{
+" =============================================================================
+"
+" For the tiny version.
+"
+
 set encoding=utf-8
 scriptencoding utf-8
 
 " NOTE: No need this basically in user vimrc because "compatible" option turns
-" into off automatically when vim find user "vimrc" or "gvimrc", but it is
-" said that system vimrc on some distributions contains "set compatible".
+" into off automatically if vim finds user "vimrc" or "gvimrc", but it is said
+" that system vimrcs on some distributions contains "set compatible".
 if &compatible
   set nocompatible
 endif
 
-filetype plugin indent on
-syntax enable
-" }}}
+" Fallback to "defaults.vim" if no "+eval" feature such as a tiny version.
+silent! while 0
+  source $VIMRUNTIME/defaults.vim
+silent! endwhile
+
+" =============================================================================
+"
+" For the normal+ version.
+"
+
+" Following lines are evaluated only if "+eval" feature is on. Maybe no
+" ":finish" is enabled on some environments, but ":if" and ":endif" is always
+" enabled even if "+eval" is not on.
+if 1
 
 " Functions {{{
 " Toggle netrw window
@@ -55,13 +77,13 @@ function! s:autocmd(group, autocmd) abort
   " Events and patterns.
   let l:left = a:autocmd[0:l:idx][0:-2]
   " Attribute arguments(++once, ++nested) and commands.
-  let l:right = a:autocmd[l:idx:]
+  let l:right = a:autocmd[l:idx :]
 
   let l:idx = match(l:right, '^\s*\%(\%(\%(++\)\=nested\|++once\)\s\+\)\+\zs')
   if l:idx >= 0
     let l:attrs = split(l:right[0:l:idx][0:-2])
     " Commands only.
-    let l:right = l:right[l:idx:]
+    let l:right = l:right[l:idx :]
   endif
 
   let l:once = index(l:attrs, '++once') >= 0
@@ -248,8 +270,10 @@ if has('linebreak')
   " syntax of markdown.
   set showbreak=+++\ 
 
-  set breakindent
-  set breakindentopt=shift:2,sbr
+  if has('patch-7.4.338')
+    set breakindent
+    set breakindentopt=shift:2,sbr
+  endif
 endif
 
 " "smartcase" works only if "ignorecase" is on.
@@ -285,7 +309,7 @@ endif
 " CVE-2017-1000382.
 "
 " https://github.com/archlinux/svntogit-packages/blob/68635a69f0c5525210adca6ff277dc13c590399b/trunk/archlinux.vim#L22
-let s:directory = get(environ(), 'XDG_CACHE_HOME', expand('~/.cache'))
+let s:directory = exists('$XDG_CACHE_HOME') ? $XDG_CACHE_HOME : expand('~/.cache')
 
 let &g:backupdir = s:directory . '/vim/backup//'
 let &g:directory = s:directory . '/vim/swap//'
@@ -358,9 +382,11 @@ nnoremap <silent> <leader>" :<C-U>terminal<CR>
 nnoremap <silent> <leader>% :<C-U>vertical terminal<CR>
 nnoremap <silent> <leader>c :<C-U>Terminal<CR>
 
-tnoremap <silent> <C-W>" <C-W>:terminal<CR>
-tnoremap <silent> <C-W>% <C-W>:vertical terminal<CR>
-tnoremap <silent> <C-W>c <C-W>:Terminal<CR>
+if has('terminal')
+  tnoremap <silent> <C-W>" <C-W>:terminal<CR>
+  tnoremap <silent> <C-W>% <C-W>:vertical terminal<CR>
+  tnoremap <silent> <C-W>c <C-W>:Terminal<CR>
+endif
 
 nnoremap <silent> <leader>y :YankComments<CR>
 vnoremap <silent> <leader>y :YankComments<CR>
@@ -414,8 +440,10 @@ Autocmd QuickFixCmdPost *grep* cwindow
 " if these directories are missing.
 Autocmd BufWritePre * silent call s:mkdir(expand('<afile>:p:h'), 'p')
 
-" Hide extras on normal mode of terminal.
-Autocmd TerminalOpen * setlocal nolist nonumber colorcolumn=
+if has('terminal')
+  " Hide extras on normal mode of terminal.
+  Autocmd TerminalOpen * setlocal nolist nonumber colorcolumn=
+endif
 
 if has('persistent_undo')
   Autocmd BufReadPre ~/* setlocal undofile
@@ -436,6 +464,14 @@ Autocmd BufWritePost * if &binary | silent %!xxd -g 1
 Autocmd BufWritePost * set nomod | endif
 " }}}
 
+" Filetypes {{{
+filetype plugin indent on
+" }}}
+
+" Syntax {{{
+syntax enable
+" }}}
+
 " Default plugins {{{
 " Disable some standard plugins which are not necessary. {{{
 let g:loaded_vimball = 1
@@ -452,8 +488,19 @@ let g:netrw_sizestyle = 'H'
 " }}}
 
 " The enhanced "%", to find many extra matchings and jump the cursor to them.
-packadd! matchit
+if has('patch-7.4.1486')
+  packadd! matchit
+else
+  source $VIMRUNTIME/macros/matchit.vim
+endif
 " }}}
+
+" =============================================================================
+
+" At least "maxpac" (and "minpac") requires Vim 8.0.0050+.
+if !has('patch-8.0.0050')
+  finish
+endif
 
 " Plugins {{{
 call maxpac#begin()
@@ -995,5 +1042,9 @@ call maxpac#add(s:lsflavor)
 
 call maxpac#end()
 " }}}
+
+endif
+
+" =============================================================================
 
 " vim:set expandtab tabstop=2 shiftwidth=2 foldmethod=marker:

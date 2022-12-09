@@ -1,3 +1,7 @@
+if !has('terminal')
+  finish
+endif
+
 " Open a single window terminal on a new tabpage.
 function! s:open_terminal_on_newtab(count, dir) abort
   " -1 is supplied if no range is specified with a command with "-range"
