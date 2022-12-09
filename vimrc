@@ -305,6 +305,12 @@ else
   endif
 endif
 
+if has('gui_running')
+  " Add a "M" to the "guioptions" before executing ":syntax enable" or
+  " ":filetype on" to avoid sourcing the "menu.vim".
+  set guioptions=M
+endif
+
 " Create temporary files(backup, swap, undo) under secure locations to avoid
 " CVE-2017-1000382.
 "
