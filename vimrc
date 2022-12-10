@@ -144,15 +144,6 @@ function! s:put(bang, reg, count) abort
   execute printf('normal! %s"%s%s', l:count, l:reg, l:put)
 endfunction
 
-function! s:capable_truecolor() abort
-  let l:terms = [
-    \ 'xterm',
-    \ 'st-256color',
-    \ ]
-
-  return $COLORTERM ==# 'truecolor' || index(l:terms, $TERM) > -1
-endfunction
-
 function! s:install_minpac() abort
   " A root directory path of vim packages.
   let l:packhome = split(&packpath, ',')[0] . '/pack'
@@ -279,7 +270,7 @@ endif
 " "smartcase" works only if "ignorecase" is on.
 set ignorecase smartcase
 
-if has('termguicolors') && s:capable_truecolor()
+if has('termguicolors') && ($COLORTERM ==# 'truecolor' || index(['xterm', 'st-256color'], $TERM) > -1)
   set termguicolors
 
   " Vim sets these configs below only if the value of `$TERM` is `xterm`.
