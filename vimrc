@@ -453,12 +453,25 @@ Autocmd BufReadPost *
   \ |   exe "normal! g`\""
   \ | endif
 
-Autocmd BufReadPost * if &binary | silent %!xxd -g 1
-Autocmd BufReadPost * set filetype=xxd | endif
-Autocmd BufWritePre * if &binary | %!xxd -r
-Autocmd BufWritePre * endif
-Autocmd BufWritePost * if &binary | silent %!xxd -g 1
-Autocmd BufWritePost * set nomod | endif
+" Read/Write the binary format, but are these configurations really
+" comfortable? Maybe we should use a binary editor insated.
+Autocmd BufReadPost *
+  \ if &binary
+  \ |   execute 'silent %!xxd -g 1'
+  \ |   set filetype=xxd
+  \ | endif
+Autocmd BufWritePre *
+  \ if &binary
+  \ |   let b:cursorpos = getcurpos()
+  \ |   execute '%!xxd -r'
+  \ | endif
+Autocmd BufWritePost *
+  \ if &binary
+  \ |   execute 'silent %!xxd -g 1'
+  \ |   set nomodified
+  \ |   call cursor(b:cursorpos[1], b:cursorpos[2], b:cursorpos[3])
+  \ |   unlet b:cursorpos
+  \ | endif
 " }}}
 
 " Filetypes {{{
