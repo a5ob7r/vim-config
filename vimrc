@@ -515,6 +515,9 @@ endif
 " Plugins {{{
 call maxpac#begin()
 
+" =============================================================================
+
+" thinca/vim-singleton {{{
 let s:singleton = maxpac#plugconf('thinca/vim-singleton')
 
 function! s:singleton.post() abort
@@ -527,7 +530,9 @@ endfunction
 if has('clientserver')
   " call maxpac#add(s:singleton)
 endif
+" }}}
 
+" k-takata/minpac {{{
 let s:minpac = maxpac#plugconf('k-takata/minpac')
 
 function! s:minpac.post() abort
@@ -539,7 +544,11 @@ function! s:minpac.post() abort
 endfunction
 
 call maxpac#add(s:minpac)
+" }}}
 
+" =============================================================================
+
+" KeitaNakamura/neodark.vim {{{
 let s:neodark = maxpac#plugconf('KeitaNakamura/neodark.vim')
 
 function! s:neodark.pre() abort
@@ -574,7 +583,9 @@ function! s:neodark.post() abort
 endfunction
 
 call maxpac#add(s:neodark)
+" }}}
 
+" itchyny/lightline.vim {{{
 let s:lightline = maxpac#plugconf('itchyny/lightline.vim')
 
 function! s:lightline.pre() abort
@@ -621,9 +632,11 @@ function! s:lightline.pre() abort
 endfunction
 
 call maxpac#add(s:lightline)
+" }}}
 
-call maxpac#add('andymass/vim-matchup')
+" =============================================================================
 
+" airblade/vim-gitgutter {{{
 let s:gitgutter = maxpac#plugconf('airblade/vim-gitgutter')
 
 function! s:gitgutter.pre() abort
@@ -635,7 +648,9 @@ function! s:gitgutter.pre() abort
 endfunction
 
 call maxpac#add(s:gitgutter)
+" }}}
 
+" lambdalisue/gina.vim {{{
 let s:gina = maxpac#plugconf('lambdalisue/gina.vim')
 
 function! s:gina.post() abort
@@ -649,7 +664,9 @@ function! s:gina.post() abort
 endfunction
 
 call maxpac#add(s:gina)
+" }}}
 
+" rhysd/git-messenger.vim {{{
 let s:git_messenger = maxpac#plugconf('rhysd/git-messenger.vim')
 
 function! s:git_messenger.post() abort
@@ -659,7 +676,11 @@ function! s:git_messenger.post() abort
 endfunction
 
 call maxpac#add(s:git_messenger)
+" }}}
 
+" =============================================================================
+
+" ctrlpvim/ctrlp.vim {{{
 let s:ctrlp = maxpac#plugconf('ctrlpvim/ctrlp.vim')
 
 function! s:ctrlp.pre() abort
@@ -710,7 +731,9 @@ function! s:ctrlp.pre() abort
 endfunction
 
 call maxpac#add(s:ctrlp)
+" }}}
 
+" mattn/ctrlp-matchfuzzy {{{
 let s:ctrlp_matchfuzzy = maxpac#plugconf('mattn/ctrlp-matchfuzzy')
 
 function! s:ctrlp_matchfuzzy.post() abort
@@ -718,7 +741,9 @@ function! s:ctrlp_matchfuzzy.post() abort
 endfunction
 
 call maxpac#add(s:ctrlp_matchfuzzy)
+" }}}
 
+" mattn/ctrlp-ghq {{{
 let s:ctrlp_ghq = maxpac#plugconf('mattn/ctrlp-ghq')
 
 function! s:ctrlp_ghq.post() abort
@@ -726,7 +751,9 @@ function! s:ctrlp_ghq.post() abort
 endfunction
 
 call maxpac#add(s:ctrlp_ghq)
+" }}}
 
+" a5ob7r/ctrlp-man {{{
 let s:ctrlp_man = maxpac#plugconf('a5ob7r/ctrlp-man')
 
 function! s:ctrlp_man.post() abort
@@ -746,7 +773,11 @@ function! s:ctrlp_man.post() abort
 endfunction
 
 call maxpac#add(s:ctrlp_man)
+" }}}
 
+" =============================================================================
+
+" prabirshrestha/vim-lsp {{{
 let s:vim_lsp = maxpac#plugconf('prabirshrestha/vim-lsp')
 
 function! s:vim_lsp.pre() abort
@@ -854,7 +885,9 @@ function! s:vim_lsp.pre() abort
 endfunction
 
 call maxpac#add(s:vim_lsp)
+" }}}
 
+" mattn/vim-lsp-settings {{{
 let s:vim_lsp_settings = maxpac#plugconf('mattn/vim-lsp-settings')
 
 function! s:vim_lsp_settings.pre() abort
@@ -879,7 +912,11 @@ function! s:vim_lsp_settings.pre() abort
 endfunction
 
 call maxpac#add(s:vim_lsp_settings)
+" }}}
 
+" =============================================================================
+
+" hrsh7th/vim-vsnip {{{
 let s:vsnip = maxpac#plugconf('hrsh7th/vim-vsnip')
 
 function! s:vsnip.pre() abort
@@ -891,12 +928,16 @@ function! s:vsnip.post() abort
 endfunction
 
 call maxpac#add(s:vsnip)
+" }}}
 
 call maxpac#add('hrsh7th/vim-vsnip-integ')
 call maxpac#add('rafamadriz/friendly-snippets')
 
+" =============================================================================
+
 call maxpac#add('kana/vim-operator-user')
 
+" kana/vim-operator-replace {{{
 let s:replace = maxpac#plugconf('kana/vim-operator-replace')
 
 function! s:replace.post() abort
@@ -904,9 +945,11 @@ function! s:replace.post() abort
 endfunction
 
 call maxpac#add(s:replace)
+" }}}
 
-call maxpac#add('LumaKernel/coqpit.vim')
+" =============================================================================
 
+" a5ob7r/shellcheckrc.vim {{{
 let s:shellcheckrc = maxpac#plugconf('a5ob7r/shellcheckrc.vim')
 
 function! s:shellcheckrc.pre() abort
@@ -914,17 +957,9 @@ function! s:shellcheckrc.pre() abort
 endfunction
 
 call maxpac#add(s:shellcheckrc)
+" }}}
 
-call maxpac#add('a5ob7r/tig.vim')
-call maxpac#add('aliou/bats.vim')
-call maxpac#add('bronson/vim-trailing-whitespace')
-call maxpac#add('editorconfig/editorconfig-vim')
-call maxpac#add('fladson/vim-kitty')
-call maxpac#add('junegunn/vader.vim')
-call maxpac#add('kannokanno/previm')
-call maxpac#add('machakann/vim-highlightedyank')
-call maxpac#add('machakann/vim-swap')
-
+" preservim/vim-markdown {{{
 let s:markdown = maxpac#plugconf('preservim/vim-markdown')
 
 function! s:markdown.pre() abort
@@ -932,7 +967,9 @@ function! s:markdown.pre() abort
 endfunction
 
 call maxpac#add(s:markdown)
+" }}}
 
+" sheerun/vim-polyglot {{{
 let s:polyglot = maxpac#plugconf('sheerun/vim-polyglot')
 
 function! s:polyglot.pre() abort
@@ -941,15 +978,9 @@ function! s:polyglot.pre() abort
 endfunction
 
 call maxpac#add(s:polyglot)
+" }}}
 
-call maxpac#add('thinca/vim-localrc')
-call maxpac#add('thinca/vim-prettyprint')
-call maxpac#add('thinca/vim-themis')
-call maxpac#add('tpope/vim-commentary')
-call maxpac#add('tpope/vim-endwise')
-call maxpac#add('tpope/vim-repeat')
-call maxpac#add('tpope/vim-surround')
-
+" tyru/eskk.vim {{{
 let s:eskk = maxpac#plugconf('tyru/eskk.vim')
 
 function! s:eskk.pre() abort
@@ -961,7 +992,9 @@ function! s:eskk.pre() abort
 endfunction
 
 call maxpac#add(s:eskk)
+" }}}
 
+" tyru/open-browser.vim {{{
 let s:open_browser = maxpac#plugconf('tyru/open-browser.vim')
 
 function! s:open_browser.post() abort
@@ -981,9 +1014,9 @@ function! s:open_browser.post() abort
 endfunction
 
 call maxpac#add(s:open_browser)
+" }}}
 
-call maxpac#add('vim-jp/vital.vim')
-
+" w0rp/ale {{{
 let s:ale = maxpac#plugconf('w0rp/ale')
 
 function! s:ale.pre() abort
@@ -1002,9 +1035,9 @@ function! s:ale.pre() abort
 endfunction
 
 call maxpac#add(s:ale)
+" }}}
 
-call maxpac#add('yasuhiroki/github-actions-yaml.vim')
-
+" kyoh86/vim-ripgrep {{{
 let s:ripgrep = maxpac#plugconf('kyoh86/vim-ripgrep')
 
 function! s:ripgrep.post() abort
@@ -1019,7 +1052,11 @@ function! s:ripgrep.post() abort
 endfunction
 
 call maxpac#add(s:ripgrep)
+" }}}
 
+" =============================================================================
+
+" lambdalisue/fern.vim {{{
 let s:fern = maxpac#plugconf('lambdalisue/fern.vim')
 
 function! s:fern.pre() abort
@@ -1037,11 +1074,11 @@ function! s:fern.pre() abort
 endfunction
 
 call maxpac#add(s:fern)
+" }}}
 
 call maxpac#add('lambdalisue/fern-git-status.vim')
 
-call maxpac#add('a5ob7r/fern-renderer-lsflavor.vim')
-
+" a5ob7r/fern-renderer-lsflavor.vim {{{
 let s:lsflavor = maxpac#plugconf('a5ob7r/fern-renderer-lsflavor.vim')
 
 function! s:lsflavor.pre() abort
@@ -1049,6 +1086,32 @@ function! s:lsflavor.pre() abort
 endfunction
 
 call maxpac#add(s:lsflavor)
+" }}}
+
+" =============================================================================
+
+call maxpac#add('LumaKernel/coqpit.vim')
+call maxpac#add('a5ob7r/tig.vim')
+call maxpac#add('aliou/bats.vim')
+call maxpac#add('andymass/vim-matchup')
+call maxpac#add('bronson/vim-trailing-whitespace')
+call maxpac#add('editorconfig/editorconfig-vim')
+call maxpac#add('fladson/vim-kitty')
+call maxpac#add('junegunn/vader.vim')
+call maxpac#add('kannokanno/previm')
+call maxpac#add('machakann/vim-highlightedyank')
+call maxpac#add('machakann/vim-swap')
+call maxpac#add('thinca/vim-localrc')
+call maxpac#add('thinca/vim-prettyprint')
+call maxpac#add('thinca/vim-themis')
+call maxpac#add('tpope/vim-commentary')
+call maxpac#add('tpope/vim-endwise')
+call maxpac#add('tpope/vim-repeat')
+call maxpac#add('tpope/vim-surround')
+call maxpac#add('vim-jp/vital.vim')
+call maxpac#add('yasuhiroki/github-actions-yaml.vim')
+
+" =============================================================================
 
 call maxpac#end()
 " }}}
