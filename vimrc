@@ -354,14 +354,14 @@ let g:mapleader=' '
 " Clear the highlightings for pattern searching.
 nnoremap <silent> <C-L> :<C-U>nohlsearch<CR>
 
-nnoremap <leader><CR> o<Esc>
+nnoremap <Leader><CR> o<Esc>
 
 noremap <silent> p :<C-U>call <SID>put('', v:register, v:count1)<CR>
 noremap <silent> P :<C-U>call <SID>put('!', v:register, v:count1)<CR>
 
-nnoremap <silent> <leader>n :<C-U>ToggleNetrw<CR>
+nnoremap <silent> <Leader>n :<C-U>ToggleNetrw<CR>
 nnoremap <silent> <F2> :<C-U>ReloadVimrc<CR>
-nnoremap <silent> <leader><F2> :<C-U>Vimrc<CR>
+nnoremap <silent> <Leader><F2> :<C-U>Vimrc<CR>
 
 " From $VIMRUNTIME/mswin.vim
 " Save with "CTRL-S" on normal mode and insert mode.
@@ -377,21 +377,21 @@ else
   inoremap <silent> <C-S> <Esc>:Update<CR>gi
 endif
 
-nnoremap <silent> <leader>t :<C-U>tabnew<CR>
+nnoremap <silent> <Leader>t :<C-U>tabnew<CR>
 
 if has('terminal')
   " Like default configurations of Tmux.
-  nnoremap <silent> <leader>" :<C-U>terminal<CR>
-  nnoremap <silent> <leader>% :<C-U>vertical terminal<CR>
-  nnoremap <silent> <leader>c :<C-U>Terminal<CR>
+  nnoremap <silent> <Leader>" :<C-U>terminal<CR>
+  nnoremap <silent> <Leader>% :<C-U>vertical terminal<CR>
+  nnoremap <silent> <Leader>c :<C-U>Terminal<CR>
 
   tnoremap <silent> <C-W>" <C-W>:terminal<CR>
   tnoremap <silent> <C-W>% <C-W>:vertical terminal<CR>
   tnoremap <silent> <C-W>c <C-W>:Terminal<CR>
 endif
 
-nnoremap <silent> <leader>y :YankComments<CR>
-vnoremap <silent> <leader>y :YankComments<CR>
+nnoremap <silent> <Leader>y :YankComments<CR>
+vnoremap <silent> <Leader>y :YankComments<CR>
 
 inoremap <silent> <C-L> <Plug>(linefeed)
 " }}}
@@ -659,9 +659,9 @@ call maxpac#add(s:gitgutter)
 let s:gina = maxpac#plugconf('lambdalisue/gina.vim')
 
 function! s:gina.post() abort
-  nmap <silent> <leader>gl :<C-U>Gina log --graph --all<CR>
-  nmap <silent> <leader>gs :<C-U>Gina status<CR>
-  nmap <silent> <leader>gc :<C-U>Gina commit<CR>
+  nmap <silent> <Leader>gl :<C-U>Gina log --graph --all<CR>
+  nmap <silent> <Leader>gs :<C-U>Gina status<CR>
+  nmap <silent> <Leader>gc :<C-U>Gina commit<CR>
 
   call gina#custom#mapping#nmap('log', 'q', '<C-W>c', { 'noremap': 1, 'silent': 1 })
   call gina#custom#mapping#nmap('status', 'q', '<C-W>c', { 'noremap': 1, 'silent': 1 })
@@ -732,7 +732,7 @@ function! s:ctrlp.pre() abort
 
   command! -bang -nargs=? -complete=dir CtrlPp call s:ctrlp_proxy(<q-bang>, <f-args>)
 
-  nnoremap <silent> <leader>b :<C-U>CtrlPBuffer<CR>
+  nnoremap <silent> <Leader>b :<C-U>CtrlPBuffer<CR>
 endfunction
 
 call maxpac#add(s:ctrlp)
@@ -752,7 +752,7 @@ call maxpac#add(s:ctrlp_matchfuzzy)
 let s:ctrlp_ghq = maxpac#plugconf('mattn/ctrlp-ghq')
 
 function! s:ctrlp_ghq.post() abort
-  nnoremap <silent> <leader>gq :CtrlPGhq<CR>
+  nnoremap <silent> <Leader>gq :CtrlPGhq<CR>
 endfunction
 
 call maxpac#add(s:ctrlp_ghq)
@@ -774,7 +774,7 @@ function! s:ctrlp_man.post() abort
 
   command! LookupManual call s:lookup_manual()
 
-  nnoremap <silent> <leader>m :LookupManual<CR>
+  nnoremap <silent> <Leader>m :LookupManual<CR>
 endfunction
 
 call maxpac#add(s:ctrlp_man)
@@ -798,15 +798,15 @@ function! s:vim_lsp.pre() abort
 
     nmap <buffer> gd <plug>(lsp-definition)
     nmap <buffer> gD <plug>(lsp-implementation)
-    nmap <buffer> <leader>r <plug>(lsp-rename)
-    nmap <buffer> <leader>h <plug>(lsp-hover)
+    nmap <buffer> <Leader>r <plug>(lsp-rename)
+    nmap <buffer> <Leader>h <plug>(lsp-hover)
     nmap <buffer> <C-P> <plug>(lsp-previous-diagnostic)
     nmap <buffer> <C-N> <plug>(lsp-next-diagnostic)
 
-    nmap <buffer> <leader>lf <plug>(lsp-document-format)
-    nmap <buffer> <leader>la <plug>(lsp-code-action)
-    nmap <buffer> <leader>ll <plug>(lsp-code-lens)
-    nmap <buffer> <leader>lr <plug>(lsp-references)
+    nmap <buffer> <Leader>lf <plug>(lsp-document-format)
+    nmap <buffer> <Leader>la <plug>(lsp-code-action)
+    nmap <buffer> <Leader>ll <plug>(lsp-code-lens)
+    nmap <buffer> <Leader>lr <plug>(lsp-references)
 
     nnoremap <silent><buffer><expr> <C-J> lsp#scroll(+1)
     nnoremap <silent><buffer><expr> <C-K> lsp#scroll(-1)
@@ -1003,8 +1003,8 @@ call maxpac#add(s:eskk)
 let s:open_browser = maxpac#plugconf('tyru/open-browser.vim')
 
 function! s:open_browser.post() abort
-  nmap <leader>K <Plug>(openbrowser-smart-search)
-  nnoremap <leader>k :call SearchUnderCursorEnglishWord()<CR>
+  nmap <Leader>K <Plug>(openbrowser-smart-search)
+  nnoremap <Leader>k :call SearchUnderCursorEnglishWord()<CR>
 
   function! SearchEnglishWord(word) abort
     let l:searchUrl = 'https://dictionary.cambridge.org/dictionary/english/'
@@ -1052,8 +1052,8 @@ function! s:ripgrep.post() abort
   " we need it to update "'<" and "'>" marks to get a visual selected text.
   command! -range Rgv call ripgrep#search(s:get_visual_selection()->escape('"')->printf('"%s"'))
 
-  nnoremap <silent> <leader>f :<C-U>call ripgrep#search(expand('<cword>')->escape('"')->printf('"%s"'))<CR>
-  vnoremap <silent> <leader>f :Rgv<CR>
+  nnoremap <silent> <Leader>f :<C-U>call ripgrep#search(expand('<cword>')->escape('"')->printf('"%s"'))<CR>
+  vnoremap <silent> <Leader>f :Rgv<CR>
 endfunction
 
 call maxpac#add(s:ripgrep)
