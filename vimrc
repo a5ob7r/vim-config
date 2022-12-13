@@ -379,12 +379,12 @@ endif
 
 nnoremap <silent> <leader>t :<C-U>tabnew<CR>
 
-" Like default configurations of Tmux.
-nnoremap <silent> <leader>" :<C-U>terminal<CR>
-nnoremap <silent> <leader>% :<C-U>vertical terminal<CR>
-nnoremap <silent> <leader>c :<C-U>Terminal<CR>
-
 if has('terminal')
+  " Like default configurations of Tmux.
+  nnoremap <silent> <leader>" :<C-U>terminal<CR>
+  nnoremap <silent> <leader>% :<C-U>vertical terminal<CR>
+  nnoremap <silent> <leader>c :<C-U>Terminal<CR>
+
   tnoremap <silent> <C-W>" <C-W>:terminal<CR>
   tnoremap <silent> <C-W>% <C-W>:vertical terminal<CR>
   tnoremap <silent> <C-W>c <C-W>:Terminal<CR>
