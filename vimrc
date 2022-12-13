@@ -2,7 +2,7 @@
 " vimrc
 "
 " - WIP: The minimal requirement version is 7.4.0000.
-" - WIP: Work well even if a tiny version.
+" - Work well even if a tiny version.
 " - Work well even if no (non-default) plugin is installed.
 " - Work well with plugins since 8.0.0050.
 " - Support Unix and Windows.
@@ -14,6 +14,7 @@
 " For the tiny version.
 "
 
+" Options {{{
 set encoding=utf-8
 scriptencoding utf-8
 
@@ -24,10 +25,163 @@ if &compatible
   set nocompatible
 endif
 
-" Fallback to "defaults.vim" if no "+eval" feature such as a tiny version.
+" Use a Vim as a Vi Improved not a Vi-compatible even if no "+eval" feature
+" such as a tiny version.
 silent! while 0
-  source $VIMRUNTIME/defaults.vim
+  set nocompatible
 silent! endwhile
+
+" Allow to delete everything in Insert Mode.
+set backspace=indent,eol,start
+
+if has('syntax')
+  set colorcolumn=81,101,121
+  set cursorline
+endif
+
+" Show characters to fill the screen as much as possible when some characters
+" are out of the screen.
+set display=lastline
+
+" Maybe SKK dictionaries are encoded by "enc-jp".
+" NOTE: "usc-bom" must precede "utf-8" to recognize BOM.
+set fileencodings=ucs-bom,utf-8,iso-2022-jp,euc-jp,cp932,latin1
+
+" Prefer "<NL>" as "<EOL>" even if it is on Windows.
+set fileformats=unix,dos,mac
+
+" Allow to hide buffers even if they are still modified.
+set hidden
+
+" The number of history of commands (":") and previous search patterns ("/").
+"
+" 10000 is the maximum value.
+set history=10000
+
+if has('extra_search')
+  set hlsearch
+  set incsearch
+endif
+
+" Render "statusline" for all of windows, to show window statuses not to
+" separate windows.
+set laststatus=2
+
+" This option has no effect when "statusline" is not empty.
+set ruler
+
+" The cursor offset value around both of window edges.
+set scrolloff=5
+
+set showcmd
+set showmatch
+set virtualedit=block
+
+" A command mode with an enhanced completion.
+set wildmenu
+set wildmode=longest:full,full
+
+if has('patch-8.2.4325')
+  set wildoptions+=pum
+endif
+
+if has('patch-8.2.4463')
+  set wildoptions+=fuzzy
+endif
+
+set nojoinspaces
+set nowrapscan
+
+" "smartindent" isn't a super option for "autoindent", and the two of options
+" work in a complement way for each other. So these options should be on at
+" the same time. This is recommended in the help too.
+set autoindent smartindent
+
+" List mode, which renders alternative characters instead of invisible
+" (non-printable, out of screen or concealed) them.
+"
+" "extends" is only used when "wrap" is off.
+set list
+set listchars+=tab:>\ ,extends:>,precedes:<
+
+if has('patch-8.1.0759')
+  set listchars+=tab:>\ \|
+endif
+
+if has('linebreak')
+  " Strings that start with '>' isn't compatible with the block quotation
+  " syntax of markdown.
+  set showbreak=+++\ 
+
+  if has('patch-7.4.338')
+    set breakindent
+    set breakindentopt=shift:2,sbr
+  endif
+endif
+
+" "smartcase" works only if "ignorecase" is on.
+set ignorecase smartcase
+
+if has('termguicolors') && ($COLORTERM ==# 'truecolor' || index(['xterm', 'st-256color'], $TERM) > -1)
+  set termguicolors
+
+  " Vim sets these configs below only if the value of `$TERM` is `xterm`.
+  " Otherwise we manually need to set them to work true color well.
+  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+endif
+
+if has('win32') || has('osxdarwin')
+  " Use the "*" register as a default one, for yank, delete, change and put
+  " operations instead of the '"' unnamed one. The contents of the "*"
+  " register is synchronous with the system clipboard's them.
+  set clipboard=unnamed
+else
+  " No connection to the X server if in a console.
+  set clipboard=exclude:cons\|linux
+
+  if has('unnamedplus')
+    " This is similar to "unnamed", but use the "+" register instead. The
+    " register is used for reading and writing of the CLIPBOARD selection but
+    " not the PRIMARY one.
+    set clipboard^=unnamedplus
+  endif
+endif
+
+if has('gui_running')
+  " Add a "M" to the "guioptions" before executing ":syntax enable" or
+  " ":filetype on" to avoid sourcing the "menu.vim".
+  set guioptions=M
+endif
+" }}}
+
+" Key mappings {{{
+" Use "Q" as the typed key recording starter and the terminator instead of
+" "q".
+noremap Q q
+map q <Nop>
+
+" Do not anything even if type "<F1>". I sometimes mistype it instead of
+" typing "<ESC>".
+map <F1> <Nop>
+map! <F1> <Nop>
+
+" Swap keybingings of 'j/k' and 'gj/gk' with each other.
+nnoremap j gj
+nnoremap k gk
+nnoremap gj j
+nnoremap gk k
+
+" By default, "Y" is a synonym of "yy" for Vi-compatibilities.
+noremap Y y$
+
+" Change the current window height instantly.
+nnoremap + <C-W>+
+nnoremap - <C-W>-
+
+" Quit Visual mode.
+vnoremap <C-L> <Esc>
+" }}}
 
 " =============================================================================
 "
@@ -179,129 +333,6 @@ endfunction
 " }}}
 
 " Options {{{
-" Allow to delete everything in Insert Mode.
-set backspace=indent,eol,start
-
-if has('syntax')
-  set colorcolumn=81,101,121
-  set cursorline
-endif
-
-" Show characters to fill the screen as much as possible when some characters
-" are out of the screen.
-set display=lastline
-
-" Maybe SKK dictionaries are encoded by "enc-jp".
-" NOTE: "usc-bom" must precede "utf-8" to recognize BOM.
-set fileencodings=ucs-bom,utf-8,iso-2022-jp,euc-jp,cp932,latin1
-
-" Prefer "<NL>" as "<EOL>" even if it is on Windows.
-set fileformats=unix,dos,mac
-
-" Allow to hide buffers even if they are still modified.
-set hidden
-
-" The number of history of commands (":") and previous search patterns ("/").
-"
-" 10000 is the maximum value.
-set history=10000
-
-if has('extra_search')
-  set hlsearch
-  set incsearch
-endif
-
-" Render "statusline" for all of windows, to show window statuses not to
-" separate windows.
-set laststatus=2
-
-" This option has no effect when "statusline" is not empty.
-set ruler
-
-" The cursor offset value around both of window edges.
-set scrolloff=5
-
-set showcmd
-set showmatch
-set virtualedit=block
-
-" A command mode with an enhanced completion.
-set wildmenu
-set wildmode=longest:full,full
-
-if has('patch-8.2.4325')
-  set wildoptions+=pum
-endif
-
-if has('patch-8.2.4463')
-  set wildoptions+=fuzzy
-endif
-
-set nojoinspaces
-set nowrapscan
-
-" "smartindent" isn't a super option for "autoindent", and the two of options
-" work in a complement way for each other. So these options should be on at
-" the same time. This is recommended in the help too.
-set autoindent smartindent
-
-" List mode, which renders alternative characters instead of invisible
-" (non-printable, out of screen or concealed) them.
-"
-" "extends" is only used when "wrap" is off.
-set list
-set listchars+=tab:>\ ,extends:>,precedes:<
-
-if has('patch-8.1.0759')
-  set listchars+=tab:>\ \|
-endif
-
-if has('linebreak')
-  " Strings that start with '>' isn't compatible with the block quotation
-  " syntax of markdown.
-  set showbreak=+++\ 
-
-  if has('patch-7.4.338')
-    set breakindent
-    set breakindentopt=shift:2,sbr
-  endif
-endif
-
-" "smartcase" works only if "ignorecase" is on.
-set ignorecase smartcase
-
-if has('termguicolors') && ($COLORTERM ==# 'truecolor' || index(['xterm', 'st-256color'], $TERM) > -1)
-  set termguicolors
-
-  " Vim sets these configs below only if the value of `$TERM` is `xterm`.
-  " Otherwise we manually need to set them to work true color well.
-  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-endif
-
-if has('win32') || has('osxdarwin')
-  " Use the "*" register as a default one, for yank, delete, change and put
-  " operations instead of the '"' unnamed one. The contents of the "*"
-  " register is synchronous with the system clipboard's them.
-  set clipboard=unnamed
-else
-  " No connection to the X server if in a console.
-  set clipboard=exclude:cons\|linux
-
-  if has('unnamedplus')
-    " This is similar to "unnamed", but use the "+" register instead. The
-    " register is used for reading and writing of the CLIPBOARD selection but
-    " not the PRIMARY one.
-    set clipboard^=unnamedplus
-  endif
-endif
-
-if has('gui_running')
-  " Add a "M" to the "guioptions" before executing ":syntax enable" or
-  " ":filetype on" to avoid sourcing the "menu.vim".
-  set guioptions=M
-endif
-
 " Create temporary files(backup, swap, undo) under secure locations to avoid
 " CVE-2017-1000382.
 "
@@ -320,34 +351,8 @@ silent call s:mkdir(expand(&g:undodir), 'p', 0700)
 " Key mappings {{{
 let g:mapleader=' '
 
-" Use "Q" as the typed key recording starter and the terminator instead of
-" "q".
-noremap Q q
-map q <Nop>
-
-" Do not anything even if type "<F1>". I sometimes mistype it instead of
-" typing "<ESC>".
-map <F1> <Nop>
-map! <F1> <Nop>
-
-" Swap keybingings of 'j/k' and 'gj/gk' with each other.
-nnoremap j gj
-nnoremap k gk
-nnoremap gj j
-nnoremap gk k
-
-" Change the current window height instantly.
-nnoremap + <C-W>+
-nnoremap - <C-W>-
-
-" By default, "Y" is a synonym of "yy" for Vi-compatibilities.
-noremap Y y$
-
 " Clear the highlightings for pattern searching.
 nnoremap <silent> <C-L> :<C-U>nohlsearch<CR>
-
-" Quit Visual mode.
-vnoremap <C-L> <Esc>
 
 nnoremap <leader><CR> o<Esc>
 
