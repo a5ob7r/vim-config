@@ -796,17 +796,17 @@ function! s:vim_lsp.pre() abort
     setlocal omnifunc=lsp#complete
     if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
 
-    nmap <buffer> gd <plug>(lsp-definition)
-    nmap <buffer> gD <plug>(lsp-implementation)
-    nmap <buffer> <Leader>r <plug>(lsp-rename)
-    nmap <buffer> <Leader>h <plug>(lsp-hover)
-    nmap <buffer> <C-P> <plug>(lsp-previous-diagnostic)
-    nmap <buffer> <C-N> <plug>(lsp-next-diagnostic)
+    nmap <buffer> gd <Plug>(lsp-definition)
+    nmap <buffer> gD <Plug>(lsp-implementation)
+    nmap <buffer> <Leader>r <Plug>(lsp-rename)
+    nmap <buffer> <Leader>h <Plug>(lsp-hover)
+    nmap <buffer> <C-P> <Plug>(lsp-previous-diagnostic)
+    nmap <buffer> <C-N> <Plug>(lsp-next-diagnostic)
 
-    nmap <buffer> <Leader>lf <plug>(lsp-document-format)
-    nmap <buffer> <Leader>la <plug>(lsp-code-action)
-    nmap <buffer> <Leader>ll <plug>(lsp-code-lens)
-    nmap <buffer> <Leader>lr <plug>(lsp-references)
+    nmap <buffer> <Leader>lf <Plug>(lsp-document-format)
+    nmap <buffer> <Leader>la <Plug>(lsp-code-action)
+    nmap <buffer> <Leader>ll <Plug>(lsp-code-lens)
+    nmap <buffer> <Leader>lr <Plug>(lsp-references)
 
     nnoremap <silent><buffer><expr> <C-J> lsp#scroll(+1)
     nnoremap <silent><buffer><expr> <C-K> lsp#scroll(-1)
