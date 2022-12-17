@@ -954,6 +954,10 @@ call maxpac#add(s:shellcheckrc)
 let s:markdown = maxpac#plugconf('preservim/vim-markdown')
 
 function! s:markdown.pre() abort
+  " No need to insert any indent preceding a new list item after inserting a
+  " newline.
+  let g:vim_markdown_new_list_item_indent = 0
+
   let g:vim_markdown_folding_disabled = 1
 endfunction
 
