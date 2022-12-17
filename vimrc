@@ -194,20 +194,6 @@ vnoremap <C-L> <Esc>
 if 1
 
 " Functions {{{
-" Toggle netrw window
-function! s:toggle_newrw() abort
-  let l:cwd = getcwd()
-
-  " Prefer the current working directory.
-  if get(b:, 'netrw_curdir', '') !=# l:cwd
-    execute 'Explore' l:cwd
-  elseif exists(':Rexplore') && exists('w:netrw_rexlocal')
-    Rexplore
-  else
-    Explore
-  endif
-endfunction
-
 " A backward comaptible "mkdir" for patch-8.0.1708, that "mkdir" with "p" flag
 " throws no error even if the directory already exists.
 function! s:mkdir(name, ...) abort
@@ -408,8 +394,6 @@ command! Runtimepath echo substitute(&runtimepath, ',', "\n", 'g')
 " This is an auxiliary command for keyboard shortcuts.
 command! -bang -bar -range=% Update
   \ execute printf('<mods> <line1>,<line2>%s<bang>', filewritable(expand('%')) ? 'update' : 'write')
-
-command! ToggleNetrw call s:toggle_newrw()
 
 " A helper command to open a file in a split window, or the current one (if it
 " is invoked with a bang mark).
