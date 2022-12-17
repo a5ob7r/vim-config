@@ -335,7 +335,9 @@ silent call s:mkdir(expand(&g:undodir), 'p', 0700)
 " }}}
 
 " Key mappings {{{
-let g:mapleader=' '
+" "<Leader>" is replaced with the value of "g:mapleader" when define a
+" keymapping, so we must define this variable before the mapping definition.
+let g:mapleader = ' '
 
 " Clear the highlightings for pattern searching.
 nnoremap <silent> <C-L> :<C-U>nohlsearch<CR>
