@@ -73,6 +73,12 @@ set ruler
 " The cursor offset value around both of window edges.
 set scrolloff=5
 
+if has('patch-8.1.1270')
+  " Show the search count message, such as "[1/24]", when using search
+  " commands such as "/" and "n".
+  set shortmess-=S
+endif
+
 set showcmd
 set showmatch
 set virtualedit=block
