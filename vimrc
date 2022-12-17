@@ -419,6 +419,8 @@ command! InstallMinpac call s:install_minpac()
 command! -nargs=+ Autocmd call s:autocmd('vimrc', <q-args>)
 
 augroup vimrc
+  " This throws "E216" if no such a autocmd group, so first of all we need to
+  " define it using ":augroup".
   autocmd!
 augroup END
 
