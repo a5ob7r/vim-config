@@ -401,7 +401,7 @@ command! -bang -bar -range=% Update
 
 " A helper command to open a file in a split window, or the current one (if it
 " is invoked with a bang mark).
-command! -bang -bar -nargs=1 -complete=file Open execute <q-mods> (empty(<q-bang>) ? 'split' : 'edit') <q-args>
+command! -bang -bar -nargs=1 -complete=file Open execute <q-mods> (<bang>1 ? 'split' : 'edit') <q-args>
 
 command! -bang -bar Vimrc <mods> Open<bang> $MYVIMRC
 command! ReloadVimrc source $MYVIMRC
