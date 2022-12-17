@@ -379,6 +379,8 @@ endif
 nnoremap <silent> <Leader>y :YankComments<CR>
 vnoremap <silent> <Leader>y :YankComments<CR>
 
+nnoremap <silent> <CR> <Plug>(newline)
+
 inoremap <silent> <C-L> <Plug>(linefeed)
 " }}}
 
