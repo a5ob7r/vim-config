@@ -25,7 +25,7 @@ function! s:extract_comment(line, ...)
   " - ''
   " - ' %s '
   " - '%s %s'
-  if ! (l:commentstring =~# '^\S\+\s*%s' && count(l:commentstring, '%s') == 1)
+  if ! (l:commentstring =~# '^\S\+\s*%s.*' && l:commentstring !~# '%s.*%s')
     return l:line
   endif
 
@@ -38,7 +38,7 @@ function! s:extract_comment(line, ...)
   " behavior.
   let l:prefix_len = len(l:prefix)
   if l:prefix_len > 0 && l:line[:l:prefix_len-1] ==# l:prefix
-    let l:line = s:strip_whitespaces(l:line[l:prefix_len:])
+    let l:line = s:strip_whitespaces(l:line[l:prefix_len :])
   endif
   let l:suffix_len = len(l:suffix)
   if l:suffix_len > 0 && l:line[-l:suffix_len:] ==# l:suffix
