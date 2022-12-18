@@ -1,5 +1,6 @@
 function! s:xnewline() abort
-  if empty(getcmdwintype())
+  " Work as just a "<CR>" if not on a normal window.
+  if empty(&buftype)
     try
       " Merge undo sequences of multiple newline insertions which are caused
       " by sequential invocation of this function.
