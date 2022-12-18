@@ -15,7 +15,10 @@
 "
 
 " Options {{{
+" This is for the internal encoding for Vim itself, not for file encoding
+" detection.
 set encoding=utf-8
+" Following lines are interpreted as if they are encoded by "utf-8".
 scriptencoding utf-8
 
 " NOTE: No need this basically in user vimrc because "compatible" option turns
@@ -34,10 +37,8 @@ silent! endwhile
 " Allow to delete everything in Insert Mode.
 set backspace=indent,eol,start
 
-if has('syntax')
-  set colorcolumn=81,101,121
-  set cursorline
-endif
+set colorcolumn=81,101,121
+set cursorline
 
 " Show characters to fill the screen as much as possible when some characters
 " are out of the screen.
@@ -58,10 +59,8 @@ set hidden
 " 10000 is the maximum value.
 set history=10000
 
-if has('extra_search')
-  set hlsearch
-  set incsearch
-endif
+set hlsearch
+set incsearch
 
 " Render "statusline" for all of windows, to show window statuses not to
 " separate windows.
@@ -73,19 +72,21 @@ set ruler
 " The cursor offset value around both of window edges.
 set scrolloff=5
 
-if has('patch-8.1.1270')
-  " Show the search count message, such as "[1/24]", when using search
-  " commands such as "/" and "n".
-  set shortmess-=S
-endif
+" Show the search count message, such as "[1/24]", when using search commands
+" such as "/" and "n". This is enabled on "8.1.1270".
+set shortmess-=S
 
 set showcmd
 set showmatch
 set virtualedit=block
 
+" When type the "wildchar" key that the default value is "<Tab>" in Vim,
+" complete the longest match part and start "wildmenu" at the same time. And
+" then complete the next item when type the key again.
+set wildmode=longest:full,full
+
 " A command mode with an enhanced completion.
 set wildmenu
-set wildmode=longest:full,full
 
 if has('patch-8.2.4325')
   set wildoptions+=pum
@@ -114,21 +115,20 @@ if has('patch-8.1.0759')
   set listchars+=tab:>\ \|
 endif
 
-if has('linebreak')
-  " Strings that start with '>' isn't compatible with the block quotation
-  " syntax of markdown.
-  set showbreak=+++\ 
+" Strings that start with '>' isn't compatible with the block quotation syntax
+" of markdown.
+set showbreak=+++\ 
 
-  if has('patch-7.4.338')
-    set breakindent
-    set breakindentopt=shift:2,sbr
-  endif
+if exists('+breakindent')
+  set breakindent
+  set breakindentopt=shift:2,sbr
 endif
 
 " "smartcase" works only if "ignorecase" is on.
 set ignorecase smartcase
 
-if has('termguicolors') && ($COLORTERM ==# 'truecolor' || index(['xterm', 'st-256color'], $TERM) > -1)
+" Xterm and st (simple terminal) also support true (or direct) colors.
+if exists('+termguicolors') && ($COLORTERM ==# 'truecolor' || index(['xterm', 'st-256color'], $TERM) > -1)
   set termguicolors
 
   " Vim sets these configs below only if the value of `$TERM` is `xterm`.
