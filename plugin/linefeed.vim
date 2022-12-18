@@ -24,7 +24,7 @@ function! s:indent_spaces_helper(n)
 endfunction
 
 function! s:linefeed()
-  let l:n = getcurpos()[4] - 1
+  let l:n = virtcol('.') - 1
 
   return "\<CR> \<C-U>" . s:indent_spaces_helper(l:n)
 endfunction
