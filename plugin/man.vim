@@ -13,17 +13,7 @@ if exists(':Man') != 2
   endtry
 endif
 
-function! s:drop_while(predicate, list)
-  for l:i in range(len(a:list))
-    if !a:predicate(a:list[l:i])
-      return a:list[l:i:]
-    endif
-  endfor
-
-  return []
-endfunction
-
-" Enhanced completion for :Man.
+" An enhanced completion for ":Man" using "apropos(1)".
 "
 " :M
 " :M l
@@ -33,7 +23,7 @@ function! s:man_complete(arg_lead, cmd_line, cursor_pos) abort
   let l:words = split(a:cmd_line, '[[:space:]]')
 
   " Trim command modifiers.
-  let l:words = s:drop_while({x -> x =~# '^[^A-Z]'}, l:words)
+  let l:words = l:words[match(l:words, '^\u') :]
 
   " Trim a incomplate word.
   if !empty(a:arg_lead) && len(l:words) >= 2
@@ -54,14 +44,14 @@ function! s:man_complete(arg_lead, cmd_line, cursor_pos) abort
   " Specify a section number.
   let l:args = ['-s', l:section, '.']
 
-  let l:candidates = systemlist(join(l:cmd + l:args))
+  let l:candidates = split(system(join(l:cmd + l:args)), '\n')
 
   " Fallback to a no option lookup if `-s` option isn't provided.
   " NOTE: This may be slow due to full search.
   if v:shell_error
     let l:args = [printf("'(%s)'", l:section)]
 
-    let l:candidates = systemlist(join(l:cmd + l:args))
+    let l:candidates = split(system(join(l:cmd + l:args)), '\n')
   endif
 
   let l:candidates = map(l:candidates, printf("matchstr(v:val, '%s')", '[[:alnum:]\.:_-]\+'))
@@ -93,6 +83,6 @@ endfunction
 
 " Define completion enhanced :Man.
 command! -nargs=+ -complete=customlist,s:man_complete M
-      \ call s:man(<q-mods>, '', <f-args>)
+  \ call s:man(<q-mods>, '', <f-args>)
 
 set keywordprg=:Man
