@@ -451,13 +451,6 @@ syntax enable
 " }}}
 
 " Default plugins {{{
-" Disable some standard plugins which are not necessary. {{{
-let g:loaded_vimball = 1
-let g:loaded_vimballPlugin = 1
-let g:loaded_getscript = 1
-let g:loaded_getscriptPlugin = 1
-" }}}
-
 " newrw {{{
 " WIP: Must match to line not but filename when `g:netrw_liststyle = 1`, on
 " the commit hash of vim/vim: a452b808b4da2d272ca4a50865eb8ca89a58f239
