@@ -317,8 +317,8 @@ nnoremap <silent> <C-L> :<C-U>nohlsearch<CR>
 
 nnoremap <Leader><CR> o<Esc>
 
-noremap <silent> p <Plug>(put)
-noremap <silent> P <Plug>(Put)
+map <silent> p <Plug>(put)
+map <silent> P <Plug>(Put)
 
 nnoremap <silent> <Leader>n :<C-U>ToggleNetrw<CR>
 nnoremap <silent> <F2> :<C-U>ReloadVimrc<CR>
@@ -354,9 +354,9 @@ endif
 nnoremap <silent> <Leader>y :YankComments<CR>
 vnoremap <silent> <Leader>y :YankComments<CR>
 
-nnoremap <silent> <CR> <Plug>(newline)
+nmap <silent> <CR> <Plug>(newline)
 
-inoremap <silent> <C-L> <Plug>(linefeed)
+imap <silent> <C-L> <Plug>(linefeed)
 " }}}
 
 " Commands {{{
