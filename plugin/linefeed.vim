@@ -7,7 +7,7 @@ endfunction
 
 function! s:linefeed() abort
   " The screen column number just before the current cursor.
-  let l:n = virtcol('.') - 1
+  let l:n = max([0, virtcol('.', 1)[0] - 1])
 
   " Remove all of automatic indentation before inserting a calculated one like
   " a linefeed.
