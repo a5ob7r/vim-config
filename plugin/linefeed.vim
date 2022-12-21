@@ -1,38 +1,23 @@
 function! s:indent_spaces(n) abort
-  let l:tab = '	'
-  let l:space = ' '
+  let l:tabs = &expandtab ? 0 : a:n / &tabstop
+  let l:spaces = &expandtab ? a:n : a:n % &tabstop
 
-  if &expandtab
-    let l:tabs = 0
-    let l:spaces = a:n
-  else
-    let l:tabs = a:n / &tabstop
-    let l:spaces = a:n % &tabstop
-  endif
-
-  return repeat(l:tab, l:tabs) . repeat(l:space, l:spaces)
+  return repeat("\<Tab>", l:tabs) . repeat(' ', l:spaces)
 endfunction
 
-function! s:indent_spaces_helper(n)
-  let l:line = s:indent_spaces(a:n)
-
-  if type(l:line) == 1
-    return l:line
-  else
-    return ''
-  endif
-endfunction
-
-function! s:linefeed()
+function! s:linefeed() abort
+  " The screen column number just before the current cursor.
   let l:n = virtcol('.') - 1
 
-  return "\<CR> \<C-U>" . s:indent_spaces_helper(l:n)
+  " Remove all of automatic indentation before inserting a calculated one like
+  " a linefeed.
+  return "\<CR> \<C-U>" . s:indent_spaces(l:n)
 endfunction
 
-" Emulate linefeed without carrige return.
+" Emulate a linefeed without a carrige return.
 "
 " Example:
-" | indicates cursor position. It is zero width in fact.
+" '|' indicates the current cursor position. It has zero width in fact.
 "
 " From
 " aaa|bbb
