@@ -158,6 +158,11 @@ else
   endif
 endif
 
+if exists('+cdhome')
+  " Behave ":cd", ":tcd" and ":lcd" like in UNIX even if in MS-Windows.
+  set cdhome
+endif
+
 if has('gui_running')
   " Add a "M" to the "guioptions" before executing ":syntax enable" or
   " ":filetype on" to avoid sourcing the "menu.vim".
