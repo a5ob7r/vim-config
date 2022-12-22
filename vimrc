@@ -303,6 +303,21 @@ function! s:get_visual_selection()
   let l:lines[0] = l:lines[0][l:column_start - 1:]
   return join(l:lines, "\n")
 endfunction
+
+" Get syntax item information at a position.
+"
+" https://vim.fandom.com/wiki/Identify_the_syntax_highlighting_group_used_at_the_cursor
+function! s:syntax_item_attribute(line, column) abort
+  let l:item_id = synID(a:line, a:column, 1)
+  let l:trans_item_id = synID(a:line, a:column, 0)
+
+  return printf(
+    \ "hi<%s> trans<%s> lo<%s>",
+    \ synIDattr(l:item_id, 'name'),
+    \ synIDattr(l:trans_item_id, 'name'),
+    \ synIDattr(synIDtrans(l:item_id), 'name')
+    \ )
+endfunction
 " }}}
 
 " Options {{{
@@ -333,6 +348,8 @@ nnoremap <Leader><CR> o<Esc>
 
 map <silent> p <Plug>(put)
 map <silent> P <Plug>(Put)
+
+nnoremap <silent> <F10> :<C-U>echo <SID>syntax_item_attribute(line('.'), col('.'))<CR>
 
 nnoremap <silent> <Leader>n :<C-U>ToggleNetrw<CR>
 nnoremap <silent> <F2> :<C-U>ReloadVimrc<CR>
