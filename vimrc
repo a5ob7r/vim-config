@@ -51,6 +51,10 @@ set fileencodings=ucs-bom,utf-8,iso-2022-jp,euc-jp,cp932,latin1
 " Prefer "<NL>" as "<EOL>" even if it is on Windows.
 set fileformats=unix,dos,mac
 
+" Automatically reload the file which is changed outside of Vim. For example
+" this is useful when discarding modifications using VCS such as git.
+set autoread
+
 " Allow to hide buffers even if they are still modified.
 set hidden
 
