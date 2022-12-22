@@ -158,6 +158,11 @@ else
   endif
 endif
 
+if has('patch-9.0.0641')
+  " Screen line oriented scrolling.
+  set smoothscroll
+endif
+
 if exists('+cdhome')
   " Behave ":cd", ":tcd" and ":lcd" like in UNIX even if in MS-Windows.
   set cdhome
