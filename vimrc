@@ -543,33 +543,33 @@ call maxpac#add(s:minpac)
 " KeitaNakamura/neodark.vim {{{
 let s:neodark = maxpac#plugconf('KeitaNakamura/neodark.vim')
 
-function! s:neodark.pre() abort
-  let g:neodark#background='#202020'
-endfunction
-
 function! s:neodark.post() abort
-  function! s:enable_colorscheme(bang)
-    let l:bang = empty(a:bang) ? '' : '!'
+  " Prefer a near black background color.
+  let g:neodark#background = '#202020'
 
-    " Linux console only works with a very few colors.
-    if empty(l:bang) && $TERM ==# 'linux'
+  function! s:apply_neodark(bang)
+    " Neodark requires 256 colors at least. For example Linux console supports
+    " only 8 colors.
+    if empty(a:bang) && &t_Co < 256
       return
     endif
 
     if exists('g:lightline')
-      let g:lightline.colorscheme = 'neodark'
+      let g:lightline['colorscheme'] = 'neodark'
     endif
 
     colorscheme neodark
 
-    " Cyan, but default is orange in a strange way.
-    let g:terminal_ansi_colors[6] = '#72c7d1'
-    " Light black
-    " Adjust autosuggestioned text color for zsh.
-    let g:terminal_ansi_colors[8] = '#5f5f5f'
+    if has('terminal')
+      " Cyan, but the default is orange in a strange way.
+      let g:terminal_ansi_colors[6] = '#72c7d1'
+      " Light black
+      " Adjust the autosuggested text color for zsh.
+      let g:terminal_ansi_colors[8] = '#5f5f5f'
+    endif
   endfunction
 
-  command! -bang Neodark call s:enable_colorscheme(<q-bang>)
+  command! -bang -bar Neodark call s:apply_neodark(<q-bang>)
 
   Autocmd VimEnter * ++nested Neodark
 endfunction
