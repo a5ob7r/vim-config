@@ -884,10 +884,13 @@ call maxpac#add(s:vim_lsp)
 let s:vim_lsp_settings = maxpac#plugconf('mattn/vim-lsp-settings')
 
 function! s:vim_lsp_settings.pre() abort
+  " Use this only as a preset configuration for LSP, not a installer.
   let g:lsp_settings_enable_suggestions = 0
 
   let g:lsp_settings = get(g:, 'lsp_settings', {})
+  " Prefer Vim + latexmk than texlab for now.
   let g:lsp_settings['texlab'] = {
+    \ 'disabled': 1,
     \ 'workspace_config': {
     \   'latex': {
     \     'build': {
