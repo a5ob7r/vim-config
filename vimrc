@@ -777,6 +777,9 @@ function! s:vim_lsp.pre() abort
   let g:lsp_diagnostics_float_cursor = 1
   let g:lsp_diagnostics_float_delay = 200
   let g:lsp_semantic_enabled = 1
+  let g:lsp_async_completion = 1
+  let g:lsp_inlay_hints_enabled = 1
+  let g:lsp_use_native_client = 1
 
   let g:lsp_experimental_workspace_folders = 1
 
