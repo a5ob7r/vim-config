@@ -651,6 +651,7 @@ function! s:gina.post() abort
   nmap <silent> <Leader>gc :<C-U>Gina commit<CR>
 
   call gina#custom#mapping#nmap('log', 'q', '<C-W>c', { 'noremap': 1, 'silent': 1 })
+  call gina#custom#mapping#nmap('log', 'yy', '<Plug>(gina-yank-rev)', { 'silent': 1 })
   call gina#custom#mapping#nmap('status', 'q', '<C-W>c', { 'noremap': 1, 'silent': 1 })
   call gina#custom#mapping#nmap('status', 'yy', '<Plug>(gina-yank-path)', { 'silent': 1 })
 endfunction
