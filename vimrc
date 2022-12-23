@@ -516,11 +516,11 @@ function! s:singleton.post() abort
   call singleton#enable()
 endfunction
 
-" NOTE: Call this ASAP!
-" NOTE: Maybe `+clientserver` is disabled on macOS even if a Vim is compiled
-" with `--with-features=huge`.
+" NOTE: Call this as soon as possible!
+" NOTE: Maybe "+clientserver" is disabled in macOS even if a Vim is compiled
+" with "--with-features=huge".
 if has('clientserver')
-  " call maxpac#add(s:singleton)
+  call maxpac#add(s:singleton)
 endif
 " }}}
 
