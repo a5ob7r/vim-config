@@ -810,39 +810,27 @@ function! s:vim_lsp.pre() abort
   Autocmd User lsp_diagnostics_updated call lightline#update()
 
   function! LspErrorCount() abort
-    let l:errors = lsp#get_buffer_diagnostics_counts().error
-    if l:errors == 0 | return '' | endif
-    return 'E: ' . l:errors
+    let l:errors = lsp#get_buffer_diagnostics_counts()['error']
+    return empty(l:errors) ? '' : 'E: ' . l:errors
   endfunction
 
   function LspWarningCount() abort
-    let l:warnings = lsp#get_buffer_diagnostics_counts().warning
-    if l:warnings == 0 | return '' | endif
-    return 'W: ' . l:warnings
+    let l:warnings = lsp#get_buffer_diagnostics_counts()['warning']
+    return empty(l:warnings) ? '' : 'W: ' . l:warnings
   endfunction
 
   function! LspInformationCount() abort
-    let l:informations = lsp#get_buffer_diagnostics_counts().information
-    if l:informations == 0 | return '' | endif
-    return 'I: ' . l:informations
+    let l:informations = lsp#get_buffer_diagnostics_counts()['information']
+    return empty(l:informations) ? '' : 'I: ' . l:informations
   endfunction
 
   function! LspHintCount() abort
-    let l:hints = lsp#get_buffer_diagnostics_counts().hint
-    if l:hints == 0 | return '' | endif
-    return 'H: ' . l:hints
+    let l:hints = lsp#get_buffer_diagnostics_counts()['hint']
+    return empty(l:hints) ? '' : 'H: ' . l:hints
   endfunction
 
   function! LspOk() abort
-    if !get(b:, 'vim_lsp_enabled', 0)
-      return ''
-    endif
-
-    let l:counts = lsp#get_buffer_diagnostics_counts()
-    let l:not_zero_counts = filter(l:counts, 'v:val != 0')
-    let l:ok = len(l:not_zero_counts) == 0
-    if l:ok | return 'OK' | endif
-    return ''
+    return get(b:, 'vim_lsp_enabled', 0) && empty(filter(lsp#get_buffer_diagnostics_counts(), '!empty(v:val)')) ? 'OK' : ''
   endfunction
 
   function! s:lsp_log_file()
