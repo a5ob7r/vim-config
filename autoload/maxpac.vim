@@ -2,15 +2,18 @@
 "
 " TODO: Implement a dependency resolver and loading.
 
-" Convert a URL into a plugin name.
-function! s:plugname(url) abort
-  let l:tail = split(a:url, '/')[-1]
+" Convert an URI into a plugin name.
+function! s:plugname(uri) abort
+  let l:tail = split(a:uri, '/')[-1]
   return substitute(l:tail, '.git$', '', '')
 endfunction
 
 " Whether or not the plugin is loadable.
-function! s:loadable(name) abort
-  return !empty(globpath(&packpath, 'pack/*/opt/' . a:name))
+function! s:loadable(uri) abort
+  return
+    \ a:uri =~# '^\%(file://\)\=/'
+    \ ? !empty(glob(substitute(a:uri, '^file://', '', '')))
+    \ : !empty(globpath(&packpath, 'pack/*/opt/' . s:plugname(a:uri)))
 endfunction
 
 " Whether or not the plugin is loaded.
@@ -72,7 +75,7 @@ function! maxpac#end() abort
   for l:name in s:maxpac.names
     let l:conf = s:maxpac.confs[l:name]
 
-    if s:loadable(s:plugname(l:name)) && type(l:conf.pre) == type(function('tr'))
+    if s:loadable(l:name) && type(l:conf.pre) == type(function('tr'))
       call l:conf.pre()
     endif
 
@@ -108,10 +111,13 @@ endfunction
 " Load a standalone plugin. The plugin is only managed by minpac, but maxpac.
 " This function works as a synonym of "minpac#add()" and "packadd".
 "
+" This can handle local plugins such as "files:///path/to/plugin" too. However
+" they are just loaded by hand and are managed by neither minpac and maxpac.
+"
 " NOTE: This function initializes minpac without any arguments if minpac isn't
 " initialized yet. If you want to initialize with non-default value,
 " initialize with the value beforehand.
-function! maxpac#load(url, ...) abort
+function! maxpac#load(uri, ...) abort
   try
     if !exists('g:minpac#opt')
       call maxpac#init()
@@ -120,18 +126,40 @@ function! maxpac#load(url, ...) abort
     return v:false
   endtry
 
-  let l:config = get(a:, 1, { 'type': 'opt' })
-  let l:name = s:plugname(a:url)
+  " TODO: Support drive letters for MS-Windows.
+  if a:uri =~# '^\%(file://\)\=/'
+    let l:path = substitute(a:uri, '^file://', '', '')
 
-  " Register the plugin to minpac to update.
-  call minpac#add(a:url, l:config)
+    if empty(glob(l:path))
+      return 0
+    endif
 
-  " Load the plugin instantly.
-  try
-    execute 'packadd' l:name
-  catch
-    " Ignore any errors.
-  endtry
+    execute printf('set runtimepath^=%s', fnameescape(l:path))
 
-  return s:loaded(l:name)
+    let l:after = globpath(l:path, 'after')
+    if !empty(l:after)
+      execute printf('set runtimepath+=%s', fnameescape(l:after))
+    endif
+
+    for l:plugin in globpath(l:path, 'plugin/**/*.vim', 0, 1)
+      execute 'source' fnameescape(l:plugin)
+    endfor
+
+    return 1
+  else
+    let l:config = get(a:, 1, { 'type': 'opt' })
+    let l:name = s:plugname(a:uri)
+
+    " Register the plugin to minpac to update.
+    call minpac#add(a:uri, l:config)
+
+    " Load the plugin instantly.
+    try
+      execute 'packadd' l:name
+    catch
+      " Ignore any errors.
+    endtry
+
+    return s:loaded(l:name)
+  endif
 endfunction
