@@ -312,7 +312,7 @@ function! s:syntax_item_attribute(line, column) abort
   let l:trans_item_id = synID(a:line, a:column, 0)
 
   return printf(
-    \ "hi<%s> trans<%s> lo<%s>",
+    \ 'hi<%s> trans<%s> lo<%s>',
     \ synIDattr(l:item_id, 'name'),
     \ synIDattr(l:trans_item_id, 'name'),
     \ synIDattr(synIDtrans(l:item_id), 'name')
