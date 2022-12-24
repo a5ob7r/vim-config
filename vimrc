@@ -1017,13 +1017,11 @@ call maxpac#add(s:open_browser)
 let s:ale = maxpac#plugconf('w0rp/ale')
 
 function! s:ale.pre() abort
-  highlight ALEErrorSign ctermfg=9 guifg=#C30500
-  highlight ALEWarningSign ctermfg=11 guifg=#ED6237
-  let g:ale_lint_on_insert_leave = 1
-  let g:ale_lint_on_text_changed = 0
-  let g:ale_lint_on_enter = 0
-  let g:ale_python_auto_pipenv = 1
+  " Use ALE only as a linter engine.
   let g:ale_disable_lsp = 1
+
+  let g:ale_python_auto_pipenv = 1
+  let g:ale_python_auto_poetry = 1
 
   nmap <silent> <C-P> <Plug>(ale_previous_wrap)
   nmap <silent> <C-N> <Plug>(ale_next_wrap)
