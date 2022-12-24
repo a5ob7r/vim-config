@@ -586,11 +586,16 @@ function! s:lightline.pre() abort
     \   'left': [
     \     [ 'mode', 'paste' ],
     \     [ 'readonly', 'relativepath', 'modified' ],
-    \     [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok' ],
+    \     [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_infos', 'linter_ok' ],
     \     [ 'lsp_errors', 'lsp_warnings', 'lsp_informations', 'lsp_hints', 'lsp_ok' ]
     \   ]
     \ },
     \ 'component_expand': {
+    \   'linter_checking': 'lightline#ale#checking',
+    \   'linter_errors': 'lightline#ale#errors',
+    \   'linter_warnings': 'lightline#ale#warnings',
+    \   'linter_infos': 'lightline#ale#infos',
+    \   'linter_ok': 'lightline#ale#ok',
     \   'lsp_errors': 'LspErrorCount',
     \   'lsp_warnings': 'LspWarningCount',
     \   'lsp_informations': 'LspInformationCount',
@@ -599,8 +604,9 @@ function! s:lightline.pre() abort
     \ },
     \ 'component_type': {
     \   'linter_checking': 'left',
-    \   'linter_warnings': 'warning',
     \   'linter_errors': 'error',
+    \   'linter_warnings': 'warning',
+    \   'linter_infos': 'left',
     \   'linter_ok': 'left',
     \   'lsp_errors': 'error',
     \   'lsp_warnings': 'warning',
@@ -1092,6 +1098,7 @@ call maxpac#add('junegunn/vader.vim')
 call maxpac#add('kannokanno/previm')
 call maxpac#add('machakann/vim-highlightedyank')
 call maxpac#add('machakann/vim-swap')
+call maxpac#add('maximbaz/lightline-ale')
 call maxpac#add('thinca/vim-localrc')
 call maxpac#add('thinca/vim-prettyprint')
 call maxpac#add('thinca/vim-themis')
