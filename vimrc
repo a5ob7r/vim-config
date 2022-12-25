@@ -587,7 +587,7 @@ function! s:lightline.pre() abort
     \     [ 'mode', 'paste' ],
     \     [ 'readonly', 'relativepath', 'modified' ],
     \     [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_infos', 'linter_ok' ],
-    \     [ 'lsp_errors', 'lsp_warnings', 'lsp_informations', 'lsp_hints', 'lsp_ok' ]
+    \     [ 'lsp_checking', 'lsp_errors', 'lsp_warnings', 'lsp_informations', 'lsp_hints', 'lsp_ok' ]
     \   ]
     \ },
     \ 'component_expand': {
@@ -596,11 +596,12 @@ function! s:lightline.pre() abort
     \   'linter_warnings': 'lightline#ale#warnings',
     \   'linter_infos': 'lightline#ale#infos',
     \   'linter_ok': 'lightline#ale#ok',
-    \   'lsp_errors': 'LspErrorCount',
-    \   'lsp_warnings': 'LspWarningCount',
-    \   'lsp_informations': 'LspInformationCount',
-    \   'lsp_hints': 'LspHintCount',
-    \   'lsp_ok': 'LspOk'
+    \   'lsp_checking': 'LightlineLspChecking',
+    \   'lsp_errors': 'LightlineLspError',
+    \   'lsp_warnings': 'LightlineLspWarning',
+    \   'lsp_informations': 'LightlineLspInformation',
+    \   'lsp_hints': 'LightlineLspHint',
+    \   'lsp_ok': 'LightlineLspOk'
     \ },
     \ 'component_type': {
     \   'linter_checking': 'left',
@@ -608,6 +609,7 @@ function! s:lightline.pre() abort
     \   'linter_warnings': 'warning',
     \   'linter_infos': 'left',
     \   'linter_ok': 'left',
+    \   'lsp_checking': 'left',
     \   'lsp_errors': 'error',
     \   'lsp_warnings': 'warning',
     \   'lsp_informations': 'left',
@@ -807,37 +809,9 @@ function! s:vim_lsp.pre() abort
 
     nnoremap <silent><buffer><expr> <C-J> lsp#scroll(+1)
     nnoremap <silent><buffer><expr> <C-K> lsp#scroll(-1)
-
-    let b:vim_lsp_enabled = 1
   endfunction
 
   Autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
-
-  Autocmd User lsp_diagnostics_updated call lightline#update()
-
-  function! LspErrorCount() abort
-    let l:errors = lsp#get_buffer_diagnostics_counts()['error']
-    return empty(l:errors) ? '' : 'E: ' . l:errors
-  endfunction
-
-  function LspWarningCount() abort
-    let l:warnings = lsp#get_buffer_diagnostics_counts()['warning']
-    return empty(l:warnings) ? '' : 'W: ' . l:warnings
-  endfunction
-
-  function! LspInformationCount() abort
-    let l:informations = lsp#get_buffer_diagnostics_counts()['information']
-    return empty(l:informations) ? '' : 'I: ' . l:informations
-  endfunction
-
-  function! LspHintCount() abort
-    let l:hints = lsp#get_buffer_diagnostics_counts()['hint']
-    return empty(l:hints) ? '' : 'H: ' . l:hints
-  endfunction
-
-  function! LspOk() abort
-    return get(b:, 'vim_lsp_enabled', 0) && empty(filter(lsp#get_buffer_diagnostics_counts(), '!empty(v:val)')) ? 'OK' : ''
-  endfunction
 
   function! s:lsp_log_file()
     return get(g:, 'lsp_log_file', '')
@@ -905,6 +879,38 @@ function! s:vim_lsp_settings.pre() abort
 endfunction
 
 call maxpac#add(s:vim_lsp_settings)
+" }}}
+
+" tsuyoshicho/lightline-lsp {{{
+let s:lightline_lsp = maxpac#plugconf('tsuyoshicho/lightline-lsp')
+
+function! s:lightline_lsp.post() abort
+  Autocmd User lsp_diagnostics_updated call lightline#update()
+
+  function! LightlineLspChecking() abort
+    return empty(lsp#get_allowed_servers()) ? '' : lightline#lsp#checking()
+  endfunction
+
+  function! LightlineLspError() abort
+    return empty(lsp#get_allowed_servers()) ? '' : lightline#lsp#error()
+  endfunction
+
+  function! LightlineLspWarning() abort
+    return empty(lsp#get_allowed_servers()) ? '' : lightline#lsp#warning()
+  endfunction
+
+  function! LightlineLspInformation() abort
+    return empty(lsp#get_allowed_servers()) ? '' : lightline#lsp#information()
+  endfunction
+
+  function! LightlineLspHint() abort
+    return empty(lsp#get_allowed_servers()) ? '' : lightline#lsp#hint()
+  endfunction
+
+  function! LightlineLspOk() abort
+    return empty(lsp#get_allowed_servers()) ? '' : lightline#lsp#ok()
+  endfunction
+endfunction
 " }}}
 
 " =============================================================================
