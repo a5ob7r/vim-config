@@ -917,6 +917,8 @@ function! s:lightline_lsp.post() abort
     return empty(lsp#get_allowed_servers()) ? '' : lightline#lsp#ok()
   endfunction
 endfunction
+
+call maxpac#add(s:lightline_lsp)
 " }}}
 
 " =============================================================================
