@@ -584,11 +584,17 @@ function! s:lightline.pre() abort
   let g:lightline = {
     \ 'active': {
     \   'left': [
-    \     [ 'mode', 'paste' ],
+    \     [ 'mode', 'binary', 'paste' ],
     \     [ 'readonly', 'relativepath', 'modified' ],
     \     [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_infos', 'linter_ok' ],
     \     [ 'lsp_checking', 'lsp_errors', 'lsp_warnings', 'lsp_informations', 'lsp_hints', 'lsp_ok' ]
     \   ]
+    \ },
+    \ 'component': {
+    \   'binary': '%{&binary ? "BINARY" : ""}'
+    \ },
+    \ 'component_visible_condition': {
+    \   'binary': '&binary'
     \ },
     \ 'component_expand': {
     \   'linter_checking': 'lightline#ale#checking',
