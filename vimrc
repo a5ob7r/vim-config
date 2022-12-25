@@ -587,7 +587,7 @@ function! s:lightline.pre() abort
     \     [ 'mode', 'binary', 'paste' ],
     \     [ 'readonly', 'relativepath', 'modified' ],
     \     [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_infos', 'linter_ok' ],
-    \     [ 'lsp_checking', 'lsp_errors', 'lsp_warnings', 'lsp_informations', 'lsp_hints', 'lsp_ok' ]
+    \     [ 'lsp_checking', 'lsp_errors', 'lsp_warnings', 'lsp_informations', 'lsp_hints', 'lsp_ok', 'lsp_progress' ]
     \   ]
     \ },
     \ 'component': {
@@ -607,7 +607,8 @@ function! s:lightline.pre() abort
     \   'lsp_warnings': 'LightlineLspWarning',
     \   'lsp_informations': 'LightlineLspInformation',
     \   'lsp_hints': 'LightlineLspHint',
-    \   'lsp_ok': 'LightlineLspOk'
+    \   'lsp_ok': 'LightlineLspOk',
+    \   'lsp_progress': 'lightline_lsp_progress#progress'
     \ },
     \ 'component_type': {
     \   'linter_checking': 'left',
@@ -620,7 +621,8 @@ function! s:lightline.pre() abort
     \   'lsp_warnings': 'warning',
     \   'lsp_informations': 'left',
     \   'lsp_hints': 'left',
-    \   'lsp_ok': 'left'
+    \   'lsp_ok': 'left',
+    \   'lsp_progress': 'left'
     \ }
     \ }
 
@@ -920,6 +922,8 @@ endfunction
 
 call maxpac#add(s:lightline_lsp)
 " }}}
+
+call maxpac#add('micchy326/lightline-lsp-progress')
 
 " =============================================================================
 
