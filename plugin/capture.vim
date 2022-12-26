@@ -32,4 +32,7 @@ endfunction
 
 " Capture Ex command outputs and redirect it to a new empty buffer.
 command! -nargs=* -complete=command -bang Capture
-      \ call s:capture(<q-bang>, <q-mods>, <q-args>)
+  \ call s:capture(<q-bang>, <q-mods>, <q-args>)
+
+command! -nargs=+ -complete=command -bang Redirect
+  \ call append('.', s:redirect(<q-bang>, <q-args>))
