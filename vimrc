@@ -602,12 +602,12 @@ function! s:lightline.pre() abort
     \   'linter_warnings': 'lightline#ale#warnings',
     \   'linter_infos': 'lightline#ale#infos',
     \   'linter_ok': 'lightline#ale#ok',
-    \   'lsp_checking': 'LightlineLspChecking',
-    \   'lsp_errors': 'LightlineLspError',
-    \   'lsp_warnings': 'LightlineLspWarning',
-    \   'lsp_informations': 'LightlineLspInformation',
-    \   'lsp_hints': 'LightlineLspHint',
-    \   'lsp_ok': 'LightlineLspOk',
+    \   'lsp_checking': 'lightline#lsp#checking',
+    \   'lsp_errors': 'lightline#lsp#error',
+    \   'lsp_warnings': 'lightline#lsp#warning',
+    \   'lsp_informations': 'lightline#lsp#information',
+    \   'lsp_hints': 'lightline#lsp#hint',
+    \   'lsp_ok': 'lightline#lsp#ok',
     \   'lsp_progress': 'lightline_lsp_progress#progress'
     \ },
     \ 'component_type': {
@@ -889,40 +889,7 @@ endfunction
 call maxpac#add(s:vim_lsp_settings)
 " }}}
 
-" tsuyoshicho/lightline-lsp {{{
-let s:lightline_lsp = maxpac#plugconf('tsuyoshicho/lightline-lsp')
-
-function! s:lightline_lsp.post() abort
-  Autocmd User lsp_diagnostics_updated call lightline#update()
-
-  function! LightlineLspChecking() abort
-    return empty(lsp#get_allowed_servers()) ? '' : lightline#lsp#checking()
-  endfunction
-
-  function! LightlineLspError() abort
-    return empty(lsp#get_allowed_servers()) ? '' : lightline#lsp#error()
-  endfunction
-
-  function! LightlineLspWarning() abort
-    return empty(lsp#get_allowed_servers()) ? '' : lightline#lsp#warning()
-  endfunction
-
-  function! LightlineLspInformation() abort
-    return empty(lsp#get_allowed_servers()) ? '' : lightline#lsp#information()
-  endfunction
-
-  function! LightlineLspHint() abort
-    return empty(lsp#get_allowed_servers()) ? '' : lightline#lsp#hint()
-  endfunction
-
-  function! LightlineLspOk() abort
-    return empty(lsp#get_allowed_servers()) ? '' : lightline#lsp#ok()
-  endfunction
-endfunction
-
-call maxpac#add(s:lightline_lsp)
-" }}}
-
+call maxpac#add('tsuyoshicho/lightline-lsp')
 call maxpac#add('micchy326/lightline-lsp-progress')
 
 " =============================================================================
