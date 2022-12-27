@@ -348,6 +348,11 @@ let g:mapleader = ' '
 vnoremap <silent><expr> j mode() ==# 'V' ? 'j' : 'gj'
 vnoremap <silent><expr> k mode() ==# 'V' ? 'k' : 'gk'
 
+" Switch buffers. These are similar to "gt" and "gT" for tabs, but for
+" buffers.
+nnoremap <silent> gb :bNext<CR>
+nnoremap <silent> gB :bprevious<CR>
+
 " Clear the highlightings for pattern searching.
 nnoremap <silent> <C-L> :<C-U>nohlsearch<CR>
 
