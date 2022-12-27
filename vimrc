@@ -356,8 +356,9 @@ vnoremap <silent><expr> k mode() ==# 'V' ? 'k' : 'gk'
 nnoremap <silent> gb :bNext<CR>
 nnoremap <silent> gB :bprevious<CR>
 
-" Clear the highlightings for pattern searching.
-nnoremap <silent> <C-L> :<C-U>nohlsearch<CR>
+" Clear the highlightings for pattern searching and run a command to refresh
+" something.
+nnoremap <silent> <C-L> :<C-U>nohlsearch<CR>:Refresh<CR>
 
 nnoremap <Leader><CR> o<Esc>
 
@@ -442,6 +443,9 @@ command! -bang -bar -nargs=1 -complete=file Open execute <q-mods> (<bang>1 ? 'sp
 command! -bang -bar Vimrc <mods> Open<bang> $MYVIMRC
 command! ReloadVimrc source $MYVIMRC
 
+" Run commands to refresh something. Use ":OnRefresh" to register a command.
+command! Refresh doautocmd <nomodeline> User Refresh
+
 command! InstallMinpac call s:install_minpac()
 " }}}
 
@@ -503,6 +507,15 @@ Autocmd BufWritePost *
   \ |   call cursor(b:cursorpos[1], b:cursorpos[2], b:cursorpos[3])
   \ |   unlet b:cursorpos
   \ | endif
+
+" Register a command to refresh something.
+command! -bar -nargs=+ OnRefresh autocmd refresh User Refresh <args>
+
+augroup refresh
+  autocmd!
+augroup END
+
+OnRefresh redraw
 " }}}
 
 " Filetypes {{{
@@ -669,6 +682,8 @@ function! s:lightline.pre() abort
   endfunction
 
   Autocmd ColorScheme * call s:update_lightline()
+
+  OnRefresh call lightline#update()
 endfunction
 
 call maxpac#add(s:lightline)
@@ -1074,6 +1089,32 @@ let s:fern = maxpac#plugconf('lambdalisue/fern.vim')
 function! s:fern.pre() abort
   let g:fern#default_hidden = 1
   let g:fern#default_exclude = '.*\~$'
+
+  " Toggle a fern buffer to keep the cursor position. A tab should only have
+  " one fern buffer.
+  function! s:toggle_fern() abort
+    if &filetype ==# 'fern'
+      if exists('t:non_fern_buffer_id')
+        execute 'buffer' t:non_fern_buffer_id
+      else
+        echohl WarningMsg
+        echo 'No non fern buffer exists'
+        echohl None
+      endif
+    else
+      if exists('t:fern_buffer_id')
+        execute 'buffer' t:fern_buffer_id
+      else
+        Fern .
+      endif
+    endif
+  endfunction
+
+  command! -bar ToggleFern call s:toggle_fern()
+
+  Autocmd Filetype fern let t:fern_buffer_id = bufnr()
+  Autocmd BufLeave * if &ft !=# 'fern' | let t:non_fern_buffer_id = bufnr() | endif
+  Autocmd DirChanged * unlet! t:fern_buffer_id
 
   command! CurrentFernLogging echo get(g:, 'fern#logfile', v:null)
   command! -nargs=* -complete=file EnableFernLogging
