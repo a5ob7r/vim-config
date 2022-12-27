@@ -404,6 +404,23 @@ imap <silent> <C-L> <Plug>(linefeed)
 
 " Commands {{{
 command! Runtimepath echo substitute(&runtimepath, ',', "\n", 'g')
+command! Packpath echo substitute(&packpath, ',', '\n', 'g')
+
+" Toggle the syntax highlighting.
+command! -bang -bar Syntax
+  \ if exists('g:syntax_on')
+  \ |   syntax off
+  \ | elseif <bang>1
+  \ |   syntax enable
+  \ | else
+  \ |   syntax on
+  \ | endif
+
+" Toggle the "paste" mode.
+command! -bar Paste set paste!
+
+" Toggle the "binary" mode locally.
+command! -bar Binary setlocal binary!
 
 " ":update" with new empty file creations for the current buffer.
 "
