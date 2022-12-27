@@ -199,6 +199,9 @@ noremap Y y$
 nnoremap + <C-W>+
 nnoremap - <C-W>-
 
+" A shortcut to complete filenames.
+inoremap <C-F> <C-X><C-F>
+
 " Quit Visual mode.
 vnoremap <C-L> <Esc>
 " }}}
