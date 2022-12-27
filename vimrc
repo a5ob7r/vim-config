@@ -341,6 +341,13 @@ silent call s:mkdir(expand(&g:undodir), 'p', 0700)
 " keymapping, so we must define this variable before the mapping definition.
 let g:mapleader = ' '
 
+" Smart linewise upward/downward cursor movements in Vitual mode.
+"
+" Move the cursor line by line phycically not logically(screen) if Visual mode
+" is linewise, otherwise character by character.
+vnoremap <silent><expr> j mode() ==# 'V' ? 'j' : 'gj'
+vnoremap <silent><expr> k mode() ==# 'V' ? 'k' : 'gk'
+
 " Clear the highlightings for pattern searching.
 nnoremap <silent> <C-L> :<C-U>nohlsearch<CR>
 
