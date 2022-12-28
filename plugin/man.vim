@@ -85,4 +85,6 @@ endfunction
 command! -nargs=+ -complete=customlist,s:man_complete M
   \ call s:man(<q-mods>, '', <f-args>)
 
-set keywordprg=:Man
+if has('patch-7.4.1833')
+  set keywordprg=:Man
+endif
