@@ -65,7 +65,7 @@ endfunction
 
 function! s:man(mods, count, ...)
   let l:section = a:count
-  let l:name = ""
+  let l:name = ''
 
   if a:0 == 1
     let l:name = a:1
