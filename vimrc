@@ -168,6 +168,15 @@ if exists('+cdhome')
   set cdhome
 endif
 
+" "modeline" is on only if Vim can validate the values.
+"
+" https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2016-1248
+set nomodeline
+
+if has('patch-8.0.0056')
+  set modeline
+endif
+
 if has('gui_running')
   " Add a "M" to the "guioptions" before executing ":syntax enable" or
   " ":filetype on" to avoid sourcing the "menu.vim".
