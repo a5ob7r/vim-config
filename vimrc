@@ -135,13 +135,17 @@ set ignorecase smartcase
 if exists('+termguicolors') && ($COLORTERM ==# 'truecolor' || index(['xterm', 'st-256color'], $TERM) > -1)
   set termguicolors
 
-  " Vim sets these configs below only if the value of `$TERM` is `xterm`.
-  " Otherwise we manually need to set them to work true color well.
-  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+  " No longer need these configurations below since "patch-9.0.1111" because
+  " Vim set them automatically if compiled with the "+termguicolors" feature.
+  if !has('patch-9.0.1111')
+    " Vim sets these configurations below only if the value of `$TERM` is
+    " `xterm`. Otherwise we manually need to set them to work true color well.
+    let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+    let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 
-  if has('patch-8.2.0863')
-    let &t_8u = "\<Esc>[58;2;%lu;%lu;%lum"
+    if has('patch-8.2.0863')
+      let &t_8u = "\<Esc>[58;2;%lu;%lu;%lum"
+    endif
   endif
 endif
 
