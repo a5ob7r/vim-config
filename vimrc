@@ -166,7 +166,7 @@ else
   endif
 endif
 
-if has('patch-9.0.0641')
+if exists('+smoothscroll')
   " Screen line oriented scrolling.
   set smoothscroll
 endif
