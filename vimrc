@@ -143,7 +143,7 @@ if exists('+termguicolors') && ($COLORTERM ==# 'truecolor' || index(['xterm', 's
     let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
     let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 
-    if has('patch-8.2.0863')
+    if exists('+t_8u')
       let &t_8u = "\<Esc>[58;2;%lu;%lu;%lum"
     endif
   endif
