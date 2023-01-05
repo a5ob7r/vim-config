@@ -1098,6 +1098,26 @@ endfunction
 call maxpac#add(s:ripgrep)
 " }}}
 
+" haya14busa/vim-asterisk {{{
+let s:asterisk = maxpac#plugconf('haya14busa/vim-asterisk')
+
+function! s:asterisk.post() abort
+  " Keep the cursor offset while searching. See "search-offset".
+  let g:asterisk#keeppos = 1
+
+  map * <Plug>(asterisk-z*)
+  map # <Plug>(asterisk-z#)
+  map g* <Plug>(asterisk-gz*)
+  map g# <Plug>(asterisk-gz#)
+  map z* <Plug>(asterisk-*)
+  map z# <Plug>(asterisk-#)
+  map gz* <Plug>(asterisk-g*)
+  map gz# <Plug>(asterisk-g#)
+endfunction
+
+call maxpac#add(s:asterisk)
+" }}}
+
 " =============================================================================
 
 " lambdalisue/fern.vim {{{
