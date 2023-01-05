@@ -1180,6 +1180,21 @@ call maxpac#add(s:lsflavor)
 
 " =============================================================================
 
+" Text object.
+call maxpac#load('kana/vim-textobj-user')
+
+call maxpac#load('kana/vim-textobj-entire')
+call maxpac#load('kana/vim-textobj-function')
+call maxpac#load('kana/vim-textobj-indent')
+call maxpac#load('kana/vim-textobj-line')
+call maxpac#load('kana/vim-textobj-syntax')
+call maxpac#load('mattn/vim-textobj-url')
+call maxpac#load('saaguero/vim-textobj-pastedtext')
+call maxpac#load('thinca/vim-textobj-comment')
+
+call maxpac#load('machakann/vim-textobj-delimited')
+
+" Misc.
 call maxpac#add('LumaKernel/coqpit.vim')
 call maxpac#add('a5ob7r/tig.vim')
 call maxpac#add('aliou/bats.vim')
