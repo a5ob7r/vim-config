@@ -820,7 +820,12 @@ call maxpac#add(s:ctrlp_matchfuzzy)
 let s:ctrlp_ghq = maxpac#plugconf('mattn/ctrlp-ghq')
 
 function! s:ctrlp_ghq.post() abort
-  nnoremap <silent> <Leader>gq :CtrlPGhq<CR>
+  let g:ctrlp_ghq_actions = [
+    \ { 'label': 'edit', 'action': 'edit', 'path': 1 },
+    \ { 'label': 'tabnew', 'action': 'tabnew', 'path': 1 }
+    \ ]
+
+  nnoremap <silent> <Leader>gq :<C-U>CtrlPGhq<CR>
 endfunction
 
 call maxpac#add(s:ctrlp_ghq)
