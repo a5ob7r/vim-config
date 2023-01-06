@@ -1118,6 +1118,18 @@ endfunction
 call maxpac#add(s:asterisk)
 " }}}
 
+" monaqa/modesearch.vim {{{
+let s:modesearch = maxpac#plugconf('monaqa/modesearch.vim')
+
+function! s:modesearch.post() abort
+  nmap <silent> g/ <Plug>(modesearch-slash-rawstr)
+  nmap <silent> g? <Plug>(modesearch-question-regexp)
+  cmap <silent> <C-x> <Plug>(modesearch-toggle-mode)
+endfunction
+
+call maxpac#add(s:modesearch)
+" }}}
+
 " =============================================================================
 
 " lambdalisue/fern.vim {{{
