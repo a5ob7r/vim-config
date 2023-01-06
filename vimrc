@@ -765,6 +765,7 @@ function! s:ctrlp.pre() abort
   let g:ctrlp_lazy_update = 150
   let g:ctrlp_reuse_window = '.*'
   let g:ctrlp_use_caching = 0
+  let g:ctrlp_compare_lim = 5000
 
   let g:ctrlp_user_command = {}
   let g:ctrlp_user_command['types'] = {}
