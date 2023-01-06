@@ -862,10 +862,19 @@ let s:vim_lsp = maxpac#plugconf('prabirshrestha/vim-lsp')
 function! s:vim_lsp.pre() abort
   let g:lsp_diagnostics_float_cursor = 1
   let g:lsp_diagnostics_float_delay = 200
+
   let g:lsp_semantic_enabled = 1
-  let g:lsp_async_completion = 1
   let g:lsp_inlay_hints_enabled = 1
-  let g:lsp_use_native_client = 1
+  " FIXME: HLS (haskell-language-server) v1.8+ (and maybe early versions too)
+  " throws such a string, "Error | Failed to parse message header:" if the
+  " native client is on. And the client logs "waiting for lsp server to
+  " initialize". This means we can't use the native client with HLSs
+  " unfortunately at this time, although I want to use the client. The client
+  " is off by default, but I make it off explicitly for this documentation
+  " about why we have to disable it.
+  let g:lsp_use_native_client = 0
+
+  let g:lsp_async_completion = 1
 
   let g:lsp_experimental_workspace_folders = 1
 
