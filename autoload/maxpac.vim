@@ -2,23 +2,23 @@
 "
 " TODO: Implement a dependency resolver and loading.
 
-" Convert an URI into a plugin name.
-function! s:plugname(uri) abort
-  let l:tail = split(a:uri, '/')[-1]
-  return substitute(l:tail, '.git$', '', '')
-endfunction
-
 " Whether or not the plugin is loadable.
 function! s:loadable(uri) abort
   return
     \ a:uri =~# '^\%(file://\)\=/'
     \ ? !empty(glob(substitute(a:uri, '^file://', '', '')))
-    \ : !empty(globpath(&packpath, 'pack/*/opt/' . s:plugname(a:uri)))
+    \ : !empty(globpath(&packpath, 'pack/*/opt/' . maxpac#plugname(a:uri)))
 endfunction
 
 " Whether or not the plugin is loaded.
 function! s:loaded(name) abort
   return !empty(globpath(&runtimepath, 'pack/*/opt/' . a:name))
+endfunction
+
+" Convert an URI into a plugin (directory) name.
+function! maxpac#plugname(uri) abort
+  let l:tail = split(a:uri, '/')[-1]
+  return a:uri =~# '^https\=://' ? substitute(l:tail, '\C\.git$', '', '') : l:tail
 endfunction
 
 " Initialize a configuration store of maxpac.
@@ -148,7 +148,7 @@ function! maxpac#load(uri, ...) abort
     return 1
   else
     let l:config = get(a:, 1, { 'type': 'opt' })
-    let l:name = s:plugname(a:uri)
+    let l:name = maxpac#plugname(a:uri)
 
     " Register the plugin to minpac to update.
     call minpac#add(a:uri, l:config)

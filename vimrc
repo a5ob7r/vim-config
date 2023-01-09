@@ -590,11 +590,31 @@ endif
 let s:minpac = maxpac#plugconf('k-takata/minpac')
 
 function! s:minpac.post() abort
-  command! PackInit call minpac#init()
-  command! PackUpdate call minpac#update()
-  command! PackInstall PackUpdate
-  command! PackClean call minpac#clean()
-  command! PackStatus call minpac#status()
+  function! s:pack_complete(...) abort
+    return join(sort(keys(minpac#getpluglist())), "\n")
+  endfunction
+
+  command! -bar -nargs=? PackInstall
+    \   if empty(<q-args>)
+    \ |   call minpac#update()
+    \ | else
+    \ |   call minpac#add(<q-args>, { 'type': 'opt' })
+    \ |   call minpac#update(<q-args>, { 'do': printf('packadd %s', maxpac#plugname(<q-args>)) })
+    \ | endif
+
+  command! -bar -nargs=? -complete=custom,s:pack_complete PackUpdate
+    \   if empty(<q-args>)
+    \ |   call minpac#update()
+    \ | else
+    \ |   call minpac#update(maxpac#plugname(<q-args>))
+    \ | endif
+
+  command! -bar -nargs=? -complete=custom,s:pack_complete PackClean
+    \   if empty(<q-args>)
+    \ |   call minpac#clean()
+    \ | else
+    \ |   call minpac#clean(maxpac#plugname(<q-args>))
+    \ | endif
 endfunction
 
 call maxpac#add(s:minpac)
