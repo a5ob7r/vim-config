@@ -1050,17 +1050,6 @@ endfunction
 call maxpac#add(s:markdown)
 " }}}
 
-" sheerun/vim-polyglot {{{
-let s:polyglot = maxpac#plugconf('sheerun/vim-polyglot')
-
-function! s:polyglot.pre() abort
-  " Disable polyglot's ftdetect to use my ftdetect.
-  let g:polyglot_disabled = ['ftdetect', 'sensible', 'markdown']
-endfunction
-
-call maxpac#add(s:polyglot)
-" }}}
-
 " tyru/eskk.vim {{{
 let s:eskk = maxpac#plugconf('tyru/eskk.vim')
 
