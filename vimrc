@@ -1154,6 +1154,26 @@ endfunction
 call maxpac#add(s:modesearch)
 " }}}
 
+" editorconfig/editorconfig-vim {{{
+let s:editorconfig = maxpac#plugconf('editorconfig/editorconfig-vim')
+
+function! s:editorconfig.post() abort
+  " Use the editorconfig syntax file instead of dosini's one if it exists. Vim
+  " includes the file in the runtime directory since
+  " 1b5f03ec9c5551047d5de8d845541dd3201abe7c.
+  if empty(globpath(&runtimepath, 'syntax/editorconfig.vim'))
+    return
+  endif
+
+  " Purge a config to set a filetype to dosini for .editorconfig.
+  augroup editorconfig_dosini
+    autocmd!
+  augroup END
+endfunction
+
+call maxpac#add(s:editorconfig)
+" }}}
+
 " =============================================================================
 
 " lambdalisue/fern.vim {{{
@@ -1236,7 +1256,6 @@ call maxpac#add('a5ob7r/tig.vim')
 call maxpac#add('aliou/bats.vim')
 call maxpac#add('andymass/vim-matchup')
 call maxpac#add('bronson/vim-trailing-whitespace')
-call maxpac#add('editorconfig/editorconfig-vim')
 call maxpac#add('fladson/vim-kitty')
 call maxpac#add('junegunn/vader.vim')
 call maxpac#add('kannokanno/previm')
