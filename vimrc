@@ -338,6 +338,12 @@ function! s:syntax_item_attribute(line, column) abort
     \ synIDattr(synIDtrans(l:item_id), 'name')
     \ )
 endfunction
+
+" Join and normalize filepaths.
+function! s:pathjoin(...) abort
+  let l:sep = has('win32') ? '\\' : '/'
+  return substitute(simplify(join(a:000, l:sep)), printf('^\.%s', l:sep), '', '')
+endfunction
 " }}}
 
 " Options {{{
@@ -1174,6 +1180,26 @@ endfunction
 call maxpac#add(s:editorconfig)
 " }}}
 
+" thinca/vim-localrc {{{
+let s:localrc = maxpac#plugconf('thinca/vim-localrc')
+
+function! s:localrc.post() abort
+  function! s:open_localrc(bang, mods, dir) abort
+    let l:filename = get(g:, 'localrc_filename', '.local.vimrc')
+    let l:localrc = s:pathjoin(a:dir, fnameescape(l:filename))
+
+    execute printf('%s Open%s %s', a:mods, a:bang, l:localrc)
+  endfunction
+
+  command! -bang -bar VimrcLocal
+    \ call s:open_localrc(<q-bang>, <q-mods>, expand('~'))
+  command! -bang -bar -nargs=? -complete=dir OpenLocalrc
+    \ call s:open_localrc(<q-bang>, <q-mods>, empty(<q-args>) ? expand('%:p:h') : <q-args>)
+endfunction
+
+call maxpac#add(s:localrc)
+" }}}
+
 " =============================================================================
 
 " lambdalisue/fern.vim {{{
@@ -1262,7 +1288,6 @@ call maxpac#add('kannokanno/previm')
 call maxpac#add('machakann/vim-highlightedyank')
 call maxpac#add('machakann/vim-swap')
 call maxpac#add('maximbaz/lightline-ale')
-call maxpac#add('thinca/vim-localrc')
 call maxpac#add('thinca/vim-prettyprint')
 call maxpac#add('thinca/vim-themis')
 call maxpac#add('tpope/vim-commentary')
