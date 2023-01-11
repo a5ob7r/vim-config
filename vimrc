@@ -443,6 +443,16 @@ command! -bang -bar Syntax
   \ |   syntax on
   \ | endif
 
+" A modified version of ":DiffOrig", which is from "defaults.vim".
+command! -nargs=? -complete=buffer Diff
+  \   vertical new
+  \ | set buftype=nofile
+  \ | execute 'read ++edit' empty(<q-args>) ? '#' : <q-args>
+  \ | 0delete _
+  \ | diffthis
+  \ | wincmd p
+  \ | diffthis
+
 " Toggle the "paste" mode.
 command! -bar Paste set paste!
 
