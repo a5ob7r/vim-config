@@ -221,6 +221,13 @@ inoremap <C-F> <C-X><C-F>
 
 " Quit Visual mode.
 vnoremap <C-L> <Esc>
+
+" Minimize the current window vertically.
+nnoremap <silent> <C-W>m :<C-U>999wincmd -<CR>
+
+if has('terminal')
+  tnoremap <silent> <C-W>m <C-W>:<C-U>999wincmd -<CR>
+endif
 " }}}
 
 " =============================================================================
