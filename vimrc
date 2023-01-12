@@ -615,7 +615,7 @@ function! s:minpac.post() abort
     \ |   call minpac#update()
     \ | else
     \ |   call minpac#add(<q-args>, { 'type': 'opt' })
-    \ |   call minpac#update(<q-args>, { 'do': printf('packadd %s', maxpac#plugname(<q-args>)) })
+    \ |   call minpac#update(maxpac#plugname(<q-args>), { 'do': printf('packadd %s', maxpac#plugname(<q-args>)) })
     \ | endif
 
   command! -bar -nargs=? -complete=custom,s:pack_complete PackUpdate
