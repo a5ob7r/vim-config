@@ -221,13 +221,6 @@ inoremap <C-F> <C-X><C-F>
 
 " Quit Visual mode.
 vnoremap <C-L> <Esc>
-
-" Minimize the current window vertically.
-nnoremap <silent> <C-W>m :<C-U>999wincmd -<CR>
-
-if has('terminal')
-  tnoremap <silent> <C-W>m <C-W>:<C-U>999wincmd -<CR>
-endif
 " }}}
 
 " =============================================================================
@@ -434,6 +427,23 @@ vnoremap <silent> <Leader>y :YankComments<CR>
 nmap <silent> <CR> <Plug>(newline)
 
 imap <silent> <C-L> <Plug>(linefeed)
+
+" Maximize or minimize the current window.
+nnoremap <silent> <C-W>m :<C-U>resize 0<CR>
+nnoremap <silent> <C-W>Vm :<C-U>vertical resize 0<CR>
+nmap <silent> <C-W>gm <Plug>(xminimize)
+
+nnoremap <silent> <C-W>M :<C-U>resize<CR>
+nnoremap <silent> <C-W>VM :<C-U>vertical resize<CR>
+
+if has('terminal')
+  tnoremap <silent> <C-W>m <C-W>:resize 0<CR>
+  tnoremap <silent> <C-W>Vm <C-W>:vertical resize 0<CR>
+  tmap <silent> <C-W>gm <Plug>(xminimize)
+
+  tnoremap <silent> <C-W>M <C-W>:resize<CR>
+  tnoremap <silent> <C-W>VM <C-W>:vertical resize<CR>
+endif
 " }}}
 
 " Commands {{{
