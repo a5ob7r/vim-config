@@ -648,6 +648,13 @@ function! s:minpac.post() abort
     \ | else
     \ |   call minpac#clean(maxpac#plugname(<q-args>))
     \ | endif
+
+  " This command is from the minpac help file.
+  command! -nargs=1 -complete=custom,s:pack_complete PackOpenDir
+    \ call term_start(&shell, {
+    \   'cwd': minpac#getpluginfo(maxpac#plugname(<q-args>))['dir'],
+    \   'term_finish': 'close',
+    \ })
 endfunction
 
 call maxpac#add(s:minpac)
