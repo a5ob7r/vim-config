@@ -676,10 +676,6 @@ function! s:neodark.post() abort
       return
     endif
 
-    if exists('g:lightline')
-      let g:lightline['colorscheme'] = 'neodark'
-    endif
-
     colorscheme neodark
 
     if has('terminal')
@@ -748,6 +744,25 @@ function! s:lightline.pre() abort
     \ }
     \ }
 
+  function! s:change_lightline_colorscheme() abort
+    if ! exists('g:loaded_lightline')
+      return
+    endif
+
+    if !get(g:, 'lightline_colorscheme_change_on_the_fly', 1)
+      return
+    endif
+
+    let l:colorscheme = g:colors_name
+
+    if empty(globpath(&runtimepath, printf('autoload/lightline/colorscheme/%s.vim', l:colorscheme), 1))
+      return
+    endif
+
+    let g:lightline = get(g:, 'lightline', {})
+    let g:lightline['colorscheme'] = l:colorscheme
+  endfunction
+
   function! s:update_lightline()
     if ! exists('g:loaded_lightline')
       return
@@ -758,6 +773,8 @@ function! s:lightline.pre() abort
     call lightline#update()
   endfunction
 
+  " Synchronous lightline's colorscheme with Vim's one on the fly.
+  Autocmd ColorScheme * call s:change_lightline_colorscheme()
   Autocmd ColorScheme * call s:update_lightline()
 
   OnRefresh call lightline#update()
