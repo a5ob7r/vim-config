@@ -344,6 +344,13 @@ function! s:pathjoin(...) abort
   let l:sep = has('win32') ? '\\' : '/'
   return substitute(simplify(join(a:000, l:sep)), printf('^\.%s', l:sep), '', '')
 endfunction
+
+function! s:terminal() abort
+  " If the current buffer is for normal exsisting file editing.
+  let l:cwd = empty(&buftype) && !empty(expand('%')) ? expand('%:p:h') : getcwd()
+
+  call term_start(&shell, { 'cwd': l:cwd, 'term_finish': 'close' })
+endfunction
 " }}}
 
 " Options {{{
@@ -413,11 +420,15 @@ nnoremap <silent> <Leader>t :<C-U>tabnew<CR>
 if has('terminal')
   " Like default configurations of Tmux.
   nnoremap <silent> <Leader>" :<C-U>terminal<CR>
+  nnoremap <silent> <Leader>' :<C-U>call <SID>terminal()<CR>
   nnoremap <silent> <Leader>% :<C-U>vertical terminal<CR>
+  nnoremap <silent> <Leader>5 :<C-U>vertical <SID>terminal()<CR>
   nnoremap <silent> <Leader>c :<C-U>Terminal<CR>
 
   tnoremap <silent> <C-W>" <C-W>:terminal<CR>
+  tnoremap <silent> <C-W>' <C-W>:call <SID>terminal()<CR>
   tnoremap <silent> <C-W>% <C-W>:vertical terminal<CR>
+  tnoremap <silent> <C-W>5 <C-W>:vertical <SID>terminal()<CR>
   tnoremap <silent> <C-W>c <C-W>:Terminal<CR>
 endif
 
