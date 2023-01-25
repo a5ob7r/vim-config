@@ -312,7 +312,7 @@ function! s:install_minpac() abort
 endfunction
 
 " https://stackoverflow.com/questions/1533565/how-to-get-visually-selected-text-in-vimscript
-function! s:get_visual_selection()
+function! s:get_visual_selection() abort
   let [l:line_start, l:column_start] = getpos("'<")[1:2]
   let [l:line_end, l:column_end] = getpos("'>")[1:2]
   let l:lines = getline(l:line_start, l:line_end)
@@ -763,7 +763,7 @@ function! s:lightline.pre() abort
     let g:lightline['colorscheme'] = l:colorscheme
   endfunction
 
-  function! s:update_lightline()
+  function! s:update_lightline() abort
     if ! exists('g:loaded_lightline')
       return
     endif
@@ -977,7 +977,7 @@ function! s:vim_lsp.pre() abort
 
   Autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
 
-  function! s:lsp_log_file()
+  function! s:lsp_log_file() abort
     return get(g:, 'lsp_log_file', '')
   endfunction
 
@@ -986,7 +986,7 @@ function! s:vim_lsp.pre() abort
     \ let g:lsp_log_file = empty(<q-args>) ? expand('~/vim-lsp.log') : <q-args>
   command! DisableLspLogging let g:lsp_log_file = ''
 
-  function! s:view_lsp_log()
+  function! s:view_lsp_log() abort
     let l:log = s:lsp_log_file()
 
     if filereadable(l:log)
@@ -1001,7 +1001,7 @@ function! s:vim_lsp.pre() abort
 
   command! ViewLspLog call s:view_lsp_log()
 
-  function! s:clear_lsp_log()
+  function! s:clear_lsp_log() abort
     let l:log = s:lsp_log_file()
 
     if filewritable(l:log)
