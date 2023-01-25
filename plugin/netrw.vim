@@ -1,5 +1,5 @@
-function! s:toggle_newrw() abort
-  let l:cwd = getcwd()
+function! s:toggle_newrw(bang) abort
+  let l:cwd = empty(a:bang) ? getcwd() : expand('%:p:h')
 
   " Prefer the current working directory.
   if get(b:, 'netrw_curdir', '') !=# l:cwd
@@ -12,4 +12,4 @@ function! s:toggle_newrw() abort
 endfunction
 
 " Toggle the netrw window.
-command! ToggleNetrw call s:toggle_newrw()
+command! -bar -bang ToggleNetrw call s:toggle_newrw(<q-bang>)

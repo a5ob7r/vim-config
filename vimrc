@@ -398,6 +398,7 @@ map <silent> P <Plug>(Put)
 nnoremap <silent> <F10> :<C-U>echo <SID>syntax_item_attribute(line('.'), col('.'))<CR>
 
 nnoremap <silent> <Leader>n :<C-U>ToggleNetrw<CR>
+nnoremap <silent> <Leader>N :<C-U>ToggleNetrw!<CR>
 nnoremap <silent> <F2> :<C-U>ReloadVimrc<CR>
 nnoremap <silent> <Leader><F2> :<C-U>Vimrc<CR>
 
