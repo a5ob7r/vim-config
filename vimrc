@@ -605,6 +605,8 @@ let g:loaded_getscriptPlugin = 1
 let g:loaded_vimballPlugin = 1
 
 " The enhanced "%", to find many extra matchings and jump the cursor to them.
+"
+" NOTE: "matchit" isn't a standard plugin, but it's bundled in Vim by default.
 if has('patch-7.4.1486')
   packadd! matchit
 else
