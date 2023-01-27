@@ -685,7 +685,7 @@ function! s:neodark.post() abort
   " Prefer a near black background color.
   let g:neodark#background = '#202020'
 
-  function! s:apply_neodark(bang)
+  function! s:apply_neodark(bang) abort
     " Neodark requires 256 colors at least. For example Linux console supports
     " only 8 colors.
     if empty(a:bang) && &t_Co < 256
