@@ -100,9 +100,6 @@ if has('patch-8.2.4463')
   set wildoptions+=fuzzy
 endif
 
-set nojoinspaces
-set nowrapscan
-
 " "smartindent" isn't a super option for "autoindent", and the two of options
 " work in a complement way for each other. So these options should be on at
 " the same time. This is recommended in the help too.
@@ -190,6 +187,12 @@ if has('gui_running')
   " ":filetype on" to avoid sourcing the "menu.vim".
   set guioptions=M
 endif
+
+" Prefer single space rather than double them for text joining.
+set nojoinspaces
+
+" Stop at a TOP or BOTTOM match even if hitting "n" or "N" repeatedly.
+set nowrapscan
 " }}}
 
 " Key mappings {{{
