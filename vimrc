@@ -188,6 +188,9 @@ if has('gui_running')
   set guioptions=M
 endif
 
+" Keep other window sizes when opening/closing new windows.
+set noequalalways
+
 " Prefer single space rather than double them for text joining.
 set nojoinspaces
 
