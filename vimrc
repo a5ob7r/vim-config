@@ -130,6 +130,12 @@ set ignorecase smartcase
 
 set pastetoggle=<F12>
 
+set completeopt=menuone,longest
+
+if has('patch-8.1.1880')
+  set completeopt+=popup
+endif
+
 " Xterm and st (simple terminal) also support true (or direct) colors.
 if exists('+termguicolors') && ($COLORTERM ==# 'truecolor' || index(['xterm', 'st-256color'], $TERM) > -1)
   set termguicolors
