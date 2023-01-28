@@ -128,6 +128,8 @@ endif
 " "smartcase" works only if "ignorecase" is on.
 set ignorecase smartcase
 
+set pastetoggle=<F12>
+
 " Xterm and st (simple terminal) also support true (or direct) colors.
 if exists('+termguicolors') && ($COLORTERM ==# 'truecolor' || index(['xterm', 'st-256color'], $TERM) > -1)
   set termguicolors
