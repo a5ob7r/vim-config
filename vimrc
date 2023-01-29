@@ -780,38 +780,55 @@ function! s:lightline.pre() abort
     \ }
     \ }
 
-  function! s:change_lightline_colorscheme() abort
-    if ! exists('g:loaded_lightline')
-      return
-    endif
-
-    if !get(g:, 'lightline_colorscheme_change_on_the_fly', 1)
-      return
-    endif
-
-    let l:colorscheme = g:colors_name
-
-    if empty(globpath(&runtimepath, printf('autoload/lightline/colorscheme/%s.vim', l:colorscheme), 1))
-      return
-    endif
-
+  function! s:set_lightline_colorscheme(colorscheme) abort
     let g:lightline = get(g:, 'lightline', {})
-    let g:lightline['colorscheme'] = l:colorscheme
+    let g:lightline['colorscheme'] = a:colorscheme
+  endfunction
+
+  function! s:has_lightline_colorscheme(colorscheme) abort
+    return !empty(globpath(&runtimepath, printf('autoload/lightline/colorscheme/%s.vim', a:colorscheme), 1))
   endfunction
 
   function! s:update_lightline() abort
-    if ! exists('g:loaded_lightline')
-      return
-    endif
-
     call lightline#init()
     call lightline#colorscheme()
     call lightline#update()
   endfunction
 
+  function! s:change_lightline_colorscheme() abort
+    if !get(g:, 'lightline_colorscheme_change_on_the_fly', 1)
+      return
+    endif
+
+    let l:colorscheme =
+      \ !exists('g:lightline_colorscheme_mapping') ? g:colors_name
+      \ : type(g:lightline_colorscheme_mapping) == type('') ? call(g:lightline_colorscheme_mapping, [g:colors_name])
+      \ : type(g:lightline_colorscheme_mapping) == type(function('tr')) ? g:lightline_colorscheme_mapping(g:colors_name)
+      \ : type(g:lightline_colorscheme_mapping) == type({}) ? get(g:lightline_colorscheme_mapping, g:colors_name, g:colors_name)
+      \ : g:colors_name
+
+    if s:has_lightline_colorscheme(l:colorscheme)
+      call s:set_lightline_colorscheme(l:colorscheme)
+    endif
+  endfunction
+
+  function! s:lightline_colorschemes(...) abort
+    return join(map(globpath(&runtimepath, 'autoload/lightline/colorscheme/*.vim', 1, 1), "fnamemodify(v:val, ':t:r')"), "\n")
+  endfunction
+
+  " The original version is from the help file of "lightline".
+  command! -bar -nargs=1 -complete=custom,s:lightline_colorschemes LightlineColorscheme
+    \   if exists('g:loaded_lightline')
+    \ |   call s:set_lightline_colorscheme(<q-args>)
+    \ |   call s:update_lightline()
+    \ | endif
+
   " Synchronous lightline's colorscheme with Vim's one on the fly.
-  Autocmd ColorScheme * call s:change_lightline_colorscheme()
-  Autocmd ColorScheme * call s:update_lightline()
+  Autocmd ColorScheme *
+    \   if exists('g:loaded_lightline')
+    \ |   call s:change_lightline_colorscheme()
+    \ |   call s:update_lightline()
+    \ | endif
 
   OnRefresh call lightline#update()
 endfunction
