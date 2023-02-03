@@ -129,8 +129,14 @@ if [[ -f $CONFIG_CACHE && $force -ge 1 ]]; then
 fi
 
 if (( latest )); then
-  git fetch -v
-  git switch -d origin/master
+  # Prefer to upstream if it exists.
+  if git remote get-url upstream &>/dev/null; then
+    git fetch -v upstream
+    git switch -d upstream/master
+  else
+    git fetch -v origin
+    git switch -d origin/master
+  fi
 fi
 
 declare -a opts=(
