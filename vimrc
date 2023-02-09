@@ -454,6 +454,15 @@ endif
 nnoremap <silent> <Leader>y :YankComments<CR>
 vnoremap <silent> <Leader>y :YankComments<CR>
 
+if has('terminal')
+  " Delete finished terminal buffers by "<CR>", this behavior is similar to
+  " Neovim's builtin terminal.
+  tnoremap <silent><expr> <CR>
+    \ job_status(term_getjob(bufnr())) ==# 'dead'
+    \ ? "<C-W>:bdelete<CR>"
+    \ : "<CR>"
+endif
+
 nmap <silent> <CR> <Plug>(newline)
 
 imap <silent> <C-L> <Plug>(linefeed)
