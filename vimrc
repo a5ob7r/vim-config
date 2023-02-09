@@ -463,7 +463,11 @@ if has('terminal')
     \ : "<CR>"
 endif
 
-nmap <silent> <CR> <Plug>(newline)
+" This is required for "term_start()" without "{ 'term_finish': 'close' }".
+nmap <silent><expr> <CR>
+  \ &buftype ==# 'terminal' && job_status(term_getjob(bufnr())) ==# 'dead'
+  \ ? ":<C-U>bdelete<CR>"
+  \ : "<Plug>(newline)"
 
 imap <silent> <C-L> <Plug>(linefeed)
 
