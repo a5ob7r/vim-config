@@ -63,7 +63,7 @@ function! s:man_complete(arg_lead, cmd_line, cursor_pos) abort
   return l:candidates
 endfunction
 
-function! s:man(mods, count, ...)
+function! s:man(bang, mods, count, ...)
   let l:section = a:count
   let l:name = ''
 
@@ -74,6 +74,11 @@ function! s:man(mods, count, ...)
     let l:name = a:2
   endif
 
+  if !empty(a:bang)
+    enew
+    setlocal filetype=man
+  endif
+
   if empty(l:section)
     execute a:mods 'Man' l:name
   else
@@ -82,8 +87,10 @@ function! s:man(mods, count, ...)
 endfunction
 
 " Define completion enhanced :Man.
-command! -nargs=+ -complete=customlist,s:man_complete M
-  \ call s:man(<q-mods>, '', <f-args>)
+"
+" Open the manual page at the current window when with a bang.
+command! -bang -nargs=+ -complete=customlist,s:man_complete M
+  \ call s:man(<q-bang>, <q-mods>, '', <f-args>)
 
 if has('patch-7.4.1833')
   set keywordprg=:Man
