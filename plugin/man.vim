@@ -76,6 +76,9 @@ function! s:man(bang, mods, count, ...)
 
   if !empty(a:bang)
     enew
+
+    " ":Man" (and "dist#man#PreGetPage()") uses the current window if the
+    " current "filetype" is "man".
     setlocal filetype=man
   endif
 
