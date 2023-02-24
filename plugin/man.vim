@@ -89,7 +89,7 @@ endfunction
 " Define completion enhanced :Man.
 "
 " Open the manual page at the current window when with a bang.
-command! -bang -nargs=+ -complete=customlist,s:man_complete M
+command! -bar -bang -nargs=+ -complete=customlist,s:man_complete M
   \ call s:man(<q-bang>, <q-mods>, '', <f-args>)
 
 if has('patch-7.4.1833')
