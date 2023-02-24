@@ -90,7 +90,7 @@ endfunction
 "
 " Open the manual page at the current window when with a bang.
 command! -bar -bang -nargs=+ -complete=customlist,s:man_complete M
-  \ call s:man(<q-bang>, <q-mods>, '', <f-args>)
+  \ call s:man(<q-bang>, <q-mods>, <count>, <f-args>)
 
 if has('patch-7.4.1833')
   set keywordprg=:Man
