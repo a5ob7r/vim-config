@@ -1,3 +1,5 @@
+scriptencoding utf-8
+
 " Substitute all of full-width Japanese punctuation('。' and '、') in every
 " string in a range with each appropriate full-width English punctuation('．'
 " and '，'). If run this with a bang('!'), substitute them in the opposite
