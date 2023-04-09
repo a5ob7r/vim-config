@@ -1375,6 +1375,7 @@ call maxpac#load('machakann/vim-textobj-delimited')
 
 " Misc.
 call maxpac#add('LumaKernel/coqpit.vim')
+call maxpac#add('a5ob7r/chmod.vim')
 call maxpac#add('a5ob7r/tig.vim')
 call maxpac#add('aliou/bats.vim')
 call maxpac#add('andymass/vim-matchup')
