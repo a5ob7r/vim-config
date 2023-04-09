@@ -17,10 +17,13 @@ if [[ -z ${VIM-=:} ]]; then
   exec vim
 fi
 
-declare -a args=()
+# On an old bash, for example 3.2.57(1)-release on macOS Ventura 13.3.1, the
+# variable expansion with an empty array throws "unbound variable" error if
+# "-u" option is on. So we have to put one element into the array at least.
+declare -a words=(vim)
 
 if command vim --version | grep -q +clientserver; then
-  args+=(--servername VIM)
+  words+=(--servername VIM)
 fi
 
 if has dtach; then
@@ -28,11 +31,11 @@ if has dtach; then
     tput smcup
   fi
 
-  dtach -A ~/.vim/.dtach.sock -r winch vim "${args[@]}"
+  dtach -A ~/.vim/.dtach.sock -r winch "${words[@]}"
 
   if has tput; then
     tput rmcup
   fi
 else
-  exec vim "${args[@]}"
+  exec "${words[@]}"
 fi
