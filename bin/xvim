@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+#
+# An extended vim command as a wrapper, not a X11 Vim.
+#
+
+set -euo pipefail
+
+has () {
+  type "$1" &>/dev/null
+}
+
+if (( $# )); then
+  exec vim "$@"
+fi
+
+if [[ -z ${VIM-=:} ]]; then
+  exec vim
+fi
+
+declare -a args=()
+
+if command vim --version | grep -q +clientserver; then
+  args+=(--servername VIM)
+fi
+
+if has dtach; then
+  if has tput; then
+    tput smcup
+  fi
+
+  dtach -A ~/.vim/.dtach.sock -r winch vim "${args[@]}"
+
+  if has tput; then
+    tput rmcup
+  fi
+else
+  exec vim "${args[@]}"
+fi
