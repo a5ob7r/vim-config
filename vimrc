@@ -1173,20 +1173,6 @@ endfunction
 call maxpac#add(s:markdown)
 " }}}
 
-" tyru/eskk.vim {{{
-let s:eskk = maxpac#plugconf('tyru/eskk.vim')
-
-function! s:eskk.pre() abort
-  let g:eskk#large_dictionary = {
-    \ 'path': '/usr/share/skk/SKK-JISYO.L',
-    \ 'sorted': 1,
-    \ 'encoding': 'euc-jp',
-    \ }
-endfunction
-
-call maxpac#add(s:eskk)
-" }}}
-
 " tyru/open-browser.vim {{{
 let s:open_browser = maxpac#plugconf('tyru/open-browser.vim')
 
@@ -1396,6 +1382,7 @@ call maxpac#add('thinca/vim-prettyprint')
 call maxpac#add('thinca/vim-themis')
 call maxpac#add('tpope/vim-commentary')
 call maxpac#add('tpope/vim-endwise')
+call maxpac#add('tyru/eskk.vim')
 call maxpac#add('vim-jp/vital.vim')
 call maxpac#add('yasuhiroki/github-actions-yaml.vim')
 
