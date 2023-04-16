@@ -28,13 +28,13 @@ fi
 
 if has dtach; then
   if has tput; then
-    tput smcup
+    tput smcup || true
   fi
 
   dtach -A ~/.vim/.dtach.sock -r winch "${words[@]}"
 
   if has tput; then
-    tput rmcup
+    tput rmcup || true
   fi
 else
   exec "${words[@]}"
