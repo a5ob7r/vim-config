@@ -444,11 +444,11 @@ if has('terminal')
   nnoremap <silent> <Leader>5 :<C-U>call <SID>terminal('', 'vertical')<CR>
   nnoremap <silent> <Leader>c :<C-U>Terminal<CR>
 
-  tnoremap <silent> <C-W>" <C-W>:terminal<CR>
-  tnoremap <silent> <C-W>' <C-W>:call <SID>terminal()<CR>
-  tnoremap <silent> <C-W>% <C-W>:vertical terminal<CR>
-  tnoremap <silent> <C-W>5 <C-W>:call <SID>terminal('', 'vertical')<CR>
-  tnoremap <silent> <C-W>c <C-W>:Terminal<CR>
+  tnoremap <silent> <C-W><Leader>" <C-W>:terminal<CR>
+  tnoremap <silent> <C-W><Leader>' <C-W>:call <SID>terminal()<CR>
+  tnoremap <silent> <C-W><Leader>% <C-W>:vertical terminal<CR>
+  tnoremap <silent> <C-W><Leader>5 <C-W>:call <SID>terminal('', 'vertical')<CR>
+  tnoremap <silent> <C-W><Leader>c <C-W>:Terminal<CR>
 endif
 
 nnoremap <silent> <Leader>y :YankComments<CR>
