@@ -39,14 +39,6 @@ is_macos () {
   [[ $OSTYPE =~ ^darwin ]]
 }
 
-sudo::proxy () {
-  if is_macos; then
-    "$@"
-  else
-    sudo "$@"
-  fi
-}
-
 nproc::proxy () {
   if is_macos; then
     sysctl -n hw.ncpu
@@ -121,7 +113,7 @@ readonly CONFIG_CACHE=src/auto/config.cache
 cd "$VIM_REPO_PATH"
 
 if [[ -f $CONFIG_CACHE ]]; then
-  sudo::proxy make --quiet uninstall
+  sudo make --quiet uninstall
 fi
 
 if [[ -f $CONFIG_CACHE && $force -ge 1 ]]; then
@@ -190,7 +182,7 @@ export CFLAGS=${CFLAGS:--O2 -march=native}
 
 njob=$(nproc::proxy)
 make --quiet --jobs="$njob"
-sudo::proxy make --quiet install
+sudo make --quiet install
 
 echo
 vim --version | head -n 2
