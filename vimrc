@@ -611,14 +611,6 @@ augroup END
 OnRefresh redraw
 " }}}
 
-" Filetypes {{{
-filetype plugin indent on
-" }}}
-
-" Syntax {{{
-syntax enable
-" }}}
-
 " Standard plugins {{{
 " newrw {{{
 " WIP: Must match to line not but filename when `g:netrw_liststyle = 1`, on
@@ -1385,6 +1377,17 @@ call maxpac#add('yasuhiroki/github-actions-yaml.vim')
 " =============================================================================
 
 call maxpac#end()
+" }}}
+
+" Filetypes {{{
+filetype off
+filetype plugin indent off
+filetype plugin indent on
+" }}}
+
+" Syntax {{{
+syntax off
+syntax enable
 " }}}
 
 endif
