@@ -643,11 +643,6 @@ endif
 
 " =============================================================================
 
-" At least "maxpac" (and "minpac") requires Vim 8.0.0050+.
-if !has('patch-8.0.0050')
-  finish
-endif
-
 " Plugins {{{
 call maxpac#begin()
 
