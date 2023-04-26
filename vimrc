@@ -1111,7 +1111,12 @@ function! s:vsnip.pre() abort
 endfunction
 
 function! s:vsnip.post() abort
-  imap <expr> <Tab> vsnip#expandable() ? '<Plug>(vsnip-expand)' : '<Tab>'
+  imap <expr> <Tab>
+    \ vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' :
+    \ vsnip#expandable() ? '<Plug>(vsnip-expand)' : '<Tab>'
+  smap <expr> <Tab> vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' : '<Tab>'
+  imap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : '<S-Tab>'
+  smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : '<S-Tab>'
 endfunction
 
 call maxpac#add(s:vsnip)
