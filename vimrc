@@ -622,15 +622,6 @@ let g:netrw_sizestyle = 'H'
 " These two plugins provide plugin management, but they are already obsolete.
 let g:loaded_getscriptPlugin = 1
 let g:loaded_vimballPlugin = 1
-
-" The enhanced "%", to find many extra matchings and jump the cursor to them.
-"
-" NOTE: "matchit" isn't a standard plugin, but it's bundled in Vim by default.
-if has('patch-7.4.1486')
-  packadd! matchit
-else
-  source $VIMRUNTIME/macros/matchit.vim
-endif
 " }}}
 
 " =============================================================================
@@ -1275,6 +1266,23 @@ endfunction
 call maxpac#add(s:localrc)
 " }}}
 
+" andymass/vim-matchup {{{
+let s:matchup = maxpac#plugconf('andymass/vim-matchup')
+
+function! s:matchup.fallback() abort
+  " The enhanced "%", to find many extra matchings and jump the cursor to them.
+  "
+  " NOTE: "matchit" isn't a standard plugin, but it's bundled in Vim by default.
+  if has('patch-7.4.1486')
+    packadd! matchit
+  else
+    source $VIMRUNTIME/macros/matchit.vim
+  endif
+endfunction
+
+call maxpac#add(s:matchup)
+" }}}
+
 " =============================================================================
 
 " lambdalisue/fern.vim {{{
@@ -1356,7 +1364,6 @@ call maxpac#add('LumaKernel/coqpit.vim')
 call maxpac#add('a5ob7r/chmod.vim')
 call maxpac#add('a5ob7r/tig.vim')
 call maxpac#add('aliou/bats.vim')
-call maxpac#add('andymass/vim-matchup')
 call maxpac#add('bronson/vim-trailing-whitespace')
 call maxpac#add('editorconfig/editorconfig-vim')
 call maxpac#add('fladson/vim-kitty')
