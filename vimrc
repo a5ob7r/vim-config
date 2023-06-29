@@ -1283,6 +1283,18 @@ endfunction
 call maxpac#add(s:matchup)
 " }}}
 
+" Eliot00/git-lens.vim {{{
+if has('vim9script')
+  let s:gitlens = maxpac#plugconf('Eliot00/git-lens.vim')
+
+  function! s:gitlens.post() abort
+    command! -bar ToggleGitLens call ToggleGitLens()
+  endfunction
+
+  call maxpac#add(s:gitlens)
+endif
+" }}}
+
 " =============================================================================
 
 " lambdalisue/fern.vim {{{
