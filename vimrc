@@ -1360,6 +1360,7 @@ call maxpac#add(s:lsflavor)
 " Text object.
 call maxpac#add('kana/vim-textobj-user')
 
+call maxpac#add('Julian/vim-textobj-variable-segment')
 call maxpac#add('kana/vim-textobj-datetime')
 call maxpac#add('kana/vim-textobj-entire')
 call maxpac#add('kana/vim-textobj-function')
