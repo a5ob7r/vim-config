@@ -1355,6 +1355,47 @@ endfunction
 call maxpac#add(s:lsflavor)
 " }}}
 
+"==============================================================================
+
+" prabirshrestha/asyncomplete.vim {{{
+let s:asyncomplete = maxpac#plugconf('prabirshrestha/asyncomplete.vim')
+
+function! s:asyncomplete.pre() abort
+  let g:asyncomplete_enable_for_all = 0
+
+  function! s:toggle_asyncomplete(...) abort
+    let l:asyncomplete_enable = get(a:000, 0, get(b:, 'asyncomplete_enable', 0))
+
+    if l:asyncomplete_enable
+      call asyncomplete#disable_for_buffer()
+
+      execute printf('augroup toggle_asyncomplete_%s', bufnr('%'))
+        autocmd!
+      augroup END
+    else
+      let l:bufname = fnameescape(bufname('%'))
+
+      execute printf('augroup toggle_asyncomplete_%s', bufnr('%'))
+        autocmd!
+        execute printf('autocmd BufEnter %s set completeopt=menuone,noinsert,noselect', l:bufname)
+        execute printf('autocmd BufLeave %s set completeopt=%s', l:bufname, &completeopt)
+        execute printf('autocmd BufWipeout %s set completeopt=%s', l:bufname, &completeopt)
+      augroup END
+
+      call asyncomplete#enable_for_buffer()
+    endif
+  endfunction
+
+  command! ToggleAsyncomplete call s:toggle_asyncomplete()
+  command! EnableAsyncomplete call s:toggle_asyncomplete(0)
+  command! DisableAsyncomplete call s:toggle_asyncomplete(1)
+endfunction
+
+call maxpac#add(s:asyncomplete)
+" }}}
+
+call maxpac#add('prabirshrestha/asyncomplete-lsp.vim')
+
 " =============================================================================
 
 " Text object.
