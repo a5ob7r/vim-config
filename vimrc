@@ -1031,7 +1031,7 @@ function! s:vim_lsp.pre() abort
 
   command! CurrentLspLogging echo s:lsp_log_file()
   command! -nargs=* -complete=file EnableLspLogging
-    \ let g:lsp_log_file = empty(<q-args>) ? expand('~/vim-lsp.log') : <q-args>
+    \ let g:lsp_log_file = empty(<q-args>) ? expand('$VIMHOME/tmp/vim-lsp.log') : <q-args>
   command! DisableLspLogging let g:lsp_log_file = ''
 
   function! s:view_lsp_log() abort
@@ -1336,7 +1336,7 @@ function! s:fern.pre() abort
 
   command! CurrentFernLogging echo get(g:, 'fern#logfile', v:null)
   command! -nargs=* -complete=file EnableFernLogging
-    \ let g:fern#logfile = empty(<q-args>) ? '~/fern.tsv' : <q-args>
+    \ let g:fern#logfile = empty(<q-args>) ? '$VIMHOME/tmp/fern.tsv' : <q-args>
   command! DisableFernLogging let g:fern#logfile = v:null
   command! FernLogDebug let g:fern#loglevel = g:fern#DEBUG
   command! FernLogInfo let g:fern#loglevel = g:fern#INFO
