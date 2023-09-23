@@ -1049,6 +1049,16 @@ function! s:vim_lsp.pre() abort
 
   command! ViewLspLog call s:view_lsp_log()
 
+  function! s:run_with_lsp_log(template) abort
+    let l:log = s:lsp_log_file()
+
+    if filereadable(l:log)
+      call term_start([&shell, &shellcmdflag, printf(a:template, l:log)], { 'term_finish': 'close' })
+    endif
+  endfunction
+
+  command! -nargs=+ -complete=shellcmd RunWithLspLog call s:run_with_lsp_log(<q-args>)
+
   function! s:clear_lsp_log() abort
     let l:log = s:lsp_log_file()
 
@@ -1334,7 +1344,11 @@ function! s:fern.pre() abort
   Autocmd BufLeave * if &ft !=# 'fern' | let t:non_fern_buffer_id = bufnr() | endif
   Autocmd DirChanged * unlet! t:fern_buffer_id
 
-  command! CurrentFernLogging echo get(g:, 'fern#logfile', v:null)
+  function! s:fern_log_file() abort
+    return get(g:, 'fern#logfile', v:null)
+  endfunction
+
+  command! CurrentFernLogging echo s:fern_log_file()
   command! -nargs=* -complete=file EnableFernLogging
     \ let g:fern#logfile = empty(<q-args>) ? '$VIMHOME/tmp/fern.tsv' : <q-args>
   command! DisableFernLogging let g:fern#logfile = v:null
@@ -1342,6 +1356,16 @@ function! s:fern.pre() abort
   command! FernLogInfo let g:fern#loglevel = g:fern#INFO
   command! FernLogWARN let g:fern#loglevel = g:fern#WARN
   command! FernLogError let g:fern#loglevel = g:fern#Error
+
+  function! s:run_with_fern_log(template) abort
+    let l:log = s:fern_log_file()
+
+    if filereadable(l:log)
+      call term_start([&shell, &shellcmdflag, printf(a:template, l:log)], { 'term_finish': 'close' })
+    endif
+  endfunction
+
+  command! -nargs=+ -complete=shellcmd RunWithFernLog call s:run_with_fern_log(<q-args>)
 endfunction
 
 call maxpac#add(s:fern)
