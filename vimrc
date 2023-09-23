@@ -371,6 +371,10 @@ function! s:terminal(...) abort
 endfunction
 " }}}
 
+" Variables {{{
+let $VIMHOME = expand('<sfile>:p:h')
+" }}}
+
 " Options {{{
 " Create temporary files(backup, swap, undo) under secure locations to avoid
 " CVE-2017-1000382.
