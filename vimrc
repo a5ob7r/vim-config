@@ -1102,7 +1102,7 @@ call maxpac#add('micchy326/lightline-lsp-progress')
 let s:vsnip = maxpac#plugconf('hrsh7th/vim-vsnip')
 
 function! s:vsnip.pre() abort
-  let g:vsnip_snippet_dir = expand('~/.vim/vsnip')
+  let g:vsnip_snippet_dir = expand('$VIMHOME/vsnip')
 endfunction
 
 function! s:vsnip.post() abort
