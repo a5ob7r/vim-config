@@ -235,6 +235,9 @@ inoremap <C-F> <C-X><C-F>
 
 " Quit Visual mode.
 vnoremap <C-L> <Esc>
+
+" A newline version of "i_CTRL-G_k" and "i_CTRL-G_j".
+inoremap <C-G><CR> <End><CR>
 " }}}
 
 " =============================================================================
