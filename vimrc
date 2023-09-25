@@ -476,8 +476,6 @@ nmap <silent><expr> <CR>
   \ ? ":<C-U>bdelete<CR>"
   \ : "<Plug>(newline)"
 
-imap <silent> <C-L> <Plug>(linefeed)
-
 " Maximize or minimize the current window.
 nnoremap <silent> <C-W>m :<C-U>resize 0<CR>
 nnoremap <silent> <C-W>Vm :<C-U>vertical resize 0<CR>
@@ -1310,6 +1308,24 @@ if has('vim9script')
 
   call maxpac#add(s:gitlens)
 endif
+" }}}
+
+" a5ob7r/linefeed.vim {{{
+let s:linefeed = maxpac#plugconf('a5ob7r/linefeed.vim')
+
+function! s:linefeed.post() abort
+  " TODO: These keymappings override some default them and conflict with other
+  " plugin's default one.
+  " imap <silent> <C-K> <Plug>(linefeed-goup)
+  " imap <silent> <C-G>k <Plug>(linefeed-up)
+  " imap <silent> <C-G><C-K> <Plug>(linefeed-up)
+  " imap <silent> <C-G><C-K> <Plug>(linefeed-up)
+  " imap <silent> <C-J> <Plug>(linefeed-godown)
+  " imap <silent> <C-G>j <Plug>(linefeed-down)
+  " imap <silent> <C-G><C-J> <Plug>(linefeed-down)
+endfunction
+
+call maxpac#add(s:linefeed)
 " }}}
 
 " =============================================================================
