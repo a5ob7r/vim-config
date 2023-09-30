@@ -17,16 +17,13 @@ scriptencoding utf-8
 " the range as a function argument instead of a function call with the range.
 " This is a little bit tedious and a very simple solution.
 function! s:substitute_japanese_punctuations(bang, line1, line2) abort
-  let l:ku_ptn = empty(a:bang) ? '。' : '．'
-  let l:ku_str = !empty(a:bang) ? '。' : '．'
-  let l:doku_ptn = empty(a:bang) ? '、' : '，'
-  let l:doku_str = !empty(a:bang) ? '、' : '，'
-
+  let [l:period_fw_jp, l:period_fw_en, l:comma_fw_jp, l:comma_fw_en] = ['。', '．', '、',  '，']
+  let [l:period_from, l:period_to, l:comma_from, l:comma_to] = empty(a:bang) ? [l:period_fw_jp, l:period_fw_en, l:comma_fw_jp, l:comma_fw_en] : [l:period_fw_en, l:period_fw_jp, l:comma_fw_en, l:comma_fw_jp]
   let l:view = winsaveview()
 
   try
-    execute printf('silent keepjumps keeppatterns %d,%dsubstitute/%s/%s/eg', a:line1, a:line2, l:ku_ptn, l:ku_str)
-    execute printf('silent keepjumps keeppatterns %d,%dsubstitute/%s/%s/eg', a:line1, a:line2, l:doku_ptn, l:doku_str)
+    execute printf('silent keepjumps keeppatterns %d,%dsubstitute/%s/%s/eg', a:line1, a:line2, l:period_from, l:period_to)
+    execute printf('silent keepjumps keeppatterns %d,%dsubstitute/%s/%s/eg', a:line1, a:line2, l:comma_from, l:comma_to)
   finally
     call winrestview(l:view)
   endtry
