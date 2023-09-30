@@ -34,13 +34,7 @@ endfunction
 
 " Break sentences followed by "。" or "．" into newline-separated them.
 function! s:break_japanese_sentences() range abort
-  let l:newline =
-    \ &fileformat ==# 'dos' ? '\n\r' :
-    \ &fileformat ==# 'unix' ? '\r' :
-    \ &fileformat ==# 'mac' ? '\n' :
-    \ '\r'
-
-  execute printf('%d,%dsubstitute/\([。/．]\)/\1%s/eg', a:firstline, a:lastline, l:newline)
+  execute printf('%d,%dsubstitute/\([。/．]\)/\1\r/eg', a:firstline, a:lastline)
 endfunction
 
 command! -bang -range SubstituteJapanesePunctuations call s:substitute_japanese_punctuations(<q-bang>, <line1>, <line2>)
