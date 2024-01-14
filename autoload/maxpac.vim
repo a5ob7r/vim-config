@@ -111,6 +111,8 @@ function! maxpac#add(conf) abort
 
   call add(s:maxpac.names, l:conf.name)
   let s:maxpac.confs[l:conf.name] = l:conf
+
+  return l:conf
 endfunction
 
 " Load a standalone plugin. The plugin is only managed by minpac, but maxpac.

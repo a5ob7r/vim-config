@@ -652,7 +652,7 @@ endif
 " }}}
 
 " k-takata/minpac {{{
-let s:minpac = maxpac#plugconf('k-takata/minpac')
+let s:minpac = maxpac#add('k-takata/minpac')
 
 function! s:minpac.post() abort
   function! s:pack_complete(...) abort
@@ -688,14 +688,12 @@ function! s:minpac.post() abort
     \   'term_finish': 'close',
     \ })
 endfunction
-
-call maxpac#add(s:minpac)
 " }}}
 
 " =============================================================================
 
 " KeitaNakamura/neodark.vim {{{
-let s:neodark = maxpac#plugconf('KeitaNakamura/neodark.vim')
+let s:neodark = maxpac#add('KeitaNakamura/neodark.vim')
 
 function! s:neodark.post() abort
   " Prefer a near black background color.
@@ -723,12 +721,10 @@ function! s:neodark.post() abort
 
   Autocmd VimEnter * ++nested Neodark
 endfunction
-
-call maxpac#add(s:neodark)
 " }}}
 
 " itchyny/lightline.vim {{{
-let s:lightline = maxpac#plugconf('itchyny/lightline.vim')
+let s:lightline = maxpac#add('itchyny/lightline.vim')
 
 function! s:lightline.pre() abort
   let g:lightline = {
@@ -828,14 +824,12 @@ function! s:lightline.pre() abort
 
   OnRefresh call lightline#update()
 endfunction
-
-call maxpac#add(s:lightline)
 " }}}
 
 " =============================================================================
 
 " airblade/vim-gitgutter {{{
-let s:gitgutter = maxpac#plugconf('airblade/vim-gitgutter')
+let s:gitgutter = maxpac#add('airblade/vim-gitgutter')
 
 function! s:gitgutter.pre() abort
   let g:gitgutter_sign_added = 'A'
@@ -844,12 +838,10 @@ function! s:gitgutter.pre() abort
   let g:gitgutter_sign_removed_first_line = 'd'
   let g:gitgutter_sign_modified_removed = 'm'
 endfunction
-
-call maxpac#add(s:gitgutter)
 " }}}
 
 " lambdalisue/gina.vim {{{
-let s:gina = maxpac#plugconf('lambdalisue/gina.vim')
+let s:gina = maxpac#add('lambdalisue/gina.vim')
 
 function! s:gina.post() abort
   nmap <silent> <Leader>gl :<C-U>Gina log --graph --all<CR>
@@ -861,26 +853,22 @@ function! s:gina.post() abort
   call gina#custom#mapping#nmap('status', 'q', '<C-W>c', { 'noremap': 1, 'silent': 1 })
   call gina#custom#mapping#nmap('status', 'yy', '<Plug>(gina-yank-path)', { 'silent': 1 })
 endfunction
-
-call maxpac#add(s:gina)
 " }}}
 
 " rhysd/git-messenger.vim {{{
-let s:git_messenger = maxpac#plugconf('rhysd/git-messenger.vim')
+let s:git_messenger = maxpac#add('rhysd/git-messenger.vim')
 
 function! s:git_messenger.post() abort
   let g:git_messenger_include_diff = 'all'
   let g:git_messenger_always_into_popup = v:true
   let g:git_messenger_max_popup_height = 15
 endfunction
-
-call maxpac#add(s:git_messenger)
 " }}}
 
 " =============================================================================
 
 " ctrlpvim/ctrlp.vim {{{
-let s:ctrlp = maxpac#plugconf('ctrlpvim/ctrlp.vim')
+let s:ctrlp = maxpac#add('ctrlpvim/ctrlp.vim')
 
 function! s:ctrlp.pre() abort
   " "<Nul>" is sent instead of "<C-Space>" when type the "CTRL" key and the
@@ -929,22 +917,18 @@ function! s:ctrlp.pre() abort
 
   nnoremap <silent> <Leader>b :<C-U>CtrlPBuffer<CR>
 endfunction
-
-call maxpac#add(s:ctrlp)
 " }}}
 
 " mattn/ctrlp-matchfuzzy {{{
-let s:ctrlp_matchfuzzy = maxpac#plugconf('mattn/ctrlp-matchfuzzy')
+let s:ctrlp_matchfuzzy = maxpac#add('mattn/ctrlp-matchfuzzy')
 
 function! s:ctrlp_matchfuzzy.post() abort
   let g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
 endfunction
-
-call maxpac#add(s:ctrlp_matchfuzzy)
 " }}}
 
 " mattn/ctrlp-ghq {{{
-let s:ctrlp_ghq = maxpac#plugconf('mattn/ctrlp-ghq')
+let s:ctrlp_ghq = maxpac#add('mattn/ctrlp-ghq')
 
 function! s:ctrlp_ghq.post() abort
   let g:ctrlp_ghq_actions = [
@@ -954,12 +938,10 @@ function! s:ctrlp_ghq.post() abort
 
   nnoremap <silent> <Leader>gq :<C-U>CtrlPGhq<CR>
 endfunction
-
-call maxpac#add(s:ctrlp_ghq)
 " }}}
 
 " a5ob7r/ctrlp-man {{{
-let s:ctrlp_man = maxpac#plugconf('a5ob7r/ctrlp-man')
+let s:ctrlp_man = maxpac#add('a5ob7r/ctrlp-man')
 
 function! s:ctrlp_man.post() abort
   function! s:lookup_manual() abort
@@ -976,14 +958,12 @@ function! s:ctrlp_man.post() abort
 
   nnoremap <silent> <Leader>m :LookupManual<CR>
 endfunction
-
-call maxpac#add(s:ctrlp_man)
 " }}}
 
 " =============================================================================
 
 " prabirshrestha/vim-lsp {{{
-let s:vim_lsp = maxpac#plugconf('prabirshrestha/vim-lsp')
+let s:vim_lsp = maxpac#add('prabirshrestha/vim-lsp')
 
 function! s:vim_lsp.pre() abort
   let g:lsp_diagnostics_float_cursor = 1
@@ -1070,12 +1050,10 @@ function! s:vim_lsp.pre() abort
 
   command! ClearLspLog call s:clear_lsp_log()
 endfunction
-
-call maxpac#add(s:vim_lsp)
 " }}}
 
 " mattn/vim-lsp-settings {{{
-let s:vim_lsp_settings = maxpac#plugconf('mattn/vim-lsp-settings')
+let s:vim_lsp_settings = maxpac#add('mattn/vim-lsp-settings')
 
 function! s:vim_lsp_settings.pre() abort
   " Use this only as a preset configuration for LSP, not a installer.
@@ -1100,8 +1078,6 @@ function! s:vim_lsp_settings.pre() abort
     \   }
     \ }
 endfunction
-
-call maxpac#add(s:vim_lsp_settings)
 " }}}
 
 call maxpac#add('tsuyoshicho/lightline-lsp')
@@ -1110,7 +1086,7 @@ call maxpac#add('micchy326/lightline-lsp-progress')
 " =============================================================================
 
 " hrsh7th/vim-vsnip {{{
-let s:vsnip = maxpac#plugconf('hrsh7th/vim-vsnip')
+let s:vsnip = maxpac#add('hrsh7th/vim-vsnip')
 
 function! s:vsnip.pre() abort
   let g:vsnip_snippet_dir = expand('$VIMHOME/vsnip')
@@ -1124,8 +1100,6 @@ function! s:vsnip.post() abort
   imap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : '<S-Tab>'
   smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : '<S-Tab>'
 endfunction
-
-call maxpac#add(s:vsnip)
 " }}}
 
 call maxpac#add('hrsh7th/vim-vsnip-integ')
@@ -1136,29 +1110,25 @@ call maxpac#add('rafamadriz/friendly-snippets')
 call maxpac#add('kana/vim-operator-user')
 
 " kana/vim-operator-replace {{{
-let s:replace = maxpac#plugconf('kana/vim-operator-replace')
+let s:replace = maxpac#add('kana/vim-operator-replace')
 
 function! s:replace.post() abort
   map _ <Plug>(operator-replace)
 endfunction
-
-call maxpac#add(s:replace)
 " }}}
 
 " =============================================================================
 
 " a5ob7r/shellcheckrc.vim {{{
-let s:shellcheckrc = maxpac#plugconf('a5ob7r/shellcheckrc.vim')
+let s:shellcheckrc = maxpac#add('a5ob7r/shellcheckrc.vim')
 
 function! s:shellcheckrc.pre() abort
   let g:shellcheck_directive_highlight = 1
 endfunction
-
-call maxpac#add(s:shellcheckrc)
 " }}}
 
 " preservim/vim-markdown {{{
-let s:markdown = maxpac#plugconf('preservim/vim-markdown')
+let s:markdown = maxpac#add('preservim/vim-markdown')
 
 function! s:markdown.pre() abort
   " No need to insert any indent preceding a new list item after inserting a
@@ -1167,12 +1137,10 @@ function! s:markdown.pre() abort
 
   let g:vim_markdown_folding_disabled = 1
 endfunction
-
-call maxpac#add(s:markdown)
 " }}}
 
 " tyru/open-browser.vim {{{
-let s:open_browser = maxpac#plugconf('tyru/open-browser.vim')
+let s:open_browser = maxpac#add('tyru/open-browser.vim')
 
 function! s:open_browser.post() abort
   nmap <Leader>K <Plug>(openbrowser-smart-search)
@@ -1189,12 +1157,10 @@ function! s:open_browser.post() abort
     call SearchEnglishWord(l:word)
   endfunction
 endfunction
-
-call maxpac#add(s:open_browser)
 " }}}
 
 " w0rp/ale {{{
-let s:ale = maxpac#plugconf('w0rp/ale')
+let s:ale = maxpac#add('w0rp/ale')
 
 function! s:ale.pre() abort
   " Use ALE only as a linter engine.
@@ -1208,12 +1174,10 @@ function! s:ale.pre() abort
 
   Autocmd User lsp_buffer_enabled ALEDisableBuffer
 endfunction
-
-call maxpac#add(s:ale)
 " }}}
 
 " kyoh86/vim-ripgrep {{{
-let s:ripgrep = maxpac#plugconf('kyoh86/vim-ripgrep')
+let s:ripgrep = maxpac#add('kyoh86/vim-ripgrep')
 
 function! s:ripgrep.post() abort
   command! -nargs=+ -complete=file Rg call ripgrep#search(<q-args>)
@@ -1225,12 +1189,10 @@ function! s:ripgrep.post() abort
   nnoremap <silent> <Leader>f :<C-U>call ripgrep#search(expand('<cword>')->escape('"')->printf('"%s"'))<CR>
   vnoremap <silent> <Leader>f :Rgv<CR>
 endfunction
-
-call maxpac#add(s:ripgrep)
 " }}}
 
 " haya14busa/vim-asterisk {{{
-let s:asterisk = maxpac#plugconf('haya14busa/vim-asterisk')
+let s:asterisk = maxpac#add('haya14busa/vim-asterisk')
 
 function! s:asterisk.post() abort
   " Keep the cursor offset while searching. See "search-offset".
@@ -1245,24 +1207,20 @@ function! s:asterisk.post() abort
   map gz* <Plug>(asterisk-g*)
   map gz# <Plug>(asterisk-g#)
 endfunction
-
-call maxpac#add(s:asterisk)
 " }}}
 
 " monaqa/modesearch.vim {{{
-let s:modesearch = maxpac#plugconf('monaqa/modesearch.vim')
+let s:modesearch = maxpac#add('monaqa/modesearch.vim')
 
 function! s:modesearch.post() abort
   nmap <silent> g/ <Plug>(modesearch-slash-rawstr)
   nmap <silent> g? <Plug>(modesearch-question-regexp)
   cmap <silent> <C-x> <Plug>(modesearch-toggle-mode)
 endfunction
-
-call maxpac#add(s:modesearch)
 " }}}
 
 " thinca/vim-localrc {{{
-let s:localrc = maxpac#plugconf('thinca/vim-localrc')
+let s:localrc = maxpac#add('thinca/vim-localrc')
 
 function! s:localrc.post() abort
   function! s:open_localrc(bang, mods, dir) abort
@@ -1277,12 +1235,10 @@ function! s:localrc.post() abort
   command! -bang -bar -nargs=? -complete=dir OpenLocalrc
     \ call s:open_localrc(<q-bang>, <q-mods>, empty(<q-args>) ? expand('%:p:h') : <q-args>)
 endfunction
-
-call maxpac#add(s:localrc)
 " }}}
 
 " andymass/vim-matchup {{{
-let s:matchup = maxpac#plugconf('andymass/vim-matchup')
+let s:matchup = maxpac#add('andymass/vim-matchup')
 
 function! s:matchup.fallback() abort
   " The enhanced "%", to find many extra matchings and jump the cursor to them.
@@ -1294,13 +1250,11 @@ function! s:matchup.fallback() abort
     source $VIMRUNTIME/macros/matchit.vim
   endif
 endfunction
-
-call maxpac#add(s:matchup)
 " }}}
 
 " Eliot00/git-lens.vim {{{
 if has('vim9script')
-  let s:gitlens = maxpac#plugconf('Eliot00/git-lens.vim')
+  let s:gitlens = maxpac#add('Eliot00/git-lens.vim')
 
   function! s:gitlens.post() abort
     command! -bar ToggleGitLens call ToggleGitLens()
@@ -1311,7 +1265,7 @@ endif
 " }}}
 
 " a5ob7r/linefeed.vim {{{
-let s:linefeed = maxpac#plugconf('a5ob7r/linefeed.vim')
+let s:linefeed = maxpac#add('a5ob7r/linefeed.vim')
 
 function! s:linefeed.post() abort
   " TODO: These keymappings override some default them and conflict with other
@@ -1324,14 +1278,12 @@ function! s:linefeed.post() abort
   " imap <silent> <C-G>j <Plug>(linefeed-down)
   " imap <silent> <C-G><C-J> <Plug>(linefeed-down)
 endfunction
-
-call maxpac#add(s:linefeed)
 " }}}
 
 " =============================================================================
 
 " lambdalisue/fern.vim {{{
-let s:fern = maxpac#plugconf('lambdalisue/fern.vim')
+let s:fern = maxpac#add('lambdalisue/fern.vim')
 
 function! s:fern.pre() abort
   let g:fern#default_hidden = 1
@@ -1386,26 +1338,22 @@ function! s:fern.pre() abort
 
   command! -nargs=+ -complete=shellcmd RunWithFernLog call s:run_with_fern_log(<q-args>)
 endfunction
-
-call maxpac#add(s:fern)
 " }}}
 
 call maxpac#add('lambdalisue/fern-git-status.vim')
 
 " a5ob7r/fern-renderer-lsflavor.vim {{{
-let s:lsflavor = maxpac#plugconf('a5ob7r/fern-renderer-lsflavor.vim')
+let s:lsflavor = maxpac#add('a5ob7r/fern-renderer-lsflavor.vim')
 
 function! s:lsflavor.pre() abort
   let g:fern#renderer = 'lsflavor'
 endfunction
-
-call maxpac#add(s:lsflavor)
 " }}}
 
 "==============================================================================
 
 " prabirshrestha/asyncomplete.vim {{{
-let s:asyncomplete = maxpac#plugconf('prabirshrestha/asyncomplete.vim')
+let s:asyncomplete = maxpac#add('prabirshrestha/asyncomplete.vim')
 
 function! s:asyncomplete.pre() abort
   let g:asyncomplete_enable_for_all = 0
@@ -1437,8 +1385,6 @@ function! s:asyncomplete.pre() abort
   command! EnableAsyncomplete call s:toggle_asyncomplete(0)
   command! DisableAsyncomplete call s:toggle_asyncomplete(1)
 endfunction
-
-call maxpac#add(s:asyncomplete)
 " }}}
 
 call maxpac#add('prabirshrestha/asyncomplete-lsp.vim')
