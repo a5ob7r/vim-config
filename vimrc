@@ -544,6 +544,8 @@ command! ReloadVimrc source $MYVIMRC
 " Run commands to refresh something. Use ":OnRefresh" to register a command.
 command! Refresh doautocmd <nomodeline> User Refresh
 
+command! Hitest source $VIMRUNTIME/syntax/hitest.vim
+
 command! InstallMinpac call s:install_minpac()
 " }}}
 
