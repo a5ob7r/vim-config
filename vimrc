@@ -1411,6 +1411,7 @@ call maxpac#add('sgur/vim-textobj-parameter')
 call maxpac#add('thinca/vim-textobj-comment')
 
 call maxpac#add('machakann/vim-textobj-delimited')
+call maxpac#add('machakann/vim-textobj-functioncall')
 
 " Misc.
 call maxpac#add('LumaKernel/coqpit.vim')
