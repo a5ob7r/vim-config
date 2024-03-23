@@ -1182,7 +1182,50 @@ endfunction
 let s:ripgrep = maxpac#add('kyoh86/vim-ripgrep')
 
 function! s:ripgrep.post() abort
-  command! -nargs=+ -complete=file Rg call ripgrep#search(<q-args>)
+  command! -bang -nargs=+ -complete=file Rg call s:ripgrep([<q-args>], { 'case': <bang>1, 'escape': <bang>1 })
+
+  function! s:ripgrep(args, ...) abort
+    let l:opts = get(a:000, 0, {})
+    let l:o_case = get(l:opts, 'case')
+    let l:o_escape = get(l:opts, 'escape')
+
+    let l:args = []
+
+    if l:o_case
+      let l:args += [&ignorecase ? &smartcase ? '--smart-case' : '--ignore-case' : '--case-sensitive']
+    endif
+
+    if l:o_escape
+      " Change the "<q-args>" to the "{command}" argument for "job_start()" literally.
+      let l:args += map(copy(a:args), 's:job_argumentalize_escape(v:val)')
+    else
+      let l:args += a:args
+    endif
+
+    call ripgrep#search(join(l:args))
+  endfunction
+
+  " Escape backslashes without them escaping a double quote or a space.
+  "
+  " :Rg \bvim\b -> call job_start('rg \\bvim\\b')
+  " :Rg \"\ vim\b -> call job_start('rg \"\ vim\\b')
+  "
+  function! s:job_argumentalize_escape(s) abort
+    let l:tokens = []
+    let l:s = a:s
+
+    while 1
+      let l:i = match(l:s, '\%(\%(\\\\\)*\)\@<=\\[" ]')
+
+      if l:i + 1
+        let l:tokens += l:i ? [escape(l:s[0 : l:i - 1], '\'), l:s[l:i : l:i + 1]] : [l:s[0 : 1]]
+        let l:s = l:s[l:i + 2 :]
+      else
+        let l:tokens += [escape(l:s, '\')]
+        return join(l:tokens, '')
+      endif
+    endwhile
+  endfunction
 
   " This does not use any replacement text provided by "-range" attribute, but
   " we need it to update "'<" and "'>" marks to get a visual selected text.
