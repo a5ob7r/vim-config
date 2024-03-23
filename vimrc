@@ -1227,12 +1227,82 @@ function! s:ripgrep.post() abort
     endwhile
   endfunction
 
-  " This does not use any replacement text provided by "-range" attribute, but
-  " we need it to update "'<" and "'>" marks to get a visual selected text.
-  command! -range Rgv call ripgrep#search(s:get_visual_selection()->escape('"')->printf('"%s"'))
+  map <Leader>f <Plug>(operator-ripgrep-g)
+  map g<Leader>f <Plug>(operator-ripgrep)
 
-  nnoremap <silent> <Leader>f :<C-U>call ripgrep#search(expand('<cword>')->escape('"')->printf('"%s"'))<CR>
-  vnoremap <silent> <Leader>f :Rgv<CR>
+  call operator#user#define('ripgrep', 'Op_ripgrep')
+  call operator#user#define('ripgrep-g', 'Op_ripgrep_g')
+
+  function! Op_ripgrep(motion_wiseness) abort
+    call s:operator_ripgrep(a:motion_wiseness, { 'boundaries': 0, 'push_history_entry': 1 })
+  endfunction
+
+  function! Op_ripgrep_g(motion_wiseness) abort
+    call s:operator_ripgrep(a:motion_wiseness, { 'boundaries': 1, 'push_history_entry': 1 })
+  endfunction
+
+  " TODO: Consider ideal linewise and blockwise operations.
+  function! s:operator_ripgrep(motion_wiseness, ...) abort
+    let l:opts = get(a:000, 0, {})
+    let l:o_boundaries = get(l:opts, 'boundaries')
+    let l:o_push_history_entry = get(l:opts, 'push_history_entry')
+
+    let l:words = ['Rg', '-F']
+
+    if l:o_boundaries
+      let l:words += ['-w']
+    endif
+
+    let [l:_, l:l_lnum, l:l_col, l:_] = getpos("'[")
+    let [l:_, l:r_lnum, l:r_col, l:_] = getpos("']")
+
+    let l:l_col_idx = l:l_col - 1
+    let l:r_col_idx = l:r_col - (&selection ==# 'inclusive' ? 1 : 2)
+
+    let l:buflines =
+          \ a:motion_wiseness ==# 'block' ? map(getbufline(bufname('%'), l:l_lnum, l:r_lnum), 'v:val[l:l_col_idx : l:r_col_idx]') :
+          \ a:motion_wiseness ==# 'line' ? getbufline(bufname('%'), l:l_lnum, l:r_lnum) :
+          \ map(getbufline(bufname('%'), l:l_lnum), 'v:val[l:l_col_idx : l:r_col_idx]')
+
+    let l:words += match(l:buflines, '^\s*-') + 1 ? ['--'] : []
+    let l:words += match(l:buflines, ' ') + 1 ? [printf('"%s"', join(map(copy(l:buflines), 's:command_line_argumentalize_escape(v:val)'), "\n"))] : [join(map(copy(l:buflines), 's:command_line_argumentalize_escape(v:val)'), "\n")]
+
+    let l:command = join(l:words)
+
+    execute l:command
+
+    if l:o_push_history_entry
+      call s:smart_ripgrep_command_history_push(l:command)
+    endif
+  endfunction
+
+  " Escape command line special characters ("cmdline-special"), any
+  " double-quotes and any backslashes preceding spaces.
+  function! s:command_line_argumentalize_escape(s) abort
+    let l:tokens = []
+    let l:s = a:s
+
+    while 1
+      let [l:matched, l:start, l:end] = matchstrpos(l:s, '\C<\(cword\|cWORD\|cexpr\|cfile\|afile\|abuf\|amatch\|sfile\|stack\|script\|slnum\|sflnum\|client\)>\|\\ ')
+
+      if l:start + 1
+        let l:tokens += (l:start ? [escape(l:s[0 : l:start - 1], '"%#')] : []) + [escape(l:matched, '<\')]
+        let l:s = l:s[l:end : ]
+      else
+        let l:tokens += [escape(l:s, '"%#')]
+        return join(l:tokens, '')
+      endif
+    endwhile
+  endfunction
+
+  function! s:smart_ripgrep_command_history_push(command) abort
+    let l:history_entry = a:command
+    let l:latest_history_entry = histget('cmd', -1)
+
+    if l:history_entry !=# l:latest_history_entry
+      call histadd('cmd', l:history_entry)
+    endif
+  endfunction
 endfunction
 " }}}
 
