@@ -1182,7 +1182,25 @@ endfunction
 let s:ripgrep = maxpac#add('kyoh86/vim-ripgrep')
 
 function! s:ripgrep.post() abort
-  command! -bang -nargs=+ -complete=file Rg call s:ripgrep([<q-args>], { 'case': <bang>1, 'escape': <bang>1 })
+  function! RipgrepContextObserver(message) abort
+    if a:message['type'] !=# 'context'
+      return
+    endif
+
+    let l:data = a:message['data']
+
+    let l:item = {
+      \ 'filename': l:data['path']['text'],
+      \ 'lnum': l:data['line_number'],
+      \ 'text': l:data['lines']['text'],
+      \ }
+
+    call setqflist([l:item], 'a')
+  endfunction
+
+  call ripgrep#observe#add_observer(g:ripgrep#event#other, 'RipgrepContextObserver')
+
+  command! -bang -count -nargs=+ -complete=file Rg call s:ripgrep(['-C<count>', <q-args>], { 'case': <bang>1, 'escape': <bang>1 })
 
   function! s:ripgrep(args, ...) abort
     let l:opts = get(a:000, 0, {})
