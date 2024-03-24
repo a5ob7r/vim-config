@@ -1252,11 +1252,11 @@ function! s:ripgrep.post() abort
   call operator#user#define('ripgrep-g', 'Op_ripgrep_g')
 
   function! Op_ripgrep(motion_wiseness) abort
-    call s:operator_ripgrep(a:motion_wiseness, { 'boundaries': 0, 'push_history_entry': 1 })
+    call s:operator_ripgrep(a:motion_wiseness, { 'boundaries': 0, 'push_history_entry': 1, 'highlight': 1 })
   endfunction
 
   function! Op_ripgrep_g(motion_wiseness) abort
-    call s:operator_ripgrep(a:motion_wiseness, { 'boundaries': 1, 'push_history_entry': 1 })
+    call s:operator_ripgrep(a:motion_wiseness, { 'boundaries': 1, 'push_history_entry': 1, 'highlight': 1 })
   endfunction
 
   " TODO: Consider ideal linewise and blockwise operations.
@@ -1264,6 +1264,7 @@ function! s:ripgrep.post() abort
     let l:opts = get(a:000, 0, {})
     let l:o_boundaries = get(l:opts, 'boundaries')
     let l:o_push_history_entry = get(l:opts, 'push_history_entry')
+    let l:o_highlight = get(l:opts, 'highlight')
 
     let l:words = ['Rg', '-F']
 
@@ -1288,6 +1289,10 @@ function! s:ripgrep.post() abort
     let l:command = join(l:words)
 
     execute l:command
+
+    if l:o_highlight && a:motion_wiseness ==# 'char'
+      let @/ = l:o_boundaries ? printf('\V\<%s\>', escape(l:buflines[0], '\/')) : printf('\V%s', escape(l:buflines[0], '\/'))
+    endif
 
     if l:o_push_history_entry
       call s:smart_ripgrep_command_history_push(l:command)
