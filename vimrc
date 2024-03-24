@@ -1215,11 +1215,11 @@ function! s:ripgrep.post() abort
     let l:s = a:s
 
     while 1
-      let l:i = match(l:s, '\%(\%(\\\\\)*\)\@<=\\[" ]')
+      let [l:matched, l:start, l:end] = matchstrpos(l:s, '\%(\%(\\\\\)*\)\@<=\\[" ]')
 
-      if l:i + 1
-        let l:tokens += l:i ? [escape(l:s[0 : l:i - 1], '\'), l:s[l:i : l:i + 1]] : [l:s[0 : 1]]
-        let l:s = l:s[l:i + 2 :]
+      if l:start + 1
+        let l:tokens += (l:start ? [escape(l:s[0 : l:start - 1], '\')] : []) + [l:matched]
+        let l:s = l:s[l:end :]
       else
         let l:tokens += [escape(l:s, '\')]
         return join(l:tokens, '')
