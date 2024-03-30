@@ -49,24 +49,6 @@ nproc::proxy () {
   fi
 }
 
-build::help () {
-  echo -n "\
-Descriptions:
-  Build helper for Vim.
-
-Usages:
-  build <options...>
-
-Options:
-  --with-lua
-  --with-python
-  --with-gui
-  --latest
-  -f, --force
-  -h, --help
-"
-}
-
 declare -i with_lua=0
 declare -i with_python=0
 declare -i with_gui=0
@@ -96,7 +78,21 @@ while (( $# )); do
       shift
       ;;
     -h | --help )
-      build::help
+      echo -n "\
+Descriptions:
+  Build helper for Vim.
+
+Usages:
+  build <options...>
+
+Options:
+  --with-lua
+  --with-python
+  --with-gui
+  --latest
+  -f, --force
+  -h, --help
+"
       exit 0
       ;;
     * )
