@@ -1397,8 +1397,6 @@ if has('vim9script')
   function! s:gitlens.post() abort
     command! -bar ToggleGitLens call ToggleGitLens()
   endfunction
-
-  call maxpac#add(s:gitlens)
 endif
 " }}}
 
