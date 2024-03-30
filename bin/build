@@ -80,7 +80,7 @@ while (( $# )); do
     -h | --help )
       echo -n "\
 Descriptions:
-  Build helper for Vim.
+  A build helper for Vim.
 
 Usages:
   build <options...>
