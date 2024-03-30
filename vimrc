@@ -411,6 +411,14 @@ vnoremap <silent><expr> k mode() ==# 'V' ? 'k' : 'gk'
 nnoremap <silent> gb :bNext<CR>
 nnoremap <silent> gB :bprevious<CR>
 
+" Browse quickfix/location lists by "<C-N>" and "<C-P>".
+nnoremap <silent> <C-N> :<C-U>execute printf('%dcnext', v:count1)<CR>
+nnoremap <silent> <C-P> :<C-U>execute printf('%dcprevious', v:count1)<CR>
+nnoremap <silent> g<C-N> :<C-U>execute printf('%dlnext', v:count1)<CR>
+nnoremap <silent> g<C-P> :<C-U>execute printf('%dlprevious', v:count1)<CR>
+nnoremap <silent> <C-G><C-N> :<C-U>execute printf('%dlnext', v:count1)<CR>
+nnoremap <silent> <C-G><C-P> :<C-U>execute printf('%dlprevious', v:count1)<CR>
+
 " Clear the highlightings for pattern searching and run a command to refresh
 " something.
 nnoremap <silent> <C-L> :<C-U>nohlsearch<CR>:Refresh<CR>
@@ -994,8 +1002,6 @@ function! s:vim_lsp.pre() abort
     nmap <buffer> gD <Plug>(lsp-implementation)
     nmap <buffer> <Leader>r <Plug>(lsp-rename)
     nmap <buffer> <Leader>h <Plug>(lsp-hover)
-    nmap <buffer> <C-P> <Plug>(lsp-previous-diagnostic)
-    nmap <buffer> <C-N> <Plug>(lsp-next-diagnostic)
 
     nmap <buffer> <Leader>lf <Plug>(lsp-document-format)
     nmap <buffer> <Leader>la <Plug>(lsp-code-action)
@@ -1170,9 +1176,6 @@ function! s:ale.pre() abort
 
   let g:ale_python_auto_pipenv = 1
   let g:ale_python_auto_poetry = 1
-
-  nmap <silent> <C-P> <Plug>(ale_previous_wrap)
-  nmap <silent> <C-N> <Plug>(ale_next_wrap)
 
   Autocmd User lsp_buffer_enabled ALEDisableBuffer
 endfunction
