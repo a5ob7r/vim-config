@@ -1419,6 +1419,39 @@ function! s:linefeed.post() abort
 endfunction
 " }}}
 
+" vim-utils/vim-man {{{
+let s:man = maxpac#add('vim-utils/vim-man')
+
+function! s:man.post() abort
+  command! -nargs=* -bar -complete=customlist,man#completion#run M Man <args>
+
+  call s:man.common()
+endfunction
+
+function! s:man.fallback() abort
+  " NOTE: An recommended way to enable :Man command on vim help page is to
+  " source default ftplugin for man by "runtime ftplugin/man.vim" in vimrc.
+  " But maybe it sources another file if another fplugin/man.vim file on
+  " runtimepath's directories. So specify default ftplugin for man explicitly.
+  try
+    source $VIMRUNTIME/ftplugin/man.vim
+  catch
+    echoerr v:exception
+    return
+  endtry
+
+  command! -nargs=+ -complete=shellcmd M <mods> Man <args>
+
+  call s:man.common()
+endfunction
+
+function! s:man.common() abort
+  if has('patch-7.4.1833')
+    set keywordprg=:Man
+  endif
+endfunction
+" }}}
+
 " =============================================================================
 
 " lambdalisue/fern.vim {{{
