@@ -1629,6 +1629,14 @@ syntax off
 syntax enable
 " }}}
 
+" Fire VimEnter manually on reload {{{
+if get(v:, 'vim_did_enter', get(g:, 'vim_did_enter', 0))
+  doautocmd <nomodeline> VimEnter
+endif
+
+let g:vim_did_enter = 1
+" }}}
+
 endif
 
 " =============================================================================
