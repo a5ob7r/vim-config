@@ -992,6 +992,8 @@ function! s:vim_lsp.pre() abort
 
   let g:lsp_async_completion = 1
 
+  let g:lsp_diagnostics_virtual_text_align = 'after'
+
   let g:lsp_experimental_workspace_folders = 1
 
   function! s:on_lsp_buffer_enabled() abort
