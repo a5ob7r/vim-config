@@ -1452,6 +1452,61 @@ function! s:man.common() abort
 endfunction
 " }}}
 
+" machakann/vim-sandwich {{{
+let s:sandwich = maxpac#add('machakann/vim-sandwich')
+
+function! s:sandwich.post() abort
+  let g:sandwich#recipes = get(g:, 'sandwich#recipes', deepcopy(g:sandwich#default_recipes))
+  let g:sandwich#recipes += [
+    \   { 'buns': ['{ ', ' }'],
+    \     'nesting': 1,
+    \     'match_syntax': 1,
+    \     'kind': ['add', 'replace'],
+    \     'action': ['add'],
+    \     'input': ['}']
+    \   },
+    \   { 'buns': ['[ ', ' ]'],
+    \     'nesting': 1,
+    \     'match_syntax': 1,
+    \     'kind': ['add', 'replace'],
+    \     'action': ['add'],
+    \     'input': [']']
+    \   },
+    \   { 'buns': ['( ', ' )'],
+    \     'nesting': 1,
+    \     'match_syntax': 1,
+    \     'kind': ['add', 'replace'],
+    \     'action': ['add'],
+    \     'input': [')']
+    \   },
+    \   { 'buns': ['{\s*', '\s*}'],
+    \     'nesting': 1,
+    \     'regex': 1,
+    \     'match_syntax': 1,
+    \     'kind': ['delete', 'replace', 'textobj'],
+    \     'action': ['delete'],
+    \     'input': ['}']
+    \   },
+    \   { 'buns': ['\[\s*', '\s*\]'],
+    \     'nesting': 1,
+    \     'regex': 1,
+    \     'match_syntax': 1,
+    \     'kind': ['delete', 'replace', 'textobj'],
+    \     'action': ['delete'],
+    \     'input': [']']
+    \   },
+    \   { 'buns': ['(\s*', '\s*)'],
+    \     'nesting': 1,
+    \     'regex': 1,
+    \     'match_syntax': 1,
+    \     'kind': ['delete', 'replace', 'textobj'],
+    \     'action': ['delete'],
+    \     'input': [')']
+    \   }
+    \ ]
+endfunction
+" }}}
+
 " =============================================================================
 
 " lambdalisue/fern.vim {{{
@@ -1600,7 +1655,6 @@ call maxpac#add('junegunn/vim-easy-align')
 call maxpac#add('kannokanno/previm')
 call maxpac#add('keith/rspec.vim')
 call maxpac#add('machakann/vim-highlightedyank')
-call maxpac#add('machakann/vim-sandwich')
 call maxpac#add('machakann/vim-swap')
 call maxpac#add('maximbaz/lightline-ale')
 call maxpac#add('neovimhaskell/haskell-vim')
