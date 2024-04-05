@@ -1509,6 +1509,18 @@ function! s:sandwich.post() abort
 endfunction
 " }}}
 
+" liuchengxu/vista.vim {{{
+let s:vista = maxpac#add('liuchengxu/vista.vim')
+
+function! s:vista.pre() abort
+  let g:vista_no_mappings = 1
+
+  Autocmd FileType vista,vista_kind nnoremap <buffer><silent> q :<C-U>Vista!!<CR>
+
+  nnoremap <silent> <Leader>v :<C-U>Vista!!<CR>
+endfunction
+" }}}
+
 " =============================================================================
 
 " lambdalisue/fern.vim {{{
