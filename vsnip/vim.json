@@ -11,5 +11,12 @@
       "\" vim: set expandtab tabstop=2 shiftwidth=2 foldmethod=marker:"
     ],
     "description": "A template for .local.vimrc loaded by localrc (https://github.com/thinca/vim-localrc)"
+  },
+  "A modeline for my vimrc": {
+    "prefix": "modeline",
+    "body": [
+      "\" vim: set expandtab tabstop=2 shiftwidth=2 foldmethod=marker:"
+    ],
+    "description": "A modeline for my vimrc"
   }
 }
