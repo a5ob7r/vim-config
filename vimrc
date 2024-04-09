@@ -1521,6 +1521,24 @@ function! s:vista.pre() abort
 endfunction
 " }}}
 
+" itchyny/screensaver.vim {{{
+let s:screensaver = maxpac#add('itchyny/screensaver.vim')
+
+function! s:screensaver.post() abort
+  " Clear the cmdline area when starting a screensaver.
+  Autocmd FileType screensaver echo
+endfunction
+" }}}
+
+" bronson/vim-trailing-whitespace {{{
+let s:trailing_whitespace = maxpac#add('bronson/vim-trailing-whitespace')
+
+function! s:trailing_whitespace.post() abort
+  let g:extra_whitespace_ignored_filetypes = get(g:, 'extra_whitespace_ignored_filetypes', [])
+  let g:extra_whitespace_ignored_filetypes += ['screensaver']
+endfunction
+" }}}
+
 " =============================================================================
 
 " lambdalisue/fern.vim {{{
@@ -1659,7 +1677,6 @@ call maxpac#add('a5ob7r/rspec-daemon.vim')
 call maxpac#add('a5ob7r/tig.vim')
 call maxpac#add('aliou/bats.vim')
 call maxpac#add('azabiong/vim-highlighter')
-call maxpac#add('bronson/vim-trailing-whitespace')
 call maxpac#add('editorconfig/editorconfig-vim')
 call maxpac#add('fladson/vim-kitty')
 call maxpac#add('gpanders/vim-oldfiles')
