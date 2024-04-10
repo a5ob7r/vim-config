@@ -430,8 +430,6 @@ map <silent> P <Plug>(Put)
 
 nnoremap <silent> <F10> :<C-U>echo <SID>syntax_item_attribute(line('.'), col('.'))<CR>
 
-nnoremap <silent> <Leader>n :<C-U>ToggleNetrw<CR>
-nnoremap <silent> <Leader>N :<C-U>ToggleNetrw!<CR>
 nnoremap <silent> <F2> :<C-U>ReloadVimrc<CR>
 nnoremap <silent> <Leader><F2> :<C-U>Vimrc<CR>
 
@@ -1602,6 +1600,14 @@ function! s:fern.pre() abort
   endfunction
 
   command! -nargs=+ -complete=shellcmd RunWithFernLog call s:run_with_fern_log(<q-args>)
+endfunction
+
+function! s:fern.fallback() abort
+  unlet g:loaded_netrw
+  unlet g:loaded_netrwPlugin
+
+  nnoremap <silent> <Leader>n :<C-U>ToggleNetrw<CR>
+  nnoremap <silent> <Leader>N :<C-U>ToggleNetrw!<CR>
 endfunction
 " }}}
 
