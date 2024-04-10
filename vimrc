@@ -1605,6 +1605,7 @@ function! s:fern.pre() abort
 endfunction
 " }}}
 
+call maxpac#add('lambdalisue/fern-hijack.vim')
 call maxpac#add('lambdalisue/fern-git-status.vim')
 
 " a5ob7r/fern-renderer-lsflavor.vim {{{
