@@ -627,16 +627,22 @@ OnRefresh redraw
 " }}}
 
 " Standard plugins {{{
-" newrw {{{
+" Avoid loading some standard plugins. {{{
+" netrw
+let g:loaded_netrw = 1
+let g:loaded_netrwPlugin = 1
+
+" These two plugins provide plugin management, but they are already obsolete.
+let g:loaded_getscriptPlugin = 1
+let g:loaded_vimballPlugin = 1
+" }}}
+
+" netrw configurations {{{
 " WIP: Must match to line not but filename when `g:netrw_liststyle = 1`, on
 " the commit hash of vim/vim: a452b808b4da2d272ca4a50865eb8ca89a58f239
 let g:netrw_list_hide = '^\..*\~ *'
 let g:netrw_sizestyle = 'H'
 " }}}
-
-" These two plugins provide plugin management, but they are already obsolete.
-let g:loaded_getscriptPlugin = 1
-let g:loaded_vimballPlugin = 1
 " }}}
 
 " =============================================================================
