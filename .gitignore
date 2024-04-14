@@ -1,4 +1,4 @@
-pack
-.netrwhist
+/pack/**/*
+/.netrwhist
 
-*.sock
+/*.sock
