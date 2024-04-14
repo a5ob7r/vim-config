@@ -1431,7 +1431,7 @@ let s:man = maxpac#add('vim-utils/vim-man')
 function! s:man.post() abort
   command! -nargs=* -bar -complete=customlist,man#completion#run M Man <args>
 
-  call s:man.common()
+  call l:self.common()
 endfunction
 
 function! s:man.fallback() abort
@@ -1448,7 +1448,7 @@ function! s:man.fallback() abort
 
   command! -nargs=+ -complete=shellcmd M <mods> Man <args>
 
-  call s:man.common()
+  call l:self.common()
 endfunction
 
 function! s:man.common() abort
