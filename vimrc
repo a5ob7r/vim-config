@@ -248,7 +248,7 @@ inoremap <C-G><CR> <End><CR>
 " Following lines are evaluated only if "+eval" feature is on. Maybe no
 " ":finish" is enabled on some environments, but ":if" and ":endif" is always
 " enabled even if "+eval" is not on.
-if 1
+if 0 | endif
 
 " Functions {{{
 " A backward comaptible "mkdir" for patch-8.0.1708, that "mkdir" with "p" flag
@@ -1732,8 +1732,6 @@ if !has('vim_starting')
   doautocmd <nomodeline> VimEnter
 endif
 " }}}
-
-endif
 
 " =============================================================================
 
