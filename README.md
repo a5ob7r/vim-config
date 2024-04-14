@@ -1,5 +1,12 @@
 # My Vim Config
 
+## Optionals
+
+- [dtach](https://github.com/crigler/dtach)
+  - executed in [bin/xvim](bin/xvim) if it is installed
+- [ripgrep](https://github.com/BurntSushi/ripgrep)
+  - required by [ripgrep.vim](https://github.com/kyoh86/vim-ripgrep)
+
 ## Setup
 
 ### Linux or macOS
