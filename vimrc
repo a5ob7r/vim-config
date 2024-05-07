@@ -1714,6 +1714,75 @@ call maxpac#add('yasuhiroki/github-actions-yaml.vim')
 
 " =============================================================================
 
+" denops.vim
+
+if executable('deno')
+  call maxpac#add('vim-denops/denops.vim')
+
+  let s:ddu = maxpac#add('Shougo/ddu.vim')
+
+  function! s:ddu.post() abort
+    call ddu#custom#patch_global(#{
+    \   ui: 'ff',
+    \   sources: ['file_rec'],
+    \   sourceOptions: #{
+    \     _: #{
+    \       matchers: ['matcher_fzy'],
+    \     },
+    \   },
+    \   kindOptions: #{
+    \     file: #{
+    \       defaultAction: 'open',
+    \     },
+    \   },
+    \ })
+
+    call ddu#custom#action('kind', 'file', 'tcd', { args -> s:ddu_kind_file_action_tcd(args) })
+
+    function! s:ddu_kind_file_action_tcd(args) abort
+      execute $'tcd {a:args.items[0].action.path}'
+
+      return 0
+    endfunction
+
+    if has('gui_running') || index(['xterm', 'xterm-kitty'], &term) >= 0
+      nnoremap <silent> <C-Space> <Cmd>call ddu#start()<CR>
+    else
+      nnoremap <silent> <Nul> <Cmd>call ddu#start()<CR>
+    endif
+
+    nnoremap <silent> <Leader>b <Cmd>call ddu#start(#{ sources: ['buffer'] })<CR>
+    nnoremap <silent> <Leader>gq <Cmd>call ddu#start(#{ sources: ['ghq'], kindOptions: #{ file: #{ defaultAction: 'tcd' } } })<CR>
+
+    Autocmd FileType ddu-ff call s:ddu_ff_keybindings()
+    function! s:ddu_ff_keybindings() abort
+      nnoremap <buffer><silent> <CR> <Cmd>call ddu#ui#do_action('itemAction')<CR>
+      nnoremap <buffer><silent> <C-X> <Cmd>call ddu#ui#do_action('itemAction', #{ name: 'open', params: #{ command: 'split' } })<CR>
+      nnoremap <buffer><silent> i <Cmd>call ddu#ui#do_action('openFilterWindow')<CR>
+      nnoremap <buffer><silent> q <Cmd>call ddu#ui#do_action('quit')<CR>
+    endfunction
+
+    Autocmd FileType ddu-ff-filter call s:ddu_ff_filter_keybindings()
+    function! s:ddu_ff_filter_keybindings() abort
+      inoremap <buffer><silent> <CR> <Esc><Cmd>call ddu#ui#do_action('closeFilterWindow')<CR>
+      nnoremap <buffer><silent> <CR> <Cmd>call ddu#ui#do_action('closeFilterWindow')<CR>
+      nnoremap <buffer><silent> q <Cmd>call ddu#ui#do_action('closeFilterWindow')<CR>
+    endfunction
+  endfunction
+
+  call maxpac#add('Shougo/ddu-ui-ff')
+
+  call maxpac#add('4513ECHO/ddu-source-ghq')
+  call maxpac#add('Shougo/ddu-source-file_rec')
+  call maxpac#add('shun/ddu-source-buffer')
+
+  call maxpac#add('matsui54/ddu-filter-fzy')
+
+  call maxpac#add('Shougo/ddu-kind-file')
+endif
+
+" =============================================================================
+
 call maxpac#end()
 " }}}
 
