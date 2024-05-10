@@ -1719,6 +1719,26 @@ call maxpac#add('yasuhiroki/github-actions-yaml.vim')
 if executable('deno')
   call maxpac#add('vim-denops/denops.vim')
 
+  let s:gin = maxpac#add('lambdalisue/gin.vim')
+
+  function! s:gin.post() abort
+    let g:gin_diff_persistent_args = ['--patch', '--stat']
+
+    if executable('delta')
+      let g:gin_diff_persistent_args += ['++processor=delta --color-only']
+    elseif executable('diff-highlight')
+      let g:gin_diff_persistent_args += ['++processor=diff-highlight']
+    endif
+
+    " Add a number argument to limit the number of commits because ":GinLog"
+    " is too slow in a large repository.
+    "
+    " https://github.com/lambdalisue/gin.vim/issues/116
+    nmap <silent> <Leader>gl :<C-U>GinLog --graph --oneline --all -500<CR>
+    nmap <silent> <Leader>gs :<C-U>GinStatus<CR>
+    nmap <silent> <Leader>gc :<C-U>Gin commit<CR>
+  endfunction
+
   let s:ddu = maxpac#add('Shougo/ddu.vim')
 
   function! s:ddu.post() abort
