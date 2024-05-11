@@ -372,6 +372,10 @@ function! s:terminal(...) abort
 
   execute l:mods 'call term_start(&shell, l:opts)'
 endfunction
+
+function! s:is_bundled_package_loadable(package_name) abort
+  return !empty(glob(printf('%s/pack/dist/opt/%s/plugin/*.vim', $VIMRUNTIME, a:package_name)))
+endfunction
 " }}}
 
 " Variables {{{
@@ -1690,7 +1694,6 @@ call maxpac#add('a5ob7r/rspec-daemon.vim')
 call maxpac#add('a5ob7r/tig.vim')
 call maxpac#add('aliou/bats.vim')
 call maxpac#add('azabiong/vim-highlighter')
-call maxpac#add('editorconfig/editorconfig-vim')
 call maxpac#add('fladson/vim-kitty')
 call maxpac#add('gpanders/vim-oldfiles')
 call maxpac#add('junegunn/goyo.vim')
@@ -1706,11 +1709,24 @@ call maxpac#add('neovimhaskell/haskell-vim')
 call maxpac#add('pocke/rbs.vim')
 call maxpac#add('thinca/vim-prettyprint')
 call maxpac#add('thinca/vim-themis')
-call maxpac#add('tpope/vim-commentary')
 call maxpac#add('tpope/vim-endwise')
 call maxpac#add('tyru/eskk.vim')
 call maxpac#add('vim-jp/vital.vim')
 call maxpac#add('yasuhiroki/github-actions-yaml.vim')
+
+if s:is_bundled_package_loadable('editorconfig')
+  " "editorconfig-vim" package is bundled since e5e04306bf02aa4ad488558dd593cf5c3b72f9b7.
+  packadd! editorconfig
+else
+  call maxpac#add('editorconfig/editorconfig-vim')
+endif
+
+if s:is_bundled_package_loadable('comment')
+  " "comment.vim" package is bundled since 5400a5d4269874fe4f1c35dfdd3c039ea17dfd62.
+  packadd! comment
+else
+  call maxpac#add('tpope/vim-commentary')
+endif
 
 " =============================================================================
 
