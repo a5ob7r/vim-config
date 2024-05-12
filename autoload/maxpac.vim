@@ -43,13 +43,6 @@ function! maxpac#plugconf(...) abort
     \ }
 endfunction
 
-" A synonym of "minpac#init()".
-function! maxpac#init(...) abort
-  let l:config = get(a:, 1, {})
-
-  call minpac#init(l:config)
-endfunction
-
 " Load "minpac" and initialize "maxpac".
 function! maxpac#begin(...) abort
   " Initialize maxmac.
@@ -68,8 +61,7 @@ function! maxpac#begin(...) abort
 
   let l:config = get(a:, 1, {})
 
-  " Initialize minpac.
-  call maxpac#init(l:config)
+  call minpac#init(l:config)
 
   return v:true
 endfunction
@@ -127,7 +119,7 @@ endfunction
 function! maxpac#load(uri, ...) abort
   try
     if !exists('g:minpac#opt')
-      call maxpac#init()
+      call minpac#init()
     endif
   catch /^Vim\%((\a\+)\)\=:E117:/
     return v:false
