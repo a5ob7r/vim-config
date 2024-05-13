@@ -1439,10 +1439,10 @@ function! s:man.post() abort
 endfunction
 
 function! s:man.fallback() abort
-  " NOTE: An recommended way to enable :Man command on vim help page is to
-  " source default ftplugin for man by "runtime ftplugin/man.vim" in vimrc.
-  " But maybe it sources another file if another fplugin/man.vim file on
-  " runtimepath's directories. So specify default ftplugin for man explicitly.
+  " NOTE: A recommended way to enable ":Man" command on vim help page is to
+  " source a default man ftplugin by ":runtime ftplugin/man.vim" in vimrc.
+  " However it sources other ftplugin files which probably have side-effects.
+  " So exlicitly specify the default man ftplugin.
   try
     source $VIMRUNTIME/ftplugin/man.vim
   catch
