@@ -1,5 +1,5 @@
 " Override some defaults {{{
-syntax match CabalProjectCompiler /\<\%(ghc\|ghcjs\|jhc\|lhc\|uhc\|haskell-suite\)-\d\%(\.\d\)*\>/
+syntax match CabalProjectCompiler /\<\%(ghc\|ghcjs\|jhc\|lhc\|uhc\|haskell-suite\)-\d\+\%(\.\d\+\)*\>/
 syntax keyword CabalProjectProfilingLevel late late-toplevel
 
 highlight link CabalProjectProfilingLevel Constant
