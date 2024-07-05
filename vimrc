@@ -376,6 +376,15 @@ endfunction
 function! s:is_bundled_package_loadable(package_name) abort
   return !empty(glob(printf('%s/pack/dist/opt/%s/plugin/*.vim', $VIMRUNTIME, a:package_name)))
 endfunction
+
+" Whether "<C-Space>" is usable for keymappings or not. Use "<Nul>" instead if
+" not.
+"
+" NOTE: "<Nul>" is sent instead of "<C-Space>" when type the "CTRL" key and
+" the "SPACE" one as once if in some terminal emulators.
+function! s:is_enable_control_space_keymapping() abort
+  return has('gui_running') || getenv('TERM_PROGRAM') ==# 'iTerm.app' || index(['xterm', 'xterm-kitty'], &term) >= 0
+endfunction
 " }}}
 
 " Variables {{{
@@ -889,9 +898,7 @@ endfunction
 let s:ctrlp = maxpac#add('ctrlpvim/ctrlp.vim')
 
 function! s:ctrlp.pre() abort
-  " "<Nul>" is sent instead of "<C-Space>" when type the "CTRL" key and the
-  " "SPACE" one as once if in some terminal emulators.
-  let g:ctrlp_map = has('gui_running') || index(['xterm', 'xterm-kitty'], &term) >= 0 ? '<C-Space>' : '<Nul>'
+  let g:ctrlp_map = s:is_enable_control_space_keymapping() ? '<C-Space>' : '<Nul>'
 
   let g:ctrlp_show_hidden = 1
   let g:ctrlp_lazy_update = 150
@@ -1783,7 +1790,7 @@ if executable('deno')
       return 0
     endfunction
 
-    if has('gui_running') || index(['xterm', 'xterm-kitty'], &term) >= 0
+    if s:is_enable_control_space_keymapping()
       nnoremap <silent> <C-Space> <Cmd>call ddu#start()<CR>
     else
       nnoremap <silent> <Nul> <Cmd>call ddu#start()<CR>
