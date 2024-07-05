@@ -1753,6 +1753,8 @@ if executable('deno')
     nmap <silent> <Leader>gl :<C-U>GinLog --graph --oneline --all -500<CR>
     nmap <silent> <Leader>gs :<C-U>GinStatus<CR>
     nmap <silent> <Leader>gc :<C-U>Gin commit<CR>
+
+    Autocmd BufReadCmd gin{branch,diff,edit,log,status,}://* setlocal nobuflisted
   endfunction
 
   let s:ddu = maxpac#add('Shougo/ddu.vim')
