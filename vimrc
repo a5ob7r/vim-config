@@ -1,17 +1,13 @@
 "
 " vimrc
 "
-" - The minimal requirement version is 9.1.0000.
-" - Work well even if a tiny version.
+" - The minimal requirement version is 9.1.0000 with default huge features.
 " - Work well even if no (non-default) plugin is installed.
 " - Support Unix and Windows.
 " - No support Neovim.
 "
 
 " =============================================================================
-"
-" For the tiny version.
-"
 
 " Options {{{
 " This is for the internal encoding for Vim itself, not for file encoding
@@ -26,12 +22,6 @@ scriptencoding utf-8
 if &compatible
   set nocompatible
 endif
-
-" Use a Vim as a Vi Improved not a Vi-compatible even if no "+eval" feature
-" such as a tiny version.
-silent! while 0
-  set nocompatible
-silent! endwhile
 
 " Allow to delete everything in Insert Mode.
 set backspace=indent,eol,start
@@ -108,10 +98,8 @@ set listchars+=tab:>\ \|,extends:>,precedes:<
 " of markdown.
 set showbreak=+++\ 
 
-if exists('+breakindent')
-  set breakindent
-  set breakindentopt=shift:2,sbr
-endif
+set breakindent
+set breakindentopt=shift:2,sbr
 
 " "smartcase" works only if "ignorecase" is on.
 set ignorecase smartcase
@@ -121,7 +109,7 @@ set pastetoggle=<F12>
 set completeopt=menuone,longest,popup
 
 " Xterm and st (simple terminal) also support true (or direct) colors.
-if exists('+termguicolors') && ($COLORTERM ==# 'truecolor' || index(['xterm', 'st-256color'], $TERM) > -1)
+if $COLORTERM ==# 'truecolor' || index(['xterm', 'st-256color'], $TERM) > -1
   set termguicolors
 endif
 
@@ -142,15 +130,11 @@ else
   endif
 endif
 
-if exists('+smoothscroll')
-  " Screen line oriented scrolling.
-  set smoothscroll
-endif
+" Screen line oriented scrolling.
+set smoothscroll
 
-if exists('+cdhome')
-  " Behave ":cd", ":tcd" and ":lcd" like in UNIX even if in MS-Windows.
-  set cdhome
-endif
+" Behave ":cd", ":tcd" and ":lcd" like in UNIX even if in MS-Windows.
+set cdhome
 
 if has('gui_running')
   " Add a "M" to the "guioptions" before executing ":syntax enable" or
@@ -203,14 +187,6 @@ inoremap <C-G><CR> <End><CR>
 " }}}
 
 " =============================================================================
-"
-" For the normal+ version.
-"
-
-" Following lines are evaluated only if "+eval" feature is on. Maybe no
-" ":finish" is enabled on some environments, but ":if" and ":endif" is always
-" enabled even if "+eval" is not on.
-if 0 | endif
 
 " Functions {{{
 function! s:autocmd(group, autocmd) abort
@@ -255,11 +231,7 @@ function! s:install_minpac() abort
 
   let l:command = printf('git clone %s %s', l:minpac_url, l:minpac_path)
 
-  if has('terminal')
-    execute 'terminal' l:command
-  else
-    call system(l:command)
-  endif
+  execute 'terminal' l:command
 endfunction
 
 " https://stackoverflow.com/questions/1533565/how-to-get-visually-selected-text-in-vimscript
@@ -392,32 +364,28 @@ inoremap <silent> <C-S> <Cmd>Update<CR>
 
 nnoremap <silent> <Leader>t :<C-U>tabnew<CR>
 
-if has('terminal')
-  " Like default configurations of Tmux.
-  nnoremap <silent> <Leader>" :<C-U>terminal<CR>
-  nnoremap <silent> <Leader>' :<C-U>call <SID>terminal()<CR>
-  nnoremap <silent> <Leader>% :<C-U>vertical terminal<CR>
-  nnoremap <silent> <Leader>5 :<C-U>call <SID>terminal('', 'vertical')<CR>
-  nnoremap <silent> <Leader>c :<C-U>Terminal<CR>
+" Like default configurations of Tmux.
+nnoremap <silent> <Leader>" :<C-U>terminal<CR>
+nnoremap <silent> <Leader>' :<C-U>call <SID>terminal()<CR>
+nnoremap <silent> <Leader>% :<C-U>vertical terminal<CR>
+nnoremap <silent> <Leader>5 :<C-U>call <SID>terminal('', 'vertical')<CR>
+nnoremap <silent> <Leader>c :<C-U>Terminal<CR>
 
-  tnoremap <silent> <C-W><Leader>" <C-W>:terminal<CR>
-  tnoremap <silent> <C-W><Leader>' <C-W>:call <SID>terminal()<CR>
-  tnoremap <silent> <C-W><Leader>% <C-W>:vertical terminal<CR>
-  tnoremap <silent> <C-W><Leader>5 <C-W>:call <SID>terminal('', 'vertical')<CR>
-  tnoremap <silent> <C-W><Leader>c <C-W>:Terminal<CR>
-endif
+tnoremap <silent> <C-W><Leader>" <C-W>:terminal<CR>
+tnoremap <silent> <C-W><Leader>' <C-W>:call <SID>terminal()<CR>
+tnoremap <silent> <C-W><Leader>% <C-W>:vertical terminal<CR>
+tnoremap <silent> <C-W><Leader>5 <C-W>:call <SID>terminal('', 'vertical')<CR>
+tnoremap <silent> <C-W><Leader>c <C-W>:Terminal<CR>
 
 nnoremap <silent> <Leader>y :YankComments<CR>
 vnoremap <silent> <Leader>y :YankComments<CR>
 
-if has('terminal')
-  " Delete finished terminal buffers by "<CR>", this behavior is similar to
-  " Neovim's builtin terminal.
-  tnoremap <silent><expr> <CR>
-    \ job_status(term_getjob(bufnr())) ==# 'dead'
-    \ ? "<C-W>:bdelete<CR>"
-    \ : "<CR>"
-endif
+" Delete finished terminal buffers by "<CR>", this behavior is similar to
+" Neovim's builtin terminal.
+tnoremap <silent><expr> <CR>
+  \ job_status(term_getjob(bufnr())) ==# 'dead'
+  \ ? "<C-W>:bdelete<CR>"
+  \ : "<CR>"
 
 " This is required for "term_start()" without "{ 'term_finish': 'close' }".
 nmap <silent><expr> <CR>
@@ -433,14 +401,12 @@ nmap <silent> <C-W>gm <Plug>(xminimize)
 nnoremap <silent> <C-W>M :<C-U>resize<CR>
 nnoremap <silent> <C-W>VM :<C-U>vertical resize<CR>
 
-if has('terminal')
-  tnoremap <silent> <C-W>m <C-W>:resize 0<CR>
-  tnoremap <silent> <C-W>Vm <C-W>:vertical resize 0<CR>
-  tmap <silent> <C-W>gm <Plug>(xminimize)
+tnoremap <silent> <C-W>m <C-W>:resize 0<CR>
+tnoremap <silent> <C-W>Vm <C-W>:vertical resize 0<CR>
+tmap <silent> <C-W>gm <Plug>(xminimize)
 
-  tnoremap <silent> <C-W>M <C-W>:resize<CR>
-  tnoremap <silent> <C-W>VM <C-W>:vertical resize<CR>
-endif
+tnoremap <silent> <C-W>M <C-W>:resize<CR>
+tnoremap <silent> <C-W>VM <C-W>:vertical resize<CR>
 " }}}
 
 " Commands {{{
@@ -521,14 +487,10 @@ Autocmd QuickFixCmdPost *grep* cwindow
 " if these directories are missing.
 Autocmd BufWritePre * silent call mkdir(expand('<afile>:p:h'), 'p')
 
-if has('terminal')
-  " Hide extras on normal mode of terminal.
-  Autocmd TerminalOpen * setlocal nolist nonumber colorcolumn=
-endif
+" Hide extras on normal mode of terminal.
+Autocmd TerminalOpen * setlocal nolist nonumber colorcolumn=
 
-if has('persistent_undo')
-  Autocmd BufReadPre ~/* setlocal undofile
-endif
+Autocmd BufReadPre ~/* setlocal undofile
 
 " From vim/runtime/defaults.vim
 " Jump cursor to last editting line.
@@ -669,13 +631,11 @@ function! s:neodark.post() abort
 
     colorscheme neodark
 
-    if has('terminal')
-      " Cyan, but the default is orange in a strange way.
-      let g:terminal_ansi_colors[6] = '#72c7d1'
-      " Light black
-      " Adjust the autosuggested text color for zsh.
-      let g:terminal_ansi_colors[8] = '#5f5f5f'
-    endif
+    " Cyan, but the default is orange in a strange way.
+    let g:terminal_ansi_colors[6] = '#72c7d1'
+    " Light black
+    " Adjust the autosuggested text color for zsh.
+    let g:terminal_ansi_colors[8] = '#5f5f5f'
   endfunction
 
   command! -bang -bar Neodark call s:apply_neodark(<q-bang>)
@@ -947,7 +907,7 @@ function! s:vim_lsp.pre() abort
 
   function! s:on_lsp_buffer_enabled() abort
     setlocal omnifunc=lsp#complete
-    if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
+    setlocal tagfunc=lsp#tagfunc
 
     nmap <buffer> gd <Plug>(lsp-definition)
     nmap <buffer> gD <Plug>(lsp-implementation)
@@ -1341,13 +1301,11 @@ endfunction
 " }}}
 
 " Eliot00/git-lens.vim {{{
-if has('vim9script')
-  let s:gitlens = maxpac#add('Eliot00/git-lens.vim')
+let s:gitlens = maxpac#add('Eliot00/git-lens.vim')
 
-  function! s:gitlens.post() abort
-    command! -bar ToggleGitLens call ToggleGitLens()
-  endfunction
-endif
+function! s:gitlens.post() abort
+  command! -bar ToggleGitLens call ToggleGitLens()
+endfunction
 " }}}
 
 " a5ob7r/linefeed.vim {{{

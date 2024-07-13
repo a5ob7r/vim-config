@@ -92,7 +92,4 @@ endfunction
 
 " Minimize the current window, and make other window's height equally.
 nnoremap <Plug>(xminimize) :<C-U>call <SID>xminimize()<CR>
-
-if has('terminal')
-  tnoremap <Plug>(xminimize) <C-W>:<C-U>call <SID>xminimize()<CR>
-endif
+tnoremap <Plug>(xminimize) <C-W>:<C-U>call <SID>xminimize()<CR>
