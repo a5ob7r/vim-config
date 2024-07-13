@@ -1,7 +1,10 @@
+scriptencoding utf-8
+
 "
 " vimrc
 "
 " - The minimal requirement version is 9.1.0000 with default huge features.
+" - Nowadays we are always in UTF-8 environment, aren't we?
 " - Work well even if no (non-default) plugin is installed.
 " - Support Unix and Windows.
 " - No support Neovim.
@@ -10,12 +13,6 @@
 " =============================================================================
 
 " Options {{{
-" This is for the internal encoding for Vim itself, not for file encoding
-" detection.
-set encoding=utf-8
-" Following lines are interpreted as if they are encoded by "utf-8".
-scriptencoding utf-8
-
 " NOTE: No need this basically in user vimrc because "compatible" option turns
 " into off automatically if vim finds user "vimrc" or "gvimrc", but it is said
 " that system vimrcs on some distributions contains "set compatible".
