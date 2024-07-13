@@ -48,11 +48,6 @@ function! maxpac#begin(...) abort
   " Initialize maxmac.
   call maxpac#initialize()
 
-  " "minpac" requires Vim 8.0.0050+.
-  if !has('patch-8.0.0050')
-    return v:false
-  endif
-
   try
     packadd minpac
   catch

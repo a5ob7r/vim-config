@@ -72,10 +72,5 @@ endfunction
 
 command! -bang -bar Bdelete call s:bdelete(<q-bang>)
 
-if has('patch-7.4.542')
-  command! -bang -bar -range=% -addr=loaded_buffers DeleteEmptyBuffers
-    \ call s:delete_empty_buffers(<q-bang>, <line1>, <line2>)
-else
-  command! -bang -bar DeleteEmptyBuffers
-    \ call s:delete_empty_buffers(<q-bang>, 1, bufnr('$'))
-endif
+command! -bang -bar -range=% -addr=loaded_buffers DeleteEmptyBuffers
+  \ call s:delete_empty_buffers(<q-bang>, <line1>, <line2>)

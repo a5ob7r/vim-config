@@ -1,10 +1,9 @@
 "
 " vimrc
 "
-" - WIP: The minimal requirement version is 7.4.0000.
+" - The minimal requirement version is 9.1.0000.
 " - Work well even if a tiny version.
 " - Work well even if no (non-default) plugin is installed.
-" - Work well with plugins since 8.0.0050.
 " - Support Unix and Windows.
 " - No support Neovim.
 "
@@ -91,14 +90,7 @@ set wildmode=longest:full,full
 
 " A command mode with an enhanced completion.
 set wildmenu
-
-if has('patch-8.2.4325')
-  set wildoptions+=pum
-endif
-
-if has('patch-8.2.4463')
-  set wildoptions+=fuzzy
-endif
+set wildoptions+=pum,fuzzy
 
 " "smartindent" isn't a super option for "autoindent", and the two of options
 " work in a complement way for each other. So these options should be on at
@@ -110,11 +102,7 @@ set autoindent smartindent
 "
 " "extends" is only used when "wrap" is off.
 set list
-set listchars+=tab:>\ ,extends:>,precedes:<
-
-if has('patch-8.1.0759')
-  set listchars+=tab:>\ \|
-endif
+set listchars+=tab:>\ \|,extends:>,precedes:<
 
 " Strings that start with '>' isn't compatible with the block quotation syntax
 " of markdown.
@@ -130,28 +118,11 @@ set ignorecase smartcase
 
 set pastetoggle=<F12>
 
-set completeopt=menuone,longest
-
-if has('patch-8.1.1880')
-  set completeopt+=popup
-endif
+set completeopt=menuone,longest,popup
 
 " Xterm and st (simple terminal) also support true (or direct) colors.
 if exists('+termguicolors') && ($COLORTERM ==# 'truecolor' || index(['xterm', 'st-256color'], $TERM) > -1)
   set termguicolors
-
-  " No longer need these configurations below since "patch-9.0.1111" because
-  " Vim set them automatically if compiled with the "+termguicolors" feature.
-  if !has('patch-9.0.1111')
-    " Vim sets these configurations below only if the value of `$TERM` is
-    " `xterm`. Otherwise we manually need to set them to work true color well.
-    let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-    let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-
-    if exists('+t_8u')
-      let &t_8u = "\<Esc>[58;2;%lu;%lu;%lum"
-    endif
-  endif
 endif
 
 if has('win32') || has('osxdarwin')
@@ -179,15 +150,6 @@ endif
 if exists('+cdhome')
   " Behave ":cd", ":tcd" and ":lcd" like in UNIX even if in MS-Windows.
   set cdhome
-endif
-
-" "modeline" is on only if Vim can validate the values.
-"
-" https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2016-1248
-set nomodeline
-
-if has('patch-8.0.0056')
-  set modeline
 endif
 
 if has('gui_running')
@@ -251,18 +213,6 @@ inoremap <C-G><CR> <End><CR>
 if 0 | endif
 
 " Functions {{{
-" A backward comaptible "mkdir" for patch-8.0.1708, that "mkdir" with "p" flag
-" throws no error even if the directory already exists.
-function! s:mkdir(name, ...) abort
-  let l:name = a:name
-  let l:path = get(a:, '1', '')
-  let l:prot = get(a:, '2', '0o755')
-
-  if !(l:path =~# 'p' && isdirectory(l:name))
-    call mkdir(l:name, l:path, l:prot)
-  endif
-endfunction
-
 function! s:autocmd(group, autocmd) abort
   let l:group = a:group
 
@@ -286,26 +236,10 @@ function! s:autocmd(group, autocmd) abort
   let l:once = index(l:attrs, '++once') >= 0
   let l:nested = match(l:attrs, '^\%(++\)\=nested$') >= 0
 
-  if has('patch-8.1.1113')
-    let l:nested_arg = l:nested ? '++nested' : ''
-    let l:once_arg = l:once ? '++once' : ''
+  let l:nested_arg = l:nested ? '++nested' : ''
+  let l:once_arg = l:once ? '++once' : ''
 
-    execute printf('autocmd %s %s %s %s %s', l:group, l:left, l:nested_arg, l:once_arg, l:right)
-  else
-    let l:nested_arg = l:nested ? 'nested' : ''
-
-    if l:once
-      let l:group = printf('vimrc_autocmd_once_%s', rand())
-
-      execute 'augroup' l:group
-        autocmd!
-        execute 'autocmd' l:left l:nested_arg l:right
-        execute 'autocmd' l:left 'autocmd!' l:group l:left
-      augroup END
-    else
-      execute 'autocmd' l:left l:nested_arg l:right
-    endif
-  endif
+  execute printf('autocmd %s %s %s %s %s', l:group, l:left, l:nested_arg, l:once_arg, l:right)
 endfunction
 
 function! s:install_minpac() abort
@@ -402,9 +336,9 @@ let &g:backupdir = s:directory . '/vim/backup//'
 let &g:directory = s:directory . '/vim/swap//'
 let &g:undodir = s:directory . '/vim/undo//'
 
-silent call s:mkdir(expand(&g:backupdir), 'p', 0700)
-silent call s:mkdir(expand(&g:directory), 'p', 0700)
-silent call s:mkdir(expand(&g:undodir), 'p', 0700)
+silent call mkdir(expand(&g:backupdir), 'p', 0700)
+silent call mkdir(expand(&g:directory), 'p', 0700)
+silent call mkdir(expand(&g:undodir), 'p', 0700)
 " }}}
 
 " Key mappings {{{
@@ -454,11 +388,7 @@ nnoremap <silent> <Leader><F2> :<C-U>Vimrc<CR>
 " bit bothersome. So I want to use these shortcuts which are often used to
 " save files by GUI editros.
 nnoremap <silent> <C-S> :<C-U>Update<CR>
-if has('patch-8.2.1978')
-  inoremap <silent> <C-S> <Cmd>Update<CR>
-else
-  inoremap <silent> <C-S> <Esc>:Update<CR>gi
-endif
+inoremap <silent> <C-S> <Cmd>Update<CR>
 
 nnoremap <silent> <Leader>t :<C-U>tabnew<CR>
 
@@ -589,7 +519,7 @@ Autocmd QuickFixCmdPost *grep* cwindow
 
 " Make parent directories of the file which the written buffer is corresponing
 " if these directories are missing.
-Autocmd BufWritePre * silent call s:mkdir(expand('<afile>:p:h'), 'p')
+Autocmd BufWritePre * silent call mkdir(expand('<afile>:p:h'), 'p')
 
 if has('terminal')
   " Hide extras on normal mode of terminal.
@@ -654,6 +584,10 @@ let g:loaded_vimballPlugin = 1
 let g:netrw_list_hide = '^\..*\~ *'
 let g:netrw_sizestyle = 'H'
 " }}}
+" }}}
+
+" Bundled plugins {{{
+packadd! editorconfig
 " }}}
 
 " =============================================================================
@@ -1402,11 +1336,7 @@ function! s:matchup.fallback() abort
   " The enhanced "%", to find many extra matchings and jump the cursor to them.
   "
   " NOTE: "matchit" isn't a standard plugin, but it's bundled in Vim by default.
-  if has('patch-7.4.1486')
-    packadd! matchit
-  else
-    source $VIMRUNTIME/macros/matchit.vim
-  endif
+  packadd! matchit
 endfunction
 " }}}
 
@@ -1463,9 +1393,7 @@ function! s:man.fallback() abort
 endfunction
 
 function! s:man.common() abort
-  if has('patch-7.4.1833')
-    set keywordprg=:Man
-  endif
+  set keywordprg=:Man
 endfunction
 " }}}
 
@@ -1720,13 +1648,6 @@ call maxpac#add('tpope/vim-endwise')
 call maxpac#add('tyru/eskk.vim')
 call maxpac#add('vim-jp/vital.vim')
 call maxpac#add('yasuhiroki/github-actions-yaml.vim')
-
-if s:is_bundled_package_loadable('editorconfig')
-  " "editorconfig-vim" package is bundled since e5e04306bf02aa4ad488558dd593cf5c3b72f9b7.
-  packadd! editorconfig
-else
-  call maxpac#add('editorconfig/editorconfig-vim')
-endif
 
 if s:is_bundled_package_loadable('comment')
   " "comment.vim" package is bundled since 5400a5d4269874fe4f1c35dfdd3c039ea17dfd62.
