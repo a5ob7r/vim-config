@@ -13,35 +13,6 @@ scriptencoding utf-8
 " =============================================================================
 
 " Functions {{{
-function! s:autocmd(group, autocmd) abort
-  let l:group = a:group
-
-  let l:once = 0
-  let l:nested = 0
-  let l:attrs = []
-
-  let l:idx = match(a:autocmd, '^\s*\S\+\s\+\%(\\ \|[^[:space:]]\)\+\s\+\zs')
-  " Events and patterns.
-  let l:left = a:autocmd[0:l:idx][0:-2]
-  " Attribute arguments(++once, ++nested) and commands.
-  let l:right = a:autocmd[l:idx :]
-
-  let l:idx = match(l:right, '^\s*\%(\%(\%(++\)\=nested\|++once\)\s\+\)\+\zs')
-  if l:idx >= 0
-    let l:attrs = split(l:right[0:l:idx][0:-2])
-    " Commands only.
-    let l:right = l:right[l:idx :]
-  endif
-
-  let l:once = index(l:attrs, '++once') >= 0
-  let l:nested = match(l:attrs, '^\%(++\)\=nested$') >= 0
-
-  let l:nested_arg = l:nested ? '++nested' : ''
-  let l:once_arg = l:once ? '++once' : ''
-
-  execute printf('autocmd %s %s %s %s %s', l:group, l:left, l:nested_arg, l:once_arg, l:right)
-endfunction
-
 function! s:install_minpac() abort
   " A root directory path of vim packages.
   let l:packhome = $'{split(&packpath, ',')[0]}/pack'
@@ -449,15 +420,7 @@ command! InstallMinpac call s:install_minpac()
 " }}}
 
 " Auto commands {{{
-" An attribute(++once, ++nested) compatible :autocmd helper.
-"
-" :Autocmd TabNew * tcd ~
-" :Autocmd TabNew * nested tcd ~
-" :Autocmd TabNew * ++nested tcd ~
-" :Autocmd TabNew * ++once tcd ~
-" :Autocmd TabNew * ++once nested tcd ~
-" :Autocmd TabNew * ++once ++nested tcd ~
-command! -nargs=+ Autocmd call s:autocmd('vimrc', <q-args>)
+command! -nargs=+ Autocmd autocmd vimrc <args>
 
 augroup vimrc
   " This throws "E216" if no such a autocmd group, so first of all we need to
