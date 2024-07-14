@@ -132,7 +132,7 @@ set cursorline
 " are out of the screen.
 set display=lastline
 
-" Maybe SKK dictionaries are encoded by "enc-jp".
+" Maybe SKK dictionaries are encoded by "euc-jp".
 " NOTE: "usc-bom" must precede "utf-8" to recognize BOM.
 set fileencodings=ucs-bom,utf-8,iso-2022-jp,euc-jp,cp932,latin1
 
