@@ -44,9 +44,9 @@ endfunction
 
 function! s:install_minpac() abort
   " A root directory path of vim packages.
-  let l:packhome = split(&packpath, ',')[0] . '/pack'
+  let l:packhome = $'{split(&packpath, ',')[0]}/pack'
 
-  let l:minpac_path = l:packhome . '/minpac/opt/minpac'
+  let l:minpac_path =  $'{l:packhome}/minpac/opt/minpac'
   let l:minpac_url = 'https://github.com/k-takata/minpac.git'
 
   if isdirectory(l:minpac_path) || ! executable('git')
@@ -256,9 +256,9 @@ set nowrapscan
 " https://github.com/archlinux/svntogit-packages/blob/68635a69f0c5525210adca6ff277dc13c590399b/trunk/archlinux.vim#L22
 let s:directory = exists('$XDG_CACHE_HOME') ? $XDG_CACHE_HOME : expand('~/.cache')
 
-let &g:backupdir = s:directory . '/vim/backup//'
-let &g:directory = s:directory . '/vim/swap//'
-let &g:undodir = s:directory . '/vim/undo//'
+let &g:backupdir = $'{s:directory}/vim/backup//'
+let &g:directory = $'{s:directory}/vim/swap//'
+let &g:undodir = $'{s:directory}/vim/undo//'
 
 silent call mkdir(expand(&g:backupdir), 'p', 0700)
 silent call mkdir(expand(&g:directory), 'p', 0700)
@@ -1050,8 +1050,7 @@ function! s:open_browser.post() abort
   nnoremap <Leader>k :call SearchUnderCursorEnglishWord()<CR>
 
   function! SearchEnglishWord(word) abort
-    let l:searchUrl = 'https://dictionary.cambridge.org/dictionary/english/'
-    let l:url = l:searchUrl . a:word
+    let l:url = $'https://dictionary.cambridge.org/dictionary/english/{a:word}'
     call openbrowser#open(l:url)
   endfunction
 
