@@ -68,14 +68,14 @@ function! s:terminal(...) abort
   let l:mods = get(a:000, 1, '')
 
   " If the current buffer is for normal exsisting file editing.
-  let l:cwd = empty(&buftype) && !empty(expand('%')) ? expand('%:p:h') : getcwd()
+  let l:cwd = empty(&buftype) && !expand('%')->empty() ? expand('%:p:h') : getcwd()
   let l:opts = { 'curwin': !empty(l:bang), 'cwd': l:cwd, 'term_finish': 'close' }
 
   execute l:mods 'call term_start(&shell, l:opts)'
 endfunction
 
 function! s:is_bundled_package_loadable(package_name) abort
-  return !empty(glob($'{$VIMRUNTIME}/pack/dist/opt/{a:package_name}/plugin/*.vim'))
+  return !glob($'{$VIMRUNTIME}/pack/dist/opt/{a:package_name}/plugin/*.vim')->empty()
 endfunction
 
 " Whether "<C-Space>" is usable for keymappings or not. Use "<Nul>" instead if
@@ -344,7 +344,7 @@ tnoremap <silent><expr> <CR>
 
 " This is required for "term_start()" without "{ 'term_finish': 'close' }".
 nmap <silent><expr> <CR>
-  \ &buftype ==# 'terminal' && job_status(term_getjob(bufnr())) ==# 'dead'
+  \ &buftype ==# 'terminal' && bufnr()->term_getjob()->job_status() ==# 'dead'
   \ ? ":<C-U>bdelete<CR>"
   \ : "<Plug>(newline)"
 
@@ -402,7 +402,7 @@ command! -bar Binary setlocal binary!
 "
 " This is an auxiliary command for keyboard shortcuts.
 command! -bang -bar -range=% Update
-  \ execute printf('<mods> <line1>,<line2>%s<bang>', filewritable(expand('%')) ? 'update' : 'write')
+  \ execute printf('<mods> <line1>,<line2>%s<bang>', expand('%')->filewritable() ? 'update' : 'write')
 
 " A helper command to open a file in a split window, or the current one (if it
 " is invoked with a bang mark).
@@ -526,7 +526,7 @@ let s:minpac = maxpac#add('k-takata/minpac')
 
 function! s:minpac.post() abort
   function! s:pack_complete(...) abort
-    return join(sort(keys(minpac#getpluglist())), "\n")
+    return minpac#getpluglist()->keys()->sort()->join("\n")
   endfunction
 
   command! -bar -nargs=? PackInstall
@@ -646,7 +646,7 @@ function! s:lightline.pre() abort
   endfunction
 
   function! s:has_lightline_colorscheme(colorscheme) abort
-    return !empty(globpath(&runtimepath, $'autoload/lightline/colorscheme/{a:colorscheme}.vim', 1))
+    return !globpath(&runtimepath, $'autoload/lightline/colorscheme/{a:colorscheme}.vim', 1)->empty()
   endfunction
 
   function! s:update_lightline() abort
@@ -673,7 +673,7 @@ function! s:lightline.pre() abort
   endfunction
 
   function! s:lightline_colorschemes(...) abort
-    return join(map(globpath(&runtimepath, 'autoload/lightline/colorscheme/*.vim', 1, 1), { _, val -> fnamemodify(val, ':t:r') }), "\n")
+    return globpath(&runtimepath, 'autoload/lightline/colorscheme/*.vim', 1, 1)->map({ _, val -> fnamemodify(val, ':t:r') })->join("\n")
   endfunction
 
   " The original version is from the help file of "lightline".
@@ -1139,12 +1139,12 @@ function! s:ripgrep.post() abort
     let l:r_col_idx = l:r_col - (&selection ==# 'inclusive' ? 1 : 2)
 
     let l:buflines =
-          \ a:motion_wiseness ==# 'block' ? map(getbufline(bufname('%'), l:l_lnum, l:r_lnum), { _, val -> val[l:l_col_idx : l:r_col_idx] }) :
+          \ a:motion_wiseness ==# 'block' ? getbufline(bufname('%'), l:l_lnum, l:r_lnum)->map({ _, val -> val[l:l_col_idx : l:r_col_idx] }) :
           \ a:motion_wiseness ==# 'line' ? getbufline(bufname('%'), l:l_lnum, l:r_lnum) :
-          \ map(getbufline(bufname('%'), l:l_lnum), { _, val -> val[l:l_col_idx : l:r_col_idx] })
+          \ getbufline(bufname('%'), l:l_lnum)->map({ _, val -> val[l:l_col_idx : l:r_col_idx] })
 
     let l:words += match(l:buflines, '^\s*-') + 1 ? ['--'] : []
-    let l:words += match(l:buflines, ' ') + 1 ? [printf('"%s"', join(map(copy(l:buflines), { _, val -> s:command_line_argumentalize_escape(val) }), "\n"))] : [join(map(copy(l:buflines), { _, val -> s:command_line_argumentalize_escape(val) }), "\n")]
+    let l:words += match(l:buflines, ' ') + 1 ? [printf('"%s"', copy(l:buflines)->map({ _, val -> s:command_line_argumentalize_escape(val) })->join("\n"))] : [copy(l:buflines)->map({ _, val -> s:command_line_argumentalize_escape(val) })->join("\n")]
 
     let l:command = join(l:words)
 
