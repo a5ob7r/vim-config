@@ -122,13 +122,6 @@ let $VIMHOME = expand('<sfile>:p:h')
 " }}}
 
 " Options {{{
-" NOTE: No need this basically in user vimrc because "compatible" option turns
-" into off automatically if vim finds user "vimrc" or "gvimrc", but it is said
-" that system vimrcs on some distributions contains "set compatible".
-if &compatible
-  set nocompatible
-endif
-
 " Allow to delete everything in Insert Mode.
 set backspace=indent,eol,start
 
