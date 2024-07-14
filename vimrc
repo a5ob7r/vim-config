@@ -710,7 +710,7 @@ function! s:lightline.pre() abort
   endfunction
 
   function! s:lightline_colorschemes(...) abort
-    return join(map(globpath(&runtimepath, 'autoload/lightline/colorscheme/*.vim', 1, 1), "fnamemodify(v:val, ':t:r')"), "\n")
+    return join(map(globpath(&runtimepath, 'autoload/lightline/colorscheme/*.vim', 1, 1), { _, val -> fnamemodify(val, ':t:r') }), "\n")
   endfunction
 
   " The original version is from the help file of "lightline".
@@ -1112,7 +1112,7 @@ function! s:ripgrep.post() abort
 
     if l:o_escape
       " Change the "<q-args>" to the "{command}" argument for "job_start()" literally.
-      let l:args += map(copy(a:args), 's:job_argumentalize_escape(v:val)')
+      let l:args += map(copy(a:args), { _, val -> s:job_argumentalize_escape(val) })
     else
       let l:args += a:args
     endif
@@ -1176,12 +1176,12 @@ function! s:ripgrep.post() abort
     let l:r_col_idx = l:r_col - (&selection ==# 'inclusive' ? 1 : 2)
 
     let l:buflines =
-          \ a:motion_wiseness ==# 'block' ? map(getbufline(bufname('%'), l:l_lnum, l:r_lnum), 'v:val[l:l_col_idx : l:r_col_idx]') :
+          \ a:motion_wiseness ==# 'block' ? map(getbufline(bufname('%'), l:l_lnum, l:r_lnum), { _, val -> val[l:l_col_idx : l:r_col_idx] }) :
           \ a:motion_wiseness ==# 'line' ? getbufline(bufname('%'), l:l_lnum, l:r_lnum) :
-          \ map(getbufline(bufname('%'), l:l_lnum), 'v:val[l:l_col_idx : l:r_col_idx]')
+          \ map(getbufline(bufname('%'), l:l_lnum), { _, val -> val[l:l_col_idx : l:r_col_idx] })
 
     let l:words += match(l:buflines, '^\s*-') + 1 ? ['--'] : []
-    let l:words += match(l:buflines, ' ') + 1 ? [printf('"%s"', join(map(copy(l:buflines), 's:command_line_argumentalize_escape(v:val)'), "\n"))] : [join(map(copy(l:buflines), 's:command_line_argumentalize_escape(v:val)'), "\n")]
+    let l:words += match(l:buflines, ' ') + 1 ? [printf('"%s"', join(map(copy(l:buflines), { _, val -> s:command_line_argumentalize_escape(val) }), "\n"))] : [join(map(copy(l:buflines), { _, val -> s:command_line_argumentalize_escape(val) }), "\n")]
 
     let l:command = join(l:words)
 
