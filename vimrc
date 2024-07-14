@@ -12,6 +12,115 @@ scriptencoding utf-8
 
 " =============================================================================
 
+" Functions {{{
+function! s:autocmd(group, autocmd) abort
+  let l:group = a:group
+
+  let l:once = 0
+  let l:nested = 0
+  let l:attrs = []
+
+  let l:idx = match(a:autocmd, '^\s*\S\+\s\+\%(\\ \|[^[:space:]]\)\+\s\+\zs')
+  " Events and patterns.
+  let l:left = a:autocmd[0:l:idx][0:-2]
+  " Attribute arguments(++once, ++nested) and commands.
+  let l:right = a:autocmd[l:idx :]
+
+  let l:idx = match(l:right, '^\s*\%(\%(\%(++\)\=nested\|++once\)\s\+\)\+\zs')
+  if l:idx >= 0
+    let l:attrs = split(l:right[0:l:idx][0:-2])
+    " Commands only.
+    let l:right = l:right[l:idx :]
+  endif
+
+  let l:once = index(l:attrs, '++once') >= 0
+  let l:nested = match(l:attrs, '^\%(++\)\=nested$') >= 0
+
+  let l:nested_arg = l:nested ? '++nested' : ''
+  let l:once_arg = l:once ? '++once' : ''
+
+  execute printf('autocmd %s %s %s %s %s', l:group, l:left, l:nested_arg, l:once_arg, l:right)
+endfunction
+
+function! s:install_minpac() abort
+  " A root directory path of vim packages.
+  let l:packhome = split(&packpath, ',')[0] . '/pack'
+
+  let l:minpac_path = l:packhome . '/minpac/opt/minpac'
+  let l:minpac_url = 'https://github.com/k-takata/minpac.git'
+
+  if isdirectory(l:minpac_path) || ! executable('git')
+    return
+  endif
+
+  let l:command = printf('git clone %s %s', l:minpac_url, l:minpac_path)
+
+  execute 'terminal' l:command
+endfunction
+
+" https://stackoverflow.com/questions/1533565/how-to-get-visually-selected-text-in-vimscript
+function! s:get_visual_selection() abort
+  let [l:line_start, l:column_start] = getpos("'<")[1:2]
+  let [l:line_end, l:column_end] = getpos("'>")[1:2]
+  let l:lines = getline(l:line_start, l:line_end)
+  if len(l:lines) == 0
+    return ''
+  endif
+  let l:lines[-1] = l:lines[-1][: l:column_end - (&selection ==# 'inclusive' ? 1 : 2)]
+  let l:lines[0] = l:lines[0][l:column_start - 1:]
+  return join(l:lines, "\n")
+endfunction
+
+" Get syntax item information at a position.
+"
+" https://vim.fandom.com/wiki/Identify_the_syntax_highlighting_group_used_at_the_cursor
+function! s:syntax_item_attribute(line, column) abort
+  let l:item_id = synID(a:line, a:column, 1)
+  let l:trans_item_id = synID(a:line, a:column, 0)
+
+  return printf(
+    \ 'hi<%s> trans<%s> lo<%s>',
+    \ synIDattr(l:item_id, 'name'),
+    \ synIDattr(l:trans_item_id, 'name'),
+    \ synIDattr(synIDtrans(l:item_id), 'name')
+    \ )
+endfunction
+
+" Join and normalize filepaths.
+function! s:pathjoin(...) abort
+  let l:sep = has('win32') ? '\\' : '/'
+  return substitute(simplify(join(a:000, l:sep)), printf('^\.%s', l:sep), '', '')
+endfunction
+
+function! s:terminal(...) abort
+  let l:bang = get(a:000, 0, '')
+  let l:mods = get(a:000, 1, '')
+
+  " If the current buffer is for normal exsisting file editing.
+  let l:cwd = empty(&buftype) && !empty(expand('%')) ? expand('%:p:h') : getcwd()
+  let l:opts = { 'curwin': !empty(l:bang), 'cwd': l:cwd, 'term_finish': 'close' }
+
+  execute l:mods 'call term_start(&shell, l:opts)'
+endfunction
+
+function! s:is_bundled_package_loadable(package_name) abort
+  return !empty(glob(printf('%s/pack/dist/opt/%s/plugin/*.vim', $VIMRUNTIME, a:package_name)))
+endfunction
+
+" Whether "<C-Space>" is usable for keymappings or not. Use "<Nul>" instead if
+" not.
+"
+" NOTE: "<Nul>" is sent instead of "<C-Space>" when type the "CTRL" key and
+" the "SPACE" one as once if in some terminal emulators.
+function! s:is_enable_control_space_keymapping() abort
+  return has('gui_running') || getenv('TERM_PROGRAM') ==# 'iTerm.app' || index(['xterm', 'xterm-kitty'], &term) >= 0
+endfunction
+" }}}
+
+" Variables {{{
+let $VIMHOME = expand('<sfile>:p:h')
+" }}}
+
 " Options {{{
 " NOTE: No need this basically in user vimrc because "compatible" option turns
 " into off automatically if vim finds user "vimrc" or "gvimrc", but it is said
@@ -147,9 +256,27 @@ set nojoinspaces
 
 " Stop at a TOP or BOTTOM match even if hitting "n" or "N" repeatedly.
 set nowrapscan
+
+" Create temporary files(backup, swap, undo) under secure locations to avoid
+" CVE-2017-1000382.
+"
+" https://github.com/archlinux/svntogit-packages/blob/68635a69f0c5525210adca6ff277dc13c590399b/trunk/archlinux.vim#L22
+let s:directory = exists('$XDG_CACHE_HOME') ? $XDG_CACHE_HOME : expand('~/.cache')
+
+let &g:backupdir = s:directory . '/vim/backup//'
+let &g:directory = s:directory . '/vim/swap//'
+let &g:undodir = s:directory . '/vim/undo//'
+
+silent call mkdir(expand(&g:backupdir), 'p', 0700)
+silent call mkdir(expand(&g:directory), 'p', 0700)
+silent call mkdir(expand(&g:undodir), 'p', 0700)
 " }}}
 
 " Key mappings {{{
+" "<Leader>" is replaced with the value of "g:mapleader" when define a
+" keymapping, so we must define this variable before the mapping definition.
+let g:mapleader = ' '
+
 " Use "Q" as the typed key recording starter and the terminator instead of
 " "q".
 noremap Q q
@@ -181,139 +308,6 @@ vnoremap <C-L> <Esc>
 
 " A newline version of "i_CTRL-G_k" and "i_CTRL-G_j".
 inoremap <C-G><CR> <End><CR>
-" }}}
-
-" =============================================================================
-
-" Functions {{{
-function! s:autocmd(group, autocmd) abort
-  let l:group = a:group
-
-  let l:once = 0
-  let l:nested = 0
-  let l:attrs = []
-
-  let l:idx = match(a:autocmd, '^\s*\S\+\s\+\%(\\ \|[^[:space:]]\)\+\s\+\zs')
-  " Events and patterns.
-  let l:left = a:autocmd[0:l:idx][0:-2]
-  " Attribute arguments(++once, ++nested) and commands.
-  let l:right = a:autocmd[l:idx :]
-
-  let l:idx = match(l:right, '^\s*\%(\%(\%(++\)\=nested\|++once\)\s\+\)\+\zs')
-  if l:idx >= 0
-    let l:attrs = split(l:right[0:l:idx][0:-2])
-    " Commands only.
-    let l:right = l:right[l:idx :]
-  endif
-
-  let l:once = index(l:attrs, '++once') >= 0
-  let l:nested = match(l:attrs, '^\%(++\)\=nested$') >= 0
-
-  let l:nested_arg = l:nested ? '++nested' : ''
-  let l:once_arg = l:once ? '++once' : ''
-
-  execute printf('autocmd %s %s %s %s %s', l:group, l:left, l:nested_arg, l:once_arg, l:right)
-endfunction
-
-function! s:install_minpac() abort
-  " A root directory path of vim packages.
-  let l:packhome = split(&packpath, ',')[0] . '/pack'
-
-  let l:minpac_path = l:packhome . '/minpac/opt/minpac'
-  let l:minpac_url = 'https://github.com/k-takata/minpac.git'
-
-  if isdirectory(l:minpac_path) || ! executable('git')
-    return
-  endif
-
-  let l:command = printf('git clone %s %s', l:minpac_url, l:minpac_path)
-
-  execute 'terminal' l:command
-endfunction
-
-" https://stackoverflow.com/questions/1533565/how-to-get-visually-selected-text-in-vimscript
-function! s:get_visual_selection() abort
-  let [l:line_start, l:column_start] = getpos("'<")[1:2]
-  let [l:line_end, l:column_end] = getpos("'>")[1:2]
-  let l:lines = getline(l:line_start, l:line_end)
-  if len(l:lines) == 0
-    return ''
-  endif
-  let l:lines[-1] = l:lines[-1][: l:column_end - (&selection ==# 'inclusive' ? 1 : 2)]
-  let l:lines[0] = l:lines[0][l:column_start - 1:]
-  return join(l:lines, "\n")
-endfunction
-
-" Get syntax item information at a position.
-"
-" https://vim.fandom.com/wiki/Identify_the_syntax_highlighting_group_used_at_the_cursor
-function! s:syntax_item_attribute(line, column) abort
-  let l:item_id = synID(a:line, a:column, 1)
-  let l:trans_item_id = synID(a:line, a:column, 0)
-
-  return printf(
-    \ 'hi<%s> trans<%s> lo<%s>',
-    \ synIDattr(l:item_id, 'name'),
-    \ synIDattr(l:trans_item_id, 'name'),
-    \ synIDattr(synIDtrans(l:item_id), 'name')
-    \ )
-endfunction
-
-" Join and normalize filepaths.
-function! s:pathjoin(...) abort
-  let l:sep = has('win32') ? '\\' : '/'
-  return substitute(simplify(join(a:000, l:sep)), printf('^\.%s', l:sep), '', '')
-endfunction
-
-function! s:terminal(...) abort
-  let l:bang = get(a:000, 0, '')
-  let l:mods = get(a:000, 1, '')
-
-  " If the current buffer is for normal exsisting file editing.
-  let l:cwd = empty(&buftype) && !empty(expand('%')) ? expand('%:p:h') : getcwd()
-  let l:opts = { 'curwin': !empty(l:bang), 'cwd': l:cwd, 'term_finish': 'close' }
-
-  execute l:mods 'call term_start(&shell, l:opts)'
-endfunction
-
-function! s:is_bundled_package_loadable(package_name) abort
-  return !empty(glob(printf('%s/pack/dist/opt/%s/plugin/*.vim', $VIMRUNTIME, a:package_name)))
-endfunction
-
-" Whether "<C-Space>" is usable for keymappings or not. Use "<Nul>" instead if
-" not.
-"
-" NOTE: "<Nul>" is sent instead of "<C-Space>" when type the "CTRL" key and
-" the "SPACE" one as once if in some terminal emulators.
-function! s:is_enable_control_space_keymapping() abort
-  return has('gui_running') || getenv('TERM_PROGRAM') ==# 'iTerm.app' || index(['xterm', 'xterm-kitty'], &term) >= 0
-endfunction
-" }}}
-
-" Variables {{{
-let $VIMHOME = expand('<sfile>:p:h')
-" }}}
-
-" Options {{{
-" Create temporary files(backup, swap, undo) under secure locations to avoid
-" CVE-2017-1000382.
-"
-" https://github.com/archlinux/svntogit-packages/blob/68635a69f0c5525210adca6ff277dc13c590399b/trunk/archlinux.vim#L22
-let s:directory = exists('$XDG_CACHE_HOME') ? $XDG_CACHE_HOME : expand('~/.cache')
-
-let &g:backupdir = s:directory . '/vim/backup//'
-let &g:directory = s:directory . '/vim/swap//'
-let &g:undodir = s:directory . '/vim/undo//'
-
-silent call mkdir(expand(&g:backupdir), 'p', 0700)
-silent call mkdir(expand(&g:directory), 'p', 0700)
-silent call mkdir(expand(&g:undodir), 'p', 0700)
-" }}}
-
-" Key mappings {{{
-" "<Leader>" is replaced with the value of "g:mapleader" when define a
-" keymapping, so we must define this variable before the mapping definition.
-let g:mapleader = ' '
 
 " Smart linewise upward/downward cursor movements in Vitual mode.
 "
