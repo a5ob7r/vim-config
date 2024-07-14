@@ -24,7 +24,7 @@ function! s:install_minpac() abort
     return
   endif
 
-  let l:command = printf('git clone %s %s', l:minpac_url, l:minpac_path)
+  let l:command = $'git clone {l:minpac_url} {l:minpac_path}'
 
   execute 'terminal' l:command
 endfunction
@@ -75,7 +75,7 @@ function! s:terminal(...) abort
 endfunction
 
 function! s:is_bundled_package_loadable(package_name) abort
-  return !empty(glob(printf('%s/pack/dist/opt/%s/plugin/*.vim', $VIMRUNTIME, a:package_name)))
+  return !empty(glob($'{$VIMRUNTIME}/pack/dist/opt/{a:package_name}/plugin/*.vim'))
 endfunction
 
 " Whether "<C-Space>" is usable for keymappings or not. Use "<Nul>" instead if
@@ -286,12 +286,12 @@ nnoremap <silent> gb :bNext<CR>
 nnoremap <silent> gB :bprevious<CR>
 
 " Browse quickfix/location lists by "<C-N>" and "<C-P>".
-nnoremap <silent> <C-N> :<C-U>execute printf('%dcnext', v:count1)<CR>
-nnoremap <silent> <C-P> :<C-U>execute printf('%dcprevious', v:count1)<CR>
-nnoremap <silent> g<C-N> :<C-U>execute printf('%dlnext', v:count1)<CR>
-nnoremap <silent> g<C-P> :<C-U>execute printf('%dlprevious', v:count1)<CR>
-nnoremap <silent> <C-G><C-N> :<C-U>execute printf('%dlnext', v:count1)<CR>
-nnoremap <silent> <C-G><C-P> :<C-U>execute printf('%dlprevious', v:count1)<CR>
+nnoremap <silent> <C-N> :<C-U>execute $'{v:count1}cnext'<CR>
+nnoremap <silent> <C-P> :<C-U>execute $'{v:count1}cprevious'<CR>
+nnoremap <silent> g<C-N> :<C-U>execute $'{v:count1}lnext'<CR>
+nnoremap <silent> g<C-P> :<C-U>execute $'{v:count1}lprevious'<CR>
+nnoremap <silent> <C-G><C-N> :<C-U>execute $'{v:count1}lnext'<CR>
+nnoremap <silent> <C-G><C-P> :<C-U>execute $'{v:count1}lprevious'<CR>
 
 " Clear the highlightings for pattern searching and run a command to refresh
 " something.
@@ -646,7 +646,7 @@ function! s:lightline.pre() abort
   endfunction
 
   function! s:has_lightline_colorscheme(colorscheme) abort
-    return !empty(globpath(&runtimepath, printf('autoload/lightline/colorscheme/%s.vim', a:colorscheme), 1))
+    return !empty(globpath(&runtimepath, $'autoload/lightline/colorscheme/{a:colorscheme}.vim', 1))
   endfunction
 
   function! s:update_lightline() abort
@@ -886,7 +886,7 @@ function! s:vim_lsp.pre() abort
 
     if filereadable(l:log)
       call term_start(
-        \ printf('less %s', l:log),
+        \ $'less {l:log}',
         \ {
         \   'env': { 'LESS': '' },
         \   'term_finish': 'close',
@@ -1225,7 +1225,7 @@ function! s:localrc.post() abort
     let l:filename = get(g:, 'localrc_filename', '.local.vimrc')
     let l:localrc = s:pathjoin(a:dir, fnameescape(l:filename))
 
-    execute printf('%s Open%s %s', a:mods, a:bang, l:localrc)
+    execute $'{a:mods} Open{a:bang} {l:localrc}'
   endfunction
 
   command! -bang -bar VimrcLocal
@@ -1479,17 +1479,17 @@ function! s:asyncomplete.pre() abort
     if l:asyncomplete_enable
       call asyncomplete#disable_for_buffer()
 
-      execute printf('augroup toggle_asyncomplete_%s', bufnr('%'))
+      execute $'augroup toggle_asyncomplete_{bufnr('%')}'
         autocmd!
       augroup END
     else
       let l:bufname = fnameescape(bufname('%'))
 
-      execute printf('augroup toggle_asyncomplete_%s', bufnr('%'))
+      execute $'augroup toggle_asyncomplete_{bufnr('%')}'
         autocmd!
-        execute printf('autocmd BufEnter %s set completeopt=menuone,noinsert,noselect', l:bufname)
-        execute printf('autocmd BufLeave %s set completeopt=%s', l:bufname, &completeopt)
-        execute printf('autocmd BufWipeout %s set completeopt=%s', l:bufname, &completeopt)
+        execute $'autocmd BufEnter {l:bufname} set completeopt=menuone,noinsert,noselect'
+        execute $'autocmd BufLeave {l:bufname} set completeopt={&completeopt}'
+        execute $'autocmd BufWipeout {l:bufname} set completeopt={&completeopt}'
       augroup END
 
       call asyncomplete#enable_for_buffer()
