@@ -47,7 +47,7 @@ endfunction
 " Join and normalize filepaths.
 function! s:pathjoin(...) abort
   let l:sep = has('win32') ? '\\' : '/'
-  return substitute(simplify(join(a:000, l:sep)), printf('^\.%s', l:sep), '', '')
+  return join(a:000, l:sep)->simplify()->substitute(printf('^\.%s', l:sep), '', '')
 endfunction
 
 function! s:terminal(bang = '', mods = '') abort
@@ -322,7 +322,7 @@ vnoremap <silent> <Leader>y :YankComments<CR>
 " Delete finished terminal buffers by "<CR>", this behavior is similar to
 " Neovim's builtin terminal.
 tnoremap <silent><expr> <CR>
-  \ job_status(term_getjob(bufnr())) ==# 'dead'
+  \ bufnr()->term_getjob()->job_status() ==# 'dead'
   \ ? "<C-W>:bdelete<CR>"
   \ : "<CR>"
 
@@ -1057,7 +1057,7 @@ function! s:ripgrep.post() abort
 
     if l:o_escape
       " Change the "<q-args>" to the "{command}" argument for "job_start()" literally.
-      let l:args += map(copy(a:args), { _, val -> s:job_argumentalize_escape(val) })
+      let l:args += copy(a:args)->map({ _, val -> s:job_argumentalize_escape(val) })
     else
       let l:args += a:args
     endif
@@ -1120,9 +1120,9 @@ function! s:ripgrep.post() abort
     let l:r_col_idx = l:r_col - (&selection ==# 'inclusive' ? 1 : 2)
 
     let l:buflines =
-          \ a:motion_wiseness ==# 'block' ? getbufline(bufname('%'), l:l_lnum, l:r_lnum)->map({ _, val -> val[l:l_col_idx : l:r_col_idx] }) :
-          \ a:motion_wiseness ==# 'line' ? getbufline(bufname('%'), l:l_lnum, l:r_lnum) :
-          \ getbufline(bufname('%'), l:l_lnum)->map({ _, val -> val[l:l_col_idx : l:r_col_idx] })
+          \ a:motion_wiseness ==# 'block' ? bufname('%')->getbufline(l:l_lnum, l:r_lnum)->map({ _, val -> val[l:l_col_idx : l:r_col_idx] }) :
+          \ a:motion_wiseness ==# 'line' ? bufname('%')->getbufline(l:l_lnum, l:r_lnum) :
+          \ bufname('%')->getbufline(l:l_lnum)->map({ _, val -> val[l:l_col_idx : l:r_col_idx] })
 
     let l:words += match(l:buflines, '^\s*-') + 1 ? ['--'] : []
     let l:words += match(l:buflines, ' ') + 1 ? [printf('"%s"', copy(l:buflines)->map({ _, val -> s:command_line_argumentalize_escape(val) })->join("\n"))] : [copy(l:buflines)->map({ _, val -> s:command_line_argumentalize_escape(val) })->join("\n")]
