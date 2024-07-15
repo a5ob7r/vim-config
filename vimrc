@@ -50,15 +50,12 @@ function! s:pathjoin(...) abort
   return substitute(simplify(join(a:000, l:sep)), printf('^\.%s', l:sep), '', '')
 endfunction
 
-function! s:terminal(...) abort
-  let l:bang = get(a:000, 0, '')
-  let l:mods = get(a:000, 1, '')
-
+function! s:terminal(bang = '', mods = '') abort
   " If the current buffer is for normal exsisting file editing.
   let l:cwd = empty(&buftype) && !expand('%')->empty() ? expand('%:p:h') : getcwd()
-  let l:opts = #{ curwin: !empty(l:bang), cwd: l:cwd, term_finish: 'close' }
+  let l:opts = #{ curwin: !empty(a:bang), cwd: l:cwd, term_finish: 'close' }
 
-  execute l:mods 'call term_start(&shell, l:opts)'
+  execute a:mods 'call term_start(&shell, l:opts)'
 endfunction
 
 function! s:is_bundled_package_loadable(package_name) abort
@@ -750,20 +747,19 @@ function! s:ctrlp.pre() abort
     let g:ctrlp_cmd = 'CtrlPp'
   endif
 
-  function! s:ctrlp_proxy(bang, ...) abort
+  function! s:ctrlp_proxy(bang, dir = getcwd()) abort
     let l:bang = empty(a:bang) ? '' : '!'
-    let l:dir = a:0 ? a:1 : getcwd()
 
     let l:home = expand('~')
 
     " Make vim heavy or freeze to run CtrlP to search many files. For example
     " this is caused when run `CtrlP` on home directory or edit a file on home
     " directory.
-    if empty(l:bang) && l:home ==# l:dir
+    if empty(l:bang) && l:home ==# a:dir
       throw 'Forbidden to run CtrlP on home directory'
     endif
 
-    CtrlP l:dir
+    CtrlP a:dir
   endfunction
 
   command! -bang -nargs=? -complete=dir CtrlPp call s:ctrlp_proxy(<q-bang>, <f-args>)
@@ -1049,10 +1045,9 @@ function! s:ripgrep.post() abort
 
   command! -bang -count -nargs=+ -complete=file Rg call s:ripgrep(['-C<count>', <q-args>], #{ case: <bang>1, escape: <bang>1 })
 
-  function! s:ripgrep(args, ...) abort
-    let l:opts = get(a:000, 0, {})
-    let l:o_case = get(l:opts, 'case')
-    let l:o_escape = get(l:opts, 'escape')
+  function! s:ripgrep(args, opts = {}) abort
+    let l:o_case = get(a:opts, 'case')
+    let l:o_escape = get(a:opts, 'escape')
 
     let l:args = []
 
@@ -1107,11 +1102,10 @@ function! s:ripgrep.post() abort
   endfunction
 
   " TODO: Consider ideal linewise and blockwise operations.
-  function! s:operator_ripgrep(motion_wiseness, ...) abort
-    let l:opts = get(a:000, 0, {})
-    let l:o_boundaries = get(l:opts, 'boundaries')
-    let l:o_push_history_entry = get(l:opts, 'push_history_entry')
-    let l:o_highlight = get(l:opts, 'highlight')
+  function! s:operator_ripgrep(motion_wiseness, opts = {}) abort
+    let l:o_boundaries = get(a:opts, 'boundaries')
+    let l:o_push_history_entry = get(a:opts, 'push_history_entry')
+    let l:o_highlight = get(a:opts, 'highlight')
 
     let l:words = ['Rg', '-F']
 
@@ -1460,10 +1454,8 @@ let s:asyncomplete = maxpac#add('prabirshrestha/asyncomplete.vim')
 function! s:asyncomplete.pre() abort
   let g:asyncomplete_enable_for_all = 0
 
-  function! s:toggle_asyncomplete(...) abort
-    let l:asyncomplete_enable = get(a:000, 0, get(b:, 'asyncomplete_enable', 0))
-
-    if l:asyncomplete_enable
+  function! s:toggle_asyncomplete(asyncomplete_enable = get(b:, 'asyncomplete_enable', 0)) abort
+    if a:asyncomplete_enable
       call asyncomplete#disable_for_buffer()
 
       execute $'augroup toggle_asyncomplete_{bufnr('%')}'
