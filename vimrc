@@ -291,7 +291,7 @@ nnoremap <silent> <F10> :<C-U>echo <SID>syntax_item_attribute(line('.'), col('.'
 nnoremap <silent> <F2> :<C-U>ReloadVimrc<CR>
 nnoremap <silent> <Leader><F2> :<C-U>Vimrc<CR>
 
-" From $VIMRUNTIME/mswin.vim
+" From "$VIMRUNTIME/mswin.vim".
 " Save with "CTRL-S" on normal mode and insert mode.
 "
 " I usually save buffers to files every line editing by switching to the
@@ -393,7 +393,7 @@ Autocmd TerminalOpen * setlocal nolist nonumber colorcolumn=
 
 Autocmd BufReadPre ~/* setlocal undofile
 
-" From vim/runtime/defaults.vim
+" From "$VIMRUNTIME/defaults.vim".
 " Jump cursor to last editting line.
 Autocmd BufReadPost *
   \ if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
