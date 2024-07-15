@@ -56,7 +56,7 @@ function! s:terminal(...) abort
 
   " If the current buffer is for normal exsisting file editing.
   let l:cwd = empty(&buftype) && !expand('%')->empty() ? expand('%:p:h') : getcwd()
-  let l:opts = { 'curwin': !empty(l:bang), 'cwd': l:cwd, 'term_finish': 'close' }
+  let l:opts = #{ curwin: !empty(l:bang), cwd: l:cwd, term_finish: 'close' }
 
   execute l:mods 'call term_start(&shell, l:opts)'
 endfunction
@@ -520,8 +520,8 @@ function! s:minpac.post() abort
     \   if empty(<q-args>)
     \ |   call minpac#update()
     \ | else
-    \ |   call minpac#add(<q-args>, { 'type': 'opt' })
-    \ |   call minpac#update(maxpac#plugname(<q-args>), { 'do': printf('packadd %s', maxpac#plugname(<q-args>)) })
+    \ |   call minpac#add(<q-args>, #{ type: 'opt' })
+    \ |   call minpac#update(maxpac#plugname(<q-args>), #{ do: printf('packadd %s', maxpac#plugname(<q-args>)) })
     \ | endif
 
   command! -bar -nargs=? -complete=custom,s:pack_complete PackUpdate
@@ -540,9 +540,9 @@ function! s:minpac.post() abort
 
   " This command is from the minpac help file.
   command! -nargs=1 -complete=custom,s:pack_complete PackOpenDir
-    \ call term_start(&shell, {
-    \   'cwd': minpac#getpluginfo(maxpac#plugname(<q-args>))['dir'],
-    \   'term_finish': 'close',
+    \ call term_start(&shell, #{
+    \   cwd: minpac#getpluginfo(maxpac#plugname(<q-args>))['dir'],
+    \   term_finish: 'close',
     \ })
 endfunction
 " }}}
@@ -582,48 +582,48 @@ endfunction
 let s:lightline = maxpac#add('itchyny/lightline.vim')
 
 function! s:lightline.pre() abort
-  let g:lightline = {
-    \ 'active': {
-    \   'left': [
+  let g:lightline = #{
+    \ active: #{
+    \   left: [
     \     [ 'mode', 'binary', 'paste' ],
     \     [ 'readonly', 'relativepath', 'modified' ],
     \     [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_infos', 'linter_ok' ],
     \     [ 'lsp_checking', 'lsp_errors', 'lsp_warnings', 'lsp_informations', 'lsp_hints', 'lsp_ok', 'lsp_progress' ]
     \   ]
     \ },
-    \ 'component': {
-    \   'binary': '%{&binary ? "BINARY" : ""}'
+    \ component: #{
+    \   binary: '%{&binary ? "BINARY" : ""}'
     \ },
-    \ 'component_visible_condition': {
-    \   'binary': '&binary'
+    \ component_visible_condition: #{
+    \   binary: '&binary'
     \ },
-    \ 'component_expand': {
-    \   'linter_checking': 'lightline#ale#checking',
-    \   'linter_errors': 'lightline#ale#errors',
-    \   'linter_warnings': 'lightline#ale#warnings',
-    \   'linter_infos': 'lightline#ale#infos',
-    \   'linter_ok': 'lightline#ale#ok',
-    \   'lsp_checking': 'lightline#lsp#checking',
-    \   'lsp_errors': 'lightline#lsp#error',
-    \   'lsp_warnings': 'lightline#lsp#warning',
-    \   'lsp_informations': 'lightline#lsp#information',
-    \   'lsp_hints': 'lightline#lsp#hint',
-    \   'lsp_ok': 'lightline#lsp#ok',
-    \   'lsp_progress': 'lightline_lsp_progress#progress'
+    \ component_expand: #{
+    \   linter_checking: 'lightline#ale#checking',
+    \   linter_errors: 'lightline#ale#errors',
+    \   linter_warnings: 'lightline#ale#warnings',
+    \   linter_infos: 'lightline#ale#infos',
+    \   linter_ok: 'lightline#ale#ok',
+    \   lsp_checking: 'lightline#lsp#checking',
+    \   lsp_errors: 'lightline#lsp#error',
+    \   lsp_warnings: 'lightline#lsp#warning',
+    \   lsp_informations: 'lightline#lsp#information',
+    \   lsp_hints: 'lightline#lsp#hint',
+    \   lsp_ok: 'lightline#lsp#ok',
+    \   lsp_progress: 'lightline_lsp_progress#progress'
     \ },
-    \ 'component_type': {
-    \   'linter_checking': 'left',
-    \   'linter_errors': 'error',
-    \   'linter_warnings': 'warning',
-    \   'linter_infos': 'left',
-    \   'linter_ok': 'left',
-    \   'lsp_checking': 'left',
-    \   'lsp_errors': 'error',
-    \   'lsp_warnings': 'warning',
-    \   'lsp_informations': 'left',
-    \   'lsp_hints': 'left',
-    \   'lsp_ok': 'left',
-    \   'lsp_progress': 'left'
+    \ component_type: #{
+    \   linter_checking: 'left',
+    \   linter_errors: 'error',
+    \   linter_warnings: 'warning',
+    \   linter_infos: 'left',
+    \   linter_ok: 'left',
+    \   lsp_checking: 'left',
+    \   lsp_errors: 'error',
+    \   lsp_warnings: 'warning',
+    \   lsp_informations: 'left',
+    \   lsp_hints: 'left',
+    \   lsp_ok: 'left',
+    \   lsp_progress: 'left'
     \ }
     \ }
 
@@ -703,10 +703,10 @@ function! s:gina.post() abort
   nmap <silent> <Leader>gs :<C-U>Gina status<CR>
   nmap <silent> <Leader>gc :<C-U>Gina commit<CR>
 
-  call gina#custom#mapping#nmap('log', 'q', '<C-W>c', { 'noremap': 1, 'silent': 1 })
-  call gina#custom#mapping#nmap('log', 'yy', '<Plug>(gina-yank-rev)', { 'silent': 1 })
-  call gina#custom#mapping#nmap('status', 'q', '<C-W>c', { 'noremap': 1, 'silent': 1 })
-  call gina#custom#mapping#nmap('status', 'yy', '<Plug>(gina-yank-path)', { 'silent': 1 })
+  call gina#custom#mapping#nmap('log', 'q', '<C-W>c', #{ noremap: 1, silent: 1 })
+  call gina#custom#mapping#nmap('log', 'yy', '<Plug>(gina-yank-rev)', #{ silent: 1 })
+  call gina#custom#mapping#nmap('status', 'q', '<C-W>c', #{ noremap: 1, silent: 1 })
+  call gina#custom#mapping#nmap('status', 'yy', '<Plug>(gina-yank-path)', #{ silent: 1 })
 endfunction
 " }}}
 
@@ -776,7 +776,7 @@ endfunction
 let s:ctrlp_matchfuzzy = maxpac#add('mattn/ctrlp-matchfuzzy')
 
 function! s:ctrlp_matchfuzzy.post() abort
-  let g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
+  let g:ctrlp_match_func = #{ match: 'ctrlp_matchfuzzy#matcher' }
 endfunction
 " }}}
 
@@ -785,8 +785,8 @@ let s:ctrlp_ghq = maxpac#add('mattn/ctrlp-ghq')
 
 function! s:ctrlp_ghq.post() abort
   let g:ctrlp_ghq_actions = [
-    \ { 'label': 'edit', 'action': 'edit', 'path': 1 },
-    \ { 'label': 'tabnew', 'action': 'tabnew', 'path': 1 }
+    \ #{ label: 'edit', action: 'edit', path: 1 },
+    \ #{ label: 'tabnew', action: 'tabnew', path: 1 }
     \ ]
 
   nnoremap <silent> <Leader>gq :<C-U>CtrlPGhq<CR>
@@ -874,9 +874,9 @@ function! s:vim_lsp.pre() abort
     if filereadable(l:log)
       call term_start(
         \ $'less {l:log}',
-        \ {
-        \   'env': { 'LESS': '' },
-        \   'term_finish': 'close',
+        \ #{
+        \   env: #{ LESS: '' },
+        \   term_finish: 'close',
         \ })
     endif
   endfunction
@@ -887,7 +887,7 @@ function! s:vim_lsp.pre() abort
     let l:log = s:lsp_log_file()
 
     if filereadable(l:log)
-      call term_start([&shell, &shellcmdflag, printf(a:template, l:log)], { 'term_finish': 'close' })
+      call term_start([&shell, &shellcmdflag, printf(a:template, l:log)], #{ term_finish: 'close' })
     endif
   endfunction
 
@@ -914,18 +914,18 @@ function! s:vim_lsp_settings.pre() abort
 
   let g:lsp_settings = get(g:, 'lsp_settings', {})
   " Prefer Vim + latexmk than texlab for now.
-  let g:lsp_settings['texlab'] = {
-    \ 'disabled': 1,
-    \ 'workspace_config': {
-    \   'latex': {
-    \     'build': {
-    \       'args': ['%f'],
-    \       'onSave': v:true,
-    \       'forwardSearchAfter': v:true
+  let g:lsp_settings['texlab'] = #{
+    \ disabled: 1,
+    \ workspace_config: #{
+    \   latex: #{
+    \     build: #{
+    \       args: ['%f'],
+    \       onSave: v:true,
+    \       forwardSearchAfter: v:true
     \       },
-    \     'forwardSearch': {
-    \       'executable': 'zathura',
-    \       'args': ['--synctex-forward', '%l:1:%f', '%p']
+    \     forwardSearch: #{
+    \       executable: 'zathura',
+    \       args: ['--synctex-forward', '%l:1:%f', '%p']
     \       }
     \     }
     \   }
@@ -1036,10 +1036,10 @@ function! s:ripgrep.post() abort
 
     let l:data = a:message['data']
 
-    let l:item = {
-      \ 'filename': l:data['path']['text'],
-      \ 'lnum': l:data['line_number'],
-      \ 'text': l:data['lines']['text'],
+    let l:item = #{
+      \ filename: l:data['path']['text'],
+      \ lnum: l:data['line_number'],
+      \ text: l:data['lines']['text'],
       \ }
 
     call setqflist([l:item], 'a')
@@ -1047,7 +1047,7 @@ function! s:ripgrep.post() abort
 
   call ripgrep#observe#add_observer(g:ripgrep#event#other, 'RipgrepContextObserver')
 
-  command! -bang -count -nargs=+ -complete=file Rg call s:ripgrep(['-C<count>', <q-args>], { 'case': <bang>1, 'escape': <bang>1 })
+  command! -bang -count -nargs=+ -complete=file Rg call s:ripgrep(['-C<count>', <q-args>], #{ case: <bang>1, escape: <bang>1 })
 
   function! s:ripgrep(args, ...) abort
     let l:opts = get(a:000, 0, {})
@@ -1294,50 +1294,50 @@ let s:sandwich = maxpac#add('machakann/vim-sandwich')
 function! s:sandwich.post() abort
   let g:sandwich#recipes = get(g:, 'sandwich#recipes', deepcopy(g:sandwich#default_recipes))
   let g:sandwich#recipes += [
-    \   { 'buns': ['{ ', ' }'],
-    \     'nesting': 1,
-    \     'match_syntax': 1,
-    \     'kind': ['add', 'replace'],
-    \     'action': ['add'],
-    \     'input': ['}']
+    \   #{ buns: ['{ ', ' }'],
+    \      nesting: 1,
+    \      match_syntax: 1,
+    \      kind: ['add', 'replace'],
+    \      action: ['add'],
+    \      input: ['}']
     \   },
-    \   { 'buns': ['[ ', ' ]'],
-    \     'nesting': 1,
-    \     'match_syntax': 1,
-    \     'kind': ['add', 'replace'],
-    \     'action': ['add'],
-    \     'input': [']']
+    \   #{ buns: ['[ ', ' ]'],
+    \      nesting: 1,
+    \      match_syntax: 1,
+    \      kind: ['add', 'replace'],
+    \      action: ['add'],
+    \      input: [']']
     \   },
-    \   { 'buns': ['( ', ' )'],
-    \     'nesting': 1,
-    \     'match_syntax': 1,
-    \     'kind': ['add', 'replace'],
-    \     'action': ['add'],
-    \     'input': [')']
+    \   #{ buns: ['( ', ' )'],
+    \      nesting: 1,
+    \      match_syntax: 1,
+    \      kind: ['add', 'replace'],
+    \      action: ['add'],
+    \      input: [')']
     \   },
-    \   { 'buns': ['{\s*', '\s*}'],
-    \     'nesting': 1,
-    \     'regex': 1,
-    \     'match_syntax': 1,
-    \     'kind': ['delete', 'replace', 'textobj'],
-    \     'action': ['delete'],
-    \     'input': ['}']
+    \   #{ buns: ['{\s*', '\s*}'],
+    \      nesting: 1,
+    \      regex: 1,
+    \      match_syntax: 1,
+    \      kind: ['delete', 'replace', 'textobj'],
+    \      action: ['delete'],
+    \      input: ['}']
     \   },
-    \   { 'buns': ['\[\s*', '\s*\]'],
-    \     'nesting': 1,
-    \     'regex': 1,
-    \     'match_syntax': 1,
-    \     'kind': ['delete', 'replace', 'textobj'],
-    \     'action': ['delete'],
-    \     'input': [']']
+    \   #{ buns: ['\[\s*', '\s*\]'],
+    \      nesting: 1,
+    \      regex: 1,
+    \      match_syntax: 1,
+    \      kind: ['delete', 'replace', 'textobj'],
+    \      action: ['delete'],
+    \      input: [']']
     \   },
-    \   { 'buns': ['(\s*', '\s*)'],
-    \     'nesting': 1,
-    \     'regex': 1,
-    \     'match_syntax': 1,
-    \     'kind': ['delete', 'replace', 'textobj'],
-    \     'action': ['delete'],
-    \     'input': [')']
+    \   #{ buns: ['(\s*', '\s*)'],
+    \      nesting: 1,
+    \      regex: 1,
+    \      match_syntax: 1,
+    \      kind: ['delete', 'replace', 'textobj'],
+    \      action: ['delete'],
+    \      input: [')']
     \   }
     \ ]
 endfunction
@@ -1425,7 +1425,7 @@ function! s:fern.pre() abort
     let l:log = s:fern_log_file()
 
     if filereadable(l:log)
-      call term_start([&shell, &shellcmdflag, printf(a:template, l:log)], { 'term_finish': 'close' })
+      call term_start([&shell, &shellcmdflag, printf(a:template, l:log)], #{ term_finish: 'close' })
     endif
   endfunction
 
