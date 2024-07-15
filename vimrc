@@ -349,35 +349,6 @@ tnoremap <silent> <C-W>VM <C-W>:vertical resize<CR>
 " }}}
 
 " Commands {{{
-command! Runtimepath echo substitute(&runtimepath, ',', "\n", 'g')
-command! Packpath echo substitute(&packpath, ',', '\n', 'g')
-
-" Toggle the syntax highlighting.
-command! -bang -bar Syntax
-  \ if exists('g:syntax_on')
-  \ |   syntax off
-  \ | elseif <bang>1
-  \ |   syntax enable
-  \ | else
-  \ |   syntax on
-  \ | endif
-
-" A modified version of ":DiffOrig", which is from "defaults.vim".
-command! -nargs=? -complete=buffer Diff
-  \   vertical new
-  \ | set buftype=nofile
-  \ | execute 'read ++edit' empty(<q-args>) ? '#' : <q-args>
-  \ | 0delete _
-  \ | diffthis
-  \ | wincmd p
-  \ | diffthis
-
-" Toggle the "paste" mode.
-command! -bar Paste set paste!
-
-" Toggle the "binary" mode locally.
-command! -bar Binary setlocal binary!
-
 " ":update" with new empty file creations for the current buffer.
 "
 " Run ":update" if the file which the current buffer is corresponding exists,
