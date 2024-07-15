@@ -2,7 +2,7 @@
   "A localrc template": {
     "prefix": "localrc",
     "body": [
-      "if get(s:, 'loaded_local_vimrc', 0)",
+      "if get(s:, 'loaded_local_vimrc')",
       "  finish",
       "endif",
       "",

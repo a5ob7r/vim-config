@@ -1454,7 +1454,7 @@ let s:asyncomplete = maxpac#add('prabirshrestha/asyncomplete.vim')
 function! s:asyncomplete.pre() abort
   let g:asyncomplete_enable_for_all = 0
 
-  function! s:toggle_asyncomplete(asyncomplete_enable = get(b:, 'asyncomplete_enable', 0)) abort
+  function! s:toggle_asyncomplete(asyncomplete_enable = get(b:, 'asyncomplete_enable')) abort
     if a:asyncomplete_enable
       call asyncomplete#disable_for_buffer()
 
