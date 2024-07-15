@@ -15,16 +15,16 @@ scriptencoding utf-8
 " Functions {{{
 function! s:install_minpac() abort
   " A root directory path of vim packages.
-  let l:packhome = $'{split(&packpath, ',')[0]}/pack'
+  const l:packhome = $'{split(&packpath, ',')[0]}/pack'
 
-  let l:minpac_path =  $'{l:packhome}/minpac/opt/minpac'
-  let l:minpac_url = 'https://github.com/k-takata/minpac.git'
+  const l:minpac_path =  $'{l:packhome}/minpac/opt/minpac'
+  const l:minpac_url = 'https://github.com/k-takata/minpac.git'
 
   if isdirectory(l:minpac_path) || ! executable('git')
     return
   endif
 
-  let l:command = $'git clone {l:minpac_url} {l:minpac_path}'
+  const l:command = $'git clone {l:minpac_url} {l:minpac_path}'
 
   execute 'terminal' l:command
 endfunction
@@ -33,8 +33,8 @@ endfunction
 "
 " https://vim.fandom.com/wiki/Identify_the_syntax_highlighting_group_used_at_the_cursor
 function! s:syntax_item_attribute(line, column) abort
-  let l:item_id = synID(a:line, a:column, 1)
-  let l:trans_item_id = synID(a:line, a:column, 0)
+  const l:item_id = synID(a:line, a:column, 1)
+  const l:trans_item_id = synID(a:line, a:column, 0)
 
   return printf(
     \ 'hi<%s> trans<%s> lo<%s>',
@@ -46,14 +46,14 @@ endfunction
 
 " Join and normalize filepaths.
 function! s:pathjoin(...) abort
-  let l:sep = has('win32') ? '\\' : '/'
+  const l:sep = has('win32') ? '\\' : '/'
   return join(a:000, l:sep)->simplify()->substitute(printf('^\.%s', l:sep), '', '')
 endfunction
 
 function! s:terminal(bang = '', mods = '') abort
   " If the current buffer is for normal exsisting file editing.
-  let l:cwd = empty(&buftype) && !expand('%')->empty() ? expand('%:p:h') : getcwd()
-  let l:opts = #{ curwin: !empty(a:bang), cwd: l:cwd, term_finish: 'close' }
+  const l:cwd = empty(&buftype) && !expand('%')->empty() ? expand('%:p:h') : getcwd()
+  const l:opts = #{ curwin: !empty(a:bang), cwd: l:cwd, term_finish: 'close' }
 
   execute a:mods 'call term_start(&shell, l:opts)'
 endfunction
@@ -644,7 +644,7 @@ function! s:lightline.pre() abort
       return
     endif
 
-    let l:colorscheme =
+    const l:colorscheme =
       \ !exists('g:lightline_colorscheme_mapping') ? g:colors_name
       \ : type(g:lightline_colorscheme_mapping) == type('') ? call(g:lightline_colorscheme_mapping, [g:colors_name])
       \ : type(g:lightline_colorscheme_mapping) == type(function('tr')) ? g:lightline_colorscheme_mapping(g:colors_name)
@@ -748,9 +748,9 @@ function! s:ctrlp.pre() abort
   endif
 
   function! s:ctrlp_proxy(bang, dir = getcwd()) abort
-    let l:bang = empty(a:bang) ? '' : '!'
+    const l:bang = empty(a:bang) ? '' : '!'
 
-    let l:home = expand('~')
+    const l:home = expand('~')
 
     " Make vim heavy or freeze to run CtrlP to search many files. For example
     " this is caused when run `CtrlP` on home directory or edit a file on home
@@ -794,7 +794,7 @@ let s:ctrlp_man = maxpac#add('a5ob7r/ctrlp-man')
 
 function! s:ctrlp_man.post() abort
   function! s:lookup_manual() abort
-    let l:q = input('keyword> ', '', 'shellcmd')
+    const l:q = input('keyword> ', '', 'shellcmd')
 
     if empty(l:q)
       return
@@ -865,7 +865,7 @@ function! s:vim_lsp.pre() abort
   command! DisableLspLogging let g:lsp_log_file = ''
 
   function! s:view_lsp_log() abort
-    let l:log = s:lsp_log_file()
+    const l:log = s:lsp_log_file()
 
     if filereadable(l:log)
       call term_start(
@@ -880,7 +880,7 @@ function! s:vim_lsp.pre() abort
   command! ViewLspLog call s:view_lsp_log()
 
   function! s:run_with_lsp_log(template) abort
-    let l:log = s:lsp_log_file()
+    const l:log = s:lsp_log_file()
 
     if filereadable(l:log)
       call term_start([&shell, &shellcmdflag, printf(a:template, l:log)], #{ term_finish: 'close' })
@@ -890,7 +890,7 @@ function! s:vim_lsp.pre() abort
   command! -nargs=+ -complete=shellcmd RunWithLspLog call s:run_with_lsp_log(<q-args>)
 
   function! s:clear_lsp_log() abort
-    let l:log = s:lsp_log_file()
+    const l:log = s:lsp_log_file()
 
     if filewritable(l:log)
       call writefile([], l:log)
@@ -996,12 +996,12 @@ function! s:open_browser.post() abort
   nnoremap <Leader>k :call SearchUnderCursorEnglishWord()<CR>
 
   function! SearchEnglishWord(word) abort
-    let l:url = $'https://dictionary.cambridge.org/dictionary/english/{a:word}'
+    const l:url = $'https://dictionary.cambridge.org/dictionary/english/{a:word}'
     call openbrowser#open(l:url)
   endfunction
 
   function! SearchUnderCursorEnglishWord() abort
-    let l:word = expand('<cword>')
+    const l:word = expand('<cword>')
     call SearchEnglishWord(l:word)
   endfunction
 endfunction
@@ -1030,9 +1030,9 @@ function! s:ripgrep.post() abort
       return
     endif
 
-    let l:data = a:message['data']
+    const l:data = a:message['data']
 
-    let l:item = #{
+    const l:item = #{
       \ filename: l:data['path']['text'],
       \ lnum: l:data['line_number'],
       \ text: l:data['lines']['text'],
@@ -1046,8 +1046,8 @@ function! s:ripgrep.post() abort
   command! -bang -count -nargs=+ -complete=file Rg call s:ripgrep(['-C<count>', <q-args>], #{ case: <bang>1, escape: <bang>1 })
 
   function! s:ripgrep(args, opts = {}) abort
-    let l:o_case = get(a:opts, 'case')
-    let l:o_escape = get(a:opts, 'escape')
+    const l:o_case = get(a:opts, 'case')
+    const l:o_escape = get(a:opts, 'escape')
 
     let l:args = []
 
@@ -1103,9 +1103,9 @@ function! s:ripgrep.post() abort
 
   " TODO: Consider ideal linewise and blockwise operations.
   function! s:operator_ripgrep(motion_wiseness, opts = {}) abort
-    let l:o_boundaries = get(a:opts, 'boundaries')
-    let l:o_push_history_entry = get(a:opts, 'push_history_entry')
-    let l:o_highlight = get(a:opts, 'highlight')
+    const l:o_boundaries = get(a:opts, 'boundaries')
+    const l:o_push_history_entry = get(a:opts, 'push_history_entry')
+    const l:o_highlight = get(a:opts, 'highlight')
 
     let l:words = ['Rg', '-F']
 
@@ -1113,13 +1113,13 @@ function! s:ripgrep.post() abort
       let l:words += ['-w']
     endif
 
-    let [l:_, l:l_lnum, l:l_col, l:_] = getpos("'[")
-    let [l:_, l:r_lnum, l:r_col, l:_] = getpos("']")
+    const [l:_l_bufnum, l:l_lnum, l:l_col, l:_l_off] = getpos("'[")
+    const [l:_r_bufnum, l:r_lnum, l:r_col, l:_r_off] = getpos("']")
 
     let l:l_col_idx = l:l_col - 1
     let l:r_col_idx = l:r_col - (&selection ==# 'inclusive' ? 1 : 2)
 
-    let l:buflines =
+    const l:buflines =
           \ a:motion_wiseness ==# 'block' ? bufname('%')->getbufline(l:l_lnum, l:r_lnum)->map({ _, val -> val[l:l_col_idx : l:r_col_idx] }) :
           \ a:motion_wiseness ==# 'line' ? bufname('%')->getbufline(l:l_lnum, l:r_lnum) :
           \ bufname('%')->getbufline(l:l_lnum)->map({ _, val -> val[l:l_col_idx : l:r_col_idx] })
@@ -1127,7 +1127,7 @@ function! s:ripgrep.post() abort
     let l:words += match(l:buflines, '^\s*-') + 1 ? ['--'] : []
     let l:words += match(l:buflines, ' ') + 1 ? [printf('"%s"', copy(l:buflines)->map({ _, val -> s:command_line_argumentalize_escape(val) })->join("\n"))] : [copy(l:buflines)->map({ _, val -> s:command_line_argumentalize_escape(val) })->join("\n")]
 
-    let l:command = join(l:words)
+    const l:command = join(l:words)
 
     execute l:command
 
@@ -1160,8 +1160,8 @@ function! s:ripgrep.post() abort
   endfunction
 
   function! s:smart_ripgrep_command_history_push(command) abort
-    let l:history_entry = a:command
-    let l:latest_history_entry = histget('cmd', -1)
+    const l:history_entry = a:command
+    const l:latest_history_entry = histget('cmd', -1)
 
     if l:history_entry !=# l:latest_history_entry
       call histadd('cmd', l:history_entry)
@@ -1203,8 +1203,8 @@ let s:localrc = maxpac#add('thinca/vim-localrc')
 
 function! s:localrc.post() abort
   function! s:open_localrc(bang, mods, dir) abort
-    let l:filename = get(g:, 'localrc_filename', '.local.vimrc')
-    let l:localrc = s:pathjoin(a:dir, fnameescape(l:filename))
+    const l:filename = get(g:, 'localrc_filename', '.local.vimrc')
+    const l:localrc = s:pathjoin(a:dir, fnameescape(l:filename))
 
     execute $'{a:mods} Open{a:bang} {l:localrc}'
   endfunction
@@ -1416,7 +1416,7 @@ function! s:fern.pre() abort
   command! FernLogError let g:fern#loglevel = g:fern#Error
 
   function! s:run_with_fern_log(template) abort
-    let l:log = s:fern_log_file()
+    const l:log = s:fern_log_file()
 
     if filereadable(l:log)
       call term_start([&shell, &shellcmdflag, printf(a:template, l:log)], #{ term_finish: 'close' })
@@ -1462,7 +1462,7 @@ function! s:asyncomplete.pre() abort
         autocmd!
       augroup END
     else
-      let l:bufname = fnameescape(bufname('%'))
+      const l:bufname = fnameescape(bufname('%'))
 
       execute $'augroup toggle_asyncomplete_{bufnr('%')}'
         autocmd!
