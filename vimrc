@@ -861,7 +861,7 @@ function! s:vim_lsp.pre() abort
 
   command! CurrentLspLogging echo s:lsp_log_file()
   command! -nargs=* -complete=file EnableLspLogging
-    \ let g:lsp_log_file = empty(<q-args>) ? expand('$VIMHOME/tmp/vim-lsp.log') : <q-args>
+    \ let g:lsp_log_file = empty(<q-args>) ? $'{$VIMHOME}/tmp/vim-lsp.log' : <q-args>
   command! DisableLspLogging let g:lsp_log_file = ''
 
   function! s:view_lsp_log() abort
@@ -938,7 +938,7 @@ call maxpac#add('micchy326/lightline-lsp-progress')
 let s:vsnip = maxpac#add('hrsh7th/vim-vsnip')
 
 function! s:vsnip.pre() abort
-  let g:vsnip_snippet_dir = expand('$VIMHOME/vsnip')
+  let g:vsnip_snippet_dir = $'{$VIMHOME}/vsnip'
 endfunction
 
 function! s:vsnip.post() abort
