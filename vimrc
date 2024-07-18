@@ -298,6 +298,7 @@ nnoremap <silent> <Leader><F2> :<C-U>Vimrc<CR>
 " normal mode and typing ":w". However doing them every editing is a little
 " bit bothersome. So I want to use these shortcuts which are often used to
 " save files by GUI editros.
+nnoremap <silent> <C-S> :<C-U>Update<CR>
 inoremap <silent> <C-S> <Cmd>Update<CR>
 
 nnoremap <silent> <Leader>t :<C-U>tabnew<CR>
