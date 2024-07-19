@@ -462,17 +462,15 @@ call maxpac#begin()
 " =============================================================================
 
 " thinca/vim-singleton {{{
-let s:singleton = maxpac#plugconf('thinca/vim-singleton')
-
-function! s:singleton.post() abort
-  call singleton#enable()
-endfunction
-
 " NOTE: Call this as soon as possible!
 " NOTE: Maybe "+clientserver" is disabled in macOS even if a Vim is compiled
 " with "--with-features=huge".
 if has('clientserver')
-  call maxpac#add(s:singleton)
+  let s:singleton = maxpac#add('thinca/vim-singleton')
+
+  function! s:singleton.post() abort
+    call singleton#enable()
+  endfunction
 endif
 " }}}
 
