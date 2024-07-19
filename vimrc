@@ -13,7 +13,7 @@ scriptencoding utf-8
 " =============================================================================
 
 " Functions {{{
-function! s:install_minpac() abort
+function! s:InstallMinpac() abort
   " A root directory path of vim packages.
   const l:packhome = $'{split(&packpath, ',')[0]}/pack'
 
@@ -32,7 +32,7 @@ endfunction
 " Get syntax item information at a position.
 "
 " https://vim.fandom.com/wiki/Identify_the_syntax_highlighting_group_used_at_the_cursor
-function! s:syntax_item_attribute(line, column) abort
+function! s:SyntaxItemAttribute(line, column) abort
   const l:item_id = synID(a:line, a:column, 1)
   const l:trans_item_id = synID(a:line, a:column, 0)
 
@@ -45,12 +45,12 @@ function! s:syntax_item_attribute(line, column) abort
 endfunction
 
 " Join and normalize filepaths.
-function! s:pathjoin(...) abort
+function! s:Pathjoin(...) abort
   const l:sep = has('win32') ? '\\' : '/'
   return join(a:000, l:sep)->simplify()->substitute(printf('^\.%s', l:sep), '', '')
 endfunction
 
-function! s:terminal(bang = '', mods = '') abort
+function! s:Terminal(bang = '', mods = '') abort
   " If the current buffer is for normal exsisting file editing.
   const l:cwd = empty(&buftype) && !expand('%')->empty() ? expand('%:p:h') : getcwd()
   const l:opts = #{ curwin: !empty(a:bang), cwd: l:cwd, term_finish: 'close' }
@@ -58,7 +58,7 @@ function! s:terminal(bang = '', mods = '') abort
   execute a:mods 'call term_start(&shell, l:opts)'
 endfunction
 
-function! s:is_bundled_package_loadable(package_name) abort
+function! s:IsBundledPackageLoadable(package_name) abort
   return !glob($'{$VIMRUNTIME}/pack/dist/opt/{a:package_name}/plugin/*.vim')->empty()
 endfunction
 
@@ -67,7 +67,7 @@ endfunction
 "
 " NOTE: "<Nul>" is sent instead of "<C-Space>" when type the "CTRL" key and
 " the "SPACE" one as once if in some terminal emulators.
-function! s:is_enable_control_space_keymapping() abort
+function! s:IsEnableControlSpaceKeymapping() abort
   return has('gui_running') || getenv('TERM_PROGRAM') ==# 'iTerm.app' || index(['xterm', 'xterm-kitty'], &term) >= 0
 endfunction
 " }}}
@@ -286,7 +286,7 @@ nnoremap <Leader><CR> o<Esc>
 map <silent> p <Plug>(put)
 map <silent> P <Plug>(Put)
 
-nnoremap <silent> <F10> :<C-U>echo <SID>syntax_item_attribute(line('.'), col('.'))<CR>
+nnoremap <silent> <F10> :<C-U>echo <SID>SyntaxItemAttribute(line('.'), col('.'))<CR>
 
 nnoremap <silent> <F2> :<C-U>ReloadVimrc<CR>
 nnoremap <silent> <Leader><F2> :<C-U>Vimrc<CR>
@@ -305,15 +305,15 @@ nnoremap <silent> <Leader>t :<C-U>tabnew<CR>
 
 " Like default configurations of Tmux.
 nnoremap <silent> <Leader>" :<C-U>terminal<CR>
-nnoremap <silent> <Leader>' :<C-U>call <SID>terminal()<CR>
+nnoremap <silent> <Leader>' :<C-U>call <SID>Terminal()<CR>
 nnoremap <silent> <Leader>% :<C-U>vertical terminal<CR>
-nnoremap <silent> <Leader>5 :<C-U>call <SID>terminal('', 'vertical')<CR>
+nnoremap <silent> <Leader>5 :<C-U>call <SID>Terminal('', 'vertical')<CR>
 nnoremap <silent> <Leader>c :<C-U>Terminal<CR>
 
 tnoremap <silent> <C-W><Leader>" <C-W>:terminal<CR>
-tnoremap <silent> <C-W><Leader>' <C-W>:call <SID>terminal()<CR>
+tnoremap <silent> <C-W><Leader>' <C-W>:call <SID>Terminal()<CR>
 tnoremap <silent> <C-W><Leader>% <C-W>:vertical terminal<CR>
-tnoremap <silent> <C-W><Leader>5 <C-W>:call <SID>terminal('', 'vertical')<CR>
+tnoremap <silent> <C-W><Leader>5 <C-W>:call <SID>Terminal('', 'vertical')<CR>
 tnoremap <silent> <C-W><Leader>c <C-W>:Terminal<CR>
 
 nnoremap <silent> <Leader>y :YankComments<CR>
@@ -371,7 +371,7 @@ command! Refresh doautocmd <nomodeline> User Refresh
 
 command! Hitest source $VIMRUNTIME/syntax/hitest.vim
 
-command! InstallMinpac call s:install_minpac()
+command! InstallMinpac call s:InstallMinpac()
 " }}}
 
 " Auto commands {{{
@@ -694,7 +694,7 @@ endfunction
 let s:ctrlp = maxpac#add('ctrlpvim/ctrlp.vim')
 
 function! s:ctrlp.pre() abort
-  let g:ctrlp_map = s:is_enable_control_space_keymapping() ? '<C-Space>' : '<Nul>'
+  let g:ctrlp_map = s:IsEnableControlSpaceKeymapping() ? '<C-Space>' : '<Nul>'
 
   let g:ctrlp_show_hidden = 1
   let g:ctrlp_lazy_update = 150
@@ -1175,7 +1175,7 @@ let s:localrc = maxpac#add('thinca/vim-localrc')
 function! s:localrc.post() abort
   function! s:open_localrc(bang, mods, dir) abort
     const l:filename = get(g:, 'localrc_filename', '.local.vimrc')
-    const l:localrc = s:pathjoin(a:dir, fnameescape(l:filename))
+    const l:localrc = s:Pathjoin(a:dir, fnameescape(l:filename))
 
     execute $'{a:mods} Open{a:bang} {l:localrc}'
   endfunction
@@ -1503,7 +1503,7 @@ call maxpac#add('tyru/eskk.vim')
 call maxpac#add('vim-jp/vital.vim')
 call maxpac#add('yasuhiroki/github-actions-yaml.vim')
 
-if s:is_bundled_package_loadable('comment')
+if s:IsBundledPackageLoadable('comment')
   " "comment.vim" package is bundled since 5400a5d4269874fe4f1c35dfdd3c039ea17dfd62.
   packadd! comment
 else
@@ -1565,7 +1565,7 @@ if executable('deno')
       return 0
     endfunction
 
-    if s:is_enable_control_space_keymapping()
+    if s:IsEnableControlSpaceKeymapping()
       nnoremap <silent> <C-Space> <Cmd>call ddu#start()<CR>
     else
       nnoremap <silent> <Nul> <Cmd>call ddu#start()<CR>
