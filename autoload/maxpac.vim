@@ -82,15 +82,8 @@ function! maxpac#end() abort
 endfunction
 
 " Store a plugin configuration.
-function! maxpac#add(conf) abort
-  if type(a:conf) == type({})
-    let l:conf = a:conf
-  elseif type(a:conf) == type('')
-    let l:conf = maxpac#plugconf(a:conf)
-  else
-    " TODO: Throw an error.
-    return
-  endif
+function! maxpac#add(name) abort
+  let l:conf = maxpac#plugconf(a:name)
 
   call add(s:maxpac.names, l:conf.name)
   let s:maxpac.confs[l:conf.name] = l:conf
