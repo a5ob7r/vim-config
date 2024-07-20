@@ -23,21 +23,21 @@ endfunction
 
 " Initialize a configuration store of maxpac.
 function! maxpac#initialize() abort
-  let s:maxpac = {
-    \ 'names': [],
-    \ 'confs': {}
+  let s:maxpac = #{
+    \ names: [],
+    \ confs: {}
     \ }
 endfunction
 
 " Return a dictionary as a plugin configiration base for maxpac.
 function! maxpac#plugconf(name) abort
-  return {
-    \ 'name': a:name,
-    \ 'config': { 'type': 'opt' },
-    \ 'pre': { -> v:null },
-    \ 'post': { -> v:null },
-    \ 'fallback': { -> v:null },
-    \ 'deps': []
+  return #{
+    \ name: a:name,
+    \ config: #{ type: 'opt' },
+    \ pre: { -> v:null },
+    \ post: { -> v:null },
+    \ fallback: { -> v:null },
+    \ deps: []
     \ }
 endfunction
 
@@ -107,7 +107,7 @@ endfunction
 " NOTE: This function initializes minpac without any arguments if minpac isn't
 " initialized yet. If you want to initialize with non-default value,
 " initialize with the value beforehand.
-function! maxpac#load(uri, config = { 'type': 'opt' }) abort
+function! maxpac#load(uri, config = #{ type: 'opt' }) abort
   try
     if !exists('g:minpac#opt')
       call minpac#init()
