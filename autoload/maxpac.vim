@@ -17,7 +17,7 @@ endfunction
 
 " Convert an URI into a plugin (directory) name.
 function! maxpac#plugname(uri) abort
-  let l:tail = split(a:uri, '/')[-1]
+  const l:tail = split(a:uri, '/')[-1]
   return a:uri =~# '^https\=://' ? substitute(l:tail, '\C\.git$', '', '') : l:tail
 endfunction
 
@@ -111,7 +111,7 @@ function! maxpac#load(uri, config = #{ type: 'opt' }) abort
 
   " TODO: Support drive letters for MS-Windows.
   if a:uri =~# '^\%(file://\)\=/'
-    let l:path = substitute(a:uri, '^file://', '', '')
+    const l:path = substitute(a:uri, '^file://', '', '')
 
     if glob(l:path)->empty()
       return 0
@@ -119,7 +119,7 @@ function! maxpac#load(uri, config = #{ type: 'opt' }) abort
 
     execute printf('set runtimepath^=%s', fnameescape(l:path))
 
-    let l:after = globpath(l:path, 'after')
+    const l:after = globpath(l:path, 'after')
     if !empty(l:after)
       execute printf('set runtimepath+=%s', fnameescape(l:after))
     endif
@@ -130,7 +130,7 @@ function! maxpac#load(uri, config = #{ type: 'opt' }) abort
 
     return 1
   else
-    let l:name = maxpac#plugname(a:uri)
+    const l:name = maxpac#plugname(a:uri)
 
     " Register the plugin to minpac to update.
     call minpac#add(a:uri, a:config)
