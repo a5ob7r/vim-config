@@ -6,13 +6,13 @@
 function! s:loadable(uri) abort
   return
     \ a:uri =~# '^\%(file://\)\=/'
-    \ ? !empty(glob(substitute(a:uri, '^file://', '', '')))
-    \ : !empty(globpath(&packpath, $'pack/*/opt/{maxpac#plugname(a:uri)}'))
+    \ ? !substitute(a:uri, '^file://', '', '')->glob()->empty()
+    \ : !globpath(&packpath, $'pack/*/opt/{maxpac#plugname(a:uri)}')->empty()
 endfunction
 
 " Whether or not the plugin is loaded.
 function! s:loaded(name) abort
-  return !empty(globpath(&runtimepath, $'pack/*/opt/{a:name}'))
+  return !globpath(&runtimepath, $'pack/*/opt/{a:name}')->empty()
 endfunction
 
 " Convert an URI into a plugin (directory) name.
@@ -120,7 +120,7 @@ function! maxpac#load(uri, config = { 'type': 'opt' }) abort
   if a:uri =~# '^\%(file://\)\=/'
     let l:path = substitute(a:uri, '^file://', '', '')
 
-    if empty(glob(l:path))
+    if glob(l:path)->empty()
       return 0
     endif
 
