@@ -30,11 +30,9 @@ function! maxpac#initialize() abort
 endfunction
 
 " Return a dictionary as a plugin configiration base for maxpac.
-function! maxpac#plugconf(...) abort
-  let l:name = get(a:, 1, '')
-
+function! maxpac#plugconf(name) abort
   return {
-    \ 'name': l:name,
+    \ 'name': a:name,
     \ 'config': { 'type': 'opt' },
     \ 'pre': { -> v:null },
     \ 'post': { -> v:null },
@@ -44,7 +42,7 @@ function! maxpac#plugconf(...) abort
 endfunction
 
 " Load "minpac" and initialize "maxpac".
-function! maxpac#begin(...) abort
+function! maxpac#begin(config = {}) abort
   " Initialize maxmac.
   call maxpac#initialize()
 
@@ -54,9 +52,7 @@ function! maxpac#begin(...) abort
     return v:false
   endtry
 
-  let l:config = get(a:, 1, {})
-
-  call minpac#init(l:config)
+  call minpac#init(a:config)
 
   return v:true
 endfunction
@@ -111,7 +107,7 @@ endfunction
 " NOTE: This function initializes minpac without any arguments if minpac isn't
 " initialized yet. If you want to initialize with non-default value,
 " initialize with the value beforehand.
-function! maxpac#load(uri, ...) abort
+function! maxpac#load(uri, config = { 'type': 'opt' }) abort
   try
     if !exists('g:minpac#opt')
       call minpac#init()
@@ -141,11 +137,10 @@ function! maxpac#load(uri, ...) abort
 
     return 1
   else
-    let l:config = get(a:, 1, { 'type': 'opt' })
     let l:name = maxpac#plugname(a:uri)
 
     " Register the plugin to minpac to update.
-    call minpac#add(a:uri, l:config)
+    call minpac#add(a:uri, a:config)
 
     " Load the plugin instantly.
     try
