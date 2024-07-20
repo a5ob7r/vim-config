@@ -145,3 +145,5 @@ function! maxpac#load(uri, config = #{ type: 'opt' }) abort
     return s:Loaded(l:name)
   endif
 endfunction
+
+" vim: set expandtab tabstop=2 shiftwidth=2 foldmethod=marker:
