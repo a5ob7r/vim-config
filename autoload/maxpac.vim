@@ -7,12 +7,12 @@ function! s:loadable(uri) abort
   return
     \ a:uri =~# '^\%(file://\)\=/'
     \ ? !empty(glob(substitute(a:uri, '^file://', '', '')))
-    \ : !empty(globpath(&packpath, 'pack/*/opt/' . maxpac#plugname(a:uri)))
+    \ : !empty(globpath(&packpath, $'pack/*/opt/{maxpac#plugname(a:uri)}'))
 endfunction
 
 " Whether or not the plugin is loaded.
 function! s:loaded(name) abort
-  return !empty(globpath(&runtimepath, 'pack/*/opt/' . a:name))
+  return !empty(globpath(&runtimepath, $'pack/*/opt/{a:name}'))
 endfunction
 
 " Convert an URI into a plugin (directory) name.
