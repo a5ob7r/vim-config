@@ -117,11 +117,11 @@ function! maxpac#load(uri, config = #{ type: 'opt' }) abort
       return 0
     endif
 
-    execute printf('set runtimepath^=%s', fnameescape(l:path))
+    execute $'set runtimepath^={fnameescape(l:path)}'
 
     const l:after = globpath(l:path, 'after')
     if !empty(l:after)
-      execute printf('set runtimepath+=%s', fnameescape(l:after))
+      execute $'set runtimepath+={fnameescape(l:after)}'
     endif
 
     for l:plugin in globpath(l:path, 'plugin/**/*.vim', 0, 1)
