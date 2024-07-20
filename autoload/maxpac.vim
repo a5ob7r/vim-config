@@ -7,7 +7,7 @@ function! s:Loadable(uri) abort
   return
     \ a:uri =~# '^\%(file://\)\=/'
     \ ? !substitute(a:uri, '^file://', '', '')->glob()->empty()
-    \ : !globpath(&packpath, $'pack/*/opt/{maxpac#plugname(a:uri)}')->empty()
+    \ : !globpath(&packpath, $'pack/*/opt/{maxpac#Plugname(a:uri)}')->empty()
 endfunction
 
 " Whether or not the plugin is loaded.
@@ -16,13 +16,13 @@ function! s:Loaded(name) abort
 endfunction
 
 " Convert an URI into a plugin (directory) name.
-function! maxpac#plugname(uri) abort
+function! maxpac#Plugname(uri) abort
   const l:tail = split(a:uri, '/')[-1]
   return a:uri =~# '^https\=://' ? substitute(l:tail, '\C\.git$', '', '') : l:tail
 endfunction
 
 " Initialize a configuration store of maxpac.
-function! maxpac#initialize() abort
+function! maxpac#Initialize() abort
   let s:maxpac = #{
     \ names: [],
     \ confs: {}
@@ -30,7 +30,7 @@ function! maxpac#initialize() abort
 endfunction
 
 " Return a dictionary as a plugin configiration base for maxpac.
-function! maxpac#plugconf(name) abort
+function! maxpac#Plugconf(name) abort
   return #{
     \ name: a:name,
     \ config: #{ type: 'opt' },
@@ -42,9 +42,9 @@ function! maxpac#plugconf(name) abort
 endfunction
 
 " Load "minpac" and initialize "maxpac".
-function! maxpac#begin(config = {}) abort
+function! maxpac#Begin(config = {}) abort
   " Initialize maxmac.
-  call maxpac#initialize()
+  call maxpac#Initialize()
 
   try
     packadd minpac
@@ -59,7 +59,7 @@ endfunction
 
 " Load plugins that each of them may have hook functions. The hooks are called
 " before or after loading one.
-function! maxpac#end() abort
+function! maxpac#End() abort
   for l:name in s:maxpac.names
     let l:conf = s:maxpac.confs[l:name]
 
@@ -67,7 +67,7 @@ function! maxpac#end() abort
       call l:conf.pre()
     endif
 
-    if !maxpac#load(l:name, l:conf.config)
+    if !maxpac#Load(l:name, l:conf.config)
       if type(l:conf.fallback) == type(function('tr'))
         call l:conf.fallback()
       endif
@@ -82,8 +82,8 @@ function! maxpac#end() abort
 endfunction
 
 " Store a plugin configuration.
-function! maxpac#add(name) abort
-  let l:conf = maxpac#plugconf(a:name)
+function! maxpac#Add(name) abort
+  let l:conf = maxpac#Plugconf(a:name)
 
   call add(s:maxpac.names, l:conf.name)
   let s:maxpac.confs[l:conf.name] = l:conf
@@ -100,7 +100,7 @@ endfunction
 " NOTE: This function initializes minpac without any arguments if minpac isn't
 " initialized yet. If you want to initialize with non-default value,
 " initialize with the value beforehand.
-function! maxpac#load(uri, config = #{ type: 'opt' }) abort
+function! maxpac#Load(uri, config = #{ type: 'opt' }) abort
   try
     if !exists('g:minpac#opt')
       call minpac#init()
@@ -130,7 +130,7 @@ function! maxpac#load(uri, config = #{ type: 'opt' }) abort
 
     return 1
   else
-    const l:name = maxpac#plugname(a:uri)
+    const l:name = maxpac#Plugname(a:uri)
 
     " Register the plugin to minpac to update.
     call minpac#add(a:uri, a:config)
