@@ -3,7 +3,7 @@
 " TODO: Implement a dependency resolver and loading.
 
 " Whether or not the plugin is loadable.
-function! s:loadable(uri) abort
+function! s:Loadable(uri) abort
   return
     \ a:uri =~# '^\%(file://\)\=/'
     \ ? !substitute(a:uri, '^file://', '', '')->glob()->empty()
@@ -11,7 +11,7 @@ function! s:loadable(uri) abort
 endfunction
 
 " Whether or not the plugin is loaded.
-function! s:loaded(name) abort
+function! s:Loaded(name) abort
   return !globpath(&runtimepath, $'pack/*/opt/{a:name}')->empty()
 endfunction
 
@@ -63,7 +63,7 @@ function! maxpac#end() abort
   for l:name in s:maxpac.names
     let l:conf = s:maxpac.confs[l:name]
 
-    if s:loadable(l:name) && type(l:conf.pre) == type(function('tr'))
+    if s:Loadable(l:name) && type(l:conf.pre) == type(function('tr'))
       call l:conf.pre()
     endif
 
@@ -142,6 +142,6 @@ function! maxpac#load(uri, config = #{ type: 'opt' }) abort
       " Ignore any errors.
     endtry
 
-    return s:loaded(l:name)
+    return s:Loaded(l:name)
   endif
 endfunction
