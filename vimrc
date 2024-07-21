@@ -730,9 +730,9 @@ function! s:ctrlp.pre() abort
   def s:CtrlpProxy(bang: string, dir = getcwd())
     const home = expand('~')
 
-    " Make vim heavy or freeze to run CtrlP to search many files. For example
-    " this is caused when run `CtrlP` on home directory or edit a file on home
-    " directory.
+    # Make vim heavy or freeze to run CtrlP to search many files. For example
+    # this is caused when run `CtrlP` on home directory or edit a file on home
+    # directory.
     if empty(bang) && home ==# dir
       throw 'Forbidden to run CtrlP on home directory'
     endif
@@ -847,7 +847,7 @@ function! s:vim_lsp.pre() abort
       term_start(
         $'less {log}',
         {
-          env: #{ LESS: '' },
+          env: { LESS: '' },
           term_finish: 'close',
         }
       )
@@ -860,7 +860,7 @@ function! s:vim_lsp.pre() abort
     const log = LspLogFile()
 
     if filereadable(log)
-      term_start([&shell, &shellcmdflag, printf(template, log)], #{ term_finish: 'close' })
+      term_start([&shell, &shellcmdflag, printf(template, log)], { term_finish: 'close' })
     endif
   enddef
 
@@ -979,7 +979,7 @@ function! s:open_browser.post() abort
 
   def! g:SearchUnderCursorEnglishWord()
     const word = expand('<cword>')
-    SearchEnglishWord(word)
+    g:SearchEnglishWord(word)
   enddef
 endfunction
 " }}}
@@ -1571,8 +1571,8 @@ if executable('deno')
 
     call ddu#custom#action('kind', 'file', 'tcd', { args -> s:DduKindFileActionTcd(args) })
 
-    def s:DduKindFileActionTcd(args: list<any>): number
-      execute $'tcd {a:args.items[0].action.path}'
+    def s:DduKindFileActionTcd(args: dict<any>): number
+      execute $'tcd {args.items[0].action.path}'
 
       return 0
     enddef
