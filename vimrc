@@ -394,30 +394,34 @@ Autocmd BufReadPre ~/* setlocal undofile
 
 " From "$VIMRUNTIME/defaults.vim".
 " Jump cursor to last editting line.
-Autocmd BufReadPost *
-  \ if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
-  \ |   exe "normal! g`\""
-  \ | endif
+Autocmd BufReadPost * {
+  if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
+    exe "normal! g`\""
+  endif
+}
 
 " Read/Write the binary format, but are these configurations really
 " comfortable? Maybe we should use a binary editor insated.
-Autocmd BufReadPost *
-  \ if &binary
-  \ |   execute 'silent %!xxd -g 1'
-  \ |   set filetype=xxd
-  \ | endif
-Autocmd BufWritePre *
-  \ if &binary
-  \ |   let b:cursorpos = getcurpos()
-  \ |   execute '%!xxd -r'
-  \ | endif
-Autocmd BufWritePost *
-  \ if &binary
-  \ |   execute 'silent %!xxd -g 1'
-  \ |   set nomodified
-  \ |   call cursor(b:cursorpos[1], b:cursorpos[2], b:cursorpos[3])
-  \ |   unlet b:cursorpos
-  \ | endif
+Autocmd BufReadPost * {
+  if &binary
+    execute 'silent %!xxd -g 1'
+    set filetype=xxd
+  endif
+}
+Autocmd BufWritePre * {
+  if &binary
+    var b:cursorpos = getcurpos()
+    execute '%!xxd -r'
+  endif
+}
+Autocmd BufWritePost * {
+  if &binary
+    execute 'silent %!xxd -g 1'
+    set nomodified
+    cursor(b:cursorpos[1], b:cursorpos[2], b:cursorpos[3])
+    unlet b:cursorpos
+  endif
+}
 
 " Register a command to refresh something.
 command! -bar -nargs=+ OnRefresh autocmd refresh User Refresh <args>
@@ -480,27 +484,30 @@ function! s:minpac.post() abort
     return minpac#getpluglist()->keys()->sort()->join("\n")
   endfunction
 
-  command! -bar -nargs=? PackInstall
-    \   if empty(<q-args>)
-    \ |   call minpac#update()
-    \ | else
-    \ |   call minpac#add(<q-args>, #{ type: 'opt' })
-    \ |   call minpac#update(maxpac#Plugname(<q-args>), #{ do: printf('packadd %s', maxpac#Plugname(<q-args>)) })
-    \ | endif
+  command! -bar -nargs=? PackInstall {
+    if empty(<q-args>)
+      minpac#update()
+    else
+      minpac#add(<q-args>, { type: 'opt' })
+      minpac#update(maxpac#Plugname(<q-args>), { do: printf('packadd %s', maxpac#Plugname(<q-args>)) })
+    endif
+  }
 
-  command! -bar -nargs=? -complete=custom,s:PackComplete PackUpdate
-    \   if empty(<q-args>)
-    \ |   call minpac#update()
-    \ | else
-    \ |   call minpac#update(maxpac#Plugname(<q-args>))
-    \ | endif
+  command! -bar -nargs=? -complete=custom,s:PackComplete PackUpdate {
+    if empty(<q-args>)
+      minpac#update()
+    else
+      minpac#update(maxpac#Plugname(<q-args>))
+    endif
+  }
 
-  command! -bar -nargs=? -complete=custom,s:PackComplete PackClean
-    \   if empty(<q-args>)
-    \ |   call minpac#clean()
-    \ | else
-    \ |   call minpac#clean(maxpac#Plugname(<q-args>))
-    \ | endif
+  command! -bar -nargs=? -complete=custom,s:PackComplete PackClean {
+    if empty(<q-args>)
+      minpac#clean()
+    else
+      minpac#clean(maxpac#Plugname(<q-args>))
+    endif
+  }
 
   " This command is from the minpac help file.
   command! -nargs=1 -complete=custom,s:PackComplete PackOpenDir
@@ -628,18 +635,20 @@ function! s:lightline.pre() abort
   endfunction
 
   " The original version is from the help file of "lightline".
-  command! -bar -nargs=1 -complete=custom,s:LightlineColorschemes LightlineColorscheme
-    \   if exists('g:loaded_lightline')
-    \ |   call s:SetLightlineColorscheme(<q-args>)
-    \ |   call s:UpdateLightline()
-    \ | endif
+  command! -bar -nargs=1 -complete=custom,s:LightlineColorschemes LightlineColorscheme {
+    if exists('g:loaded_lightline')
+      SetLightlineColorscheme(<q-args>)
+      UpdateLightline()
+    endif
+  }
 
   " Synchronous lightline's colorscheme with Vim's one on the fly.
-  Autocmd ColorScheme *
-    \   if exists('g:loaded_lightline')
-    \ |   call s:ChangeLightlineColorscheme()
-    \ |   call s:UpdateLightline()
-    \ | endif
+  Autocmd ColorScheme * {
+    if exists('g:loaded_lightline')
+      ChangeLightlineColorscheme()
+      UpdateLightline()
+    endif
+  }
 
   OnRefresh call lightline#update()
 endfunction
@@ -802,7 +811,7 @@ function! s:vim_lsp.pre() abort
 
   let g:lsp_experimental_workspace_folders = 1
 
-  function! s:OnLspBufferEnabled() abort
+  Autocmd User lsp_buffer_enabled {
     setlocal omnifunc=lsp#complete
     setlocal tagfunc=lsp#tagfunc
 
@@ -818,9 +827,7 @@ function! s:vim_lsp.pre() abort
 
     nnoremap <silent><buffer><expr> <C-J> lsp#scroll(+1)
     nnoremap <silent><buffer><expr> <C-K> lsp#scroll(-1)
-  endfunction
-
-  Autocmd User lsp_buffer_enabled call s:OnLspBufferEnabled()
+  }
 
   function! s:LspLogFile() abort
     return get(g:, 'lsp_log_file', '')
@@ -1570,20 +1577,18 @@ if executable('deno')
     nnoremap <silent> <Leader>b <Cmd>call ddu#start(#{ sources: ['buffer'] })<CR>
     nnoremap <silent> <Leader>gq <Cmd>call ddu#start(#{ sources: ['ghq'], kindOptions: #{ file: #{ defaultAction: 'tcd' } } })<CR>
 
-    Autocmd FileType ddu-ff call s:DduFfKeybindings()
-    function! s:DduFfKeybindings() abort
+    Autocmd FileType ddu-ff {
       nnoremap <buffer><silent> <CR> <Cmd>call ddu#ui#do_action('itemAction')<CR>
       nnoremap <buffer><silent> <C-X> <Cmd>call ddu#ui#do_action('itemAction', #{ name: 'open', params: #{ command: 'split' } })<CR>
       nnoremap <buffer><silent> i <Cmd>call ddu#ui#do_action('openFilterWindow')<CR>
       nnoremap <buffer><silent> q <Cmd>call ddu#ui#do_action('quit')<CR>
-    endfunction
+    }
 
-    Autocmd FileType ddu-ff-filter call s:DduFfFilterKeybindings()
-    function! s:DduFfFilterKeybindings() abort
+    Autocmd FileType ddu-ff-filter {
       inoremap <buffer><silent> <CR> <Esc><Cmd>call ddu#ui#do_action('closeFilterWindow')<CR>
       nnoremap <buffer><silent> <CR> <Cmd>call ddu#ui#do_action('closeFilterWindow')<CR>
       nnoremap <buffer><silent> q <Cmd>call ddu#ui#do_action('closeFilterWindow')<CR>
-    endfunction
+    }
   endfunction
 
   call maxpac#Add('Shougo/ddu-ui-ff')
