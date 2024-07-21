@@ -476,7 +476,7 @@ endif
 let s:minpac = maxpac#Add('k-takata/minpac')
 
 function! s:minpac.post() abort
-  function! s:pack_complete(...) abort
+  function! s:PackComplete(...) abort
     return minpac#getpluglist()->keys()->sort()->join("\n")
   endfunction
 
@@ -488,14 +488,14 @@ function! s:minpac.post() abort
     \ |   call minpac#update(maxpac#Plugname(<q-args>), #{ do: printf('packadd %s', maxpac#Plugname(<q-args>)) })
     \ | endif
 
-  command! -bar -nargs=? -complete=custom,s:pack_complete PackUpdate
+  command! -bar -nargs=? -complete=custom,s:PackComplete PackUpdate
     \   if empty(<q-args>)
     \ |   call minpac#update()
     \ | else
     \ |   call minpac#update(maxpac#Plugname(<q-args>))
     \ | endif
 
-  command! -bar -nargs=? -complete=custom,s:pack_complete PackClean
+  command! -bar -nargs=? -complete=custom,s:PackComplete PackClean
     \   if empty(<q-args>)
     \ |   call minpac#clean()
     \ | else
@@ -503,7 +503,7 @@ function! s:minpac.post() abort
     \ | endif
 
   " This command is from the minpac help file.
-  command! -nargs=1 -complete=custom,s:pack_complete PackOpenDir
+  command! -nargs=1 -complete=custom,s:PackComplete PackOpenDir
     \ call term_start(&shell, #{
     \   cwd: minpac#getpluginfo(maxpac#Plugname(<q-args>))['dir'],
     \   term_finish: 'close',
@@ -520,7 +520,7 @@ function! s:neodark.post() abort
   " Prefer a near black background color.
   let g:neodark#background = '#202020'
 
-  function! s:apply_neodark(bang) abort
+  function! s:ApplyNeodark(bang) abort
     " Neodark requires 256 colors at least. For example Linux console supports
     " only 8 colors.
     if empty(a:bang) && &t_Co < 256
@@ -536,7 +536,7 @@ function! s:neodark.post() abort
     let g:terminal_ansi_colors[8] = '#5f5f5f'
   endfunction
 
-  command! -bang -bar Neodark call s:apply_neodark(<q-bang>)
+  command! -bang -bar Neodark call s:ApplyNeodark(<q-bang>)
 
   Autocmd VimEnter * ++nested Neodark
 endfunction
@@ -591,22 +591,22 @@ function! s:lightline.pre() abort
     \ }
     \ }
 
-  function! s:set_lightline_colorscheme(colorscheme) abort
+  function! s:SetLightlineColorscheme(colorscheme) abort
     let g:lightline = get(g:, 'lightline', {})
     let g:lightline['colorscheme'] = a:colorscheme
   endfunction
 
-  function! s:has_lightline_colorscheme(colorscheme) abort
+  function! s:HasLightlineColorscheme(colorscheme) abort
     return !globpath(&runtimepath, $'autoload/lightline/colorscheme/{a:colorscheme}.vim', 1)->empty()
   endfunction
 
-  function! s:update_lightline() abort
+  function! s:UpdateLightline() abort
     call lightline#init()
     call lightline#colorscheme()
     call lightline#update()
   endfunction
 
-  function! s:change_lightline_colorscheme() abort
+  function! s:ChangeLightlineColorscheme() abort
     if !get(g:, 'lightline_colorscheme_change_on_the_fly', 1)
       return
     endif
@@ -618,27 +618,27 @@ function! s:lightline.pre() abort
       \ : type(g:lightline_colorscheme_mapping) == type({}) ? get(g:lightline_colorscheme_mapping, g:colors_name, g:colors_name)
       \ : g:colors_name
 
-    if s:has_lightline_colorscheme(l:colorscheme)
-      call s:set_lightline_colorscheme(l:colorscheme)
+    if s:HasLightlineColorscheme(l:colorscheme)
+      call s:SetLightlineColorscheme(l:colorscheme)
     endif
   endfunction
 
-  function! s:lightline_colorschemes(...) abort
+  function! s:LightlineColorschemes(...) abort
     return globpath(&runtimepath, 'autoload/lightline/colorscheme/*.vim', 1, 1)->map({ _, val -> fnamemodify(val, ':t:r') })->join("\n")
   endfunction
 
   " The original version is from the help file of "lightline".
-  command! -bar -nargs=1 -complete=custom,s:lightline_colorschemes LightlineColorscheme
+  command! -bar -nargs=1 -complete=custom,s:LightlineColorschemes LightlineColorscheme
     \   if exists('g:loaded_lightline')
-    \ |   call s:set_lightline_colorscheme(<q-args>)
-    \ |   call s:update_lightline()
+    \ |   call s:SetLightlineColorscheme(<q-args>)
+    \ |   call s:UpdateLightline()
     \ | endif
 
   " Synchronous lightline's colorscheme with Vim's one on the fly.
   Autocmd ColorScheme *
     \   if exists('g:loaded_lightline')
-    \ |   call s:change_lightline_colorscheme()
-    \ |   call s:update_lightline()
+    \ |   call s:ChangeLightlineColorscheme()
+    \ |   call s:UpdateLightline()
     \ | endif
 
   OnRefresh call lightline#update()
@@ -714,7 +714,7 @@ function! s:ctrlp.pre() abort
     let g:ctrlp_cmd = 'CtrlPp'
   endif
 
-  function! s:ctrlp_proxy(bang, dir = getcwd()) abort
+  function! s:CtrlpProxy(bang, dir = getcwd()) abort
     const l:bang = empty(a:bang) ? '' : '!'
 
     const l:home = expand('~')
@@ -729,7 +729,7 @@ function! s:ctrlp.pre() abort
     CtrlP a:dir
   endfunction
 
-  command! -bang -nargs=? -complete=dir CtrlPp call s:ctrlp_proxy(<q-bang>, <f-args>)
+  command! -bang -nargs=? -complete=dir CtrlPp call s:CtrlpProxy(<q-bang>, <f-args>)
 
   nnoremap <silent> <Leader>b :<C-U>CtrlPBuffer<CR>
 endfunction
@@ -760,7 +760,7 @@ endfunction
 let s:ctrlp_man = maxpac#Add('a5ob7r/ctrlp-man')
 
 function! s:ctrlp_man.post() abort
-  function! s:lookup_manual() abort
+  function! s:LookupManual() abort
     const l:q = input('keyword> ', '', 'shellcmd')
 
     if empty(l:q)
@@ -770,7 +770,7 @@ function! s:ctrlp_man.post() abort
     execute 'CtrlPMan' l:q
   endfunction
 
-  command! LookupManual call s:lookup_manual()
+  command! LookupManual call s:LookupManual()
 
   nnoremap <silent> <Leader>m :LookupManual<CR>
 endfunction
@@ -802,7 +802,7 @@ function! s:vim_lsp.pre() abort
 
   let g:lsp_experimental_workspace_folders = 1
 
-  function! s:on_lsp_buffer_enabled() abort
+  function! s:OnLspBufferEnabled() abort
     setlocal omnifunc=lsp#complete
     setlocal tagfunc=lsp#tagfunc
 
@@ -820,19 +820,19 @@ function! s:vim_lsp.pre() abort
     nnoremap <silent><buffer><expr> <C-K> lsp#scroll(-1)
   endfunction
 
-  Autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
+  Autocmd User lsp_buffer_enabled call s:OnLspBufferEnabled()
 
-  function! s:lsp_log_file() abort
+  function! s:LspLogFile() abort
     return get(g:, 'lsp_log_file', '')
   endfunction
 
-  command! CurrentLspLogging echo s:lsp_log_file()
+  command! CurrentLspLogging echo s:LspLogFile()
   command! -nargs=* -complete=file EnableLspLogging
     \ let g:lsp_log_file = empty(<q-args>) ? $'{$VIMHOME}/tmp/vim-lsp.log' : <q-args>
   command! DisableLspLogging let g:lsp_log_file = ''
 
-  function! s:view_lsp_log() abort
-    const l:log = s:lsp_log_file()
+  function! s:ViewLspLog() abort
+    const l:log = s:LspLogFile()
 
     if filereadable(l:log)
       call term_start(
@@ -844,27 +844,27 @@ function! s:vim_lsp.pre() abort
     endif
   endfunction
 
-  command! ViewLspLog call s:view_lsp_log()
+  command! ViewLspLog call s:ViewLspLog()
 
-  function! s:run_with_lsp_log(template) abort
-    const l:log = s:lsp_log_file()
+  function! s:RunWithLspLog(template) abort
+    const l:log = s:LspLogFile()
 
     if filereadable(l:log)
       call term_start([&shell, &shellcmdflag, printf(a:template, l:log)], #{ term_finish: 'close' })
     endif
   endfunction
 
-  command! -nargs=+ -complete=shellcmd RunWithLspLog call s:run_with_lsp_log(<q-args>)
+  command! -nargs=+ -complete=shellcmd RunWithLspLog call s:RunWithLspLog(<q-args>)
 
-  function! s:clear_lsp_log() abort
-    const l:log = s:lsp_log_file()
+  function! s:ClearLspLog() abort
+    const l:log = s:LspLogFile()
 
     if filewritable(l:log)
       call writefile([], l:log)
     endif
   endfunction
 
-  command! ClearLspLog call s:clear_lsp_log()
+  command! ClearLspLog call s:ClearLspLog()
 endfunction
 " }}}
 
@@ -1010,9 +1010,9 @@ function! s:ripgrep.post() abort
 
   call ripgrep#observe#add_observer(g:ripgrep#event#other, 'RipgrepContextObserver')
 
-  command! -bang -count -nargs=+ -complete=file Rg call s:ripgrep(['-C<count>', <q-args>], #{ case: <bang>1, escape: <bang>1 })
+  command! -bang -count -nargs=+ -complete=file Rg call s:Ripgrep(['-C<count>', <q-args>], #{ case: <bang>1, escape: <bang>1 })
 
-  function! s:ripgrep(args, opts = {}) abort
+  function! s:Ripgrep(args, opts = {}) abort
     const l:o_case = get(a:opts, 'case')
     const l:o_escape = get(a:opts, 'escape')
 
@@ -1024,7 +1024,7 @@ function! s:ripgrep.post() abort
 
     if l:o_escape
       " Change the "<q-args>" to the "{command}" argument for "job_start()" literally.
-      let l:args += copy(a:args)->map({ _, val -> s:job_argumentalize_escape(val) })
+      let l:args += copy(a:args)->map({ _, val -> s:JobArgumentalizeEscape(val) })
     else
       let l:args += a:args
     endif
@@ -1037,7 +1037,7 @@ function! s:ripgrep.post() abort
   " :Rg \bvim\b -> call job_start('rg \\bvim\\b')
   " :Rg \"\ vim\b -> call job_start('rg \"\ vim\\b')
   "
-  function! s:job_argumentalize_escape(s) abort
+  function! s:JobArgumentalizeEscape(s) abort
     let l:tokens = []
     let l:s = a:s
 
@@ -1061,15 +1061,15 @@ function! s:ripgrep.post() abort
   call operator#user#define('ripgrep-g', 'Op_ripgrep_g')
 
   function! Op_ripgrep(motion_wiseness) abort
-    call s:operator_ripgrep(a:motion_wiseness, { 'boundaries': 0, 'push_history_entry': 1, 'highlight': 1 })
+    call s:OperatorRipgrep(a:motion_wiseness, { 'boundaries': 0, 'push_history_entry': 1, 'highlight': 1 })
   endfunction
 
   function! Op_ripgrep_g(motion_wiseness) abort
-    call s:operator_ripgrep(a:motion_wiseness, { 'boundaries': 1, 'push_history_entry': 1, 'highlight': 1 })
+    call s:OperatorRipgrep(a:motion_wiseness, { 'boundaries': 1, 'push_history_entry': 1, 'highlight': 1 })
   endfunction
 
   " TODO: Consider ideal linewise and blockwise operations.
-  function! s:operator_ripgrep(motion_wiseness, opts = {}) abort
+  function! s:OperatorRipgrep(motion_wiseness, opts = {}) abort
     const l:o_boundaries = get(a:opts, 'boundaries')
     const l:o_push_history_entry = get(a:opts, 'push_history_entry')
     const l:o_highlight = get(a:opts, 'highlight')
@@ -1092,7 +1092,7 @@ function! s:ripgrep.post() abort
           \ bufname('%')->getbufline(l:l_lnum)->map({ _, val -> val[l:l_col_idx : l:r_col_idx] })
 
     let l:words += match(l:buflines, '^\s*-') + 1 ? ['--'] : []
-    let l:words += match(l:buflines, ' ') + 1 ? [printf('"%s"', copy(l:buflines)->map({ _, val -> s:command_line_argumentalize_escape(val) })->join("\n"))] : [copy(l:buflines)->map({ _, val -> s:command_line_argumentalize_escape(val) })->join("\n")]
+    let l:words += match(l:buflines, ' ') + 1 ? [printf('"%s"', copy(l:buflines)->map({ _, val -> s:CommandLineArgumentalizeEscape(val) })->join("\n"))] : [copy(l:buflines)->map({ _, val -> s:CommandLineArgumentalizeEscape(val) })->join("\n")]
 
     const l:command = join(l:words)
 
@@ -1103,13 +1103,13 @@ function! s:ripgrep.post() abort
     endif
 
     if l:o_push_history_entry
-      call s:smart_ripgrep_command_history_push(l:command)
+      call s:SmartRipgrepCommandHistoryPush(l:command)
     endif
   endfunction
 
   " Escape command line special characters ("cmdline-special"), any
   " double-quotes and any backslashes preceding spaces.
-  function! s:command_line_argumentalize_escape(s) abort
+  function! s:CommandLineArgumentalizeEscape(s) abort
     let l:tokens = []
     let l:s = a:s
 
@@ -1126,7 +1126,7 @@ function! s:ripgrep.post() abort
     endwhile
   endfunction
 
-  function! s:smart_ripgrep_command_history_push(command) abort
+  function! s:SmartRipgrepCommandHistoryPush(command) abort
     const l:history_entry = a:command
     const l:latest_history_entry = histget('cmd', -1)
 
@@ -1169,7 +1169,7 @@ endfunction
 let s:localrc = maxpac#Add('thinca/vim-localrc')
 
 function! s:localrc.post() abort
-  function! s:open_localrc(bang, mods, dir) abort
+  function! s:OpenLocalrc(bang, mods, dir) abort
     const l:filename = get(g:, 'localrc_filename', '.local.vimrc')
     const l:localrc = s:Pathjoin(a:dir, fnameescape(l:filename))
 
@@ -1177,9 +1177,9 @@ function! s:localrc.post() abort
   endfunction
 
   command! -bang -bar VimrcLocal
-    \ call s:open_localrc(<q-bang>, <q-mods>, expand('~'))
+    \ call s:OpenLocalrc(<q-bang>, <q-mods>, expand('~'))
   command! -bang -bar -nargs=? -complete=dir OpenLocalrc
-    \ call s:open_localrc(<q-bang>, <q-mods>, empty(<q-args>) ? expand('%:p:h') : <q-args>)
+    \ call s:OpenLocalrc(<q-bang>, <q-mods>, empty(<q-args>) ? expand('%:p:h') : <q-args>)
 endfunction
 " }}}
 
@@ -1345,7 +1345,7 @@ function! s:fern.pre() abort
 
   " Toggle a fern buffer to keep the cursor position. A tab should only have
   " one fern buffer.
-  function! s:toggle_fern() abort
+  function! s:ToggleFern() abort
     if &filetype ==# 'fern'
       if exists('t:non_fern_buffer_id')
         execute 'buffer' t:non_fern_buffer_id
@@ -1363,17 +1363,17 @@ function! s:fern.pre() abort
     endif
   endfunction
 
-  command! -bar ToggleFern call s:toggle_fern()
+  command! -bar ToggleFern call s:ToggleFern()
 
   Autocmd Filetype fern let t:fern_buffer_id = bufnr()
   Autocmd BufLeave * if &ft !=# 'fern' | let t:non_fern_buffer_id = bufnr() | endif
   Autocmd DirChanged * unlet! t:fern_buffer_id
 
-  function! s:fern_log_file() abort
+  function! s:FernLogFile() abort
     return get(g:, 'fern#logfile', v:null)
   endfunction
 
-  command! CurrentFernLogging echo s:fern_log_file()
+  command! CurrentFernLogging echo s:FernLogFile()
   command! -nargs=* -complete=file EnableFernLogging
     \ let g:fern#logfile = empty(<q-args>) ? '$VIMHOME/tmp/fern.tsv' : <q-args>
   command! DisableFernLogging let g:fern#logfile = v:null
@@ -1382,15 +1382,15 @@ function! s:fern.pre() abort
   command! FernLogWARN let g:fern#loglevel = g:fern#WARN
   command! FernLogError let g:fern#loglevel = g:fern#Error
 
-  function! s:run_with_fern_log(template) abort
-    const l:log = s:fern_log_file()
+  function! s:RunWithFernLog(template) abort
+    const l:log = s:FernLogFile()
 
     if filereadable(l:log)
       call term_start([&shell, &shellcmdflag, printf(a:template, l:log)], #{ term_finish: 'close' })
     endif
   endfunction
 
-  command! -nargs=+ -complete=shellcmd RunWithFernLog call s:run_with_fern_log(<q-args>)
+  command! -nargs=+ -complete=shellcmd RunWithFernLog call s:RunWithFernLog(<q-args>)
 endfunction
 
 function! s:fern.fallback() abort
@@ -1421,7 +1421,7 @@ let s:asyncomplete = maxpac#Add('prabirshrestha/asyncomplete.vim')
 function! s:asyncomplete.pre() abort
   let g:asyncomplete_enable_for_all = 0
 
-  function! s:toggle_asyncomplete(asyncomplete_enable = get(b:, 'asyncomplete_enable')) abort
+  function! s:ToggleAsyncomplete(asyncomplete_enable = get(b:, 'asyncomplete_enable')) abort
     if a:asyncomplete_enable
       call asyncomplete#disable_for_buffer()
 
@@ -1442,9 +1442,9 @@ function! s:asyncomplete.pre() abort
     endif
   endfunction
 
-  command! ToggleAsyncomplete call s:toggle_asyncomplete()
-  command! EnableAsyncomplete call s:toggle_asyncomplete(0)
-  command! DisableAsyncomplete call s:toggle_asyncomplete(1)
+  command! ToggleAsyncomplete call s:ToggleAsyncomplete()
+  command! EnableAsyncomplete call s:ToggleAsyncomplete(0)
+  command! DisableAsyncomplete call s:ToggleAsyncomplete(1)
 endfunction
 " }}}
 
@@ -1553,9 +1553,9 @@ if executable('deno')
     \   },
     \ })
 
-    call ddu#custom#action('kind', 'file', 'tcd', { args -> s:ddu_kind_file_action_tcd(args) })
+    call ddu#custom#action('kind', 'file', 'tcd', { args -> s:DduKindFileActionTcd(args) })
 
-    function! s:ddu_kind_file_action_tcd(args) abort
+    function! s:DduKindFileActionTcd(args) abort
       execute $'tcd {a:args.items[0].action.path}'
 
       return 0
@@ -1570,16 +1570,16 @@ if executable('deno')
     nnoremap <silent> <Leader>b <Cmd>call ddu#start(#{ sources: ['buffer'] })<CR>
     nnoremap <silent> <Leader>gq <Cmd>call ddu#start(#{ sources: ['ghq'], kindOptions: #{ file: #{ defaultAction: 'tcd' } } })<CR>
 
-    Autocmd FileType ddu-ff call s:ddu_ff_keybindings()
-    function! s:ddu_ff_keybindings() abort
+    Autocmd FileType ddu-ff call s:DduFfKeybindings()
+    function! s:DduFfKeybindings() abort
       nnoremap <buffer><silent> <CR> <Cmd>call ddu#ui#do_action('itemAction')<CR>
       nnoremap <buffer><silent> <C-X> <Cmd>call ddu#ui#do_action('itemAction', #{ name: 'open', params: #{ command: 'split' } })<CR>
       nnoremap <buffer><silent> i <Cmd>call ddu#ui#do_action('openFilterWindow')<CR>
       nnoremap <buffer><silent> q <Cmd>call ddu#ui#do_action('quit')<CR>
     endfunction
 
-    Autocmd FileType ddu-ff-filter call s:ddu_ff_filter_keybindings()
-    function! s:ddu_ff_filter_keybindings() abort
+    Autocmd FileType ddu-ff-filter call s:DduFfFilterKeybindings()
+    function! s:DduFfFilterKeybindings() abort
       inoremap <buffer><silent> <CR> <Esc><Cmd>call ddu#ui#do_action('closeFilterWindow')<CR>
       nnoremap <buffer><silent> <CR> <Cmd>call ddu#ui#do_action('closeFilterWindow')<CR>
       nnoremap <buffer><silent> q <Cmd>call ddu#ui#do_action('closeFilterWindow')<CR>
