@@ -1186,10 +1186,10 @@ let s:localrc = maxpac#Add('thinca/vim-localrc')
 
 function! s:localrc.post() abort
   def s:OpenLocalrc(bang: string, mods: string, dir: string)
-    const filename = get(g:, 'localrc_filename', '.local.vimrc')
-    const localrc = s:Pathjoin(dir, fnameescape(filename))
+    const localrc_filename = get(g:, 'localrc_filename', '.local.vimrc')
+    const localrc_filepath = Pathjoin(dir, fnameescape(localrc_filename))
 
-    execute $'{mods} Open{bang} {localrc}'
+    execute $'{mods} Open{bang} {localrc_filepath}'
   enddef
 
   command! -bang -bar VimrcLocal
