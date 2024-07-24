@@ -468,18 +468,17 @@ call maxpac#Begin()
 " NOTE: Maybe "+clientserver" is disabled in macOS even if a Vim is compiled
 " with "--with-features=huge".
 if has('clientserver')
-  let s:singleton = maxpac#Add('thinca/vim-singleton')
+  def s:SingletonPost()
+    singleton#enable()
+  enddef
 
-  function! s:singleton.post() abort
-    call singleton#enable()
-  endfunction
+  let s:singleton = maxpac#Add('thinca/vim-singleton')
+  let s:singleton.post = funcref('s:SingletonPost')
 endif
 " }}}
 
 " k-takata/minpac {{{
-let s:minpac = maxpac#Add('k-takata/minpac')
-
-function! s:minpac.post() abort
+def s:MinpacPost()
   command! -bar -nargs=? PackInstall {
     if empty(<q-args>)
       minpac#update()
@@ -505,27 +504,28 @@ function! s:minpac.post() abort
     endif
   }
 
-  " This command is from the minpac help file.
+  # This command is from the minpac help file.
   command! -nargs=1 -complete=custom,s:PackComplete PackOpenDir
-    \ call term_start(&shell, #{
+    \ term_start(&shell, {
     \   cwd: minpac#getpluginfo(maxpac#Plugname(<q-args>))['dir'],
     \   term_finish: 'close',
     \ })
-endfunction
+enddef
 
 def s:PackComplete(..._): string
   return minpac#getpluglist()->keys()->sort()->join("\n")
 enddef
+
+let s:minpac = maxpac#Add('k-takata/minpac')
+let s:minpac.post = funcref('s:MinpacPost')
 " }}}
 
 " =============================================================================
 
 " KeitaNakamura/neodark.vim {{{
-let s:neodark = maxpac#Add('KeitaNakamura/neodark.vim')
-
-function! s:neodark.post() abort
-  " Prefer a near black background color.
-  let g:neodark#background = '#202020'
+def s:NeodarkPost()
+  # Prefer a near black background color.
+  g:neodark#background = '#202020'
 
   command! -bang -bar Neodark call s:ApplyNeodark(<q-bang>)
 
@@ -533,7 +533,7 @@ function! s:neodark.post() abort
     autocmd!
     autocmd VimEnter * ++nested Neodark
   augroup END
-endfunction
+enddef
 
 def s:ApplyNeodark(bang: string)
   # Neodark requires 256 colors at least. For example Linux console supports
@@ -550,58 +550,59 @@ def s:ApplyNeodark(bang: string)
   # Adjust the autosuggested text color for zsh.
   g:terminal_ansi_colors[8] = '#5f5f5f'
 enddef
+
+let s:neodark = maxpac#Add('KeitaNakamura/neodark.vim')
+let s:neodark.post  = funcref('s:NeodarkPost')
 " }}}
 
 " itchyny/lightline.vim {{{
-let s:lightline = maxpac#Add('itchyny/lightline.vim')
+def s:LightlinePre()
+  g:lightline = {
+    active: {
+      left: [
+        [ 'mode', 'binary', 'paste' ],
+        [ 'readonly', 'relativepath', 'modified' ],
+        [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_infos', 'linter_ok' ],
+        [ 'lsp_checking', 'lsp_errors', 'lsp_warnings', 'lsp_informations', 'lsp_hints', 'lsp_ok', 'lsp_progress' ]
+      ]
+    },
+    component: {
+      binary: '%{&binary ? "BINARY" : ""}'
+    },
+    component_visible_condition: {
+      binary: '&binary'
+    },
+    component_expand: {
+      linter_checking: 'lightline#ale#checking',
+      linter_errors: 'lightline#ale#errors',
+      linter_warnings: 'lightline#ale#warnings',
+      linter_infos: 'lightline#ale#infos',
+      linter_ok: 'lightline#ale#ok',
+      lsp_checking: 'lightline#lsp#checking',
+      lsp_errors: 'lightline#lsp#error',
+      lsp_warnings: 'lightline#lsp#warning',
+      lsp_informations: 'lightline#lsp#information',
+      lsp_hints: 'lightline#lsp#hint',
+      lsp_ok: 'lightline#lsp#ok',
+      lsp_progress: 'lightline_lsp_progress#progress'
+    },
+    component_type: {
+      linter_checking: 'left',
+      linter_errors: 'error',
+      linter_warnings: 'warning',
+      linter_infos: 'left',
+      linter_ok: 'left',
+      lsp_checking: 'left',
+      lsp_errors: 'error',
+      lsp_warnings: 'warning',
+      lsp_informations: 'left',
+      lsp_hints: 'left',
+      lsp_ok: 'left',
+      lsp_progress: 'left'
+    }
+  }
 
-function! s:lightline.pre() abort
-  let g:lightline = #{
-    \ active: #{
-    \   left: [
-    \     [ 'mode', 'binary', 'paste' ],
-    \     [ 'readonly', 'relativepath', 'modified' ],
-    \     [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_infos', 'linter_ok' ],
-    \     [ 'lsp_checking', 'lsp_errors', 'lsp_warnings', 'lsp_informations', 'lsp_hints', 'lsp_ok', 'lsp_progress' ]
-    \   ]
-    \ },
-    \ component: #{
-    \   binary: '%{&binary ? "BINARY" : ""}'
-    \ },
-    \ component_visible_condition: #{
-    \   binary: '&binary'
-    \ },
-    \ component_expand: #{
-    \   linter_checking: 'lightline#ale#checking',
-    \   linter_errors: 'lightline#ale#errors',
-    \   linter_warnings: 'lightline#ale#warnings',
-    \   linter_infos: 'lightline#ale#infos',
-    \   linter_ok: 'lightline#ale#ok',
-    \   lsp_checking: 'lightline#lsp#checking',
-    \   lsp_errors: 'lightline#lsp#error',
-    \   lsp_warnings: 'lightline#lsp#warning',
-    \   lsp_informations: 'lightline#lsp#information',
-    \   lsp_hints: 'lightline#lsp#hint',
-    \   lsp_ok: 'lightline#lsp#ok',
-    \   lsp_progress: 'lightline_lsp_progress#progress'
-    \ },
-    \ component_type: #{
-    \   linter_checking: 'left',
-    \   linter_errors: 'error',
-    \   linter_warnings: 'warning',
-    \   linter_infos: 'left',
-    \   linter_ok: 'left',
-    \   lsp_checking: 'left',
-    \   lsp_errors: 'error',
-    \   lsp_warnings: 'warning',
-    \   lsp_informations: 'left',
-    \   lsp_hints: 'left',
-    \   lsp_ok: 'left',
-    \   lsp_progress: 'left'
-    \ }
-    \ }
-
-  " The original version is from the help file of "lightline".
+  # The original version is from the help file of "lightline".
   command! -bar -nargs=1 -complete=custom,s:LightlineColorschemes LightlineColorscheme {
     if exists('g:loaded_lightline')
       SetLightlineColorscheme(<q-args>)
@@ -612,7 +613,7 @@ function! s:lightline.pre() abort
   augroup vimrc:lightline
     autocmd!
 
-    " Synchronous lightline's colorscheme with Vim's one on the fly.
+    # Synchronous lightline's colorscheme with Vim's one on the fly.
     autocmd ColorScheme * {
       if exists('g:loaded_lightline')
         ChangeLightlineColorscheme()
@@ -622,7 +623,7 @@ function! s:lightline.pre() abort
   augroup END
 
   OnRefresh call lightline#update()
-endfunction
+enddef
 
 def s:SetLightlineColorscheme(colorscheme: string)
   g:lightline = get(g:, 'lightline', {})
@@ -659,81 +660,85 @@ enddef
 def s:LightlineColorschemes(..._): string
   return globpath(&runtimepath, 'autoload/lightline/colorscheme/*.vim', 1, 1)->map((_, val) => fnamemodify(val, ':t:r'))->join("\n")
 enddef
+
+let s:lightline = maxpac#Add('itchyny/lightline.vim')
+let s:lightline.pre = funcref('s:LightlinePre')
 " }}}
 
 " =============================================================================
 
 " airblade/vim-gitgutter {{{
-let s:gitgutter = maxpac#Add('airblade/vim-gitgutter')
+def s:GitgutterPre()
+  g:gitgutter_sign_added = 'A'
+  g:gitgutter_sign_modified = 'M'
+  g:gitgutter_sign_removed = 'D'
+  g:gitgutter_sign_removed_first_line = 'd'
+  g:gitgutter_sign_modified_removed = 'm'
+enddef
 
-function! s:gitgutter.pre() abort
-  let g:gitgutter_sign_added = 'A'
-  let g:gitgutter_sign_modified = 'M'
-  let g:gitgutter_sign_removed = 'D'
-  let g:gitgutter_sign_removed_first_line = 'd'
-  let g:gitgutter_sign_modified_removed = 'm'
-endfunction
+let s:gitgutter = maxpac#Add('airblade/vim-gitgutter')
+let s:gitgutter.pre = funcref('s:GitgutterPre')
 " }}}
 
 " lambdalisue/gina.vim {{{
-let s:gina = maxpac#Add('lambdalisue/gina.vim')
-
-function! s:gina.post() abort
+def s:GinaPost()
   nmap <silent> <Leader>gl :<C-U>Gina log --graph --all<CR>
   nmap <silent> <Leader>gs :<C-U>Gina status<CR>
   nmap <silent> <Leader>gc :<C-U>Gina commit<CR>
 
-  call gina#custom#mapping#nmap('log', 'q', '<C-W>c', #{ noremap: 1, silent: 1 })
-  call gina#custom#mapping#nmap('log', 'yy', '<Plug>(gina-yank-rev)', #{ silent: 1 })
-  call gina#custom#mapping#nmap('status', 'q', '<C-W>c', #{ noremap: 1, silent: 1 })
-  call gina#custom#mapping#nmap('status', 'yy', '<Plug>(gina-yank-path)', #{ silent: 1 })
-endfunction
+  gina#custom#mapping#nmap('log', 'q', '<C-W>c', { noremap: 1, silent: 1 })
+  gina#custom#mapping#nmap('log', 'yy', '<Plug>(gina-yank-rev)', { silent: 1 })
+  gina#custom#mapping#nmap('status', 'q', '<C-W>c', { noremap: 1, silent: 1 })
+  gina#custom#mapping#nmap('status', 'yy', '<Plug>(gina-yank-path)', { silent: 1 })
+enddef
+
+let s:gina = maxpac#Add('lambdalisue/gina.vim')
+let s:gina.post = funcref('s:GinaPost')
 " }}}
 
 " rhysd/git-messenger.vim {{{
-let s:git_messenger = maxpac#Add('rhysd/git-messenger.vim')
+def s:GitMessengerPost()
+  g:git_messenger_include_diff = 'all'
+  g:git_messenger_always_into_popup = v:true
+  g:git_messenger_max_popup_height = 15
+enddef
 
-function! s:git_messenger.post() abort
-  let g:git_messenger_include_diff = 'all'
-  let g:git_messenger_always_into_popup = v:true
-  let g:git_messenger_max_popup_height = 15
-endfunction
+let s:git_messenger = maxpac#Add('rhysd/git-messenger.vim')
+let s:git_messenger.post = funcref('s:GitMessengerPost')
 " }}}
 
 " =============================================================================
 
 " ctrlpvim/ctrlp.vim {{{
-let s:ctrlp = maxpac#Add('ctrlpvim/ctrlp.vim')
+def s:CtrlpPre()
+  g:ctrlp_map = s:IsEnableControlSpaceKeymapping() ? '<C-Space>' : '<Nul>'
 
-function! s:ctrlp.pre() abort
-  let g:ctrlp_map = s:IsEnableControlSpaceKeymapping() ? '<C-Space>' : '<Nul>'
+  g:ctrlp_show_hidden = 1
+  g:ctrlp_lazy_update = 150
+  g:ctrlp_reuse_window = '.*'
+  g:ctrlp_use_caching = 0
+  g:ctrlp_compare_lim = 5000
 
-  let g:ctrlp_show_hidden = 1
-  let g:ctrlp_lazy_update = 150
-  let g:ctrlp_reuse_window = '.*'
-  let g:ctrlp_use_caching = 0
-  let g:ctrlp_compare_lim = 5000
-
-  let g:ctrlp_user_command = {}
-  let g:ctrlp_user_command['types'] = {}
+  g:ctrlp_user_command = {}
+  g:ctrlp_user_command['types'] = {}
 
   if executable('git')
-    let g:ctrlp_user_command['types'][1] = ['.git', 'git -C %s ls-files -co --exclude-standard']
+    g:ctrlp_user_command['types'][1] = ['.git', 'git -C %s ls-files -co --exclude-standard']
   endif
 
   if executable('fd')
-    let g:ctrlp_user_command['fallback'] = 'fd --type=file --type=symlink --hidden . %s'
+    g:ctrlp_user_command['fallback'] = 'fd --type=file --type=symlink --hidden . %s'
   elseif executable('find')
-    let g:ctrlp_user_command['fallback'] = 'find %s -type f'
+    g:ctrlp_user_command['fallback'] = 'find %s -type f'
   else
-    let g:ctrlp_use_caching = 1
-    let g:ctrlp_cmd = 'CtrlPp'
+    g:ctrlp_use_caching = 1
+    g:ctrlp_cmd = 'CtrlPp'
   endif
 
   command! -bang -nargs=? -complete=dir CtrlPp call s:CtrlpProxy(<q-bang>, <f-args>)
 
   nnoremap <silent> <Leader>b :<C-U>CtrlPBuffer<CR>
-endfunction
+enddef
 
 def s:CtrlpProxy(bang: string, dir = getcwd())
   const home = expand('~')
@@ -747,37 +752,40 @@ def s:CtrlpProxy(bang: string, dir = getcwd())
 
   CtrlP dir
 enddef
+
+let s:ctrlp = maxpac#Add('ctrlpvim/ctrlp.vim')
+let s:ctrlp.pre = funcref('s:CtrlpPre')
 " }}}
 
 " mattn/ctrlp-matchfuzzy {{{
-let s:ctrlp_matchfuzzy = maxpac#Add('mattn/ctrlp-matchfuzzy')
+def s:CtrlpMatchfuzzyPost()
+  g:ctrlp_match_func = { match: 'ctrlp_matchfuzzy#matcher' }
+enddef
 
-function! s:ctrlp_matchfuzzy.post() abort
-  let g:ctrlp_match_func = #{ match: 'ctrlp_matchfuzzy#matcher' }
-endfunction
+let s:ctrlp_matchfuzzy = maxpac#Add('mattn/ctrlp-matchfuzzy')
+let s:ctrlp_matchfuzzy.post = funcref('s:CtrlpMatchfuzzyPost')
 " }}}
 
 " mattn/ctrlp-ghq {{{
-let s:ctrlp_ghq = maxpac#Add('mattn/ctrlp-ghq')
-
-function! s:ctrlp_ghq.post() abort
-  let g:ctrlp_ghq_actions = [
-    \ #{ label: 'edit', action: 'edit', path: 1 },
-    \ #{ label: 'tabnew', action: 'tabnew', path: 1 }
-    \ ]
+def s:CtrlpGhqPost()
+  g:ctrlp_ghq_actions = [
+    { label: 'edit', action: 'edit', path: 1 },
+    { label: 'tabnew', action: 'tabnew', path: 1 }
+  ]
 
   nnoremap <silent> <Leader>gq :<C-U>CtrlPGhq<CR>
-endfunction
+enddef
+
+let s:ctrlp_ghq = maxpac#Add('mattn/ctrlp-ghq')
+let s:ctrlp_ghq.post = funcref('s:CtrlpGhqPost')
 " }}}
 
 " a5ob7r/ctrlp-man {{{
-let s:ctrlp_man = maxpac#Add('a5ob7r/ctrlp-man')
-
-function! s:ctrlp_man.post() abort
+def s:CtrlpManPost()
   command! LookupManual call s:LookupManual()
 
   nnoremap <silent> <Leader>m :LookupManual<CR>
-endfunction
+enddef
 
 def s:LookupManual()
   const q = input('keyword> ', '', 'shellcmd')
@@ -788,33 +796,34 @@ def s:LookupManual()
 
   execute 'CtrlPMan' q
 enddef
+
+let s:ctrlp_man = maxpac#Add('a5ob7r/ctrlp-man')
+let s:ctrlp_man.post = funcref('s:CtrlpManPost')
 " }}}
 
 " =============================================================================
 
 " prabirshrestha/vim-lsp {{{
-let s:vim_lsp = maxpac#Add('prabirshrestha/vim-lsp')
+def s:VimLspPre()
+  g:lsp_diagnostics_float_cursor = 1
+  g:lsp_diagnostics_float_delay = 200
 
-function! s:vim_lsp.pre() abort
-  let g:lsp_diagnostics_float_cursor = 1
-  let g:lsp_diagnostics_float_delay = 200
+  g:lsp_semantic_enabled = 1
+  g:lsp_inlay_hints_enabled = 1
+  # FIXME: HLS (haskell-language-server) v1.8+ (and maybe early versions too)
+  # throws such a string, "Error | Failed to parse message header:" if the
+  # native client is on. And the client logs "waiting for lsp server to
+  # initialize". This means we can't use the native client with HLSs
+  # unfortunately at this time, although I want to use the client. The client
+  # is off by default, but I make it off explicitly for this documentation
+  # about why we have to disable it.
+  g:lsp_use_native_client = 0
 
-  let g:lsp_semantic_enabled = 1
-  let g:lsp_inlay_hints_enabled = 1
-  " FIXME: HLS (haskell-language-server) v1.8+ (and maybe early versions too)
-  " throws such a string, "Error | Failed to parse message header:" if the
-  " native client is on. And the client logs "waiting for lsp server to
-  " initialize". This means we can't use the native client with HLSs
-  " unfortunately at this time, although I want to use the client. The client
-  " is off by default, but I make it off explicitly for this documentation
-  " about why we have to disable it.
-  let g:lsp_use_native_client = 0
+  g:lsp_async_completion = 1
 
-  let g:lsp_async_completion = 1
+  g:lsp_diagnostics_virtual_text_align = 'after'
 
-  let g:lsp_diagnostics_virtual_text_align = 'after'
-
-  let g:lsp_experimental_workspace_folders = 1
+  g:lsp_experimental_workspace_folders = 1
 
   augroup vimrc:vim_lsp
     autocmd!
@@ -847,7 +856,7 @@ function! s:vim_lsp.pre() abort
   command! -nargs=+ -complete=shellcmd RunWithLspLog call s:RunWithLspLog(<q-args>)
 
   command! ClearLspLog call s:ClearLspLog()
-endfunction
+enddef
 
 def s:LspLogFile(): string
   return get(g:, 'lsp_log_file', '')
@@ -882,34 +891,38 @@ def s:ClearLspLog()
     writefile([], log)
   endif
 enddef
+
+let s:vim_lsp = maxpac#Add('prabirshrestha/vim-lsp')
+let s:vim_lsp.pre = funcref('s:VimLspPre')
 " }}}
 
 " mattn/vim-lsp-settings {{{
+def s:VimLspSettingsPre()
+  # Use this only as a preset configuration for LSP, not a installer.
+  g:lsp_settings_enable_suggestions = 0
+
+  g:lsp_settings = get(g:, 'lsp_settings', {})
+  # Prefer Vim + latexmk than texlab for now.
+  g:lsp_settings['texlab'] = {
+    disabled: 1,
+    workspace_config: {
+      latex: {
+        build: {
+          args: ['%f'],
+          onSave: v:true,
+          forwardSearchAfter: v:true
+        },
+        forwardSearch: {
+          executable: 'zathura',
+          args: ['--synctex-forward', '%l:1:%f', '%p']
+        }
+      }
+    }
+  }
+enddef
+
 let s:vim_lsp_settings = maxpac#Add('mattn/vim-lsp-settings')
-
-function! s:vim_lsp_settings.pre() abort
-  " Use this only as a preset configuration for LSP, not a installer.
-  let g:lsp_settings_enable_suggestions = 0
-
-  let g:lsp_settings = get(g:, 'lsp_settings', {})
-  " Prefer Vim + latexmk than texlab for now.
-  let g:lsp_settings['texlab'] = #{
-    \ disabled: 1,
-    \ workspace_config: #{
-    \   latex: #{
-    \     build: #{
-    \       args: ['%f'],
-    \       onSave: v:true,
-    \       forwardSearchAfter: v:true
-    \       },
-    \     forwardSearch: #{
-    \       executable: 'zathura',
-    \       args: ['--synctex-forward', '%l:1:%f', '%p']
-    \       }
-    \     }
-    \   }
-    \ }
-endfunction
+let s:vim_lsp_settings.pre = funcref('s:VimLspSettingsPre')
 " }}}
 
 call maxpac#Add('tsuyoshicho/lightline-lsp')
@@ -918,20 +931,22 @@ call maxpac#Add('micchy326/lightline-lsp-progress')
 " =============================================================================
 
 " hrsh7th/vim-vsnip {{{
-let s:vsnip = maxpac#Add('hrsh7th/vim-vsnip')
+def s:VsnipPre()
+  g:vsnip_snippet_dir = $'{$VIMHOME}/vsnip'
+enddef
 
-function! s:vsnip.pre() abort
-  let g:vsnip_snippet_dir = $'{$VIMHOME}/vsnip'
-endfunction
-
-function! s:vsnip.post() abort
+def s:VsnipPost()
   imap <expr> <Tab>
     \ vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' :
     \ vsnip#expandable() ? '<Plug>(vsnip-expand)' : '<Tab>'
   smap <expr> <Tab> vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' : '<Tab>'
   imap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : '<S-Tab>'
   smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : '<S-Tab>'
-endfunction
+enddef
+
+let s:vsnip = maxpac#Add('hrsh7th/vim-vsnip')
+let s:vsnip.pre = funcref('s:VsnipPre')
+let s:vsnip.post = funcref('s:VsnipPost')
 " }}}
 
 call maxpac#Add('hrsh7th/vim-vsnip-integ')
@@ -942,42 +957,43 @@ call maxpac#Add('rafamadriz/friendly-snippets')
 call maxpac#Add('kana/vim-operator-user')
 
 " kana/vim-operator-replace {{{
-let s:replace = maxpac#Add('kana/vim-operator-replace')
-
-function! s:replace.post() abort
+def s:ReplacePost()
   map _ <Plug>(operator-replace)
-endfunction
+enddef
+
+let s:replace = maxpac#Add('kana/vim-operator-replace')
+let s:replace.post = funcref('s:ReplacePost')
 " }}}
 
 " =============================================================================
 
 " a5ob7r/shellcheckrc.vim {{{
-let s:shellcheckrc = maxpac#Add('a5ob7r/shellcheckrc.vim')
+def s:ShellcheckrcPre()
+  g:shellcheck_directive_highlight = 1
+enddef
 
-function! s:shellcheckrc.pre() abort
-  let g:shellcheck_directive_highlight = 1
-endfunction
+let s:shellcheckrc = maxpac#Add('a5ob7r/shellcheckrc.vim')
+let s:shellcheckrc.pre = funcref('s:ShellcheckrcPre')
 " }}}
 
 " preservim/vim-markdown {{{
+def s:MarkdownPre()
+  # No need to insert any indent preceding a new list item after inserting a
+  # newline.
+  g:vim_markdown_new_list_item_indent = 0
+
+  g:vim_markdown_folding_disabled = 1
+enddef
+
 let s:markdown = maxpac#Add('preservim/vim-markdown')
-
-function! s:markdown.pre() abort
-  " No need to insert any indent preceding a new list item after inserting a
-  " newline.
-  let g:vim_markdown_new_list_item_indent = 0
-
-  let g:vim_markdown_folding_disabled = 1
-endfunction
+let s:markdown.pre = funcref('s:MarkdownPre')
 " }}}
 
 " tyru/open-browser.vim {{{
-let s:open_browser = maxpac#Add('tyru/open-browser.vim')
-
-function! s:open_browser.post() abort
+def s:OpenBrowserPost()
   nmap <Leader>K <Plug>(openbrowser-smart-search)
   nnoremap <Leader>k :call SearchUnderCursorEnglishWord()<CR>
-endfunction
+enddef
 
 def! g:SearchEnglishWord(word: string)
   const url = $'https://dictionary.cambridge.org/dictionary/english/{word}'
@@ -988,39 +1004,41 @@ def! g:SearchUnderCursorEnglishWord()
   const word = expand('<cword>')
   g:SearchEnglishWord(word)
 enddef
+
+let s:open_browser = maxpac#Add('tyru/open-browser.vim')
+let s:open_browser.post = funcref('s:OpenBrowserPost')
 " }}}
 
 " w0rp/ale {{{
-let s:ale = maxpac#Add('w0rp/ale')
+def s:AlePre()
+  # Use ALE only as a linter engine.
+  g:ale_disable_lsp = 1
 
-function! s:ale.pre() abort
-  " Use ALE only as a linter engine.
-  let g:ale_disable_lsp = 1
-
-  let g:ale_python_auto_pipenv = 1
-  let g:ale_python_auto_poetry = 1
+  g:ale_python_auto_pipenv = 1
+  g:ale_python_auto_poetry = 1
 
   augroup vimrc:ale
     autocmd!
     autocmd User lsp_buffer_enabled ALEDisableBuffer
   augroup END
-endfunction
+enddef
+
+let s:ale = maxpac#Add('w0rp/ale')
+let s:ale.pre = funcref('s:AlePre')
 " }}}
 
 " kyoh86/vim-ripgrep {{{
-let s:ripgrep = maxpac#Add('kyoh86/vim-ripgrep')
-
-function! s:ripgrep.post() abort
-  call ripgrep#observe#add_observer(g:ripgrep#event#other, 'RipgrepContextObserver')
+def s:RipgrepPost()
+  ripgrep#observe#add_observer(g:ripgrep#event#other, 'RipgrepContextObserver')
 
   command! -bang -count -nargs=+ -complete=file Rg call s:Ripgrep(['-C<count>', <q-args>], #{ case: <bang>1, escape: <bang>1 })
 
   map <Leader>f <Plug>(operator-ripgrep-g)
   map g<Leader>f <Plug>(operator-ripgrep)
 
-  call operator#user#define('ripgrep', 'Op_ripgrep')
-  call operator#user#define('ripgrep-g', 'Op_ripgrep_g')
-endfunction
+  operator#user#define('ripgrep', 'Op_ripgrep')
+  operator#user#define('ripgrep-g', 'Op_ripgrep_g')
+enddef
 
 def! g:RipgrepContextObserver(message: dict<any>)
   if message['type'] !=# 'context'
@@ -1160,14 +1178,15 @@ def s:SmartRipgrepCommandHistoryPush(command: string)
     histadd('cmd', history_entry)
   endif
 enddef
+
+let s:ripgrep = maxpac#Add('kyoh86/vim-ripgrep')
+let s:ripgrep.post = funcref('s:RipgrepPost')
 " }}}
 
 " haya14busa/vim-asterisk {{{
-let s:asterisk = maxpac#Add('haya14busa/vim-asterisk')
-
-function! s:asterisk.post() abort
-  " Keep the cursor offset while searching. See "search-offset".
-  let g:asterisk#keeppos = 1
+def s:AsteriskPost()
+  # Keep the cursor offset while searching. See "search-offset".
+  g:asterisk#keeppos = 1
 
   map * <Plug>(asterisk-z*)
   map # <Plug>(asterisk-z#)
@@ -1177,28 +1196,30 @@ function! s:asterisk.post() abort
   map z# <Plug>(asterisk-#)
   map gz* <Plug>(asterisk-g*)
   map gz# <Plug>(asterisk-g#)
-endfunction
+enddef
+
+let s:asterisk = maxpac#Add('haya14busa/vim-asterisk')
+let s:asterisk.post = funcref('s:AsteriskPost')
 " }}}
 
 " monaqa/modesearch.vim {{{
-let s:modesearch = maxpac#Add('monaqa/modesearch.vim')
-
-function! s:modesearch.post() abort
+def s:ModesearchPost()
   nmap <silent> g/ <Plug>(modesearch-slash-rawstr)
   nmap <silent> g? <Plug>(modesearch-question-regexp)
   cmap <silent> <C-x> <Plug>(modesearch-toggle-mode)
-endfunction
+enddef
+
+let s:modesearch = maxpac#Add('monaqa/modesearch.vim')
+let s:modesearch.post = funcref('s:ModesearchPost')
 " }}}
 
 " thinca/vim-localrc {{{
-let s:localrc = maxpac#Add('thinca/vim-localrc')
-
-function! s:localrc.post() abort
+def s:LocalrcPost()
   command! -bang -bar VimrcLocal
     \ call s:OpenLocalrc(<q-bang>, <q-mods>, expand('~'))
   command! -bang -bar -nargs=? -complete=dir OpenLocalrc
     \ call s:OpenLocalrc(<q-bang>, <q-mods>, empty(<q-args>) ? expand('%:p:h') : <q-args>)
-endfunction
+enddef
 
 def s:OpenLocalrc(bang: string, mods: string, dir: string)
   const localrc_filename = get(g:, 'localrc_filename', '.local.vimrc')
@@ -1206,57 +1227,61 @@ def s:OpenLocalrc(bang: string, mods: string, dir: string)
 
   execute $'{mods} Open{bang} {localrc_filepath}'
 enddef
+
+let s:localrc = maxpac#Add('thinca/vim-localrc')
+let s:localrc.post = funcref('s:LocalrcPost')
 " }}}
 
 " andymass/vim-matchup {{{
-let s:matchup = maxpac#Add('andymass/vim-matchup')
-
-function! s:matchup.fallback() abort
-  " The enhanced "%", to find many extra matchings and jump the cursor to them.
-  "
-  " NOTE: "matchit" isn't a standard plugin, but it's bundled in Vim by default.
+def s:MatchupFallback()
+  # The enhanced "%", to find many extra matchings and jump the cursor to them.
+  #
+  # NOTE: "matchit" isn't a standard plugin, but it's bundled in Vim by default.
   packadd! matchit
-endfunction
+enddef
+
+let s:matchup = maxpac#Add('andymass/vim-matchup')
+let s:matchup.fallback = funcref('s:MatchupFallback')
 " }}}
 
 " Eliot00/git-lens.vim {{{
-let s:gitlens = maxpac#Add('Eliot00/git-lens.vim')
-
-function! s:gitlens.post() abort
+def s:GitlensPost()
   command! -bar ToggleGitLens call ToggleGitLens()
-endfunction
+enddef
+
+let s:gitlens = maxpac#Add('Eliot00/git-lens.vim')
+let s:gitlens.post = funcref('s:GitlensPost')
 " }}}
 
 " a5ob7r/linefeed.vim {{{
-let s:linefeed = maxpac#Add('a5ob7r/linefeed.vim')
+def s:LinefeedPost()
+  # TODO: These keymappings override some default them and conflict with other
+  # plugin's default one.
+  # imap <silent> <C-K> <Plug>(linefeed-goup)
+  # imap <silent> <C-G>k <Plug>(linefeed-up)
+  # imap <silent> <C-G><C-K> <Plug>(linefeed-up)
+  # imap <silent> <C-G><C-K> <Plug>(linefeed-up)
+  # imap <silent> <C-J> <Plug>(linefeed-godown)
+  # imap <silent> <C-G>j <Plug>(linefeed-down)
+  # imap <silent> <C-G><C-J> <Plug>(linefeed-down)
+enddef
 
-function! s:linefeed.post() abort
-  " TODO: These keymappings override some default them and conflict with other
-  " plugin's default one.
-  " imap <silent> <C-K> <Plug>(linefeed-goup)
-  " imap <silent> <C-G>k <Plug>(linefeed-up)
-  " imap <silent> <C-G><C-K> <Plug>(linefeed-up)
-  " imap <silent> <C-G><C-K> <Plug>(linefeed-up)
-  " imap <silent> <C-J> <Plug>(linefeed-godown)
-  " imap <silent> <C-G>j <Plug>(linefeed-down)
-  " imap <silent> <C-G><C-J> <Plug>(linefeed-down)
-endfunction
+let s:linefeed = maxpac#Add('a5ob7r/linefeed.vim')
+let s:linefeed.post = funcref('s:LinefeedPost')
 " }}}
 
 " vim-utils/vim-man {{{
-let s:man = maxpac#Add('vim-utils/vim-man')
-
-function! s:man.post() abort
+def s:ManPost()
   command! -nargs=* -bar -complete=customlist,man#completion#run M Man <args>
 
-  call l:self.common()
-endfunction
+  ManCommon()
+enddef
 
-function! s:man.fallback() abort
-  " NOTE: A recommended way to enable ":Man" command on vim help page is to
-  " source a default man ftplugin by ":runtime ftplugin/man.vim" in vimrc.
-  " However it sources other ftplugin files which probably have side-effects.
-  " So exlicitly specify the default man ftplugin.
+def s:ManFallback()
+  # NOTE: A recommended way to enable ":Man" command on vim help page is to
+  # source a default man ftplugin by ":runtime ftplugin/man.vim" in vimrc.
+  # However it sources other ftplugin files which probably have side-effects.
+  # So exlicitly specify the default man ftplugin.
   try
     source $VIMRUNTIME/ftplugin/man.vim
   catch
@@ -1266,74 +1291,76 @@ function! s:man.fallback() abort
 
   command! -nargs=+ -complete=shellcmd M <mods> Man <args>
 
-  call l:self.common()
-endfunction
+  ManCommon()
+enddef
 
-function! s:man.common() abort
+def s:ManCommon()
   set keywordprg=:Man
-endfunction
+enddef
+
+let s:man = maxpac#Add('vim-utils/vim-man')
+let s:man.post = funcref('s:ManPost')
 " }}}
 
 " machakann/vim-sandwich {{{
-let s:sandwich = maxpac#Add('machakann/vim-sandwich')
+def s:SandwichPost()
+  g:sandwich#recipes = get(g:, 'sandwich#recipes', deepcopy(g:sandwich#default_recipes))
+  g:sandwich#recipes += [
+    { buns: ['{ ', ' }'],
+      nesting: 1,
+      match_syntax: 1,
+      kind: ['add', 'replace'],
+      action: ['add'],
+      input: ['}']
+    },
+    { buns: ['[ ', ' ]'],
+      nesting: 1,
+      match_syntax: 1,
+      kind: ['add', 'replace'],
+      action: ['add'],
+      input: [']']
+    },
+    { buns: ['( ', ' )'],
+      nesting: 1,
+      match_syntax: 1,
+      kind: ['add', 'replace'],
+      action: ['add'],
+      input: [')']
+    },
+    { buns: ['{\s*', '\s*}'],
+      nesting: 1,
+      regex: 1,
+      match_syntax: 1,
+      kind: ['delete', 'replace', 'textobj'],
+      action: ['delete'],
+      input: ['}']
+    },
+    { buns: ['\[\s*', '\s*\]'],
+      nesting: 1,
+      regex: 1,
+      match_syntax: 1,
+      kind: ['delete', 'replace', 'textobj'],
+      action: ['delete'],
+      input: [']']
+    },
+    { buns: ['(\s*', '\s*)'],
+      nesting: 1,
+      regex: 1,
+      match_syntax: 1,
+      kind: ['delete', 'replace', 'textobj'],
+      action: ['delete'],
+      input: [')']
+    }
+  ]
+enddef
 
-function! s:sandwich.post() abort
-  let g:sandwich#recipes = get(g:, 'sandwich#recipes', deepcopy(g:sandwich#default_recipes))
-  let g:sandwich#recipes += [
-    \   #{ buns: ['{ ', ' }'],
-    \      nesting: 1,
-    \      match_syntax: 1,
-    \      kind: ['add', 'replace'],
-    \      action: ['add'],
-    \      input: ['}']
-    \   },
-    \   #{ buns: ['[ ', ' ]'],
-    \      nesting: 1,
-    \      match_syntax: 1,
-    \      kind: ['add', 'replace'],
-    \      action: ['add'],
-    \      input: [']']
-    \   },
-    \   #{ buns: ['( ', ' )'],
-    \      nesting: 1,
-    \      match_syntax: 1,
-    \      kind: ['add', 'replace'],
-    \      action: ['add'],
-    \      input: [')']
-    \   },
-    \   #{ buns: ['{\s*', '\s*}'],
-    \      nesting: 1,
-    \      regex: 1,
-    \      match_syntax: 1,
-    \      kind: ['delete', 'replace', 'textobj'],
-    \      action: ['delete'],
-    \      input: ['}']
-    \   },
-    \   #{ buns: ['\[\s*', '\s*\]'],
-    \      nesting: 1,
-    \      regex: 1,
-    \      match_syntax: 1,
-    \      kind: ['delete', 'replace', 'textobj'],
-    \      action: ['delete'],
-    \      input: [']']
-    \   },
-    \   #{ buns: ['(\s*', '\s*)'],
-    \      nesting: 1,
-    \      regex: 1,
-    \      match_syntax: 1,
-    \      kind: ['delete', 'replace', 'textobj'],
-    \      action: ['delete'],
-    \      input: [')']
-    \   }
-    \ ]
-endfunction
+let s:sandwich = maxpac#Add('machakann/vim-sandwich')
+let s:sandwich.post = funcref('s:SandwichPost')
 " }}}
 
 " liuchengxu/vista.vim {{{
-let s:vista = maxpac#Add('liuchengxu/vista.vim')
-
-function! s:vista.pre() abort
-  let g:vista_no_mappings = 1
+def s:VistaPre()
+  g:vista_no_mappings = 1
 
   augroup vimrc:vista
     autocmd!
@@ -1341,38 +1368,41 @@ function! s:vista.pre() abort
   augroup END
 
   nnoremap <silent> <Leader>v :<C-U>Vista!!<CR>
-endfunction
+enddef
+
+let s:vista = maxpac#Add('liuchengxu/vista.vim')
+let s:vista.pre = funcref('s:VistaPre')
 " }}}
 
 " itchyny/screensaver.vim {{{
-let s:screensaver = maxpac#Add('itchyny/screensaver.vim')
-
-function! s:screensaver.post() abort
+def s:ScreensaverPost()
   augroup vimrc:screensaver
     autocmd!
-    " Clear the cmdline area when starting a screensaver.
+    # Clear the cmdline area when starting a screensaver.
     autocmd FileType screensaver echo
   augroup END
-endfunction
+enddef
+
+let s:screensaver = maxpac#Add('itchyny/screensaver.vim')
+let s:screensaver.post = funcref('s:ScreensaverPost')
 " }}}
 
 " bronson/vim-trailing-whitespace {{{
-let s:trailing_whitespace = maxpac#Add('bronson/vim-trailing-whitespace')
+def s:TrailingWhitespacePost()
+  g:extra_whitespace_ignored_filetypes = get(g:, 'extra_whitespace_ignored_filetypes', [])
+  g:extra_whitespace_ignored_filetypes += ['screensaver']
+enddef
 
-function! s:trailing_whitespace.post() abort
-  let g:extra_whitespace_ignored_filetypes = get(g:, 'extra_whitespace_ignored_filetypes', [])
-  let g:extra_whitespace_ignored_filetypes += ['screensaver']
-endfunction
+let s:trailing_whitespace = maxpac#Add('bronson/vim-trailing-whitespace')
+let s:trailing_whitespace.post = funcref('s:TrailingWhitespacePost')
 " }}}
 
 " =============================================================================
 
 " lambdalisue/fern.vim {{{
-let s:fern = maxpac#Add('lambdalisue/fern.vim')
-
-function! s:fern.pre() abort
-  let g:fern#default_hidden = 1
-  let g:fern#default_exclude = '.*\~$'
+def s:FernPre()
+  g:fern#default_hidden = 1
+  g:fern#default_exclude = '.*\~$'
 
   command! -bar ToggleFern call s:ToggleFern()
 
@@ -1393,15 +1423,15 @@ function! s:fern.pre() abort
   command! FernLogError let g:fern#loglevel = g:fern#Error
 
   command! -nargs=+ -complete=shellcmd RunWithFernLog call s:RunWithFernLog(<q-args>)
-endfunction
+enddef
 
-function! s:fern.fallback() abort
+def s:FernFallback()
   unlet g:loaded_netrw
   unlet g:loaded_netrwPlugin
 
   nnoremap <silent> <Leader>n :<C-U>ToggleNetrw<CR>
   nnoremap <silent> <Leader>N :<C-U>ToggleNetrw!<CR>
-endfunction
+enddef
 
 " Toggle a fern buffer to keep the cursor position. A tab should only have
 " one fern buffer.
@@ -1434,31 +1464,34 @@ def s:RunWithFernLog(template: string)
     term_start([&shell, &shellcmdflag, printf(template, log)], { term_finish: 'close' })
   endif
 enddef
+
+let s:fern = maxpac#Add('lambdalisue/fern.vim')
+let s:fern.pre = funcref('s:FernPre')
+let s:fern.fallback = funcref('s:FernFallback')
 " }}}
 
 call maxpac#Add('lambdalisue/fern-hijack.vim')
 call maxpac#Add('lambdalisue/fern-git-status.vim')
 
 " a5ob7r/fern-renderer-lsflavor.vim {{{
-let s:lsflavor = maxpac#Add('a5ob7r/fern-renderer-lsflavor.vim')
+def s:LsflavorPre()
+  g:fern#renderer = 'lsflavor'
+enddef
 
-function! s:lsflavor.pre() abort
-  let g:fern#renderer = 'lsflavor'
-endfunction
+let s:lsflavor = maxpac#Add('a5ob7r/fern-renderer-lsflavor.vim')
+let s:lsflavor.pre = funcref('s:LsflavorPre')
 " }}}
 
 "==============================================================================
 
 " prabirshrestha/asyncomplete.vim {{{
-let s:asyncomplete = maxpac#Add('prabirshrestha/asyncomplete.vim')
-
-function! s:asyncomplete.pre() abort
-  let g:asyncomplete_enable_for_all = 0
+def s:AsyncompletePre()
+  g:asyncomplete_enable_for_all = 0
 
   command! ToggleAsyncomplete call s:ToggleAsyncomplete()
   command! EnableAsyncomplete call s:ToggleAsyncomplete(0)
   command! DisableAsyncomplete call s:ToggleAsyncomplete(1)
-endfunction
+enddef
 
 def s:ToggleAsyncomplete(asyncomplete_enable = get(b:, 'asyncomplete_enable'))
   if asyncomplete_enable
@@ -1480,6 +1513,9 @@ def s:ToggleAsyncomplete(asyncomplete_enable = get(b:, 'asyncomplete_enable'))
     asyncomplete#enable_for_buffer()
   endif
 enddef
+
+let s:asyncomplete = maxpac#Add('prabirshrestha/asyncomplete.vim')
+let s:asyncomplete.pre = funcref('s:AsyncompletePre')
 " }}}
 
 call maxpac#Add('prabirshrestha/asyncomplete-lsp.vim')
@@ -1547,21 +1583,19 @@ endif
 if executable('deno')
   call maxpac#Add('vim-denops/denops.vim')
 
-  let s:gin = maxpac#Add('lambdalisue/gin.vim')
-
-  function! s:gin.post() abort
-    let g:gin_diff_persistent_args = ['--patch', '--stat']
+  def s:GinPost()
+    g:gin_diff_persistent_args = ['--patch', '--stat']
 
     if executable('delta')
-      let g:gin_diff_persistent_args += ['++processor=delta --color-only']
+      g:gin_diff_persistent_args += ['++processor=delta --color-only']
     elseif executable('diff-highlight')
-      let g:gin_diff_persistent_args += ['++processor=diff-highlight']
+      g:gin_diff_persistent_args += ['++processor=diff-highlight']
     endif
 
-    " Add a number argument to limit the number of commits because ":GinLog"
-    " is too slow in a large repository.
-    "
-    " https://github.com/lambdalisue/gin.vim/issues/116
+    # Add a number argument to limit the number of commits because ":GinLog"
+    # is too slow in a large repository.
+    #
+    # https://github.com/lambdalisue/gin.vim/issues/116
     nmap <silent> <Leader>gl :<C-U>GinLog --graph --oneline --all -500<CR>
     nmap <silent> <Leader>gs :<C-U>GinStatus<CR>
     nmap <silent> <Leader>gc :<C-U>Gin commit<CR>
@@ -1570,27 +1604,28 @@ if executable('deno')
       autocmd!
       autocmd BufReadCmd gin{branch,diff,edit,log,status,}://* setlocal nobuflisted
     augroup END
-  endfunction
+  enddef
 
-  let s:ddu = maxpac#Add('Shougo/ddu.vim')
+  let s:gin = maxpac#Add('lambdalisue/gin.vim')
+  let s:gin.post = funcref('s:GinPost')
 
-  function! s:ddu.post() abort
-    call ddu#custom#patch_global(#{
-    \   ui: 'ff',
-    \   sources: ['file_rec'],
-    \   sourceOptions: #{
-    \     _: #{
-    \       matchers: ['matcher_fzy'],
-    \     },
-    \   },
-    \   kindOptions: #{
-    \     file: #{
-    \       defaultAction: 'open',
-    \     },
-    \   },
-    \ })
+  def s:DduPost()
+    ddu#custom#patch_global({
+      ui: 'ff',
+      sources: ['file_rec'],
+      sourceOptions: {
+        _: {
+          matchers: ['matcher_fzy'],
+        },
+      },
+      kindOptions: {
+        file: {
+          defaultAction: 'open',
+        },
+      },
+    })
 
-    call ddu#custom#action('kind', 'file', 'tcd', { args -> s:DduKindFileActionTcd(args) })
+    ddu#custom#action('kind', 'file', 'tcd', (args) => s:DduKindFileActionTcd(args))
 
     if s:IsEnableControlSpaceKeymapping()
       nnoremap <silent> <C-Space> <Cmd>call ddu#start()<CR>
@@ -1598,15 +1633,15 @@ if executable('deno')
       nnoremap <silent> <Nul> <Cmd>call ddu#start()<CR>
     endif
 
-    nnoremap <silent> <Leader>b <Cmd>call ddu#start(#{ sources: ['buffer'] })<CR>
-    nnoremap <silent> <Leader>gq <Cmd>call ddu#start(#{ sources: ['ghq'], kindOptions: #{ file: #{ defaultAction: 'tcd' } } })<CR>
+    nnoremap <silent> <Leader>b <Cmd>call ddu#start({ sources: ['buffer'] })<CR>
+    nnoremap <silent> <Leader>gq <Cmd>call ddu#start({ sources: ['ghq'], kindOptions: { file: { defaultAction: 'tcd' } } })<CR>
 
     augroup vimrc:ddu
       autocmd!
 
       autocmd FileType ddu-ff {
         nnoremap <buffer><silent> <CR> <Cmd>call ddu#ui#do_action('itemAction')<CR>
-        nnoremap <buffer><silent> <C-X> <Cmd>call ddu#ui#do_action('itemAction', #{ name: 'open', params: #{ command: 'split' } })<CR>
+        nnoremap <buffer><silent> <C-X> <Cmd>call ddu#ui#do_action('itemAction', { name: 'open', params: { command: 'split' } })<CR>
         nnoremap <buffer><silent> i <Cmd>call ddu#ui#do_action('openFilterWindow')<CR>
         nnoremap <buffer><silent> q <Cmd>call ddu#ui#do_action('quit')<CR>
       }
@@ -1617,7 +1652,10 @@ if executable('deno')
         nnoremap <buffer><silent> q <Cmd>call ddu#ui#do_action('closeFilterWindow')<CR>
       }
     augroup END
-  endfunction
+  enddef
+
+  let s:ddu = maxpac#Add('Shougo/ddu.vim')
+  let s:ddu.post = funcref('s:DduPost')
 
   def s:DduKindFileActionTcd(args: dict<any>): number
     execute $'tcd {args.items[0].action.path}'
