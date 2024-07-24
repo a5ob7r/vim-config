@@ -377,55 +377,51 @@ command! InstallMinpac call s:InstallMinpac()
 " }}}
 
 " Auto commands {{{
-command! -nargs=+ Autocmd autocmd vimrc <args>
-
 augroup vimrc
-  " This throws "E216" if no such a autocmd group, so first of all we need to
-  " define it using ":augroup".
   autocmd!
+
+  autocmd QuickFixCmdPost *grep* cwindow
+
+  " Make parent directories of the file which the written buffer is corresponing
+  " if these directories are missing.
+  autocmd BufWritePre * silent call mkdir(expand('<afile>:p:h'), 'p')
+
+  " Hide extras on normal mode of terminal.
+  autocmd TerminalOpen * setlocal nolist nonumber colorcolumn=
+
+  autocmd BufReadPre ~/* setlocal undofile
+
+  " From "$VIMRUNTIME/defaults.vim".
+  " Jump cursor to last editting line.
+  autocmd BufReadPost * {
+    if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
+      exe "normal! g`\""
+    endif
+  }
+
+  " Read/Write the binary format, but are these configurations really
+  " comfortable? Maybe we should use a binary editor insated.
+  autocmd BufReadPost * {
+    if &binary
+      execute 'silent %!xxd -g 1'
+      set filetype=xxd
+    endif
+  }
+  autocmd BufWritePre * {
+    if &binary
+      var b:cursorpos = getcurpos()
+      execute '%!xxd -r'
+    endif
+  }
+  autocmd BufWritePost * {
+    if &binary
+      execute 'silent %!xxd -g 1'
+      set nomodified
+      cursor(b:cursorpos[1], b:cursorpos[2], b:cursorpos[3])
+      unlet b:cursorpos
+    endif
+  }
 augroup END
-
-Autocmd QuickFixCmdPost *grep* cwindow
-
-" Make parent directories of the file which the written buffer is corresponing
-" if these directories are missing.
-Autocmd BufWritePre * silent call mkdir(expand('<afile>:p:h'), 'p')
-
-" Hide extras on normal mode of terminal.
-Autocmd TerminalOpen * setlocal nolist nonumber colorcolumn=
-
-Autocmd BufReadPre ~/* setlocal undofile
-
-" From "$VIMRUNTIME/defaults.vim".
-" Jump cursor to last editting line.
-Autocmd BufReadPost * {
-  if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
-    exe "normal! g`\""
-  endif
-}
-
-" Read/Write the binary format, but are these configurations really
-" comfortable? Maybe we should use a binary editor insated.
-Autocmd BufReadPost * {
-  if &binary
-    execute 'silent %!xxd -g 1'
-    set filetype=xxd
-  endif
-}
-Autocmd BufWritePre * {
-  if &binary
-    var b:cursorpos = getcurpos()
-    execute '%!xxd -r'
-  endif
-}
-Autocmd BufWritePost * {
-  if &binary
-    execute 'silent %!xxd -g 1'
-    set nomodified
-    cursor(b:cursorpos[1], b:cursorpos[2], b:cursorpos[3])
-    unlet b:cursorpos
-  endif
-}
 
 " Register a command to refresh something.
 command! -bar -nargs=+ OnRefresh autocmd refresh User Refresh <args>
@@ -533,7 +529,10 @@ function! s:neodark.post() abort
 
   command! -bang -bar Neodark call s:ApplyNeodark(<q-bang>)
 
-  Autocmd VimEnter * ++nested Neodark
+  augroup vimrc:neodark
+    autocmd!
+    autocmd VimEnter * ++nested Neodark
+  augroup END
 endfunction
 
 def s:ApplyNeodark(bang: string)
@@ -610,13 +609,17 @@ function! s:lightline.pre() abort
     endif
   }
 
-  " Synchronous lightline's colorscheme with Vim's one on the fly.
-  Autocmd ColorScheme * {
-    if exists('g:loaded_lightline')
-      ChangeLightlineColorscheme()
-      UpdateLightline()
-    endif
-  }
+  augroup vimrc:lightline
+    autocmd!
+
+    " Synchronous lightline's colorscheme with Vim's one on the fly.
+    autocmd ColorScheme * {
+      if exists('g:loaded_lightline')
+        ChangeLightlineColorscheme()
+        UpdateLightline()
+      endif
+    }
+  augroup END
 
   OnRefresh call lightline#update()
 endfunction
@@ -813,23 +816,26 @@ function! s:vim_lsp.pre() abort
 
   let g:lsp_experimental_workspace_folders = 1
 
-  Autocmd User lsp_buffer_enabled {
-    setlocal omnifunc=lsp#complete
-    setlocal tagfunc=lsp#tagfunc
+  augroup vimrc:vim_lsp
+    autocmd!
+    autocmd User lsp_buffer_enabled {
+      setlocal omnifunc=lsp#complete
+      setlocal tagfunc=lsp#tagfunc
 
-    nmap <buffer> gd <Plug>(lsp-definition)
-    nmap <buffer> gD <Plug>(lsp-implementation)
-    nmap <buffer> <Leader>r <Plug>(lsp-rename)
-    nmap <buffer> <Leader>h <Plug>(lsp-hover)
+      nmap <buffer> gd <Plug>(lsp-definition)
+      nmap <buffer> gD <Plug>(lsp-implementation)
+      nmap <buffer> <Leader>r <Plug>(lsp-rename)
+      nmap <buffer> <Leader>h <Plug>(lsp-hover)
 
-    nmap <buffer> <Leader>lf <Plug>(lsp-document-format)
-    nmap <buffer> <Leader>la <Plug>(lsp-code-action)
-    nmap <buffer> <Leader>ll <Plug>(lsp-code-lens)
-    nmap <buffer> <Leader>lr <Plug>(lsp-references)
+      nmap <buffer> <Leader>lf <Plug>(lsp-document-format)
+      nmap <buffer> <Leader>la <Plug>(lsp-code-action)
+      nmap <buffer> <Leader>ll <Plug>(lsp-code-lens)
+      nmap <buffer> <Leader>lr <Plug>(lsp-references)
 
-    nnoremap <silent><buffer><expr> <C-J> lsp#scroll(+1)
-    nnoremap <silent><buffer><expr> <C-K> lsp#scroll(-1)
-  }
+      nnoremap <silent><buffer><expr> <C-J> lsp#scroll(+1)
+      nnoremap <silent><buffer><expr> <C-K> lsp#scroll(-1)
+    }
+  augroup END
 
   command! CurrentLspLogging echo s:LspLogFile()
   command! -nargs=* -complete=file EnableLspLogging
@@ -994,7 +1000,10 @@ function! s:ale.pre() abort
   let g:ale_python_auto_pipenv = 1
   let g:ale_python_auto_poetry = 1
 
-  Autocmd User lsp_buffer_enabled ALEDisableBuffer
+  augroup vimrc:ale
+    autocmd!
+    autocmd User lsp_buffer_enabled ALEDisableBuffer
+  augroup END
 endfunction
 " }}}
 
@@ -1326,7 +1335,10 @@ let s:vista = maxpac#Add('liuchengxu/vista.vim')
 function! s:vista.pre() abort
   let g:vista_no_mappings = 1
 
-  Autocmd FileType vista,vista_kind nnoremap <buffer><silent> q :<C-U>Vista!!<CR>
+  augroup vimrc:vista
+    autocmd!
+    autocmd FileType vista,vista_kind nnoremap <buffer><silent> q :<C-U>Vista!!<CR>
+  augroup END
 
   nnoremap <silent> <Leader>v :<C-U>Vista!!<CR>
 endfunction
@@ -1336,8 +1348,11 @@ endfunction
 let s:screensaver = maxpac#Add('itchyny/screensaver.vim')
 
 function! s:screensaver.post() abort
-  " Clear the cmdline area when starting a screensaver.
-  Autocmd FileType screensaver echo
+  augroup vimrc:screensaver
+    autocmd!
+    " Clear the cmdline area when starting a screensaver.
+    autocmd FileType screensaver echo
+  augroup END
 endfunction
 " }}}
 
@@ -1361,9 +1376,12 @@ function! s:fern.pre() abort
 
   command! -bar ToggleFern call s:ToggleFern()
 
-  Autocmd Filetype fern let t:fern_buffer_id = bufnr()
-  Autocmd BufLeave * if &ft !=# 'fern' | let t:non_fern_buffer_id = bufnr() | endif
-  Autocmd DirChanged * unlet! t:fern_buffer_id
+  augroup vimrc:fern
+    autocmd!
+    autocmd Filetype fern let t:fern_buffer_id = bufnr()
+    autocmd BufLeave * if &ft !=# 'fern' | let t:non_fern_buffer_id = bufnr() | endif
+    autocmd DirChanged * unlet! t:fern_buffer_id
+  augroup END
 
   command! CurrentFernLogging echo s:FernLogFile()
   command! -nargs=* -complete=file EnableFernLogging
@@ -1548,7 +1566,10 @@ if executable('deno')
     nmap <silent> <Leader>gs :<C-U>GinStatus<CR>
     nmap <silent> <Leader>gc :<C-U>Gin commit<CR>
 
-    Autocmd BufReadCmd gin{branch,diff,edit,log,status,}://* setlocal nobuflisted
+    augroup vimrc:gin
+      autocmd!
+      autocmd BufReadCmd gin{branch,diff,edit,log,status,}://* setlocal nobuflisted
+    augroup END
   endfunction
 
   let s:ddu = maxpac#Add('Shougo/ddu.vim')
@@ -1580,18 +1601,22 @@ if executable('deno')
     nnoremap <silent> <Leader>b <Cmd>call ddu#start(#{ sources: ['buffer'] })<CR>
     nnoremap <silent> <Leader>gq <Cmd>call ddu#start(#{ sources: ['ghq'], kindOptions: #{ file: #{ defaultAction: 'tcd' } } })<CR>
 
-    Autocmd FileType ddu-ff {
-      nnoremap <buffer><silent> <CR> <Cmd>call ddu#ui#do_action('itemAction')<CR>
-      nnoremap <buffer><silent> <C-X> <Cmd>call ddu#ui#do_action('itemAction', #{ name: 'open', params: #{ command: 'split' } })<CR>
-      nnoremap <buffer><silent> i <Cmd>call ddu#ui#do_action('openFilterWindow')<CR>
-      nnoremap <buffer><silent> q <Cmd>call ddu#ui#do_action('quit')<CR>
-    }
+    augroup vimrc:ddu
+      autocmd!
 
-    Autocmd FileType ddu-ff-filter {
-      inoremap <buffer><silent> <CR> <Esc><Cmd>call ddu#ui#do_action('closeFilterWindow')<CR>
-      nnoremap <buffer><silent> <CR> <Cmd>call ddu#ui#do_action('closeFilterWindow')<CR>
-      nnoremap <buffer><silent> q <Cmd>call ddu#ui#do_action('closeFilterWindow')<CR>
-    }
+      autocmd FileType ddu-ff {
+        nnoremap <buffer><silent> <CR> <Cmd>call ddu#ui#do_action('itemAction')<CR>
+        nnoremap <buffer><silent> <C-X> <Cmd>call ddu#ui#do_action('itemAction', #{ name: 'open', params: #{ command: 'split' } })<CR>
+        nnoremap <buffer><silent> i <Cmd>call ddu#ui#do_action('openFilterWindow')<CR>
+        nnoremap <buffer><silent> q <Cmd>call ddu#ui#do_action('quit')<CR>
+      }
+
+      autocmd FileType ddu-ff-filter {
+        inoremap <buffer><silent> <CR> <Esc><Cmd>call ddu#ui#do_action('closeFilterWindow')<CR>
+        nnoremap <buffer><silent> <CR> <Cmd>call ddu#ui#do_action('closeFilterWindow')<CR>
+        nnoremap <buffer><silent> q <Cmd>call ddu#ui#do_action('closeFilterWindow')<CR>
+      }
+    augroup END
   endfunction
 
   def s:DduKindFileActionTcd(args: dict<any>): number
