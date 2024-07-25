@@ -290,7 +290,7 @@ nnoremap <Leader><CR> o<Esc>
 map <silent> p <Plug>(put)
 map <silent> P <Plug>(Put)
 
-nnoremap <silent> <F10> :<C-U>echo <SID>SyntaxItemAttribute(line('.'), col('.'))<CR>
+nnoremap <silent> <F10> <ScriptCmd>echo SyntaxItemAttribute(line('.'), col('.'))<CR>
 
 nnoremap <silent> <F2> :<C-U>ReloadVimrc<CR>
 nnoremap <silent> <Leader><F2> :<C-U>Vimrc<CR>
@@ -309,15 +309,15 @@ nnoremap <silent> <Leader>t :<C-U>tabnew<CR>
 
 # Like default configurations of Tmux.
 nnoremap <silent> <Leader>" :<C-U>terminal<CR>
-nnoremap <silent> <Leader>' :<C-U>call <SID>Terminal()<CR>
+nnoremap <silent> <Leader>' <ScriptCmd>Terminal()<CR>
 nnoremap <silent> <Leader>% :<C-U>vertical terminal<CR>
-nnoremap <silent> <Leader>5 :<C-U>call <SID>Terminal('', 'vertical')<CR>
+nnoremap <silent> <Leader>5 <ScriptCmd>Terminal('', 'vertical')<CR>
 nnoremap <silent> <Leader>c :<C-U>Terminal<CR>
 
 tnoremap <silent> <C-W><Leader>" <C-W>:terminal<CR>
-tnoremap <silent> <C-W><Leader>' <C-W>:call <SID>Terminal()<CR>
+tnoremap <silent> <C-W><Leader>' <ScriptCmd>Terminal()<CR>
 tnoremap <silent> <C-W><Leader>% <C-W>:vertical terminal<CR>
-tnoremap <silent> <C-W><Leader>5 <C-W>:call <SID>Terminal('', 'vertical')<CR>
+tnoremap <silent> <C-W><Leader>5 <ScriptCmd>Terminal('', 'vertical')<CR>
 tnoremap <silent> <C-W><Leader>c <C-W>:Terminal<CR>
 
 nnoremap <silent> <Leader>y :YankComments<CR>
