@@ -1639,28 +1639,28 @@ if executable('deno')
     })
 
     if IsEnableControlSpaceKeymapping()
-      nnoremap <silent> <C-Space> <Cmd>call ddu#start()<CR>
+      nnoremap <silent> <C-Space> <ScriptCmd>ddu#start()<CR>
     else
-      nnoremap <silent> <Nul> <Cmd>call ddu#start()<CR>
+      nnoremap <silent> <Nul> <ScriptCmd>ddu#start()<CR>
     endif
 
-    nnoremap <silent> <Leader>b <Cmd>call ddu#start({ sources: ['buffer'] })<CR>
-    nnoremap <silent> <Leader>gq <Cmd>call ddu#start({ sources: ['ghq'], kindOptions: { file: { defaultAction: 'tcd' } } })<CR>
+    nnoremap <silent> <Leader>b <ScriptCmd>ddu#start({ sources: ['buffer'] })<CR>
+    nnoremap <silent> <Leader>gq <ScriptCmd>ddu#start({ sources: ['ghq'], kindOptions: { file: { defaultAction: 'tcd' } } })<CR>
 
     augroup vimrc:ddu
       autocmd!
 
       autocmd FileType ddu-ff {
-        nnoremap <buffer><silent> <CR> <Cmd>call ddu#ui#do_action('itemAction')<CR>
-        nnoremap <buffer><silent> <C-X> <Cmd>call ddu#ui#do_action('itemAction', { name: 'open', params: { command: 'split' } })<CR>
-        nnoremap <buffer><silent> i <Cmd>call ddu#ui#do_action('openFilterWindow')<CR>
-        nnoremap <buffer><silent> q <Cmd>call ddu#ui#do_action('quit')<CR>
+        nnoremap <buffer><silent> <CR> <ScriptCmd>ddu#ui#do_action('itemAction')<CR>
+        nnoremap <buffer><silent> <C-X> <ScriptCmd>ddu#ui#do_action('itemAction', { name: 'open', params: { command: 'split' } })<CR>
+        nnoremap <buffer><silent> i <ScriptCmd>ddu#ui#do_action('openFilterWindow')<CR>
+        nnoremap <buffer><silent> q <ScriptCmd>ddu#ui#do_action('quit')<CR>
       }
 
       autocmd FileType ddu-ff-filter {
-        inoremap <buffer><silent> <CR> <Esc><Cmd>call ddu#ui#do_action('closeFilterWindow')<CR>
-        nnoremap <buffer><silent> <CR> <Cmd>call ddu#ui#do_action('closeFilterWindow')<CR>
-        nnoremap <buffer><silent> q <Cmd>call ddu#ui#do_action('closeFilterWindow')<CR>
+        inoremap <buffer><silent> <CR> <Esc><ScriptCmd>ddu#ui#do_action('closeFilterWindow')<CR>
+        nnoremap <buffer><silent> <CR> <ScriptCmd>ddu#ui#do_action('closeFilterWindow')<CR>
+        nnoremap <buffer><silent> q <ScriptCmd>ddu#ui#do_action('closeFilterWindow')<CR>
       }
     augroup END
   enddef
