@@ -396,8 +396,13 @@ augroup vimrc
   # From "$VIMRUNTIME/defaults.vim".
   # Jump cursor to last editting line.
   autocmd BufReadPost * {
-    if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
-      exe "normal! g`\""
+    const line = line("'\"")
+
+    if line >= 1
+        && line <= line("$")
+        && &filetype !~# 'commit'
+        && index(['xxd', 'gitrebase'], &filetype) == -1
+      execute "normal! g`\""
     endif
   }
 
