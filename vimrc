@@ -361,7 +361,7 @@ tnoremap <silent> <C-W>VM <C-W>:vertical resize<CR>
 #
 # This is an auxiliary command for keyboard shortcuts.
 command! -bang -bar -range=% Update
-  \ execute printf('<mods> <line1>,<line2>%s<bang>', expand('%')->filewritable() ? 'update' : 'write')
+  \ execute printf('<mods> :<line1>,<line2>%s<bang>', expand('%')->filewritable() ? 'update' : 'write')
 
 # A helper command to open a file in a split window, or the current one (if it
 # is invoked with a bang mark).
