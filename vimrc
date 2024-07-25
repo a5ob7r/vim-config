@@ -1,17 +1,19 @@
-"
-" vimrc
-"
-" - The minimal requirement version is 9.1.0000 with default huge features.
-" - Nowadays we are always in UTF-8 environment, aren't we?
-" - Work well even if no (non-default) plugin is installed.
-" - Support Unix and Windows.
-" - No support Neovim.
-"
+vim9script
 
-" =============================================================================
+#
+# vimrc
+#
+# - The minimal requirement version is 9.1.0000 with default huge features.
+# - Nowadays we are always in UTF-8 environment, aren't we?
+# - Work well even if no (non-default) plugin is installed.
+# - Support Unix and Windows.
+# - No support Neovim.
+#
 
-" Functions {{{
-def s:InstallMinpac()
+# =============================================================================
+
+# Functions {{{
+def InstallMinpac()
   # A root directory path of vim packages.
   const packhome = $'{split(&packpath, ',')[0]}/pack'
 
@@ -27,10 +29,10 @@ def s:InstallMinpac()
   execute 'terminal' command
 enddef
 
-" Get syntax item information at a position.
-"
-" https://vim.fandom.com/wiki/Identify_the_syntax_highlighting_group_used_at_the_cursor
-def s:SyntaxItemAttribute(line: number, column: number): string
+# Get syntax item information at a position.
+#
+# https://vim.fandom.com/wiki/Identify_the_syntax_highlighting_group_used_at_the_cursor
+def SyntaxItemAttribute(line: number, column: number): string
   const item_id = synID(line, column, 1)
   const trans_item_id = synID(line, column, 0)
 
@@ -42,13 +44,13 @@ def s:SyntaxItemAttribute(line: number, column: number): string
   )
 enddef
 
-" Join and normalize filepaths.
-def s:Pathjoin(...paths: list<string>): string
+# Join and normalize filepaths.
+def Pathjoin(...paths: list<string>): string
   const sep = has('win32') ? '\\' : '/'
   return join(paths, sep)->simplify()->substitute(printf('^\.%s', sep), '', '')
 enddef
 
-def s:Terminal(bang = '', mods = '')
+def Terminal(bang = '', mods = '')
   # If the current buffer is for normal exsisting file editing.
   const cwd = empty(&buftype) && !expand('%')->empty() ? expand('%:p:h') : getcwd()
   const opts = {
@@ -60,218 +62,218 @@ def s:Terminal(bang = '', mods = '')
   execute $'{mods} term_start(&shell, {opts})'
 enddef
 
-def s:IsBundledPackageLoadable(package_name: string): bool
+def IsBundledPackageLoadable(package_name: string): bool
   return !glob($'{$VIMRUNTIME}/pack/dist/opt/{package_name}/plugin/*.vim')->empty()
 enddef
 
-" Whether "<C-Space>" is usable for keymappings or not. Use "<Nul>" instead if
-" not.
-"
-" NOTE: "<Nul>" is sent instead of "<C-Space>" when type the "CTRL" key and
-" the "SPACE" one as once if in some terminal emulators.
-def s:IsEnableControlSpaceKeymapping(): bool
+# Whether "<C-Space>" is usable for keymappings or not. Use "<Nul>" instead if
+# not.
+#
+# NOTE: "<Nul>" is sent instead of "<C-Space>" when type the "CTRL" key and
+# the "SPACE" one as once if in some terminal emulators.
+def IsEnableControlSpaceKeymapping(): bool
   return has('gui_running') || getenv('TERM_PROGRAM') ==# 'iTerm.app' || index(['xterm', 'xterm-kitty'], &term) >= 0
 enddef
-" }}}
+# }}}
 
-" Variables {{{
-let $VIMHOME = expand('<sfile>:p:h')
-" }}}
+# Variables {{{
+$VIMHOME = expand('<sfile>:p:h')
+# }}}
 
-" Options {{{
-" Allow to delete everything in Insert Mode.
+# Options {{{
+# Allow to delete everything in Insert Mode.
 set backspace=indent,eol,start
 
 set colorcolumn=81,101,121
 set cursorline
 
-" Show characters to fill the screen as much as possible when some characters
-" are out of the screen.
+# Show characters to fill the screen as much as possible when some characters
+# are out of the screen.
 set display=lastline
 
-" Maybe SKK dictionaries are encoded by "euc-jp".
-" NOTE: "usc-bom" must precede "utf-8" to recognize BOM.
+# Maybe SKK dictionaries are encoded by "euc-jp".
+# NOTE: "usc-bom" must precede "utf-8" to recognize BOM.
 set fileencodings=ucs-bom,utf-8,iso-2022-jp,euc-jp,cp932,latin1
 
-" Prefer "<NL>" as "<EOL>" even if it is on Windows.
+# Prefer "<NL>" as "<EOL>" even if it is on Windows.
 set fileformats=unix,dos,mac
 
-" Automatically reload the file which is changed outside of Vim. For example
-" this is useful when discarding modifications using VCS such as git.
+# Automatically reload the file which is changed outside of Vim. For example
+# this is useful when discarding modifications using VCS such as git.
 set autoread
 
-" Allow to hide buffers even if they are still modified.
+# Allow to hide buffers even if they are still modified.
 set hidden
 
-" The number of history of commands (":") and previous search patterns ("/").
-"
-" 10000 is the maximum value.
+# The number of history of commands (":") and previous search patterns ("/").
+#
+# 10000 is the maximum value.
 set history=10000
 
 set hlsearch
 set incsearch
 
-" Render "statusline" for all of windows, to show window statuses not to
-" separate windows.
+# Render "statusline" for all of windows, to show window statuses not to
+# separate windows.
 set laststatus=2
 
-" This option has no effect when "statusline" is not empty.
+# This option has no effect when "statusline" is not empty.
 set ruler
 
-" The cursor offset value around both of window edges.
+# The cursor offset value around both of window edges.
 set scrolloff=5
 
-" Show the search count message, such as "[1/24]", when using search commands
-" such as "/" and "n". This is enabled on "8.1.1270".
+# Show the search count message, such as "[1/24]", when using search commands
+# such as "/" and "n". This is enabled on "8.1.1270".
 set shortmess-=S
 
 set showcmd
 set showmatch
 set virtualedit=block
 
-" When type the "wildchar" key that the default value is "<Tab>" in Vim,
-" complete the longest match part and start "wildmenu" at the same time. And
-" then complete the next item when type the key again.
+# When type the "wildchar" key that the default value is "<Tab>" in Vim,
+# complete the longest match part and start "wildmenu" at the same time. And
+# then complete the next item when type the key again.
 set wildmode=longest:full,full
 
-" A command mode with an enhanced completion.
+# A command mode with an enhanced completion.
 set wildmenu
 set wildoptions+=pum,fuzzy
 
-" "smartindent" isn't a super option for "autoindent", and the two of options
-" work in a complement way for each other. So these options should be on at
-" the same time. This is recommended in the help too.
+# "smartindent" isn't a super option for "autoindent", and the two of options
+# work in a complement way for each other. So these options should be on at
+# the same time. This is recommended in the help too.
 set autoindent smartindent
 
-" List mode, which renders alternative characters instead of invisible
-" (non-printable, out of screen or concealed) them.
-"
-" "extends" is only used when "wrap" is off.
+# List mode, which renders alternative characters instead of invisible
+# (non-printable, out of screen or concealed) them.
+#
+# "extends" is only used when "wrap" is off.
 set list
 set listchars+=tab:>\ \|,extends:>,precedes:<
 
-" Strings that start with '>' isn't compatible with the block quotation syntax
-" of markdown.
+# Strings that start with '>' isn't compatible with the block quotation syntax
+# of markdown.
 set showbreak=+++\ 
 
 set breakindent
 set breakindentopt=shift:2,sbr
 
-" "smartcase" works only if "ignorecase" is on.
+# "smartcase" works only if "ignorecase" is on.
 set ignorecase smartcase
 
 set pastetoggle=<F12>
 
 set completeopt=menuone,longest,popup
 
-" Xterm and st (simple terminal) also support true (or direct) colors.
+# Xterm and st (simple terminal) also support true (or direct) colors.
 if $COLORTERM ==# 'truecolor' || index(['xterm', 'st-256color'], $TERM) > -1
   set termguicolors
 endif
 
 if has('win32') || has('osxdarwin')
-  " Use the "*" register as a default one, for yank, delete, change and put
-  " operations instead of the '"' unnamed one. The contents of the "*"
-  " register is synchronous with the system clipboard's them.
+  # Use the "*" register as a default one, for yank, delete, change and put
+  # operations instead of the '"' unnamed one. The contents of the "*"
+  # register is synchronous with the system clipboard's them.
   set clipboard=unnamed
 else
-  " No connection to the X server if in a console.
+  # No connection to the X server if in a console.
   set clipboard=exclude:cons\|linux
 
   if has('unnamedplus')
-    " This is similar to "unnamed", but use the "+" register instead. The
-    " register is used for reading and writing of the CLIPBOARD selection but
-    " not the PRIMARY one.
+    # This is similar to "unnamed", but use the "+" register instead. The
+    # register is used for reading and writing of the CLIPBOARD selection but
+    # not the PRIMARY one.
     set clipboard^=unnamedplus
   endif
 endif
 
-" Screen line oriented scrolling.
+# Screen line oriented scrolling.
 set smoothscroll
 
-" Behave ":cd", ":tcd" and ":lcd" like in UNIX even if in MS-Windows.
+# Behave ":cd", ":tcd" and ":lcd" like in UNIX even if in MS-Windows.
 set cdhome
 
 if has('gui_running')
-  " Add a "M" to the "guioptions" before executing ":syntax enable" or
-  " ":filetype on" to avoid sourcing the "menu.vim".
+  # Add a "M" to the "guioptions" before executing ":syntax enable" or
+  # ":filetype on" to avoid sourcing the "menu.vim".
   set guioptions=M
 endif
 
-" Keep other window sizes when opening/closing new windows.
+# Keep other window sizes when opening/closing new windows.
 set noequalalways
 
-" Prefer single space rather than double them for text joining.
+# Prefer single space rather than double them for text joining.
 set nojoinspaces
 
-" Stop at a TOP or BOTTOM match even if hitting "n" or "N" repeatedly.
+# Stop at a TOP or BOTTOM match even if hitting "n" or "N" repeatedly.
 set nowrapscan
 
-" Create temporary files(backup, swap, undo) under secure locations to avoid
-" CVE-2017-1000382.
-"
-" https://github.com/archlinux/svntogit-packages/blob/68635a69f0c5525210adca6ff277dc13c590399b/trunk/archlinux.vim#L22
-let s:directory = exists('$XDG_CACHE_HOME') ? $XDG_CACHE_HOME : expand('~/.cache')
+# Create temporary files(backup, swap, undo) under secure locations to avoid
+# CVE-2017-1000382.
+#
+# https://github.com/archlinux/svntogit-packages/blob/68635a69f0c5525210adca6ff277dc13c590399b/trunk/archlinux.vim#L22
+const directory = exists('$XDG_CACHE_HOME') ? $XDG_CACHE_HOME : expand('~/.cache')
 
-let &g:backupdir = $'{s:directory}/vim/backup//'
-let &g:directory = $'{s:directory}/vim/swap//'
-let &g:undodir = $'{s:directory}/vim/undo//'
+&g:backupdir = $'{directory}/vim/backup//'
+&g:directory = $'{directory}/vim/swap//'
+&g:undodir = $'{directory}/vim/undo//'
 
-silent call mkdir(expand(&g:backupdir), 'p', 0700)
-silent call mkdir(expand(&g:directory), 'p', 0700)
-silent call mkdir(expand(&g:undodir), 'p', 0700)
-" }}}
+silent mkdir(expand(&g:backupdir), 'p', 0700)
+silent mkdir(expand(&g:directory), 'p', 0700)
+silent mkdir(expand(&g:undodir), 'p', 0700)
+# }}}
 
-" Key mappings {{{
-" "<Leader>" is replaced with the value of "g:mapleader" when define a
-" keymapping, so we must define this variable before the mapping definition.
-let g:mapleader = ' '
+# Key mappings {{{
+# "<Leader>" is replaced with the value of "g:mapleader" when define a
+# keymapping, so we must define this variable before the mapping definition.
+g:mapleader = ' '
 
-" Use "Q" as the typed key recording starter and the terminator instead of
-" "q".
+# Use "Q" as the typed key recording starter and the terminator instead of
+# "q".
 noremap Q q
 map q <Nop>
 
-" Do not anything even if type "<F1>". I sometimes mistype it instead of
-" typing "<ESC>".
+# Do not anything even if type "<F1>". I sometimes mistype it instead of
+# typing "<ESC>".
 map <F1> <Nop>
 map! <F1> <Nop>
 
-" Swap keybingings of 'j/k' and 'gj/gk' with each other.
+# Swap keybingings of 'j/k' and 'gj/gk' with each other.
 nnoremap j gj
 nnoremap k gk
 nnoremap gj j
 nnoremap gk k
 
-" By default, "Y" is a synonym of "yy" for Vi-compatibilities.
+# By default, "Y" is a synonym of "yy" for Vi-compatibilities.
 noremap Y y$
 
-" Change the current window height instantly.
+# Change the current window height instantly.
 nnoremap + <C-W>+
 nnoremap - <C-W>-
 
-" A shortcut to complete filenames.
+# A shortcut to complete filenames.
 inoremap <C-F> <C-X><C-F>
 
-" Quit Visual mode.
+# Quit Visual mode.
 vnoremap <C-L> <Esc>
 
-" A newline version of "i_CTRL-G_k" and "i_CTRL-G_j".
+# A newline version of "i_CTRL-G_k" and "i_CTRL-G_j".
 inoremap <C-G><CR> <End><CR>
 
-" Smart linewise upward/downward cursor movements in Vitual mode.
-"
-" Move the cursor line by line phycically not logically(screen) if Visual mode
-" is linewise, otherwise character by character.
+# Smart linewise upward/downward cursor movements in Vitual mode.
+#
+# Move the cursor line by line phycically not logically(screen) if Visual mode
+# is linewise, otherwise character by character.
 vnoremap <silent><expr> j mode() ==# 'V' ? 'j' : 'gj'
 vnoremap <silent><expr> k mode() ==# 'V' ? 'k' : 'gk'
 
-" Switch buffers. These are similar to "gt" and "gT" for tabs, but for
-" buffers.
+# Switch buffers. These are similar to "gt" and "gT" for tabs, but for
+# buffers.
 nnoremap <silent> gb :bNext<CR>
 nnoremap <silent> gB :bprevious<CR>
 
-" Browse quickfix/location lists by "<C-N>" and "<C-P>".
+# Browse quickfix/location lists by "<C-N>" and "<C-P>".
 nnoremap <silent> <C-N> :<C-U>execute $'{v:count1}cnext'<CR>
 nnoremap <silent> <C-P> :<C-U>execute $'{v:count1}cprevious'<CR>
 nnoremap <silent> g<C-N> :<C-U>execute $'{v:count1}lnext'<CR>
@@ -279,8 +281,8 @@ nnoremap <silent> g<C-P> :<C-U>execute $'{v:count1}lprevious'<CR>
 nnoremap <silent> <C-G><C-N> :<C-U>execute $'{v:count1}lnext'<CR>
 nnoremap <silent> <C-G><C-P> :<C-U>execute $'{v:count1}lprevious'<CR>
 
-" Clear the highlightings for pattern searching and run a command to refresh
-" something.
+# Clear the highlightings for pattern searching and run a command to refresh
+# something.
 nnoremap <silent> <C-L> :<C-U>nohlsearch<CR>:Refresh<CR>
 
 nnoremap <Leader><CR> o<Esc>
@@ -293,19 +295,19 @@ nnoremap <silent> <F10> :<C-U>echo <SID>SyntaxItemAttribute(line('.'), col('.'))
 nnoremap <silent> <F2> :<C-U>ReloadVimrc<CR>
 nnoremap <silent> <Leader><F2> :<C-U>Vimrc<CR>
 
-" From "$VIMRUNTIME/mswin.vim".
-" Save with "CTRL-S" on normal mode and insert mode.
-"
-" I usually save buffers to files every line editing by switching to the
-" normal mode and typing ":w". However doing them every editing is a little
-" bit bothersome. So I want to use these shortcuts which are often used to
-" save files by GUI editros.
+# From "$VIMRUNTIME/mswin.vim".
+# Save with "CTRL-S" on normal mode and insert mode.
+#
+# I usually save buffers to files every line editing by switching to the
+# normal mode and typing ":w". However doing them every editing is a little
+# bit bothersome. So I want to use these shortcuts which are often used to
+# save files by GUI editros.
 nnoremap <silent> <C-S> :<C-U>Update<CR>
 inoremap <silent> <C-S> <Cmd>Update<CR>
 
 nnoremap <silent> <Leader>t :<C-U>tabnew<CR>
 
-" Like default configurations of Tmux.
+# Like default configurations of Tmux.
 nnoremap <silent> <Leader>" :<C-U>terminal<CR>
 nnoremap <silent> <Leader>' :<C-U>call <SID>Terminal()<CR>
 nnoremap <silent> <Leader>% :<C-U>vertical terminal<CR>
@@ -321,20 +323,20 @@ tnoremap <silent> <C-W><Leader>c <C-W>:Terminal<CR>
 nnoremap <silent> <Leader>y :YankComments<CR>
 vnoremap <silent> <Leader>y :YankComments<CR>
 
-" Delete finished terminal buffers by "<CR>", this behavior is similar to
-" Neovim's builtin terminal.
+# Delete finished terminal buffers by "<CR>", this behavior is similar to
+# Neovim's builtin terminal.
 tnoremap <silent><expr> <CR>
   \ bufnr()->term_getjob()->job_status() ==# 'dead'
   \ ? "<C-W>:bdelete<CR>"
   \ : "<CR>"
 
-" This is required for "term_start()" without "{ 'term_finish': 'close' }".
+# This is required for "term_start()" without "{ 'term_finish': 'close' }".
 nmap <silent><expr> <CR>
   \ &buftype ==# 'terminal' && bufnr()->term_getjob()->job_status() ==# 'dead'
   \ ? ":<C-U>bdelete<CR>"
   \ : "<Plug>(newline)"
 
-" Maximize or minimize the current window.
+# Maximize or minimize the current window.
 nnoremap <silent> <C-W>m :<C-U>resize 0<CR>
 nnoremap <silent> <C-W>Vm :<C-U>vertical resize 0<CR>
 nmap <silent> <C-W>gm <Plug>(xminimize)
@@ -348,59 +350,59 @@ tmap <silent> <C-W>gm <Plug>(xminimize)
 
 tnoremap <silent> <C-W>M <C-W>:resize<CR>
 tnoremap <silent> <C-W>VM <C-W>:vertical resize<CR>
-" }}}
+# }}}
 
-" Commands {{{
-" ":update" with new empty file creations for the current buffer.
-"
-" Run ":update" if the file which the current buffer is corresponding exists,
-" otherwise run ":write" instead. This is because ":update" doesn't create a
-" new empty file if the corresponding buffer is empty and unmodified.
-"
-" This is an auxiliary command for keyboard shortcuts.
+# Commands {{{
+# ":update" with new empty file creations for the current buffer.
+#
+# Run ":update" if the file which the current buffer is corresponding exists,
+# otherwise run ":write" instead. This is because ":update" doesn't create a
+# new empty file if the corresponding buffer is empty and unmodified.
+#
+# This is an auxiliary command for keyboard shortcuts.
 command! -bang -bar -range=% Update
   \ execute printf('<mods> <line1>,<line2>%s<bang>', expand('%')->filewritable() ? 'update' : 'write')
 
-" A helper command to open a file in a split window, or the current one (if it
-" is invoked with a bang mark).
+# A helper command to open a file in a split window, or the current one (if it
+# is invoked with a bang mark).
 command! -bang -bar -nargs=1 -complete=file Open execute <q-mods> (<bang>1 ? 'split' : 'edit') <q-args>
 
 command! -bang -bar Vimrc <mods> Open<bang> $MYVIMRC
 command! ReloadVimrc source $MYVIMRC
 
-" Run commands to refresh something. Use ":OnRefresh" to register a command.
+# Run commands to refresh something. Use ":OnRefresh" to register a command.
 command! Refresh doautocmd <nomodeline> User Refresh
 
 command! Hitest source $VIMRUNTIME/syntax/hitest.vim
 
-command! InstallMinpac call s:InstallMinpac()
-" }}}
+command! InstallMinpac call InstallMinpac()
+# }}}
 
-" Auto commands {{{
+# Auto commands {{{
 augroup vimrc
   autocmd!
 
   autocmd QuickFixCmdPost *grep* cwindow
 
-  " Make parent directories of the file which the written buffer is corresponing
-  " if these directories are missing.
+  # Make parent directories of the file which the written buffer is corresponing
+  # if these directories are missing.
   autocmd BufWritePre * silent call mkdir(expand('<afile>:p:h'), 'p')
 
-  " Hide extras on normal mode of terminal.
+  # Hide extras on normal mode of terminal.
   autocmd TerminalOpen * setlocal nolist nonumber colorcolumn=
 
   autocmd BufReadPre ~/* setlocal undofile
 
-  " From "$VIMRUNTIME/defaults.vim".
-  " Jump cursor to last editting line.
+  # From "$VIMRUNTIME/defaults.vim".
+  # Jump cursor to last editting line.
   autocmd BufReadPost * {
     if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
       exe "normal! g`\""
     endif
   }
 
-  " Read/Write the binary format, but are these configurations really
-  " comfortable? Maybe we should use a binary editor insated.
+  # Read/Write the binary format, but are these configurations really
+  # comfortable? Maybe we should use a binary editor insated.
   autocmd BufReadPost * {
     if &binary
       execute 'silent %!xxd -g 1'
@@ -423,7 +425,7 @@ augroup vimrc
   }
 augroup END
 
-" Register a command to refresh something.
+# Register a command to refresh something.
 command! -bar -nargs=+ OnRefresh autocmd refresh User Refresh <args>
 
 augroup refresh
@@ -431,54 +433,54 @@ augroup refresh
 augroup END
 
 OnRefresh redraw
-" }}}
+# }}}
 
-" Standard plugins {{{
-" Avoid loading some standard plugins. {{{
-" netrw
-let g:loaded_netrw = 1
-let g:loaded_netrwPlugin = 1
+# Standard plugins {{{
+# Avoid loading some standard plugins. {{{
+# netrw
+g:loaded_netrw = 1
+g:loaded_netrwPlugin = 1
 
-" These two plugins provide plugin management, but they are already obsolete.
-let g:loaded_getscriptPlugin = 1
-let g:loaded_vimballPlugin = 1
-" }}}
+# These two plugins provide plugin management, but they are already obsolete.
+g:loaded_getscriptPlugin = 1
+g:loaded_vimballPlugin = 1
+# }}}
 
-" netrw configurations {{{
-" WIP: Must match to line not but filename when `g:netrw_liststyle = 1`, on
-" the commit hash of vim/vim: a452b808b4da2d272ca4a50865eb8ca89a58f239
-let g:netrw_list_hide = '^\..*\~ *'
-let g:netrw_sizestyle = 'H'
-" }}}
-" }}}
+# netrw configurations {{{
+# WIP: Must match to line not but filename when `g:netrw_liststyle = 1`, on
+# the commit hash of vim/vim: a452b808b4da2d272ca4a50865eb8ca89a58f239
+g:netrw_list_hide = '^\..*\~ *'
+g:netrw_sizestyle = 'H'
+# }}}
+# }}}
 
-" Bundled plugins {{{
+# Bundled plugins {{{
 packadd! editorconfig
-" }}}
+# }}}
 
-" =============================================================================
+# =============================================================================
 
-" Plugins {{{
-call maxpac#Begin()
+# Plugins {{{
+maxpac#Begin()
 
-" =============================================================================
+# =============================================================================
 
-" thinca/vim-singleton {{{
-" NOTE: Call this as soon as possible!
-" NOTE: Maybe "+clientserver" is disabled in macOS even if a Vim is compiled
-" with "--with-features=huge".
+# thinca/vim-singleton {{{
+# NOTE: Call this as soon as possible!
+# NOTE: Maybe "+clientserver" is disabled in macOS even if a Vim is compiled
+# with "--with-features=huge".
 if has('clientserver')
-  def s:SingletonPost()
+  def SingletonPost()
     singleton#enable()
   enddef
 
-  let s:singleton = maxpac#Add('thinca/vim-singleton')
-  let s:singleton.post = funcref('s:SingletonPost')
+  final singleton = maxpac#Add('thinca/vim-singleton')
+  singleton.post = SingletonPost
 endif
-" }}}
+# }}}
 
-" k-takata/minpac {{{
-def s:MinpacPost()
+# k-takata/minpac {{{
+def MinpacPost()
   command! -bar -nargs=? PackInstall {
     if empty(<q-args>)
       minpac#update()
@@ -488,7 +490,7 @@ def s:MinpacPost()
     endif
   }
 
-  command! -bar -nargs=? -complete=custom,s:PackComplete PackUpdate {
+  command! -bar -nargs=? -complete=custom,PackComplete PackUpdate {
     if empty(<q-args>)
       minpac#update()
     else
@@ -496,7 +498,7 @@ def s:MinpacPost()
     endif
   }
 
-  command! -bar -nargs=? -complete=custom,s:PackComplete PackClean {
+  command! -bar -nargs=? -complete=custom,PackComplete PackClean {
     if empty(<q-args>)
       minpac#clean()
     else
@@ -505,29 +507,29 @@ def s:MinpacPost()
   }
 
   # This command is from the minpac help file.
-  command! -nargs=1 -complete=custom,s:PackComplete PackOpenDir
+  command! -nargs=1 -complete=custom,PackComplete PackOpenDir
     \ term_start(&shell, {
     \   cwd: minpac#getpluginfo(maxpac#Plugname(<q-args>))['dir'],
     \   term_finish: 'close',
     \ })
 enddef
 
-def s:PackComplete(..._): string
+def PackComplete(..._): string
   return minpac#getpluglist()->keys()->sort()->join("\n")
 enddef
 
-let s:minpac = maxpac#Add('k-takata/minpac')
-let s:minpac.post = funcref('s:MinpacPost')
-" }}}
+final minpac = maxpac#Add('k-takata/minpac')
+minpac.post = MinpacPost
+# }}}
 
-" =============================================================================
+# =============================================================================
 
-" KeitaNakamura/neodark.vim {{{
-def s:NeodarkPost()
+# KeitaNakamura/neodark.vim {{{
+def NeodarkPost()
   # Prefer a near black background color.
   g:neodark#background = '#202020'
 
-  command! -bang -bar Neodark call s:ApplyNeodark(<q-bang>)
+  command! -bang -bar Neodark call ApplyNeodark(<q-bang>)
 
   augroup vimrc:neodark
     autocmd!
@@ -535,7 +537,7 @@ def s:NeodarkPost()
   augroup END
 enddef
 
-def s:ApplyNeodark(bang: string)
+def ApplyNeodark(bang: string)
   # Neodark requires 256 colors at least. For example Linux console supports
   # only 8 colors.
   if empty(bang) && str2nr(&t_Co) < 256
@@ -551,12 +553,12 @@ def s:ApplyNeodark(bang: string)
   g:terminal_ansi_colors[8] = '#5f5f5f'
 enddef
 
-let s:neodark = maxpac#Add('KeitaNakamura/neodark.vim')
-let s:neodark.post  = funcref('s:NeodarkPost')
-" }}}
+final neodark = maxpac#Add('KeitaNakamura/neodark.vim')
+neodark.post  = NeodarkPost
+# }}}
 
-" itchyny/lightline.vim {{{
-def s:LightlinePre()
+# itchyny/lightline.vim {{{
+def LightlinePre()
   g:lightline = {
     active: {
       left: [
@@ -603,7 +605,7 @@ def s:LightlinePre()
   }
 
   # The original version is from the help file of "lightline".
-  command! -bar -nargs=1 -complete=custom,s:LightlineColorschemes LightlineColorscheme {
+  command! -bar -nargs=1 -complete=custom,LightlineColorschemes LightlineColorscheme {
     if exists('g:loaded_lightline')
       SetLightlineColorscheme(<q-args>)
       UpdateLightline()
@@ -625,22 +627,22 @@ def s:LightlinePre()
   OnRefresh call lightline#update()
 enddef
 
-def s:SetLightlineColorscheme(colorscheme: string)
+def SetLightlineColorscheme(colorscheme: string)
   g:lightline = get(g:, 'lightline', {})
   g:lightline['colorscheme'] = colorscheme
 enddef
 
-def s:HasLightlineColorscheme(colorscheme: string): bool
+def HasLightlineColorscheme(colorscheme: string): bool
   return !globpath(&runtimepath, $'autoload/lightline/colorscheme/{colorscheme}.vim', 1)->empty()
 enddef
 
-def s:UpdateLightline()
+def UpdateLightline()
   lightline#init()
   lightline#colorscheme()
   lightline#update()
 enddef
 
-def s:ChangeLightlineColorscheme()
+def ChangeLightlineColorscheme()
   if !get(g:, 'lightline_colorscheme_change_on_the_fly', 1)
     return
   endif
@@ -652,23 +654,23 @@ def s:ChangeLightlineColorscheme()
     : type(g:lightline_colorscheme_mapping) == type({}) ? get(g:lightline_colorscheme_mapping, g:colors_name, g:colors_name)
     : g:colors_name
 
-  if s:HasLightlineColorscheme(colorscheme)
-    s:SetLightlineColorscheme(colorscheme)
+  if HasLightlineColorscheme(colorscheme)
+    SetLightlineColorscheme(colorscheme)
   endif
 enddef
 
-def s:LightlineColorschemes(..._): string
+def LightlineColorschemes(..._): string
   return globpath(&runtimepath, 'autoload/lightline/colorscheme/*.vim', 1, 1)->map((_, val) => fnamemodify(val, ':t:r'))->join("\n")
 enddef
 
-let s:lightline = maxpac#Add('itchyny/lightline.vim')
-let s:lightline.pre = funcref('s:LightlinePre')
-" }}}
+final lightline = maxpac#Add('itchyny/lightline.vim')
+lightline.pre = LightlinePre
+# }}}
 
-" =============================================================================
+# =============================================================================
 
-" airblade/vim-gitgutter {{{
-def s:GitgutterPre()
+# airblade/vim-gitgutter {{{
+def GitgutterPre()
   g:gitgutter_sign_added = 'A'
   g:gitgutter_sign_modified = 'M'
   g:gitgutter_sign_removed = 'D'
@@ -676,12 +678,12 @@ def s:GitgutterPre()
   g:gitgutter_sign_modified_removed = 'm'
 enddef
 
-let s:gitgutter = maxpac#Add('airblade/vim-gitgutter')
-let s:gitgutter.pre = funcref('s:GitgutterPre')
-" }}}
+final gitgutter = maxpac#Add('airblade/vim-gitgutter')
+gitgutter.pre = GitgutterPre
+# }}}
 
-" lambdalisue/gina.vim {{{
-def s:GinaPost()
+# lambdalisue/gina.vim {{{
+def GinaPost()
   nmap <silent> <Leader>gl :<C-U>Gina log --graph --all<CR>
   nmap <silent> <Leader>gs :<C-U>Gina status<CR>
   nmap <silent> <Leader>gc :<C-U>Gina commit<CR>
@@ -692,26 +694,26 @@ def s:GinaPost()
   gina#custom#mapping#nmap('status', 'yy', '<Plug>(gina-yank-path)', { silent: 1 })
 enddef
 
-let s:gina = maxpac#Add('lambdalisue/gina.vim')
-let s:gina.post = funcref('s:GinaPost')
-" }}}
+final gina = maxpac#Add('lambdalisue/gina.vim')
+gina.post = GinaPost
+# }}}
 
-" rhysd/git-messenger.vim {{{
-def s:GitMessengerPost()
+# rhysd/git-messenger.vim {{{
+def GitMessengerPost()
   g:git_messenger_include_diff = 'all'
   g:git_messenger_always_into_popup = v:true
   g:git_messenger_max_popup_height = 15
 enddef
 
-let s:git_messenger = maxpac#Add('rhysd/git-messenger.vim')
-let s:git_messenger.post = funcref('s:GitMessengerPost')
-" }}}
+final git_messenger = maxpac#Add('rhysd/git-messenger.vim')
+git_messenger.post = GitMessengerPost
+# }}}
 
-" =============================================================================
+# =============================================================================
 
-" ctrlpvim/ctrlp.vim {{{
-def s:CtrlpPre()
-  g:ctrlp_map = s:IsEnableControlSpaceKeymapping() ? '<C-Space>' : '<Nul>'
+# ctrlpvim/ctrlp.vim {{{
+def CtrlpPre()
+  g:ctrlp_map = IsEnableControlSpaceKeymapping() ? '<C-Space>' : '<Nul>'
 
   g:ctrlp_show_hidden = 1
   g:ctrlp_lazy_update = 150
@@ -735,12 +737,12 @@ def s:CtrlpPre()
     g:ctrlp_cmd = 'CtrlPp'
   endif
 
-  command! -bang -nargs=? -complete=dir CtrlPp call s:CtrlpProxy(<q-bang>, <f-args>)
+  command! -bang -nargs=? -complete=dir CtrlPp call CtrlpProxy(<q-bang>, <f-args>)
 
   nnoremap <silent> <Leader>b :<C-U>CtrlPBuffer<CR>
 enddef
 
-def s:CtrlpProxy(bang: string, dir = getcwd())
+def CtrlpProxy(bang: string, dir = getcwd())
   const home = expand('~')
 
   # Make vim heavy or freeze to run CtrlP to search many files. For example
@@ -753,21 +755,21 @@ def s:CtrlpProxy(bang: string, dir = getcwd())
   CtrlP dir
 enddef
 
-let s:ctrlp = maxpac#Add('ctrlpvim/ctrlp.vim')
-let s:ctrlp.pre = funcref('s:CtrlpPre')
-" }}}
+final ctrlp = maxpac#Add('ctrlpvim/ctrlp.vim')
+ctrlp.pre = CtrlpPre
+# }}}
 
-" mattn/ctrlp-matchfuzzy {{{
-def s:CtrlpMatchfuzzyPost()
+# mattn/ctrlp-matchfuzzy {{{
+def CtrlpMatchfuzzyPost()
   g:ctrlp_match_func = { match: 'ctrlp_matchfuzzy#matcher' }
 enddef
 
-let s:ctrlp_matchfuzzy = maxpac#Add('mattn/ctrlp-matchfuzzy')
-let s:ctrlp_matchfuzzy.post = funcref('s:CtrlpMatchfuzzyPost')
-" }}}
+final ctrlp_matchfuzzy = maxpac#Add('mattn/ctrlp-matchfuzzy')
+ctrlp_matchfuzzy.post = CtrlpMatchfuzzyPost
+# }}}
 
-" mattn/ctrlp-ghq {{{
-def s:CtrlpGhqPost()
+# mattn/ctrlp-ghq {{{
+def CtrlpGhqPost()
   g:ctrlp_ghq_actions = [
     { label: 'edit', action: 'edit', path: 1 },
     { label: 'tabnew', action: 'tabnew', path: 1 }
@@ -776,18 +778,18 @@ def s:CtrlpGhqPost()
   nnoremap <silent> <Leader>gq :<C-U>CtrlPGhq<CR>
 enddef
 
-let s:ctrlp_ghq = maxpac#Add('mattn/ctrlp-ghq')
-let s:ctrlp_ghq.post = funcref('s:CtrlpGhqPost')
-" }}}
+final ctrlp_ghq = maxpac#Add('mattn/ctrlp-ghq')
+ctrlp_ghq.post = CtrlpGhqPost
+# }}}
 
-" a5ob7r/ctrlp-man {{{
-def s:CtrlpManPost()
-  command! LookupManual call s:LookupManual()
+# a5ob7r/ctrlp-man {{{
+def CtrlpManPost()
+  command! LookupManual call LookupManual()
 
   nnoremap <silent> <Leader>m :LookupManual<CR>
 enddef
 
-def s:LookupManual()
+def LookupManual()
   const q = input('keyword> ', '', 'shellcmd')
 
   if empty(q)
@@ -797,14 +799,14 @@ def s:LookupManual()
   execute 'CtrlPMan' q
 enddef
 
-let s:ctrlp_man = maxpac#Add('a5ob7r/ctrlp-man')
-let s:ctrlp_man.post = funcref('s:CtrlpManPost')
-" }}}
+final ctrlp_man = maxpac#Add('a5ob7r/ctrlp-man')
+ctrlp_man.post = CtrlpManPost
+# }}}
 
-" =============================================================================
+# =============================================================================
 
-" prabirshrestha/vim-lsp {{{
-def s:VimLspPre()
+# prabirshrestha/vim-lsp {{{
+def VimLspPre()
   g:lsp_diagnostics_float_cursor = 1
   g:lsp_diagnostics_float_delay = 200
 
@@ -846,23 +848,23 @@ def s:VimLspPre()
     }
   augroup END
 
-  command! CurrentLspLogging echo s:LspLogFile()
+  command! CurrentLspLogging echo LspLogFile()
   command! -nargs=* -complete=file EnableLspLogging
-    \ let g:lsp_log_file = empty(<q-args>) ? $'{$VIMHOME}/tmp/vim-lsp.log' : <q-args>
-  command! DisableLspLogging let g:lsp_log_file = ''
+    \ g:lsp_log_file = empty(<q-args>) ? $'{$VIMHOME}/tmp/vim-lsp.log' : <q-args>
+  command! DisableLspLogging g:lsp_log_file = ''
 
-  command! ViewLspLog call s:ViewLspLog()
+  command! ViewLspLog call ViewLspLog()
 
-  command! -nargs=+ -complete=shellcmd RunWithLspLog call s:RunWithLspLog(<q-args>)
+  command! -nargs=+ -complete=shellcmd RunWithLspLog call RunWithLspLog(<q-args>)
 
-  command! ClearLspLog call s:ClearLspLog()
+  command! ClearLspLog call ClearLspLog()
 enddef
 
-def s:LspLogFile(): string
+def LspLogFile(): string
   return get(g:, 'lsp_log_file', '')
 enddef
 
-def s:ViewLspLog()
+def ViewLspLog()
   const log = LspLogFile()
 
   if filereadable(log)
@@ -876,7 +878,7 @@ def s:ViewLspLog()
   endif
 enddef
 
-def s:RunWithLspLog(template: string)
+def RunWithLspLog(template: string)
   const log = LspLogFile()
 
   if filereadable(log)
@@ -884,7 +886,7 @@ def s:RunWithLspLog(template: string)
   endif
 enddef
 
-def s:ClearLspLog()
+def ClearLspLog()
   const log = LspLogFile()
 
   if filewritable(log)
@@ -892,12 +894,12 @@ def s:ClearLspLog()
   endif
 enddef
 
-let s:vim_lsp = maxpac#Add('prabirshrestha/vim-lsp')
-let s:vim_lsp.pre = funcref('s:VimLspPre')
-" }}}
+final vim_lsp = maxpac#Add('prabirshrestha/vim-lsp')
+vim_lsp.pre = VimLspPre
+# }}}
 
-" mattn/vim-lsp-settings {{{
-def s:VimLspSettingsPre()
+# mattn/vim-lsp-settings {{{
+def VimLspSettingsPre()
   # Use this only as a preset configuration for LSP, not a installer.
   g:lsp_settings_enable_suggestions = 0
 
@@ -921,21 +923,21 @@ def s:VimLspSettingsPre()
   }
 enddef
 
-let s:vim_lsp_settings = maxpac#Add('mattn/vim-lsp-settings')
-let s:vim_lsp_settings.pre = funcref('s:VimLspSettingsPre')
-" }}}
+final vim_lsp_settings = maxpac#Add('mattn/vim-lsp-settings')
+vim_lsp_settings.pre = VimLspSettingsPre
+# }}}
 
-call maxpac#Add('tsuyoshicho/lightline-lsp')
-call maxpac#Add('micchy326/lightline-lsp-progress')
+maxpac#Add('tsuyoshicho/lightline-lsp')
+maxpac#Add('micchy326/lightline-lsp-progress')
 
-" =============================================================================
+# =============================================================================
 
-" hrsh7th/vim-vsnip {{{
-def s:VsnipPre()
+# hrsh7th/vim-vsnip {{{
+def VsnipPre()
   g:vsnip_snippet_dir = $'{$VIMHOME}/vsnip'
 enddef
 
-def s:VsnipPost()
+def VsnipPost()
   imap <expr> <Tab>
     \ vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' :
     \ vsnip#expandable() ? '<Plug>(vsnip-expand)' : '<Tab>'
@@ -944,40 +946,40 @@ def s:VsnipPost()
   smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : '<S-Tab>'
 enddef
 
-let s:vsnip = maxpac#Add('hrsh7th/vim-vsnip')
-let s:vsnip.pre = funcref('s:VsnipPre')
-let s:vsnip.post = funcref('s:VsnipPost')
-" }}}
+final vsnip = maxpac#Add('hrsh7th/vim-vsnip')
+vsnip.pre = VsnipPre
+vsnip.post = VsnipPost
+# }}}
 
-call maxpac#Add('hrsh7th/vim-vsnip-integ')
-call maxpac#Add('rafamadriz/friendly-snippets')
+maxpac#Add('hrsh7th/vim-vsnip-integ')
+maxpac#Add('rafamadriz/friendly-snippets')
 
-" =============================================================================
+# =============================================================================
 
-call maxpac#Add('kana/vim-operator-user')
+maxpac#Add('kana/vim-operator-user')
 
-" kana/vim-operator-replace {{{
-def s:ReplacePost()
+# kana/vim-operator-replace {{{
+def ReplacePost()
   map _ <Plug>(operator-replace)
 enddef
 
-let s:replace = maxpac#Add('kana/vim-operator-replace')
-let s:replace.post = funcref('s:ReplacePost')
-" }}}
+final replace = maxpac#Add('kana/vim-operator-replace')
+replace.post = ReplacePost
+# }}}
 
-" =============================================================================
+# =============================================================================
 
-" a5ob7r/shellcheckrc.vim {{{
-def s:ShellcheckrcPre()
+# a5ob7r/shellcheckrc.vim {{{
+def ShellcheckrcPre()
   g:shellcheck_directive_highlight = 1
 enddef
 
-let s:shellcheckrc = maxpac#Add('a5ob7r/shellcheckrc.vim')
-let s:shellcheckrc.pre = funcref('s:ShellcheckrcPre')
-" }}}
+final shellcheckrc = maxpac#Add('a5ob7r/shellcheckrc.vim')
+shellcheckrc.pre = ShellcheckrcPre
+# }}}
 
-" preservim/vim-markdown {{{
-def s:MarkdownPre()
+# preservim/vim-markdown {{{
+def MarkdownPre()
   # No need to insert any indent preceding a new list item after inserting a
   # newline.
   g:vim_markdown_new_list_item_indent = 0
@@ -985,12 +987,12 @@ def s:MarkdownPre()
   g:vim_markdown_folding_disabled = 1
 enddef
 
-let s:markdown = maxpac#Add('preservim/vim-markdown')
-let s:markdown.pre = funcref('s:MarkdownPre')
-" }}}
+final markdown = maxpac#Add('preservim/vim-markdown')
+markdown.pre = MarkdownPre
+# }}}
 
-" tyru/open-browser.vim {{{
-def s:OpenBrowserPost()
+# tyru/open-browser.vim {{{
+def OpenBrowserPost()
   nmap <Leader>K <Plug>(openbrowser-smart-search)
   nnoremap <Leader>k :call SearchUnderCursorEnglishWord()<CR>
 enddef
@@ -1005,12 +1007,12 @@ def! g:SearchUnderCursorEnglishWord()
   g:SearchEnglishWord(word)
 enddef
 
-let s:open_browser = maxpac#Add('tyru/open-browser.vim')
-let s:open_browser.post = funcref('s:OpenBrowserPost')
-" }}}
+final open_browser = maxpac#Add('tyru/open-browser.vim')
+open_browser.post = OpenBrowserPost
+# }}}
 
-" w0rp/ale {{{
-def s:AlePre()
+# w0rp/ale {{{
+def AlePre()
   # Use ALE only as a linter engine.
   g:ale_disable_lsp = 1
 
@@ -1023,15 +1025,15 @@ def s:AlePre()
   augroup END
 enddef
 
-let s:ale = maxpac#Add('w0rp/ale')
-let s:ale.pre = funcref('s:AlePre')
-" }}}
+final ale = maxpac#Add('w0rp/ale')
+ale.pre = AlePre
+# }}}
 
-" kyoh86/vim-ripgrep {{{
-def s:RipgrepPost()
+# kyoh86/vim-ripgrep {{{
+def RipgrepPost()
   ripgrep#observe#add_observer(g:ripgrep#event#other, 'RipgrepContextObserver')
 
-  command! -bang -count -nargs=+ -complete=file Rg call s:Ripgrep(['-C<count>', <q-args>], #{ case: <bang>1, escape: <bang>1 })
+  command! -bang -count -nargs=+ -complete=file Rg call Ripgrep(['-C<count>', <q-args>], { case: <bang>1, escape: <bang>1 })
 
   map <Leader>f <Plug>(operator-ripgrep-g)
   map g<Leader>f <Plug>(operator-ripgrep)
@@ -1056,7 +1058,7 @@ def! g:RipgrepContextObserver(message: dict<any>)
   setqflist([item], 'a')
 enddef
 
-def s:Ripgrep(args: list<string>, opts = {})
+def Ripgrep(args: list<string>, opts = {})
   const o_case = get(opts, 'case')
   const o_escape = get(opts, 'escape')
 
@@ -1076,12 +1078,12 @@ def s:Ripgrep(args: list<string>, opts = {})
   ripgrep#search(join(arguments))
 enddef
 
-" Escape backslashes without them escaping a double quote or a space.
-"
-" :Rg \bvim\b -> call job_start('rg \\bvim\\b')
-" :Rg \"\ vim\b -> call job_start('rg \"\ vim\\b')
-"
-def s:JobArgumentalizeEscape(s: string): string
+# Escape backslashes without them escaping a double quote or a space.
+#
+# :Rg \bvim\b -> call job_start('rg \\bvim\\b')
+# :Rg \"\ vim\b -> call job_start('rg \"\ vim\\b')
+#
+def JobArgumentalizeEscape(s: string): string
   var tokens = []
   var str = s
 
@@ -1108,8 +1110,8 @@ def! g:Op_ripgrep_g(motion_wiseness: string)
   OperatorRipgrep(motion_wiseness, { boundaries: 1, push_history_entry: 1, highlight: 1 })
 enddef
 
-" TODO: Consider ideal linewise and blockwise operations.
-def s:OperatorRipgrep(motion_wiseness: string, opts = {})
+# TODO: Consider ideal linewise and blockwise operations.
+def OperatorRipgrep(motion_wiseness: string, opts = {})
   const o_boundaries = get(opts, 'boundaries')
   const o_push_history_entry = get(opts, 'push_history_entry')
   const o_highlight = get(opts, 'highlight')
@@ -1149,9 +1151,9 @@ def s:OperatorRipgrep(motion_wiseness: string, opts = {})
   endif
 enddef
 
-" Escape command line special characters ("cmdline-special"), any
-" double-quotes and any backslashes preceding spaces.
-def s:CommandLineArgumentalizeEscape(s: string): string
+# Escape command line special characters ("cmdline-special"), any
+# double-quotes and any backslashes preceding spaces.
+def CommandLineArgumentalizeEscape(s: string): string
   var tokens = []
   var str = s
 
@@ -1170,7 +1172,7 @@ def s:CommandLineArgumentalizeEscape(s: string): string
   return join(tokens, '')
 enddef
 
-def s:SmartRipgrepCommandHistoryPush(command: string)
+def SmartRipgrepCommandHistoryPush(command: string)
   const history_entry = command
   const latest_history_entry = histget('cmd', -1)
 
@@ -1179,12 +1181,12 @@ def s:SmartRipgrepCommandHistoryPush(command: string)
   endif
 enddef
 
-let s:ripgrep = maxpac#Add('kyoh86/vim-ripgrep')
-let s:ripgrep.post = funcref('s:RipgrepPost')
-" }}}
+final ripgrep = maxpac#Add('kyoh86/vim-ripgrep')
+ripgrep.post = RipgrepPost
+# }}}
 
-" haya14busa/vim-asterisk {{{
-def s:AsteriskPost()
+# haya14busa/vim-asterisk {{{
+def AsteriskPost()
   # Keep the cursor offset while searching. See "search-offset".
   g:asterisk#keeppos = 1
 
@@ -1198,63 +1200,63 @@ def s:AsteriskPost()
   map gz# <Plug>(asterisk-g#)
 enddef
 
-let s:asterisk = maxpac#Add('haya14busa/vim-asterisk')
-let s:asterisk.post = funcref('s:AsteriskPost')
-" }}}
+final asterisk = maxpac#Add('haya14busa/vim-asterisk')
+asterisk.post = AsteriskPost
+# }}}
 
-" monaqa/modesearch.vim {{{
-def s:ModesearchPost()
+# monaqa/modesearch.vim {{{
+def ModesearchPost()
   nmap <silent> g/ <Plug>(modesearch-slash-rawstr)
   nmap <silent> g? <Plug>(modesearch-question-regexp)
   cmap <silent> <C-x> <Plug>(modesearch-toggle-mode)
 enddef
 
-let s:modesearch = maxpac#Add('monaqa/modesearch.vim')
-let s:modesearch.post = funcref('s:ModesearchPost')
-" }}}
+final modesearch = maxpac#Add('monaqa/modesearch.vim')
+modesearch.post = ModesearchPost
+# }}}
 
-" thinca/vim-localrc {{{
-def s:LocalrcPost()
+# thinca/vim-localrc {{{
+def LocalrcPost()
   command! -bang -bar VimrcLocal
-    \ call s:OpenLocalrc(<q-bang>, <q-mods>, expand('~'))
+    \ call OpenLocalrc(<q-bang>, <q-mods>, expand('~'))
   command! -bang -bar -nargs=? -complete=dir OpenLocalrc
-    \ call s:OpenLocalrc(<q-bang>, <q-mods>, empty(<q-args>) ? expand('%:p:h') : <q-args>)
+    \ call OpenLocalrc(<q-bang>, <q-mods>, empty(<q-args>) ? expand('%:p:h') : <q-args>)
 enddef
 
-def s:OpenLocalrc(bang: string, mods: string, dir: string)
+def OpenLocalrc(bang: string, mods: string, dir: string)
   const localrc_filename = get(g:, 'localrc_filename', '.local.vimrc')
   const localrc_filepath = Pathjoin(dir, fnameescape(localrc_filename))
 
   execute $'{mods} Open{bang} {localrc_filepath}'
 enddef
 
-let s:localrc = maxpac#Add('thinca/vim-localrc')
-let s:localrc.post = funcref('s:LocalrcPost')
-" }}}
+final localrc = maxpac#Add('thinca/vim-localrc')
+localrc.post = LocalrcPost
+# }}}
 
-" andymass/vim-matchup {{{
-def s:MatchupFallback()
+# andymass/vim-matchup {{{
+def MatchupFallback()
   # The enhanced "%", to find many extra matchings and jump the cursor to them.
   #
   # NOTE: "matchit" isn't a standard plugin, but it's bundled in Vim by default.
   packadd! matchit
 enddef
 
-let s:matchup = maxpac#Add('andymass/vim-matchup')
-let s:matchup.fallback = funcref('s:MatchupFallback')
-" }}}
+final matchup = maxpac#Add('andymass/vim-matchup')
+matchup.fallback = MatchupFallback
+# }}}
 
-" Eliot00/git-lens.vim {{{
-def s:GitlensPost()
+# Eliot00/git-lens.vim {{{
+def GitlensPost()
   command! -bar ToggleGitLens call ToggleGitLens()
 enddef
 
-let s:gitlens = maxpac#Add('Eliot00/git-lens.vim')
-let s:gitlens.post = funcref('s:GitlensPost')
-" }}}
+final gitlens = maxpac#Add('Eliot00/git-lens.vim')
+gitlens.post = GitlensPost
+# }}}
 
-" a5ob7r/linefeed.vim {{{
-def s:LinefeedPost()
+# a5ob7r/linefeed.vim {{{
+def LinefeedPost()
   # TODO: These keymappings override some default them and conflict with other
   # plugin's default one.
   # imap <silent> <C-K> <Plug>(linefeed-goup)
@@ -1266,18 +1268,18 @@ def s:LinefeedPost()
   # imap <silent> <C-G><C-J> <Plug>(linefeed-down)
 enddef
 
-let s:linefeed = maxpac#Add('a5ob7r/linefeed.vim')
-let s:linefeed.post = funcref('s:LinefeedPost')
-" }}}
+final linefeed = maxpac#Add('a5ob7r/linefeed.vim')
+linefeed.post = LinefeedPost
+# }}}
 
-" vim-utils/vim-man {{{
-def s:ManPost()
+# vim-utils/vim-man {{{
+def ManPost()
   command! -nargs=* -bar -complete=customlist,man#completion#run M Man <args>
 
   ManCommon()
 enddef
 
-def s:ManFallback()
+def ManFallback()
   # NOTE: A recommended way to enable ":Man" command on vim help page is to
   # source a default man ftplugin by ":runtime ftplugin/man.vim" in vimrc.
   # However it sources other ftplugin files which probably have side-effects.
@@ -1294,16 +1296,16 @@ def s:ManFallback()
   ManCommon()
 enddef
 
-def s:ManCommon()
+def ManCommon()
   set keywordprg=:Man
 enddef
 
-let s:man = maxpac#Add('vim-utils/vim-man')
-let s:man.post = funcref('s:ManPost')
-" }}}
+final man = maxpac#Add('vim-utils/vim-man')
+man.post = ManPost
+# }}}
 
-" machakann/vim-sandwich {{{
-def s:SandwichPost()
+# machakann/vim-sandwich {{{
+def SandwichPost()
   g:sandwich#recipes = get(g:, 'sandwich#recipes', deepcopy(g:sandwich#default_recipes))
   g:sandwich#recipes += [
     { buns: ['{ ', ' }'],
@@ -1354,12 +1356,12 @@ def s:SandwichPost()
   ]
 enddef
 
-let s:sandwich = maxpac#Add('machakann/vim-sandwich')
-let s:sandwich.post = funcref('s:SandwichPost')
-" }}}
+final sandwich = maxpac#Add('machakann/vim-sandwich')
+sandwich.post = SandwichPost
+# }}}
 
-" liuchengxu/vista.vim {{{
-def s:VistaPre()
+# liuchengxu/vista.vim {{{
+def VistaPre()
   g:vista_no_mappings = 1
 
   augroup vimrc:vista
@@ -1370,12 +1372,12 @@ def s:VistaPre()
   nnoremap <silent> <Leader>v :<C-U>Vista!!<CR>
 enddef
 
-let s:vista = maxpac#Add('liuchengxu/vista.vim')
-let s:vista.pre = funcref('s:VistaPre')
-" }}}
+final vista = maxpac#Add('liuchengxu/vista.vim')
+vista.pre = VistaPre
+# }}}
 
-" itchyny/screensaver.vim {{{
-def s:ScreensaverPost()
+# itchyny/screensaver.vim {{{
+def ScreensaverPost()
   augroup vimrc:screensaver
     autocmd!
     # Clear the cmdline area when starting a screensaver.
@@ -1383,49 +1385,49 @@ def s:ScreensaverPost()
   augroup END
 enddef
 
-let s:screensaver = maxpac#Add('itchyny/screensaver.vim')
-let s:screensaver.post = funcref('s:ScreensaverPost')
-" }}}
+final screensaver = maxpac#Add('itchyny/screensaver.vim')
+screensaver.post = ScreensaverPost
+# }}}
 
-" bronson/vim-trailing-whitespace {{{
-def s:TrailingWhitespacePost()
+# bronson/vim-trailing-whitespace {{{
+def TrailingWhitespacePost()
   g:extra_whitespace_ignored_filetypes = get(g:, 'extra_whitespace_ignored_filetypes', [])
   g:extra_whitespace_ignored_filetypes += ['screensaver']
 enddef
 
-let s:trailing_whitespace = maxpac#Add('bronson/vim-trailing-whitespace')
-let s:trailing_whitespace.post = funcref('s:TrailingWhitespacePost')
-" }}}
+final trailing_whitespace = maxpac#Add('bronson/vim-trailing-whitespace')
+trailing_whitespace.post = TrailingWhitespacePost
+# }}}
 
-" =============================================================================
+# =============================================================================
 
-" lambdalisue/fern.vim {{{
-def s:FernPre()
+# lambdalisue/fern.vim {{{
+def FernPre()
   g:fern#default_hidden = 1
   g:fern#default_exclude = '.*\~$'
 
-  command! -bar ToggleFern call s:ToggleFern()
+  command! -bar ToggleFern call ToggleFern()
 
   augroup vimrc:fern
     autocmd!
-    autocmd Filetype fern let t:fern_buffer_id = bufnr()
-    autocmd BufLeave * if &ft !=# 'fern' | let t:non_fern_buffer_id = bufnr() | endif
+    autocmd Filetype fern t:fern_buffer_id = bufnr()
+    autocmd BufLeave * if &ft !=# 'fern' | t:non_fern_buffer_id = bufnr() | endif
     autocmd DirChanged * unlet! t:fern_buffer_id
   augroup END
 
-  command! CurrentFernLogging echo s:FernLogFile()
+  command! CurrentFernLogging echo FernLogFile()
   command! -nargs=* -complete=file EnableFernLogging
-    \ let g:fern#logfile = empty(<q-args>) ? '$VIMHOME/tmp/fern.tsv' : <q-args>
-  command! DisableFernLogging let g:fern#logfile = v:null
-  command! FernLogDebug let g:fern#loglevel = g:fern#DEBUG
-  command! FernLogInfo let g:fern#loglevel = g:fern#INFO
-  command! FernLogWARN let g:fern#loglevel = g:fern#WARN
-  command! FernLogError let g:fern#loglevel = g:fern#Error
+    \ g:fern#logfile = empty(<q-args>) ? '$VIMHOME/tmp/fern.tsv' : <q-args>
+  command! DisableFernLogging g:fern#logfile = v:null
+  command! FernLogDebug g:fern#loglevel = g:fern#DEBUG
+  command! FernLogInfo g:fern#loglevel = g:fern#INFO
+  command! FernLogWARN g:fern#loglevel = g:fern#WARN
+  command! FernLogError g:fern#loglevel = g:fern#Error
 
-  command! -nargs=+ -complete=shellcmd RunWithFernLog call s:RunWithFernLog(<q-args>)
+  command! -nargs=+ -complete=shellcmd RunWithFernLog call RunWithFernLog(<q-args>)
 enddef
 
-def s:FernFallback()
+def FernFallback()
   unlet g:loaded_netrw
   unlet g:loaded_netrwPlugin
 
@@ -1433,9 +1435,9 @@ def s:FernFallback()
   nnoremap <silent> <Leader>N :<C-U>ToggleNetrw!<CR>
 enddef
 
-" Toggle a fern buffer to keep the cursor position. A tab should only have
-" one fern buffer.
-def s:ToggleFern()
+# Toggle a fern buffer to keep the cursor position. A tab should only have
+# one fern buffer.
+def ToggleFern()
   if &filetype ==# 'fern'
     if exists('t:non_fern_buffer_id')
       execute 'buffer' t:non_fern_buffer_id
@@ -1453,11 +1455,11 @@ def s:ToggleFern()
   endif
 enddef
 
-def s:FernLogFile(): string
+def FernLogFile(): string
   return get(g:, 'fern#logfile', v:null)
 enddef
 
-def s:RunWithFernLog(template: string)
+def RunWithFernLog(template: string)
   const log = FernLogFile()
 
   if filereadable(log)
@@ -1465,35 +1467,35 @@ def s:RunWithFernLog(template: string)
   endif
 enddef
 
-let s:fern = maxpac#Add('lambdalisue/fern.vim')
-let s:fern.pre = funcref('s:FernPre')
-let s:fern.fallback = funcref('s:FernFallback')
-" }}}
+final fern = maxpac#Add('lambdalisue/fern.vim')
+fern.pre = FernPre
+fern.fallback = FernFallback
+# }}}
 
-call maxpac#Add('lambdalisue/fern-hijack.vim')
-call maxpac#Add('lambdalisue/fern-git-status.vim')
+maxpac#Add('lambdalisue/fern-hijack.vim')
+maxpac#Add('lambdalisue/fern-git-status.vim')
 
-" a5ob7r/fern-renderer-lsflavor.vim {{{
-def s:LsflavorPre()
+# a5ob7r/fern-renderer-lsflavor.vim {{{
+def LsflavorPre()
   g:fern#renderer = 'lsflavor'
 enddef
 
-let s:lsflavor = maxpac#Add('a5ob7r/fern-renderer-lsflavor.vim')
-let s:lsflavor.pre = funcref('s:LsflavorPre')
-" }}}
+final lsflavor = maxpac#Add('a5ob7r/fern-renderer-lsflavor.vim')
+lsflavor.pre = LsflavorPre
+# }}}
 
-"==============================================================================
+#==============================================================================
 
-" prabirshrestha/asyncomplete.vim {{{
-def s:AsyncompletePre()
+# prabirshrestha/asyncomplete.vim {{{
+def AsyncompletePre()
   g:asyncomplete_enable_for_all = 0
 
-  command! ToggleAsyncomplete call s:ToggleAsyncomplete()
-  command! EnableAsyncomplete call s:ToggleAsyncomplete(0)
-  command! DisableAsyncomplete call s:ToggleAsyncomplete(1)
+  command! ToggleAsyncomplete call ToggleAsyncomplete()
+  command! EnableAsyncomplete call ToggleAsyncomplete(0)
+  command! DisableAsyncomplete call ToggleAsyncomplete(1)
 enddef
 
-def s:ToggleAsyncomplete(asyncomplete_enable = get(b:, 'asyncomplete_enable'))
+def ToggleAsyncomplete(asyncomplete_enable = get(b:, 'asyncomplete_enable'))
   if asyncomplete_enable
     asyncomplete#disable_for_buffer()
 
@@ -1514,76 +1516,76 @@ def s:ToggleAsyncomplete(asyncomplete_enable = get(b:, 'asyncomplete_enable'))
   endif
 enddef
 
-let s:asyncomplete = maxpac#Add('prabirshrestha/asyncomplete.vim')
-let s:asyncomplete.pre = funcref('s:AsyncompletePre')
-" }}}
+final asyncomplete = maxpac#Add('prabirshrestha/asyncomplete.vim')
+asyncomplete.pre = AsyncompletePre
+# }}}
 
-call maxpac#Add('prabirshrestha/asyncomplete-lsp.vim')
+maxpac#Add('prabirshrestha/asyncomplete-lsp.vim')
 
-" =============================================================================
+# =============================================================================
 
-" Text object.
-call maxpac#Add('kana/vim-textobj-user')
+# Text object.
+maxpac#Add('kana/vim-textobj-user')
 
-call maxpac#Add('D4KU/vim-textobj-chainmember')
-call maxpac#Add('Julian/vim-textobj-variable-segment')
-call maxpac#Add('deris/vim-textobj-enclosedsyntax')
-call maxpac#Add('kana/vim-textobj-datetime')
-call maxpac#Add('kana/vim-textobj-entire')
-call maxpac#Add('kana/vim-textobj-indent')
-call maxpac#Add('kana/vim-textobj-line')
-call maxpac#Add('kana/vim-textobj-syntax')
-call maxpac#Add('mattn/vim-textobj-url')
-call maxpac#Add('osyo-manga/vim-textobj-blockwise')
-call maxpac#Add('saaguero/vim-textobj-pastedtext')
-call maxpac#Add('sgur/vim-textobj-parameter')
-call maxpac#Add('thinca/vim-textobj-comment')
+maxpac#Add('D4KU/vim-textobj-chainmember')
+maxpac#Add('Julian/vim-textobj-variable-segment')
+maxpac#Add('deris/vim-textobj-enclosedsyntax')
+maxpac#Add('kana/vim-textobj-datetime')
+maxpac#Add('kana/vim-textobj-entire')
+maxpac#Add('kana/vim-textobj-indent')
+maxpac#Add('kana/vim-textobj-line')
+maxpac#Add('kana/vim-textobj-syntax')
+maxpac#Add('mattn/vim-textobj-url')
+maxpac#Add('osyo-manga/vim-textobj-blockwise')
+maxpac#Add('saaguero/vim-textobj-pastedtext')
+maxpac#Add('sgur/vim-textobj-parameter')
+maxpac#Add('thinca/vim-textobj-comment')
 
-call maxpac#Add('machakann/vim-textobj-delimited')
-call maxpac#Add('machakann/vim-textobj-functioncall')
+maxpac#Add('machakann/vim-textobj-delimited')
+maxpac#Add('machakann/vim-textobj-functioncall')
 
-" Misc.
-call maxpac#Add('LumaKernel/coqpit.vim')
-call maxpac#Add('a5ob7r/chmod.vim')
-call maxpac#Add('a5ob7r/rspec-daemon.vim')
-call maxpac#Add('a5ob7r/tig.vim')
-call maxpac#Add('aliou/bats.vim')
-call maxpac#Add('azabiong/vim-highlighter')
-call maxpac#Add('fladson/vim-kitty')
-call maxpac#Add('gpanders/vim-oldfiles')
-call maxpac#Add('junegunn/goyo.vim')
-call maxpac#Add('junegunn/vader.vim')
-call maxpac#Add('junegunn/vim-easy-align')
-call maxpac#Add('kannokanno/previm')
-call maxpac#Add('keith/rspec.vim')
-call maxpac#Add('lambdalisue/vital-Whisky')
-call maxpac#Add('machakann/vim-highlightedyank')
-call maxpac#Add('machakann/vim-swap')
-call maxpac#Add('maximbaz/lightline-ale')
-call maxpac#Add('neovimhaskell/haskell-vim')
-call maxpac#Add('pocke/rbs.vim')
-call maxpac#Add('thinca/vim-prettyprint')
-call maxpac#Add('thinca/vim-themis')
-call maxpac#Add('tpope/vim-endwise')
-call maxpac#Add('tyru/eskk.vim')
-call maxpac#Add('vim-jp/vital.vim')
-call maxpac#Add('yasuhiroki/github-actions-yaml.vim')
+# Misc.
+maxpac#Add('LumaKernel/coqpit.vim')
+maxpac#Add('a5ob7r/chmod.vim')
+maxpac#Add('a5ob7r/rspec-daemon.vim')
+maxpac#Add('a5ob7r/tig.vim')
+maxpac#Add('aliou/bats.vim')
+maxpac#Add('azabiong/vim-highlighter')
+maxpac#Add('fladson/vim-kitty')
+maxpac#Add('gpanders/vim-oldfiles')
+maxpac#Add('junegunn/goyo.vim')
+maxpac#Add('junegunn/vader.vim')
+maxpac#Add('junegunn/vim-easy-align')
+maxpac#Add('kannokanno/previm')
+maxpac#Add('keith/rspec.vim')
+maxpac#Add('lambdalisue/vital-Whisky')
+maxpac#Add('machakann/vim-highlightedyank')
+maxpac#Add('machakann/vim-swap')
+maxpac#Add('maximbaz/lightline-ale')
+maxpac#Add('neovimhaskell/haskell-vim')
+maxpac#Add('pocke/rbs.vim')
+maxpac#Add('thinca/vim-prettyprint')
+maxpac#Add('thinca/vim-themis')
+maxpac#Add('tpope/vim-endwise')
+maxpac#Add('tyru/eskk.vim')
+maxpac#Add('vim-jp/vital.vim')
+maxpac#Add('yasuhiroki/github-actions-yaml.vim')
 
-if s:IsBundledPackageLoadable('comment')
-  " "comment.vim" package is bundled since 5400a5d4269874fe4f1c35dfdd3c039ea17dfd62.
+if IsBundledPackageLoadable('comment')
+  # "comment.vim" package is bundled since 5400a5d4269874fe4f1c35dfdd3c039ea17dfd62.
   packadd! comment
 else
-  call maxpac#Add('tpope/vim-commentary')
+  maxpac#Add('tpope/vim-commentary')
 endif
 
-" =============================================================================
+# =============================================================================
 
-" denops.vim
+# denops.vim
 
 if executable('deno')
-  call maxpac#Add('vim-denops/denops.vim')
+  maxpac#Add('vim-denops/denops.vim')
 
-  def s:GinPost()
+  def GinPost()
     g:gin_diff_persistent_args = ['--patch', '--stat']
 
     if executable('delta')
@@ -1606,10 +1608,10 @@ if executable('deno')
     augroup END
   enddef
 
-  let s:gin = maxpac#Add('lambdalisue/gin.vim')
-  let s:gin.post = funcref('s:GinPost')
+  final gin = maxpac#Add('lambdalisue/gin.vim')
+  gin.post = GinPost
 
-  def s:DduPost()
+  def DduPost()
     ddu#custom#patch_global({
       ui: 'ff',
       sources: ['file_rec'],
@@ -1625,9 +1627,13 @@ if executable('deno')
       },
     })
 
-    ddu#custom#action('kind', 'file', 'tcd', (args) => s:DduKindFileActionTcd(args))
+    ddu#custom#action('kind', 'file', 'tcd', (args) => {
+      execute $'tcd {args.items[0].action.path}'
 
-    if s:IsEnableControlSpaceKeymapping()
+      return 0
+    })
+
+    if IsEnableControlSpaceKeymapping()
       nnoremap <silent> <C-Space> <Cmd>call ddu#start()<CR>
     else
       nnoremap <silent> <Nul> <Cmd>call ddu#start()<CR>
@@ -1654,48 +1660,42 @@ if executable('deno')
     augroup END
   enddef
 
-  let s:ddu = maxpac#Add('Shougo/ddu.vim')
-  let s:ddu.post = funcref('s:DduPost')
+  final ddu = maxpac#Add('Shougo/ddu.vim')
+  ddu.post = DduPost
 
-  def s:DduKindFileActionTcd(args: dict<any>): number
-    execute $'tcd {args.items[0].action.path}'
+  maxpac#Add('Shougo/ddu-ui-ff')
 
-    return 0
-  enddef
+  maxpac#Add('4513ECHO/ddu-source-ghq')
+  maxpac#Add('Shougo/ddu-source-file_rec')
+  maxpac#Add('shun/ddu-source-buffer')
 
-  call maxpac#Add('Shougo/ddu-ui-ff')
+  maxpac#Add('matsui54/ddu-filter-fzy')
 
-  call maxpac#Add('4513ECHO/ddu-source-ghq')
-  call maxpac#Add('Shougo/ddu-source-file_rec')
-  call maxpac#Add('shun/ddu-source-buffer')
-
-  call maxpac#Add('matsui54/ddu-filter-fzy')
-
-  call maxpac#Add('Shougo/ddu-kind-file')
+  maxpac#Add('Shougo/ddu-kind-file')
 endif
 
-" =============================================================================
+# =============================================================================
 
-call maxpac#End()
-" }}}
+maxpac#End()
+# }}}
 
-" Filetypes {{{
+# Filetypes {{{
 filetype off
 filetype plugin indent off
 filetype plugin indent on
-" }}}
+# }}}
 
-" Syntax {{{
+# Syntax {{{
 syntax off
 syntax enable
-" }}}
+# }}}
 
-" Fire VimEnter manually on reload {{{
+# Fire VimEnter manually on reload {{{
 if !has('vim_starting')
   doautocmd <nomodeline> VimEnter
 endif
-" }}}
+# }}}
 
-" =============================================================================
+# =============================================================================
 
-" vim:set expandtab tabstop=2 shiftwidth=2 foldmethod=marker:
+# vim:set expandtab tabstop=2 shiftwidth=2 foldmethod=marker:
