@@ -52,12 +52,12 @@ export def Begin(config: dict<any> = {}): bool
   try
     packadd minpac
   catch
-    return v:false
+    return false
   endtry
 
   minpac#init(config)
 
-  return v:true
+  return true
 enddef
 
 # Load plugins that each of them may have hook functions. The hooks are called
@@ -109,7 +109,7 @@ export def Load(uri: string, config: dict<any> = { type: 'opt' }): bool
       minpac#init()
     endif
   catch /^Vim\%((\a\+)\)\=:E117:/
-    return v:false
+    return false
   endtry
 
   # TODO: Support drive letters for MS-Windows.

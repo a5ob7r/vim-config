@@ -706,7 +706,7 @@ gina.post = GinaPost
 # rhysd/git-messenger.vim {{{
 def GitMessengerPost()
   g:git_messenger_include_diff = 'all'
-  g:git_messenger_always_into_popup = v:true
+  g:git_messenger_always_into_popup = true
   g:git_messenger_max_popup_height = 15
 enddef
 
@@ -916,8 +916,8 @@ def VimLspSettingsPre()
       latex: {
         build: {
           args: ['%f'],
-          onSave: v:true,
-          forwardSearchAfter: v:true
+          onSave: true,
+          forwardSearchAfter: true
         },
         forwardSearch: {
           executable: 'zathura',
