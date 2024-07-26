@@ -37,9 +37,9 @@ export def Plugconf(name: string): dict<any>
   return {
     name: name,
     config: { type: 'opt' },
-    pre: () => v:null,
-    post: () => v:null,
-    fallback: () => v:null,
+    pre: () => null,
+    post: () => null,
+    fallback: () => null,
     deps: []
   }
 enddef

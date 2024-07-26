@@ -1423,7 +1423,7 @@ def FernPre()
   command! CurrentFernLogging echo FernLogFile()
   command! -nargs=* -complete=file EnableFernLogging
     \ g:fern#logfile = empty(<q-args>) ? '$VIMHOME/tmp/fern.tsv' : <q-args>
-  command! DisableFernLogging g:fern#logfile = v:null
+  command! DisableFernLogging g:fern#logfile = null
   command! FernLogDebug g:fern#loglevel = g:fern#DEBUG
   command! FernLogInfo g:fern#loglevel = g:fern#INFO
   command! FernLogWARN g:fern#loglevel = g:fern#WARN
@@ -1461,7 +1461,7 @@ def ToggleFern()
 enddef
 
 def FernLogFile(): string
-  return get(g:, 'fern#logfile', v:null)
+  return get(g:, 'fern#logfile', null)
 enddef
 
 def RunWithFernLog(template: string)
