@@ -375,7 +375,7 @@ command! Refresh doautocmd <nomodeline> User Refresh
 
 command! Hitest source $VIMRUNTIME/syntax/hitest.vim
 
-command! InstallMinpac call InstallMinpac()
+command! InstallMinpac InstallMinpac()
 # }}}
 
 # Auto commands {{{
@@ -386,7 +386,7 @@ augroup vimrc
 
   # Make parent directories of the file which the written buffer is corresponing
   # if these directories are missing.
-  autocmd BufWritePre * silent call mkdir(expand('<afile>:p:h'), 'p')
+  autocmd BufWritePre * silent mkdir(expand('<afile>:p:h'), 'p')
 
   # Hide extras on normal mode of terminal.
   autocmd TerminalOpen * setlocal nolist nonumber colorcolumn=
@@ -534,7 +534,7 @@ def NeodarkPost()
   # Prefer a near black background color.
   g:neodark#background = '#202020'
 
-  command! -bang -bar Neodark call ApplyNeodark(<q-bang>)
+  command! -bang -bar Neodark ApplyNeodark(<q-bang>)
 
   augroup vimrc:neodark
     autocmd!
@@ -629,7 +629,7 @@ def LightlinePre()
     }
   augroup END
 
-  OnRefresh call lightline#update()
+  OnRefresh lightline#update()
 enddef
 
 def SetLightlineColorscheme(colorscheme: string)
@@ -742,7 +742,7 @@ def CtrlpPre()
     g:ctrlp_cmd = 'CtrlPp'
   endif
 
-  command! -bang -nargs=? -complete=dir CtrlPp call CtrlpProxy(<q-bang>, <f-args>)
+  command! -bang -nargs=? -complete=dir CtrlPp CtrlpProxy(<q-bang>, <f-args>)
 
   nnoremap <silent> <Leader>b :<C-U>CtrlPBuffer<CR>
 enddef
@@ -789,7 +789,7 @@ ctrlp_ghq.post = CtrlpGhqPost
 
 # a5ob7r/ctrlp-man {{{
 def CtrlpManPost()
-  command! LookupManual call LookupManual()
+  command! LookupManual LookupManual()
 
   nnoremap <silent> <Leader>m :LookupManual<CR>
 enddef
@@ -858,11 +858,11 @@ def VimLspPre()
     \ g:lsp_log_file = empty(<q-args>) ? $'{$VIMHOME}/tmp/vim-lsp.log' : <q-args>
   command! DisableLspLogging g:lsp_log_file = ''
 
-  command! ViewLspLog call ViewLspLog()
+  command! ViewLspLog ViewLspLog()
 
-  command! -nargs=+ -complete=shellcmd RunWithLspLog call RunWithLspLog(<q-args>)
+  command! -nargs=+ -complete=shellcmd RunWithLspLog RunWithLspLog(<q-args>)
 
-  command! ClearLspLog call ClearLspLog()
+  command! ClearLspLog ClearLspLog()
 enddef
 
 def LspLogFile(): string
@@ -999,7 +999,7 @@ markdown.pre = MarkdownPre
 # tyru/open-browser.vim {{{
 def OpenBrowserPost()
   nmap <Leader>K <Plug>(openbrowser-smart-search)
-  nnoremap <Leader>k :call SearchUnderCursorEnglishWord()<CR>
+  nnoremap <Leader>k <ScriptCmd>g:SearchUnderCursorEnglishWord()<CR>
 enddef
 
 def! g:SearchEnglishWord(word: string)
@@ -1038,7 +1038,7 @@ ale.pre = AlePre
 def RipgrepPost()
   ripgrep#observe#add_observer(g:ripgrep#event#other, 'RipgrepContextObserver')
 
-  command! -bang -count -nargs=+ -complete=file Rg call Ripgrep(['-C<count>', <q-args>], { case: <bang>1, escape: <bang>1 })
+  command! -bang -count -nargs=+ -complete=file Rg Ripgrep(['-C<count>', <q-args>], { case: <bang>1, escape: <bang>1 })
 
   map <Leader>f <Plug>(operator-ripgrep-g)
   map g<Leader>f <Plug>(operator-ripgrep)
@@ -1085,8 +1085,8 @@ enddef
 
 # Escape backslashes without them escaping a double quote or a space.
 #
-# :Rg \bvim\b -> call job_start('rg \\bvim\\b')
-# :Rg \"\ vim\b -> call job_start('rg \"\ vim\\b')
+# :Rg \bvim\b -> job_start('rg \\bvim\\b')
+# :Rg \"\ vim\b -> job_start('rg \"\ vim\\b')
 #
 def JobArgumentalizeEscape(s: string): string
   var tokens = []
@@ -1223,9 +1223,9 @@ modesearch.post = ModesearchPost
 # thinca/vim-localrc {{{
 def LocalrcPost()
   command! -bang -bar VimrcLocal
-    \ call OpenLocalrc(<q-bang>, <q-mods>, expand('~'))
+    \ OpenLocalrc(<q-bang>, <q-mods>, expand('~'))
   command! -bang -bar -nargs=? -complete=dir OpenLocalrc
-    \ call OpenLocalrc(<q-bang>, <q-mods>, empty(<q-args>) ? expand('%:p:h') : <q-args>)
+    \ OpenLocalrc(<q-bang>, <q-mods>, empty(<q-args>) ? expand('%:p:h') : <q-args>)
 enddef
 
 def OpenLocalrc(bang: string, mods: string, dir: string)
@@ -1253,7 +1253,7 @@ matchup.fallback = MatchupFallback
 
 # Eliot00/git-lens.vim {{{
 def GitlensPost()
-  command! -bar ToggleGitLens call ToggleGitLens()
+  command! -bar ToggleGitLens ToggleGitLens()
 enddef
 
 final gitlens = maxpac#Add('Eliot00/git-lens.vim')
@@ -1411,7 +1411,7 @@ def FernPre()
   g:fern#default_hidden = 1
   g:fern#default_exclude = '.*\~$'
 
-  command! -bar ToggleFern call ToggleFern()
+  command! -bar ToggleFern ToggleFern()
 
   augroup vimrc:fern
     autocmd!
@@ -1429,7 +1429,7 @@ def FernPre()
   command! FernLogWARN g:fern#loglevel = g:fern#WARN
   command! FernLogError g:fern#loglevel = g:fern#Error
 
-  command! -nargs=+ -complete=shellcmd RunWithFernLog call RunWithFernLog(<q-args>)
+  command! -nargs=+ -complete=shellcmd RunWithFernLog RunWithFernLog(<q-args>)
 enddef
 
 def FernFallback()
@@ -1495,9 +1495,9 @@ lsflavor.pre = LsflavorPre
 def AsyncompletePre()
   g:asyncomplete_enable_for_all = 0
 
-  command! ToggleAsyncomplete call ToggleAsyncomplete()
-  command! EnableAsyncomplete call ToggleAsyncomplete(0)
-  command! DisableAsyncomplete call ToggleAsyncomplete(1)
+  command! ToggleAsyncomplete ToggleAsyncomplete()
+  command! EnableAsyncomplete ToggleAsyncomplete(0)
+  command! DisableAsyncomplete ToggleAsyncomplete(1)
 enddef
 
 def ToggleAsyncomplete(asyncomplete_enable = get(b:, 'asyncomplete_enable'))
