@@ -10,6 +10,8 @@ vim9script
 # - No support Neovim.
 #
 
+import autoload 'maxpac.vim'
+
 # =============================================================================
 
 # Functions {{{
@@ -466,7 +468,7 @@ packadd! editorconfig
 # =============================================================================
 
 # Plugins {{{
-maxpac#Begin()
+maxpac.Begin()
 
 # =============================================================================
 
@@ -479,7 +481,7 @@ if has('clientserver')
     singleton#enable()
   enddef
 
-  final singleton = maxpac#Add('thinca/vim-singleton')
+  final singleton = maxpac.Add('thinca/vim-singleton')
   singleton.post = SingletonPost
 endif
 # }}}
@@ -491,7 +493,7 @@ def MinpacPost()
       minpac#update()
     else
       minpac#add(<q-args>, { type: 'opt' })
-      minpac#update(maxpac#Plugname(<q-args>), { do: printf('packadd %s', maxpac#Plugname(<q-args>)) })
+      minpac#update(maxpac.Plugname(<q-args>), { do: printf('packadd %s', maxpac.Plugname(<q-args>)) })
     endif
   }
 
@@ -499,7 +501,7 @@ def MinpacPost()
     if empty(<q-args>)
       minpac#update()
     else
-      minpac#update(maxpac#Plugname(<q-args>))
+      minpac#update(maxpac.Plugname(<q-args>))
     endif
   }
 
@@ -507,14 +509,14 @@ def MinpacPost()
     if empty(<q-args>)
       minpac#clean()
     else
-      minpac#clean(maxpac#Plugname(<q-args>))
+      minpac#clean(maxpac.Plugname(<q-args>))
     endif
   }
 
   # This command is from the minpac help file.
   command! -nargs=1 -complete=custom,PackComplete PackOpenDir
     \ term_start(&shell, {
-    \   cwd: minpac#getpluginfo(maxpac#Plugname(<q-args>))['dir'],
+    \   cwd: minpac#getpluginfo(maxpac.Plugname(<q-args>))['dir'],
     \   term_finish: 'close',
     \ })
 enddef
@@ -523,7 +525,7 @@ def PackComplete(..._): string
   return minpac#getpluglist()->keys()->sort()->join("\n")
 enddef
 
-final minpac = maxpac#Add('k-takata/minpac')
+final minpac = maxpac.Add('k-takata/minpac')
 minpac.post = MinpacPost
 # }}}
 
@@ -558,7 +560,7 @@ def ApplyNeodark(bang: string)
   g:terminal_ansi_colors[8] = '#5f5f5f'
 enddef
 
-final neodark = maxpac#Add('KeitaNakamura/neodark.vim')
+final neodark = maxpac.Add('KeitaNakamura/neodark.vim')
 neodark.post  = NeodarkPost
 # }}}
 
@@ -668,7 +670,7 @@ def LightlineColorschemes(..._): string
   return globpath(&runtimepath, 'autoload/lightline/colorscheme/*.vim', 1, 1)->map((_, val) => fnamemodify(val, ':t:r'))->join("\n")
 enddef
 
-final lightline = maxpac#Add('itchyny/lightline.vim')
+final lightline = maxpac.Add('itchyny/lightline.vim')
 lightline.pre = LightlinePre
 # }}}
 
@@ -683,7 +685,7 @@ def GitgutterPre()
   g:gitgutter_sign_modified_removed = 'm'
 enddef
 
-final gitgutter = maxpac#Add('airblade/vim-gitgutter')
+final gitgutter = maxpac.Add('airblade/vim-gitgutter')
 gitgutter.pre = GitgutterPre
 # }}}
 
@@ -699,7 +701,7 @@ def GinaPost()
   gina#custom#mapping#nmap('status', 'yy', '<Plug>(gina-yank-path)', { silent: 1 })
 enddef
 
-final gina = maxpac#Add('lambdalisue/gina.vim')
+final gina = maxpac.Add('lambdalisue/gina.vim')
 gina.post = GinaPost
 # }}}
 
@@ -710,7 +712,7 @@ def GitMessengerPost()
   g:git_messenger_max_popup_height = 15
 enddef
 
-final git_messenger = maxpac#Add('rhysd/git-messenger.vim')
+final git_messenger = maxpac.Add('rhysd/git-messenger.vim')
 git_messenger.post = GitMessengerPost
 # }}}
 
@@ -760,7 +762,7 @@ def CtrlpProxy(bang: string, dir = getcwd())
   CtrlP dir
 enddef
 
-final ctrlp = maxpac#Add('ctrlpvim/ctrlp.vim')
+final ctrlp = maxpac.Add('ctrlpvim/ctrlp.vim')
 ctrlp.pre = CtrlpPre
 # }}}
 
@@ -769,7 +771,7 @@ def CtrlpMatchfuzzyPost()
   g:ctrlp_match_func = { match: 'ctrlp_matchfuzzy#matcher' }
 enddef
 
-final ctrlp_matchfuzzy = maxpac#Add('mattn/ctrlp-matchfuzzy')
+final ctrlp_matchfuzzy = maxpac.Add('mattn/ctrlp-matchfuzzy')
 ctrlp_matchfuzzy.post = CtrlpMatchfuzzyPost
 # }}}
 
@@ -783,7 +785,7 @@ def CtrlpGhqPost()
   nnoremap <silent> <Leader>gq :<C-U>CtrlPGhq<CR>
 enddef
 
-final ctrlp_ghq = maxpac#Add('mattn/ctrlp-ghq')
+final ctrlp_ghq = maxpac.Add('mattn/ctrlp-ghq')
 ctrlp_ghq.post = CtrlpGhqPost
 # }}}
 
@@ -804,7 +806,7 @@ def LookupManual()
   execute 'CtrlPMan' q
 enddef
 
-final ctrlp_man = maxpac#Add('a5ob7r/ctrlp-man')
+final ctrlp_man = maxpac.Add('a5ob7r/ctrlp-man')
 ctrlp_man.post = CtrlpManPost
 # }}}
 
@@ -899,7 +901,7 @@ def ClearLspLog()
   endif
 enddef
 
-final vim_lsp = maxpac#Add('prabirshrestha/vim-lsp')
+final vim_lsp = maxpac.Add('prabirshrestha/vim-lsp')
 vim_lsp.pre = VimLspPre
 # }}}
 
@@ -928,12 +930,12 @@ def VimLspSettingsPre()
   }
 enddef
 
-final vim_lsp_settings = maxpac#Add('mattn/vim-lsp-settings')
+final vim_lsp_settings = maxpac.Add('mattn/vim-lsp-settings')
 vim_lsp_settings.pre = VimLspSettingsPre
 # }}}
 
-maxpac#Add('tsuyoshicho/lightline-lsp')
-maxpac#Add('micchy326/lightline-lsp-progress')
+maxpac.Add('tsuyoshicho/lightline-lsp')
+maxpac.Add('micchy326/lightline-lsp-progress')
 
 # =============================================================================
 
@@ -951,24 +953,24 @@ def VsnipPost()
   smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : '<S-Tab>'
 enddef
 
-final vsnip = maxpac#Add('hrsh7th/vim-vsnip')
+final vsnip = maxpac.Add('hrsh7th/vim-vsnip')
 vsnip.pre = VsnipPre
 vsnip.post = VsnipPost
 # }}}
 
-maxpac#Add('hrsh7th/vim-vsnip-integ')
-maxpac#Add('rafamadriz/friendly-snippets')
+maxpac.Add('hrsh7th/vim-vsnip-integ')
+maxpac.Add('rafamadriz/friendly-snippets')
 
 # =============================================================================
 
-maxpac#Add('kana/vim-operator-user')
+maxpac.Add('kana/vim-operator-user')
 
 # kana/vim-operator-replace {{{
 def ReplacePost()
   map _ <Plug>(operator-replace)
 enddef
 
-final replace = maxpac#Add('kana/vim-operator-replace')
+final replace = maxpac.Add('kana/vim-operator-replace')
 replace.post = ReplacePost
 # }}}
 
@@ -979,7 +981,7 @@ def ShellcheckrcPre()
   g:shellcheck_directive_highlight = 1
 enddef
 
-final shellcheckrc = maxpac#Add('a5ob7r/shellcheckrc.vim')
+final shellcheckrc = maxpac.Add('a5ob7r/shellcheckrc.vim')
 shellcheckrc.pre = ShellcheckrcPre
 # }}}
 
@@ -992,7 +994,7 @@ def MarkdownPre()
   g:vim_markdown_folding_disabled = 1
 enddef
 
-final markdown = maxpac#Add('preservim/vim-markdown')
+final markdown = maxpac.Add('preservim/vim-markdown')
 markdown.pre = MarkdownPre
 # }}}
 
@@ -1012,7 +1014,7 @@ def! g:SearchUnderCursorEnglishWord()
   g:SearchEnglishWord(word)
 enddef
 
-final open_browser = maxpac#Add('tyru/open-browser.vim')
+final open_browser = maxpac.Add('tyru/open-browser.vim')
 open_browser.post = OpenBrowserPost
 # }}}
 
@@ -1030,7 +1032,7 @@ def AlePre()
   augroup END
 enddef
 
-final ale = maxpac#Add('w0rp/ale')
+final ale = maxpac.Add('w0rp/ale')
 ale.pre = AlePre
 # }}}
 
@@ -1186,7 +1188,7 @@ def SmartRipgrepCommandHistoryPush(command: string)
   endif
 enddef
 
-final ripgrep = maxpac#Add('kyoh86/vim-ripgrep')
+final ripgrep = maxpac.Add('kyoh86/vim-ripgrep')
 ripgrep.post = RipgrepPost
 # }}}
 
@@ -1205,7 +1207,7 @@ def AsteriskPost()
   map gz# <Plug>(asterisk-g#)
 enddef
 
-final asterisk = maxpac#Add('haya14busa/vim-asterisk')
+final asterisk = maxpac.Add('haya14busa/vim-asterisk')
 asterisk.post = AsteriskPost
 # }}}
 
@@ -1216,7 +1218,7 @@ def ModesearchPost()
   cmap <silent> <C-x> <Plug>(modesearch-toggle-mode)
 enddef
 
-final modesearch = maxpac#Add('monaqa/modesearch.vim')
+final modesearch = maxpac.Add('monaqa/modesearch.vim')
 modesearch.post = ModesearchPost
 # }}}
 
@@ -1235,7 +1237,7 @@ def OpenLocalrc(bang: string, mods: string, dir: string)
   execute $'{mods} Open{bang} {localrc_filepath}'
 enddef
 
-final localrc = maxpac#Add('thinca/vim-localrc')
+final localrc = maxpac.Add('thinca/vim-localrc')
 localrc.post = LocalrcPost
 # }}}
 
@@ -1247,7 +1249,7 @@ def MatchupFallback()
   packadd! matchit
 enddef
 
-final matchup = maxpac#Add('andymass/vim-matchup')
+final matchup = maxpac.Add('andymass/vim-matchup')
 matchup.fallback = MatchupFallback
 # }}}
 
@@ -1256,7 +1258,7 @@ def GitlensPost()
   command! -bar ToggleGitLens ToggleGitLens()
 enddef
 
-final gitlens = maxpac#Add('Eliot00/git-lens.vim')
+final gitlens = maxpac.Add('Eliot00/git-lens.vim')
 gitlens.post = GitlensPost
 # }}}
 
@@ -1273,7 +1275,7 @@ def LinefeedPost()
   # imap <silent> <C-G><C-J> <Plug>(linefeed-down)
 enddef
 
-final linefeed = maxpac#Add('a5ob7r/linefeed.vim')
+final linefeed = maxpac.Add('a5ob7r/linefeed.vim')
 linefeed.post = LinefeedPost
 # }}}
 
@@ -1305,7 +1307,7 @@ def ManCommon()
   set keywordprg=:Man
 enddef
 
-final man = maxpac#Add('vim-utils/vim-man')
+final man = maxpac.Add('vim-utils/vim-man')
 man.post = ManPost
 # }}}
 
@@ -1361,7 +1363,7 @@ def SandwichPost()
   ]
 enddef
 
-final sandwich = maxpac#Add('machakann/vim-sandwich')
+final sandwich = maxpac.Add('machakann/vim-sandwich')
 sandwich.post = SandwichPost
 # }}}
 
@@ -1377,7 +1379,7 @@ def VistaPre()
   nnoremap <silent> <Leader>v :<C-U>Vista!!<CR>
 enddef
 
-final vista = maxpac#Add('liuchengxu/vista.vim')
+final vista = maxpac.Add('liuchengxu/vista.vim')
 vista.pre = VistaPre
 # }}}
 
@@ -1390,7 +1392,7 @@ def ScreensaverPost()
   augroup END
 enddef
 
-final screensaver = maxpac#Add('itchyny/screensaver.vim')
+final screensaver = maxpac.Add('itchyny/screensaver.vim')
 screensaver.post = ScreensaverPost
 # }}}
 
@@ -1400,7 +1402,7 @@ def TrailingWhitespacePost()
   g:extra_whitespace_ignored_filetypes += ['screensaver']
 enddef
 
-final trailing_whitespace = maxpac#Add('bronson/vim-trailing-whitespace')
+final trailing_whitespace = maxpac.Add('bronson/vim-trailing-whitespace')
 trailing_whitespace.post = TrailingWhitespacePost
 # }}}
 
@@ -1472,20 +1474,20 @@ def RunWithFernLog(template: string)
   endif
 enddef
 
-final fern = maxpac#Add('lambdalisue/fern.vim')
+final fern = maxpac.Add('lambdalisue/fern.vim')
 fern.pre = FernPre
 fern.fallback = FernFallback
 # }}}
 
-maxpac#Add('lambdalisue/fern-hijack.vim')
-maxpac#Add('lambdalisue/fern-git-status.vim')
+maxpac.Add('lambdalisue/fern-hijack.vim')
+maxpac.Add('lambdalisue/fern-git-status.vim')
 
 # a5ob7r/fern-renderer-lsflavor.vim {{{
 def LsflavorPre()
   g:fern#renderer = 'lsflavor'
 enddef
 
-final lsflavor = maxpac#Add('a5ob7r/fern-renderer-lsflavor.vim')
+final lsflavor = maxpac.Add('a5ob7r/fern-renderer-lsflavor.vim')
 lsflavor.pre = LsflavorPre
 # }}}
 
@@ -1521,66 +1523,66 @@ def ToggleAsyncomplete(asyncomplete_enable = get(b:, 'asyncomplete_enable'))
   endif
 enddef
 
-final asyncomplete = maxpac#Add('prabirshrestha/asyncomplete.vim')
+final asyncomplete = maxpac.Add('prabirshrestha/asyncomplete.vim')
 asyncomplete.pre = AsyncompletePre
 # }}}
 
-maxpac#Add('prabirshrestha/asyncomplete-lsp.vim')
+maxpac.Add('prabirshrestha/asyncomplete-lsp.vim')
 
 # =============================================================================
 
 # Text object.
-maxpac#Add('kana/vim-textobj-user')
+maxpac.Add('kana/vim-textobj-user')
 
-maxpac#Add('D4KU/vim-textobj-chainmember')
-maxpac#Add('Julian/vim-textobj-variable-segment')
-maxpac#Add('deris/vim-textobj-enclosedsyntax')
-maxpac#Add('kana/vim-textobj-datetime')
-maxpac#Add('kana/vim-textobj-entire')
-maxpac#Add('kana/vim-textobj-indent')
-maxpac#Add('kana/vim-textobj-line')
-maxpac#Add('kana/vim-textobj-syntax')
-maxpac#Add('mattn/vim-textobj-url')
-maxpac#Add('osyo-manga/vim-textobj-blockwise')
-maxpac#Add('saaguero/vim-textobj-pastedtext')
-maxpac#Add('sgur/vim-textobj-parameter')
-maxpac#Add('thinca/vim-textobj-comment')
+maxpac.Add('D4KU/vim-textobj-chainmember')
+maxpac.Add('Julian/vim-textobj-variable-segment')
+maxpac.Add('deris/vim-textobj-enclosedsyntax')
+maxpac.Add('kana/vim-textobj-datetime')
+maxpac.Add('kana/vim-textobj-entire')
+maxpac.Add('kana/vim-textobj-indent')
+maxpac.Add('kana/vim-textobj-line')
+maxpac.Add('kana/vim-textobj-syntax')
+maxpac.Add('mattn/vim-textobj-url')
+maxpac.Add('osyo-manga/vim-textobj-blockwise')
+maxpac.Add('saaguero/vim-textobj-pastedtext')
+maxpac.Add('sgur/vim-textobj-parameter')
+maxpac.Add('thinca/vim-textobj-comment')
 
-maxpac#Add('machakann/vim-textobj-delimited')
-maxpac#Add('machakann/vim-textobj-functioncall')
+maxpac.Add('machakann/vim-textobj-delimited')
+maxpac.Add('machakann/vim-textobj-functioncall')
 
 # Misc.
-maxpac#Add('LumaKernel/coqpit.vim')
-maxpac#Add('a5ob7r/chmod.vim')
-maxpac#Add('a5ob7r/rspec-daemon.vim')
-maxpac#Add('a5ob7r/tig.vim')
-maxpac#Add('aliou/bats.vim')
-maxpac#Add('azabiong/vim-highlighter')
-maxpac#Add('fladson/vim-kitty')
-maxpac#Add('gpanders/vim-oldfiles')
-maxpac#Add('junegunn/goyo.vim')
-maxpac#Add('junegunn/vader.vim')
-maxpac#Add('junegunn/vim-easy-align')
-maxpac#Add('kannokanno/previm')
-maxpac#Add('keith/rspec.vim')
-maxpac#Add('lambdalisue/vital-Whisky')
-maxpac#Add('machakann/vim-highlightedyank')
-maxpac#Add('machakann/vim-swap')
-maxpac#Add('maximbaz/lightline-ale')
-maxpac#Add('neovimhaskell/haskell-vim')
-maxpac#Add('pocke/rbs.vim')
-maxpac#Add('thinca/vim-prettyprint')
-maxpac#Add('thinca/vim-themis')
-maxpac#Add('tpope/vim-endwise')
-maxpac#Add('tyru/eskk.vim')
-maxpac#Add('vim-jp/vital.vim')
-maxpac#Add('yasuhiroki/github-actions-yaml.vim')
+maxpac.Add('LumaKernel/coqpit.vim')
+maxpac.Add('a5ob7r/chmod.vim')
+maxpac.Add('a5ob7r/rspec-daemon.vim')
+maxpac.Add('a5ob7r/tig.vim')
+maxpac.Add('aliou/bats.vim')
+maxpac.Add('azabiong/vim-highlighter')
+maxpac.Add('fladson/vim-kitty')
+maxpac.Add('gpanders/vim-oldfiles')
+maxpac.Add('junegunn/goyo.vim')
+maxpac.Add('junegunn/vader.vim')
+maxpac.Add('junegunn/vim-easy-align')
+maxpac.Add('kannokanno/previm')
+maxpac.Add('keith/rspec.vim')
+maxpac.Add('lambdalisue/vital-Whisky')
+maxpac.Add('machakann/vim-highlightedyank')
+maxpac.Add('machakann/vim-swap')
+maxpac.Add('maximbaz/lightline-ale')
+maxpac.Add('neovimhaskell/haskell-vim')
+maxpac.Add('pocke/rbs.vim')
+maxpac.Add('thinca/vim-prettyprint')
+maxpac.Add('thinca/vim-themis')
+maxpac.Add('tpope/vim-endwise')
+maxpac.Add('tyru/eskk.vim')
+maxpac.Add('vim-jp/vital.vim')
+maxpac.Add('yasuhiroki/github-actions-yaml.vim')
 
 if IsBundledPackageLoadable('comment')
   # "comment.vim" package is bundled since 5400a5d4269874fe4f1c35dfdd3c039ea17dfd62.
   packadd! comment
 else
-  maxpac#Add('tpope/vim-commentary')
+  maxpac.Add('tpope/vim-commentary')
 endif
 
 # =============================================================================
@@ -1588,7 +1590,7 @@ endif
 # denops.vim
 
 if executable('deno')
-  maxpac#Add('vim-denops/denops.vim')
+  maxpac.Add('vim-denops/denops.vim')
 
   def GinPost()
     g:gin_diff_persistent_args = ['--patch', '--stat']
@@ -1613,7 +1615,7 @@ if executable('deno')
     augroup END
   enddef
 
-  final gin = maxpac#Add('lambdalisue/gin.vim')
+  final gin = maxpac.Add('lambdalisue/gin.vim')
   gin.post = GinPost
 
   def DduPost()
@@ -1665,23 +1667,23 @@ if executable('deno')
     augroup END
   enddef
 
-  final ddu = maxpac#Add('Shougo/ddu.vim')
+  final ddu = maxpac.Add('Shougo/ddu.vim')
   ddu.post = DduPost
 
-  maxpac#Add('Shougo/ddu-ui-ff')
+  maxpac.Add('Shougo/ddu-ui-ff')
 
-  maxpac#Add('4513ECHO/ddu-source-ghq')
-  maxpac#Add('Shougo/ddu-source-file_rec')
-  maxpac#Add('shun/ddu-source-buffer')
+  maxpac.Add('4513ECHO/ddu-source-ghq')
+  maxpac.Add('Shougo/ddu-source-file_rec')
+  maxpac.Add('shun/ddu-source-buffer')
 
-  maxpac#Add('matsui54/ddu-filter-fzy')
+  maxpac.Add('matsui54/ddu-filter-fzy')
 
-  maxpac#Add('Shougo/ddu-kind-file')
+  maxpac.Add('Shougo/ddu-kind-file')
 endif
 
 # =============================================================================
 
-maxpac#End()
+maxpac.End()
 # }}}
 
 # Filetypes {{{
