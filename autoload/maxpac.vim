@@ -85,8 +85,8 @@ export def End()
 enddef
 
 # Store a plugin configuration.
-export def Add(name: string): dict<any>
-  var conf = Plugconf(name)
+export def Add(name: string, config = {}): dict<any>
+  var conf = extend(Plugconf(name), config)
 
   add(maxpac.names, conf.name)
   maxpac.confs[conf.name] = conf
