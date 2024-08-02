@@ -76,6 +76,24 @@ enddef
 def IsEnableControlSpaceKeymapping(): bool
   return has('gui_running') || getenv('TERM_PROGRAM') ==# 'iTerm.app' || index(['xterm', 'xterm-kitty'], &term) >= 0
 enddef
+
+# A naive truecolor support terminal detection in the two ways.
+#
+# 1. Check $COLORTERM if it is defined.
+# 2. Assume almost all the current major terminals without some exception like
+#    below support truecolor.
+#
+#     - Terminal.app
+#     - Linux console
+#
+# https://github.com/termstandard/colors
+def IsInTruecolorSupportedTerminal(): bool
+  if exists('$COLORTERM')
+    return index(['truecolor', '24bit'], $COLORTERM) >= 0
+  endif
+
+  return !($TERM_PROGRAM ==# 'Apple_Terminal' || &term ==# 'linux')
+enddef
 # }}}
 
 # Variables {{{
@@ -168,8 +186,7 @@ set pastetoggle=<F12>
 
 set completeopt=menuone,longest,popup
 
-# Xterm and st (simple terminal) also support true (or direct) colors.
-if $COLORTERM ==# 'truecolor' || index(['xterm', 'st-256color'], $TERM) > -1
+if IsInTruecolorSupportedTerminal()
   set termguicolors
 endif
 
