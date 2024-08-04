@@ -1408,6 +1408,18 @@ enddef
 maxpac.Add('bronson/vim-trailing-whitespace', { post: VimTrailingWhitespacePost })
 # }}}
 
+# girishji/vimbits {{{
+def VimbitsPre()
+  g:vimbits_highlightonyank = false
+  g:vimbits_easyjump = false
+  g:vimbits_fFtT = true
+  g:vimbits_vim9cmdline = false
+enddef
+
+# For ":h vimtips".
+maxpac.Add('girishji/vimbits', { pre: VimbitsPre })
+# }}}
+
 # =============================================================================
 
 # lambdalisue/fern.vim {{{
