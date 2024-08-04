@@ -68,15 +68,6 @@ def IsBundledPackageLoadable(package_name: string): bool
   return !glob($'{$VIMRUNTIME}/pack/dist/opt/{package_name}/plugin/*.vim')->empty()
 enddef
 
-# Whether "<C-Space>" is usable for keymappings or not. Use "<Nul>" instead if
-# not.
-#
-# NOTE: "<Nul>" is sent instead of "<C-Space>" when type the "CTRL" key and
-# the "SPACE" one as once if in some terminal emulators.
-def IsEnableControlSpaceKeymapping(): bool
-  return has('gui_running') || getenv('TERM_PROGRAM') ==# 'iTerm.app' || index(['xterm', 'xterm-kitty'], &term) >= 0
-enddef
-
 # A naive truecolor support terminal detection in the two ways.
 #
 # 1. Check $COLORTERM if it is defined.
@@ -386,6 +377,10 @@ tmap <silent> <C-W>gm <Plug>(xminimize)
 
 tnoremap <silent> <C-W>M <C-W>:resize<CR>
 tnoremap <silent> <C-W>VM <C-W>:vertical resize<CR>
+
+# NOTE: "<Nul>" is sent instead of "<C-Space>" when type the "CTRL" key and
+# the "SPACE" one as once if in some terminal emulators.
+nmap <Nul> <C-Space>
 # }}}
 
 # Commands {{{
@@ -747,7 +742,7 @@ maxpac.Add('rhysd/git-messenger.vim', { post: GitMessengerVimPost })
 
 # ctrlpvim/ctrlp.vim {{{
 def CtrlpVimPre()
-  g:ctrlp_map = IsEnableControlSpaceKeymapping() ? '<C-Space>' : '<Nul>'
+  g:ctrlp_map = '<C-Space>'
 
   g:ctrlp_show_hidden = 1
   g:ctrlp_lazy_update = 150
@@ -1649,11 +1644,7 @@ if executable('deno')
       return 0
     })
 
-    if IsEnableControlSpaceKeymapping()
-      nnoremap <silent> <C-Space> <ScriptCmd>ddu#start()<CR>
-    else
-      nnoremap <silent> <Nul> <ScriptCmd>ddu#start()<CR>
-    endif
+    nnoremap <silent> <C-Space> <ScriptCmd>ddu#start()<CR>
 
     nnoremap <silent> <Leader>b <ScriptCmd>ddu#start({ sources: ['buffer'] })<CR>
     nnoremap <silent> <Leader>gq <ScriptCmd>ddu#start({ sources: ['ghq'], kindOptions: { file: { defaultAction: 'tcd' } } })<CR>
