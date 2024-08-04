@@ -590,6 +590,8 @@ enddef
 maxpac.Add('KeitaNakamura/neodark.vim', { post: NeodarkVimPost })
 # }}}
 
+maxpac.Add('a5ob7r/lightline-otf')
+
 # itchyny/lightline.vim {{{
 def LightlineVimPre()
   g:lightline = {
@@ -645,18 +647,6 @@ def LightlineVimPre()
     endif
   }
 
-  augroup vimrc:lightline
-    autocmd!
-
-    # Synchronous lightline's colorscheme with Vim's one on the fly.
-    autocmd ColorScheme * {
-      if exists('g:loaded_lightline')
-        ChangeLightlineColorscheme()
-        UpdateLightline()
-      endif
-    }
-  augroup END
-
   OnRefresh lightline#update()
 enddef
 
@@ -665,31 +655,10 @@ def SetLightlineColorscheme(colorscheme: string)
   g:lightline['colorscheme'] = colorscheme
 enddef
 
-def HasLightlineColorscheme(colorscheme: string): bool
-  return !globpath(&runtimepath, $'autoload/lightline/colorscheme/{colorscheme}.vim', 1)->empty()
-enddef
-
 def UpdateLightline()
   lightline#init()
   lightline#colorscheme()
   lightline#update()
-enddef
-
-def ChangeLightlineColorscheme()
-  if !get(g:, 'lightline_colorscheme_change_on_the_fly', 1)
-    return
-  endif
-
-  const colorscheme =
-    !exists('g:lightline_colorscheme_mapping') ? g:colors_name
-    : type(g:lightline_colorscheme_mapping) == type('') ? call(g:lightline_colorscheme_mapping, [g:colors_name])
-    : type(g:lightline_colorscheme_mapping) == type(function('tr')) ? g:lightline_colorscheme_mapping(g:colors_name)
-    : type(g:lightline_colorscheme_mapping) == type({}) ? get(g:lightline_colorscheme_mapping, g:colors_name, g:colors_name)
-    : g:colors_name
-
-  if HasLightlineColorscheme(colorscheme)
-    SetLightlineColorscheme(colorscheme)
-  endif
 enddef
 
 def LightlineColorschemes(..._): string
