@@ -1667,12 +1667,6 @@ if executable('deno')
         nnoremap <buffer><silent> i <ScriptCmd>ddu#ui#do_action('openFilterWindow')<CR>
         nnoremap <buffer><silent> q <ScriptCmd>ddu#ui#do_action('quit')<CR>
       }
-
-      autocmd FileType ddu-ff-filter {
-        inoremap <buffer><silent> <CR> <Esc><ScriptCmd>ddu#ui#do_action('closeFilterWindow')<CR>
-        nnoremap <buffer><silent> <CR> <ScriptCmd>ddu#ui#do_action('closeFilterWindow')<CR>
-        nnoremap <buffer><silent> q <ScriptCmd>ddu#ui#do_action('closeFilterWindow')<CR>
-      }
     augroup END
   enddef
 
