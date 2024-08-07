@@ -1075,8 +1075,8 @@ def JobArgumentalizeEscape(s: string): string
   while 1
     var [matched, start, end] = matchstrpos(str, '\%(\%(\\\\\)*\)\@<=\\[" ]')
 
-    if start + 1
-      tokens += (start ? [escape(str[0 : start - 1], '\')] : []) + [matched]
+    if !!(start + 1)
+      tokens += (!!start ? [escape(str[0 : start - 1], '\')] : []) + [matched]
       str = str[end :]
     else
       tokens += [escape(str, '\')]
@@ -1145,8 +1145,8 @@ def CommandLineArgumentalizeEscape(s: string): string
   while 1
     var [matched, start, end] = matchstrpos(str, '\C<\(cword\|cWORD\|cexpr\|cfile\|afile\|abuf\|amatch\|sfile\|stack\|script\|slnum\|sflnum\|client\)>\|\\ ')
 
-    if start + 1
-      tokens += (start ? [escape(str[0 : start - 1], '"%#')] : []) + [escape(matched, '<\')]
+    if !!(start + 1)
+      tokens += (!!start ? [escape(str[0 : start - 1], '"%#')] : []) + [escape(matched, '<\')]
       str = str[end : ]
     else
       tokens += [escape(str, '"%#')]
