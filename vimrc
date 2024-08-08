@@ -521,7 +521,7 @@ def MinpacPost()
       minpac#update()
     else
       minpac#add(<q-args>, { type: 'opt' })
-      minpac#update(maxpac.Plugname(<q-args>), { do: printf('packadd %s', maxpac.Plugname(<q-args>)) })
+      minpac#update(maxpac.Plugname(<q-args>), { do: $'packadd {maxpac.Plugname(<q-args>)}' })
     endif
   }
 
