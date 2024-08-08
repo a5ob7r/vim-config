@@ -526,19 +526,11 @@ def MinpacPost()
   }
 
   command! -bar -nargs=? -complete=custom,PackComplete PackUpdate {
-    if empty(<q-args>)
-      minpac#update()
-    else
-      minpac#update(maxpac.Plugname(<q-args>))
-    endif
+    call('minpac#update', map([<f-args>], (_, v) => maxpac.Plugname(v)))
   }
 
   command! -bar -nargs=? -complete=custom,PackComplete PackClean {
-    if empty(<q-args>)
-      minpac#clean()
-    else
-      minpac#clean(maxpac.Plugname(<q-args>))
-    endif
+    call('minpac#clean', map([<f-args>], (_, v) => maxpac.Plugname(v)))
   }
 
   # This command is from the minpac help file.
