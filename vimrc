@@ -52,16 +52,15 @@ def Pathjoin(...paths: list<string>): string
   return join(paths, sep)->simplify()->substitute(printf('^\.%s', sep), '', '')
 enddef
 
-def Terminal(bang = '', mods = '')
+def Terminal()
   # If the current buffer is for normal exsisting file editing.
   const cwd = empty(&buftype) && !expand('%')->empty() ? expand('%:p:h') : getcwd()
   const opts = {
-    curwin: !empty(bang),
     cwd: cwd,
     term_finish: 'close'
   }
 
-  execute $'{mods} term_start(&shell, {opts})'
+  term_start(&shell, opts)
 enddef
 
 def IsBundledPackageLoadable(package_name: string): bool
@@ -338,13 +337,13 @@ nnoremap <silent> <Leader>t :<C-U>tabnew<CR>
 nnoremap <silent> <Leader>" :<C-U>terminal<CR>
 nnoremap <silent> <Leader>' <ScriptCmd>Terminal()<CR>
 nnoremap <silent> <Leader>% :<C-U>vertical terminal<CR>
-nnoremap <silent> <Leader>5 <ScriptCmd>Terminal('', 'vertical')<CR>
+nnoremap <silent> <Leader>5 <ScriptCmd>vertical Terminal()<CR>
 nnoremap <silent> <Leader>c :<C-U>Terminal<CR>
 
 tnoremap <silent> <C-W><Leader>" <C-W>:terminal<CR>
 tnoremap <silent> <C-W><Leader>' <ScriptCmd>Terminal()<CR>
 tnoremap <silent> <C-W><Leader>% <C-W>:vertical terminal<CR>
-tnoremap <silent> <C-W><Leader>5 <ScriptCmd>Terminal('', 'vertical')<CR>
+tnoremap <silent> <C-W><Leader>5 <ScriptCmd>vertical Terminal()<CR>
 tnoremap <silent> <C-W><Leader>c <C-W>:Terminal<CR>
 
 nnoremap <silent> <Leader>y :YankComments<CR>
