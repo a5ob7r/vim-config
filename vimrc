@@ -516,13 +516,9 @@ endif
 
 # k-takata/minpac {{{
 def MinpacPost()
-  command! -bar -nargs=? PackInstall {
-    if empty(<q-args>)
-      minpac#update()
-    else
-      minpac#add(<q-args>, { type: 'opt' })
-      minpac#update(maxpac.Plugname(<q-args>), { do: $'packadd {maxpac.Plugname(<q-args>)}' })
-    endif
+  command! -bar -nargs=1 PackInstall {
+    minpac#add(<q-args>, { type: 'opt' })
+    minpac#update(maxpac.Plugname(<q-args>), { do: $'packadd {maxpac.Plugname(<q-args>)}' })
   }
 
   command! -bar -nargs=? -complete=custom,PackComplete PackUpdate {
