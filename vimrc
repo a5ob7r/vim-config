@@ -377,7 +377,7 @@ tnoremap <silent> <C-W>M <C-W>:resize<CR>
 tnoremap <silent> <C-W>VM <C-W>:vertical resize<CR>
 
 # NOTE: "<Nul>" is sent instead of "<C-Space>" when type the "CTRL" key and
-# the "SPACE" one as once if in some terminal emulators.
+# the "SPACE" one at once if in some terminal emulators.
 nmap <Nul> <C-Space>
 # }}}
 
