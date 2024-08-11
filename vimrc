@@ -495,21 +495,11 @@ packadd! editorconfig
 # =============================================================================
 
 # Plugins {{{
-maxpac.Begin()
-
-# =============================================================================
-
+# Plugin hooks {{{
 # thinca/vim-singleton {{{
-# NOTE: Call this as soon as possible!
-# NOTE: Maybe "+clientserver" is disabled in macOS even if a Vim is compiled
-# with "--with-features=huge".
-if has('clientserver')
-  def VimSingletonPost()
-    singleton#enable()
-  enddef
-
-  maxpac.Add('thinca/vim-singleton', { post: VimSingletonPost })
-endif
+def VimSingletonPost()
+  singleton#enable()
+enddef
 # }}}
 
 # k-takata/minpac {{{
@@ -538,8 +528,6 @@ enddef
 def PackComplete(..._): string
   return minpac#getpluglist()->keys()->sort()->join("\n")
 enddef
-
-maxpac.Add('k-takata/minpac', { post: MinpacPost })
 # }}}
 
 # =============================================================================
@@ -572,11 +560,7 @@ def ApplyNeodark(bang: string)
   # Adjust the autosuggested text color for zsh.
   g:terminal_ansi_colors[8] = '#5f5f5f'
 enddef
-
-maxpac.Add('KeitaNakamura/neodark.vim', { post: NeodarkVimPost })
 # }}}
-
-maxpac.Add('a5ob7r/lightline-otf')
 
 # itchyny/lightline.vim {{{
 def LightlineVimPre()
@@ -650,8 +634,6 @@ enddef
 def LightlineColorschemes(..._): string
   return globpath(&runtimepath, 'autoload/lightline/colorscheme/*.vim', 1, 1)->map((_, val) => fnamemodify(val, ':t:r'))->join("\n")
 enddef
-
-maxpac.Add('itchyny/lightline.vim', { pre: LightlineVimPre })
 # }}}
 
 # =============================================================================
@@ -664,8 +646,6 @@ def VimGitgutterPre()
   g:gitgutter_sign_removed_first_line = 'd'
   g:gitgutter_sign_modified_removed = 'm'
 enddef
-
-maxpac.Add('airblade/vim-gitgutter', { pre: VimGitgutterPre })
 # }}}
 
 # lambdalisue/gina.vim {{{
@@ -679,8 +659,6 @@ def GinaVimPost()
   gina#custom#mapping#nmap('status', 'q', '<C-W>c', { noremap: 1, silent: 1 })
   gina#custom#mapping#nmap('status', 'yy', '<Plug>(gina-yank-path)', { silent: 1 })
 enddef
-
-maxpac.Add('lambdalisue/gina.vim', { post: GinaVimPost })
 # }}}
 
 # rhysd/git-messenger.vim {{{
@@ -689,8 +667,6 @@ def GitMessengerVimPost()
   g:git_messenger_always_into_popup = true
   g:git_messenger_max_popup_height = 15
 enddef
-
-maxpac.Add('rhysd/git-messenger.vim', { post: GitMessengerVimPost })
 # }}}
 
 # =============================================================================
@@ -738,16 +714,12 @@ def CtrlpProxy(bang: string, dir = getcwd())
 
   CtrlP dir
 enddef
-
-maxpac.Add('ctrlpvim/ctrlp.vim', { pre: CtrlpVimPre })
 # }}}
 
 # mattn/ctrlp-matchfuzzy {{{
 def CtrlpMatchfuzzyPost()
   g:ctrlp_match_func = { match: 'ctrlp_matchfuzzy#matcher' }
 enddef
-
-maxpac.Add('mattn/ctrlp-matchfuzzy', { post: CtrlpMatchfuzzyPost })
 # }}}
 
 # mattn/ctrlp-ghq {{{
@@ -759,8 +731,6 @@ def CtrlpGhqPost()
 
   nnoremap <silent> <Leader>gq :<C-U>CtrlPGhq<CR>
 enddef
-
-maxpac.Add('mattn/ctrlp-ghq', { post: CtrlpGhqPost })
 # }}}
 
 # a5ob7r/ctrlp-man {{{
@@ -779,8 +749,6 @@ def LookupManual()
 
   execute 'CtrlPMan' q
 enddef
-
-maxpac.Add('a5ob7r/ctrlp-man', { post: CtrlpManPost })
 # }}}
 
 # =============================================================================
@@ -873,8 +841,6 @@ def ClearLspLog()
     writefile([], log)
   endif
 enddef
-
-maxpac.Add('prabirshrestha/vim-lsp', { pre: VimLspPre })
 # }}}
 
 # mattn/vim-lsp-settings {{{
@@ -901,12 +867,7 @@ def VimLspSettingsPre()
     }
   }
 enddef
-
-maxpac.Add('mattn/vim-lsp-settings', { pre: VimLspSettingsPre })
 # }}}
-
-maxpac.Add('tsuyoshicho/lightline-lsp')
-maxpac.Add('micchy326/lightline-lsp-progress')
 
 # =============================================================================
 
@@ -923,23 +884,14 @@ def VimVsnipPost()
   imap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : '<S-Tab>'
   smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : '<S-Tab>'
 enddef
-
-maxpac.Add('hrsh7th/vim-vsnip', { pre: VimVsnipPre, post: VimVsnipPost })
 # }}}
 
-maxpac.Add('hrsh7th/vim-vsnip-integ')
-maxpac.Add('rafamadriz/friendly-snippets')
-
 # =============================================================================
-
-maxpac.Add('kana/vim-operator-user')
 
 # kana/vim-operator-replace {{{
 def VimOperatorReplacePost()
   map _ <Plug>(operator-replace)
 enddef
-
-maxpac.Add('kana/vim-operator-replace', { post: VimOperatorReplacePost })
 # }}}
 
 # =============================================================================
@@ -948,8 +900,6 @@ maxpac.Add('kana/vim-operator-replace', { post: VimOperatorReplacePost })
 def ShellcheckrcVimPre()
   g:shellcheck_directive_highlight = 1
 enddef
-
-maxpac.Add('a5ob7r/shellcheckrc.vim', { pre: ShellcheckrcVimPre })
 # }}}
 
 # preservim/vim-markdown {{{
@@ -960,8 +910,6 @@ def VimMarkdownPre()
 
   g:vim_markdown_folding_disabled = 1
 enddef
-
-maxpac.Add('preservim/vim-markdown', { pre: VimMarkdownPre })
 # }}}
 
 # tyru/open-browser.vim {{{
@@ -979,8 +927,6 @@ def! g:SearchUnderCursorEnglishWord()
   const word = expand('<cword>')
   g:SearchEnglishWord(word)
 enddef
-
-maxpac.Add('tyru/open-browser.vim', { post: OpenBrowserVimPost })
 # }}}
 
 # w0rp/ale {{{
@@ -996,8 +942,6 @@ def AlePre()
     autocmd User lsp_buffer_enabled ALEDisableBuffer
   augroup END
 enddef
-
-maxpac.Add('w0rp/ale', { pre: AlePre })
 # }}}
 
 # kyoh86/vim-ripgrep {{{
@@ -1151,8 +1095,6 @@ def SmartRipgrepCommandHistoryPush(command: string)
     histadd('cmd', history_entry)
   endif
 enddef
-
-maxpac.Add('kyoh86/vim-ripgrep', { post: VimRipgrepPost })
 # }}}
 
 # haya14busa/vim-asterisk {{{
@@ -1169,8 +1111,6 @@ def VimAsteriskPost()
   map gz* <Plug>(asterisk-g*)
   map gz# <Plug>(asterisk-g#)
 enddef
-
-maxpac.Add('haya14busa/vim-asterisk', { post: VimAsteriskPost })
 # }}}
 
 # monaqa/modesearch.vim {{{
@@ -1179,8 +1119,6 @@ def ModesearchVimPost()
   nmap <silent> g? <Plug>(modesearch-question-regexp)
   cmap <silent> <C-x> <Plug>(modesearch-toggle-mode)
 enddef
-
-maxpac.Add('monaqa/modesearch.vim', { post: ModesearchVimPost })
 # }}}
 
 # thinca/vim-localrc {{{
@@ -1197,8 +1135,6 @@ def OpenLocalrc(bang: string, mods: string, dir: string)
 
   execute $'{mods} Open{bang} {localrc_filepath}'
 enddef
-
-maxpac.Add('thinca/vim-localrc', { post: VimLocalrcPost })
 # }}}
 
 # andymass/vim-matchup {{{
@@ -1208,16 +1144,12 @@ def VimMatchupFallback()
   # NOTE: "matchit" isn't a standard plugin, but it's bundled in Vim by default.
   packadd! matchit
 enddef
-
-maxpac.Add('andymass/vim-matchup', { fallback: VimMatchupFallback })
 # }}}
 
 # Eliot00/git-lens.vim {{{
 def GitlensVimPost()
   command! -bar ToggleGitLens ToggleGitLens()
 enddef
-
-maxpac.Add('Eliot00/git-lens.vim', { post: GitlensVimPost })
 # }}}
 
 # a5ob7r/linefeed.vim {{{
@@ -1232,8 +1164,6 @@ def LinefeedVimPost()
   # imap <silent> <C-G>j <Plug>(linefeed-down)
   # imap <silent> <C-G><C-J> <Plug>(linefeed-down)
 enddef
-
-maxpac.Add('a5ob7r/linefeed.vim', { post: LinefeedVimPost })
 # }}}
 
 # vim-utils/vim-man {{{
@@ -1263,8 +1193,6 @@ enddef
 def VimManCommon()
   set keywordprg=:Man
 enddef
-
-maxpac.Add('vim-utils/vim-man', { post: VimManPost })
 # }}}
 
 # machakann/vim-sandwich {{{
@@ -1318,8 +1246,6 @@ def VimSandwichPost()
     }
   ]
 enddef
-
-maxpac.Add('machakann/vim-sandwich', { post: VimSandwichPost })
 # }}}
 
 # liuchengxu/vista.vim {{{
@@ -1333,8 +1259,6 @@ def VistaVimPre()
 
   nnoremap <silent> <Leader>v :<C-U>Vista!!<CR>
 enddef
-
-maxpac.Add('liuchengxu/vista.vim', { pre: VistaVimPre })
 # }}}
 
 # itchyny/screensaver.vim {{{
@@ -1345,8 +1269,6 @@ def ScreensaverVimPost()
     autocmd FileType screensaver echo
   augroup END
 enddef
-
-maxpac.Add('itchyny/screensaver.vim', { post: ScreensaverVimPost })
 # }}}
 
 # bronson/vim-trailing-whitespace {{{
@@ -1354,8 +1276,6 @@ def VimTrailingWhitespacePost()
   g:extra_whitespace_ignored_filetypes = get(g:, 'extra_whitespace_ignored_filetypes', [])
   g:extra_whitespace_ignored_filetypes += ['screensaver']
 enddef
-
-maxpac.Add('bronson/vim-trailing-whitespace', { post: VimTrailingWhitespacePost })
 # }}}
 
 # girishji/vimbits {{{
@@ -1365,9 +1285,6 @@ def VimbitsPre()
   g:vimbits_fFtT = true
   g:vimbits_vim9cmdline = false
 enddef
-
-# For ":h vimtips".
-maxpac.Add('girishji/vimbits', { pre: VimbitsPre })
 # }}}
 
 # =============================================================================
@@ -1437,19 +1354,12 @@ def RunWithFernLog(template: string)
     term_start([&shell, &shellcmdflag, printf(template, log)], { term_finish: 'close' })
   endif
 enddef
-
-maxpac.Add('lambdalisue/fern.vim', { pre: FernVimPre, fallback: FernVimFallback })
 # }}}
-
-maxpac.Add('lambdalisue/fern-hijack.vim')
-maxpac.Add('lambdalisue/fern-git-status.vim')
 
 # a5ob7r/fern-renderer-lsflavor.vim {{{
 def FernRendererLsflavorVimPre()
   g:fern#renderer = 'lsflavor'
 enddef
-
-maxpac.Add('a5ob7r/fern-renderer-lsflavor.vim', { pre: FernRendererLsflavorVimPre })
 # }}}
 
 #==============================================================================
@@ -1483,15 +1393,120 @@ def ToggleAsyncomplete(asyncomplete_enable = get(b:, 'asyncomplete_enable'))
     asyncomplete#enable_for_buffer()
   endif
 enddef
-
-maxpac.Add('prabirshrestha/asyncomplete.vim', { pre: AsyncompleteVimPre })
 # }}}
-
-maxpac.Add('prabirshrestha/asyncomplete-lsp.vim')
 
 # =============================================================================
 
-# Text object.
+# lambdalisue/gin.vim {{{
+def GinVimPost()
+  g:gin_diff_persistent_args = ['--patch', '--stat']
+
+  if executable('delta')
+    g:gin_diff_persistent_args += ['++processor=delta --color-only']
+  elseif executable('diff-highlight')
+    g:gin_diff_persistent_args += ['++processor=diff-highlight']
+  endif
+
+  # Add a number argument to limit the number of commits because ":GinLog"
+  # is too slow in a large repository.
+  #
+  # https://github.com/lambdalisue/gin.vim/issues/116
+  nmap <silent> <Leader>gl :<C-U>GinLog --graph --oneline --all -500<CR>
+  nmap <silent> <Leader>gs :<C-U>GinStatus<CR>
+  nmap <silent> <Leader>gc :<C-U>Gin commit<CR>
+
+  augroup vimrc:gin
+    autocmd!
+    autocmd BufReadCmd gin{branch,diff,edit,log,status,}://* setlocal nobuflisted
+  augroup END
+enddef
+# }}}
+
+# Shougo/ddu.vim {{{
+def DduVimPost()
+  ddu#custom#patch_global({
+    ui: 'ff',
+    sources: ['file_rec'],
+    sourceOptions: {
+      _: {
+        matchers: ['matcher_fzy'],
+      },
+    },
+    kindOptions: {
+      file: {
+        defaultAction: 'open',
+      },
+    },
+  })
+
+  ddu#custom#action('kind', 'file', 'tcd', (args) => {
+    execute $'tcd {args.items[0].action.path}'
+
+    return 0
+  })
+
+  nnoremap <silent> <C-Space> <ScriptCmd>ddu#start()<CR>
+
+  nnoremap <silent> <Leader>b <ScriptCmd>ddu#start({ sources: ['buffer'] })<CR>
+  nnoremap <silent> <Leader>gq <ScriptCmd>ddu#start({ sources: ['ghq'], kindOptions: { file: { defaultAction: 'tcd' } } })<CR>
+
+  augroup vimrc:ddu
+    autocmd!
+
+    autocmd FileType ddu-ff {
+      nnoremap <buffer><silent> <CR> <ScriptCmd>ddu#ui#do_action('itemAction')<CR>
+      nnoremap <buffer><silent> <C-X> <ScriptCmd>ddu#ui#do_action('itemAction', { name: 'open', params: { command: 'split' } })<CR>
+      nnoremap <buffer><silent> i <ScriptCmd>ddu#ui#do_action('openFilterWindow')<CR>
+      nnoremap <buffer><silent> q <ScriptCmd>ddu#ui#do_action('quit')<CR>
+    }
+  augroup END
+enddef
+# }}}
+# }}}
+
+# Plugin registrations. {{{
+maxpac.Begin()
+
+# NOTE: Call this as soon as possible!
+# NOTE: Maybe "+clientserver" is disabled in macOS even if a Vim is compiled
+# with "--with-features=huge".
+if has('clientserver')
+  maxpac.Add('thinca/vim-singleton', { post: VimSingletonPost })
+endif
+
+maxpac.Add('a5ob7r/lightline-otf')
+maxpac.Add('itchyny/lightline.vim', { pre: LightlineVimPre })
+
+maxpac.Add('ctrlpvim/ctrlp.vim', { pre: CtrlpVimPre })
+maxpac.Add('mattn/ctrlp-matchfuzzy', { post: CtrlpMatchfuzzyPost })
+maxpac.Add('mattn/ctrlp-ghq', { post: CtrlpGhqPost })
+maxpac.Add('a5ob7r/ctrlp-man', { post: CtrlpManPost })
+
+maxpac.Add('prabirshrestha/vim-lsp', { pre: VimLspPre })
+maxpac.Add('mattn/vim-lsp-settings', { pre: VimLspSettingsPre })
+
+maxpac.Add('tsuyoshicho/lightline-lsp')
+maxpac.Add('micchy326/lightline-lsp-progress')
+
+maxpac.Add('hrsh7th/vim-vsnip', { pre: VimVsnipPre, post: VimVsnipPost })
+maxpac.Add('hrsh7th/vim-vsnip-integ')
+maxpac.Add('rafamadriz/friendly-snippets')
+
+maxpac.Add('lambdalisue/fern.vim', { pre: FernVimPre, fallback: FernVimFallback })
+maxpac.Add('lambdalisue/fern-hijack.vim')
+maxpac.Add('lambdalisue/fern-git-status.vim')
+maxpac.Add('a5ob7r/fern-renderer-lsflavor.vim', { pre: FernRendererLsflavorVimPre })
+
+maxpac.Add('prabirshrestha/asyncomplete.vim', { pre: AsyncompleteVimPre })
+maxpac.Add('prabirshrestha/asyncomplete-lsp.vim')
+
+# Operators.
+maxpac.Add('kana/vim-operator-user')
+maxpac.Add('kana/vim-operator-replace', { post: VimOperatorReplacePost })
+
+maxpac.Add('kyoh86/vim-ripgrep', { post: VimRipgrepPost })
+
+# Text objects.
 maxpac.Add('kana/vim-textobj-user')
 
 maxpac.Add('D4KU/vim-textobj-chainmember')
@@ -1512,30 +1527,51 @@ maxpac.Add('machakann/vim-textobj-delimited')
 maxpac.Add('machakann/vim-textobj-functioncall')
 
 # Misc.
+maxpac.Add('Eliot00/git-lens.vim', { post: GitlensVimPost })
+maxpac.Add('KeitaNakamura/neodark.vim', { post: NeodarkVimPost })
 maxpac.Add('LumaKernel/coqpit.vim')
 maxpac.Add('a5ob7r/chmod.vim')
+maxpac.Add('a5ob7r/linefeed.vim', { post: LinefeedVimPost })
 maxpac.Add('a5ob7r/rspec-daemon.vim')
+maxpac.Add('a5ob7r/shellcheckrc.vim', { pre: ShellcheckrcVimPre })
 maxpac.Add('a5ob7r/tig.vim')
+maxpac.Add('airblade/vim-gitgutter', { pre: VimGitgutterPre })
 maxpac.Add('aliou/bats.vim')
+maxpac.Add('andymass/vim-matchup', { fallback: VimMatchupFallback })
 maxpac.Add('azabiong/vim-highlighter')
+maxpac.Add('bronson/vim-trailing-whitespace', { post: VimTrailingWhitespacePost })
 maxpac.Add('fladson/vim-kitty')
+maxpac.Add('girishji/vimbits', { pre: VimbitsPre }) # For ":h vimtips".
 maxpac.Add('gpanders/vim-oldfiles')
+maxpac.Add('haya14busa/vim-asterisk', { post: VimAsteriskPost })
+maxpac.Add('itchyny/screensaver.vim', { post: ScreensaverVimPost })
 maxpac.Add('junegunn/goyo.vim')
 maxpac.Add('junegunn/vader.vim')
 maxpac.Add('junegunn/vim-easy-align')
+maxpac.Add('k-takata/minpac', { post: MinpacPost })
 maxpac.Add('kannokanno/previm')
 maxpac.Add('keith/rspec.vim')
+maxpac.Add('lambdalisue/gina.vim', { post: GinaVimPost })
 maxpac.Add('lambdalisue/vital-Whisky')
+maxpac.Add('liuchengxu/vista.vim', { pre: VistaVimPre })
 maxpac.Add('machakann/vim-highlightedyank')
+maxpac.Add('machakann/vim-sandwich', { post: VimSandwichPost })
 maxpac.Add('machakann/vim-swap')
 maxpac.Add('maximbaz/lightline-ale')
+maxpac.Add('monaqa/modesearch.vim', { post: ModesearchVimPost })
 maxpac.Add('neovimhaskell/haskell-vim')
 maxpac.Add('pocke/rbs.vim')
+maxpac.Add('preservim/vim-markdown', { pre: VimMarkdownPre })
+maxpac.Add('rhysd/git-messenger.vim', { post: GitMessengerVimPost })
+maxpac.Add('thinca/vim-localrc', { post: VimLocalrcPost })
 maxpac.Add('thinca/vim-prettyprint')
 maxpac.Add('thinca/vim-themis')
 maxpac.Add('tpope/vim-endwise')
 maxpac.Add('tyru/eskk.vim')
+maxpac.Add('tyru/open-browser.vim', { post: OpenBrowserVimPost })
 maxpac.Add('vim-jp/vital.vim')
+maxpac.Add('vim-utils/vim-man', { post: VimManPost })
+maxpac.Add('w0rp/ale', { pre: AlePre })
 maxpac.Add('yasuhiroki/github-actions-yaml.vim')
 
 if IsBundledPackageLoadable('comment')
@@ -1552,69 +1588,7 @@ endif
 if executable('deno')
   maxpac.Add('vim-denops/denops.vim')
 
-  def GinVimPost()
-    g:gin_diff_persistent_args = ['--patch', '--stat']
-
-    if executable('delta')
-      g:gin_diff_persistent_args += ['++processor=delta --color-only']
-    elseif executable('diff-highlight')
-      g:gin_diff_persistent_args += ['++processor=diff-highlight']
-    endif
-
-    # Add a number argument to limit the number of commits because ":GinLog"
-    # is too slow in a large repository.
-    #
-    # https://github.com/lambdalisue/gin.vim/issues/116
-    nmap <silent> <Leader>gl :<C-U>GinLog --graph --oneline --all -500<CR>
-    nmap <silent> <Leader>gs :<C-U>GinStatus<CR>
-    nmap <silent> <Leader>gc :<C-U>Gin commit<CR>
-
-    augroup vimrc:gin
-      autocmd!
-      autocmd BufReadCmd gin{branch,diff,edit,log,status,}://* setlocal nobuflisted
-    augroup END
-  enddef
-
   maxpac.Add('lambdalisue/gin.vim', { post: GinVimPost })
-
-  def DduVimPost()
-    ddu#custom#patch_global({
-      ui: 'ff',
-      sources: ['file_rec'],
-      sourceOptions: {
-        _: {
-          matchers: ['matcher_fzy'],
-        },
-      },
-      kindOptions: {
-        file: {
-          defaultAction: 'open',
-        },
-      },
-    })
-
-    ddu#custom#action('kind', 'file', 'tcd', (args) => {
-      execute $'tcd {args.items[0].action.path}'
-
-      return 0
-    })
-
-    nnoremap <silent> <C-Space> <ScriptCmd>ddu#start()<CR>
-
-    nnoremap <silent> <Leader>b <ScriptCmd>ddu#start({ sources: ['buffer'] })<CR>
-    nnoremap <silent> <Leader>gq <ScriptCmd>ddu#start({ sources: ['ghq'], kindOptions: { file: { defaultAction: 'tcd' } } })<CR>
-
-    augroup vimrc:ddu
-      autocmd!
-
-      autocmd FileType ddu-ff {
-        nnoremap <buffer><silent> <CR> <ScriptCmd>ddu#ui#do_action('itemAction')<CR>
-        nnoremap <buffer><silent> <C-X> <ScriptCmd>ddu#ui#do_action('itemAction', { name: 'open', params: { command: 'split' } })<CR>
-        nnoremap <buffer><silent> i <ScriptCmd>ddu#ui#do_action('openFilterWindow')<CR>
-        nnoremap <buffer><silent> q <ScriptCmd>ddu#ui#do_action('quit')<CR>
-      }
-    augroup END
-  enddef
 
   maxpac.Add('Shougo/ddu.vim', { post: DduVimPost })
 
@@ -1629,9 +1603,8 @@ if executable('deno')
   maxpac.Add('Shougo/ddu-kind-file')
 endif
 
-# =============================================================================
-
 maxpac.End()
+# }}}
 # }}}
 
 # Filetypes {{{
