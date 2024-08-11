@@ -7,7 +7,6 @@ vim9script
 # - Nowadays we are always in UTF-8 environment, aren't we?
 # - Work well even if no (non-default) plugin is installed.
 # - Support Unix and Windows.
-# - No support Neovim.
 #
 
 import autoload 'maxpac.vim'
