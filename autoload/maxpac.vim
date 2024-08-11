@@ -1,8 +1,6 @@
 vim9script
 
 # "maxpac" is a complement plugin manager for minpac.
-#
-# TODO: Implement a dependency resolver and loading.
 
 var maxpac = {}
 
