@@ -1413,6 +1413,7 @@ def GinVimPost()
   # https://github.com/lambdalisue/gin.vim/issues/116
   nmap <silent> <Leader>gl :<C-U>GinLog --graph --oneline --all -500<CR>
   nmap <silent> <Leader>gs :<C-U>GinStatus<CR>
+  nmap <silent> <Leader>gb <Cmd>GinBranch<CR>
   nmap <silent> <Leader>gc :<C-U>Gin commit<CR>
 
   augroup vimrc:gin
