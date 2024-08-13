@@ -1462,6 +1462,12 @@ def DduVimPost()
   augroup END
 enddef
 # }}}
+
+# Einenlum/yaml-revealer {{{
+def YamlRevealerPost()
+  command! SearchYamlKey SearchYamlKey()
+enddef
+# }}}
 # }}}
 
 # Plugin registrations. {{{
@@ -1527,6 +1533,7 @@ maxpac.Add('machakann/vim-textobj-delimited')
 maxpac.Add('machakann/vim-textobj-functioncall')
 
 # Misc.
+maxpac.Add('Einenlum/yaml-revealer', { post: YamlRevealerPost })
 maxpac.Add('Eliot00/git-lens.vim', { post: GitlensVimPost })
 maxpac.Add('KeitaNakamura/neodark.vim', { post: NeodarkVimPost })
 maxpac.Add('LumaKernel/coqpit.vim')
@@ -1540,6 +1547,7 @@ maxpac.Add('aliou/bats.vim')
 maxpac.Add('andymass/vim-matchup', { fallback: VimMatchupFallback })
 maxpac.Add('azabiong/vim-highlighter')
 maxpac.Add('bronson/vim-trailing-whitespace', { post: VimTrailingWhitespacePost })
+maxpac.Add('chrisbra/csv.vim')
 maxpac.Add('fladson/vim-kitty')
 maxpac.Add('girishji/vimbits', { pre: VimbitsPre }) # For ":h vimtips".
 maxpac.Add('gpanders/vim-oldfiles')
@@ -1550,6 +1558,7 @@ maxpac.Add('junegunn/vader.vim')
 maxpac.Add('junegunn/vim-easy-align')
 maxpac.Add('k-takata/minpac', { post: MinpacPost })
 maxpac.Add('kannokanno/previm')
+maxpac.Add('kchmck/vim-coffee-script')
 maxpac.Add('keith/rspec.vim')
 maxpac.Add('lambdalisue/gina.vim', { post: GinaVimPost })
 maxpac.Add('lambdalisue/vital-Whisky')
@@ -1573,6 +1582,7 @@ maxpac.Add('vim-jp/vital.vim')
 maxpac.Add('vim-utils/vim-man', { post: VimManPost })
 maxpac.Add('w0rp/ale', { pre: AlePre })
 maxpac.Add('yasuhiroki/github-actions-yaml.vim')
+maxpac.Add('zorab47/procfile.vim')
 
 if IsBundledPackageLoadable('comment')
   # "comment.vim" package is bundled since 5400a5d4269874fe4f1c35dfdd3c039ea17dfd62.
