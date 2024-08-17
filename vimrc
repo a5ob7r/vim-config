@@ -965,17 +965,17 @@ enddef
 # tyru/open-browser.vim {{{
 def OpenBrowserVimPost()
   nmap <Leader>K <Plug>(openbrowser-smart-search)
-  nnoremap <Leader>k <ScriptCmd>g:SearchUnderCursorEnglishWord()<CR>
+  nnoremap <Leader>k <ScriptCmd>SearchUnderCursorEnglishWord()<CR>
 enddef
 
-def! g:SearchEnglishWord(word: string)
+def SearchEnglishWord(word: string)
   const url = $'https://dictionary.cambridge.org/dictionary/english/{word}'
   openbrowser#open(url)
 enddef
 
-def! g:SearchUnderCursorEnglishWord()
+def SearchUnderCursorEnglishWord()
   const word = expand('<cword>')
-  g:SearchEnglishWord(word)
+  SearchEnglishWord(word)
 enddef
 # }}}
 
