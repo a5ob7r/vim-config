@@ -63,19 +63,19 @@ export def End()
   for name in maxpac.names
     var conf = maxpac.confs[name]
 
-    if Loadable(name) && type(conf.pre) == type(function('tr'))
+    if Loadable(name) && type(conf.pre) == v:t_func
       conf.pre()
     endif
 
     if !Load(name, conf.config)
-      if type(conf.fallback) == type(function('tr'))
+      if type(conf.fallback) == v:t_func
         conf.fallback()
       endif
 
       continue
     endif
 
-    if type(conf.post) == type(function('tr'))
+    if type(conf.post) == v:t_func
       conf.post()
     endif
   endfor
