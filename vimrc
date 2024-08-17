@@ -312,9 +312,6 @@ nnoremap <silent> <C-L> :<C-U>nohlsearch<CR>:Refresh<CR>
 
 nnoremap <Leader><CR> o<Esc>
 
-map <silent> p <Plug>(put)
-map <silent> P <Plug>(Put)
-
 nnoremap <silent> <F10> <ScriptCmd>echo SyntaxItemAttribute(line('.'), col('.'))<CR>
 
 nnoremap <silent> <F2> :<C-U>ReloadVimrc<CR>
@@ -405,6 +402,14 @@ command! Refresh doautocmd <nomodeline> User Refresh
 command! Hitest source $VIMRUNTIME/syntax/hitest.vim
 
 command! InstallMinpac InstallMinpac()
+
+command! XReconnect {
+  set clipboard^=unnamedplus
+  xrestore
+}
+command! XDisconnect {
+  set clipboard-=unnamedplus
+}
 # }}}
 
 # Auto commands {{{
