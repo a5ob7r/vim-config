@@ -387,7 +387,9 @@ nmap <Nul> <C-Space>
 #
 # This is an auxiliary command for keyboard shortcuts.
 command! -bang -bar -range=% Update {
-  execute printf('<mods> :<line1>,<line2>%s<bang>', expand('%')->filewritable() ? 'update' : 'write')
+  const command = expand('%')->filewritable() ? 'update' : 'write'
+
+  execute $'<mods> :<line1>,<line2>{command}<bang>'
 }
 
 # A helper command to open a file in a split window, or the current one (if it
