@@ -429,16 +429,24 @@ command! XDisconnect {
 augroup vimrc
   autocmd!
 
-  autocmd QuickFixCmdPost *grep* cwindow
+  autocmd QuickFixCmdPost *grep* {
+    cwindow
+  }
 
   # Make parent directories of the file which the written buffer is corresponing
   # if these directories are missing.
-  autocmd BufWritePre * silent mkdir(expand('<afile>:p:h'), 'p')
+  autocmd BufWritePre * {
+    silent mkdir(expand('<afile>:p:h'), 'p')
+  }
 
   # Hide extras on normal mode of terminal.
-  autocmd TerminalOpen * setlocal nolist nonumber colorcolumn=
+  autocmd TerminalOpen * {
+    setlocal nolist nonumber colorcolumn=
+  }
 
-  autocmd BufReadPre ~/* setlocal undofile
+  autocmd BufReadPre ~/* {
+    setlocal undofile
+  }
 
   # From "$VIMRUNTIME/defaults.vim".
   # Jump cursor to last editting line.
@@ -564,7 +572,9 @@ def NeodarkVimPost()
 
   augroup vimrc:neodark
     autocmd!
-    autocmd VimEnter * ++nested Neodark
+    autocmd VimEnter * ++nested {
+      Neodark
+    }
   augroup END
 enddef
 
@@ -977,7 +987,9 @@ def AlePre()
 
   augroup vimrc:ale
     autocmd!
-    autocmd User lsp_buffer_enabled ALEDisableBuffer
+    autocmd User lsp_buffer_enabled {
+      ALEDisableBuffer
+    }
   augroup END
 enddef
 # }}}
@@ -1302,7 +1314,9 @@ def VistaVimPre()
 
   augroup vimrc:vista
     autocmd!
-    autocmd FileType vista,vista_kind nnoremap <buffer><silent> q :<C-U>Vista!!<CR>
+    autocmd FileType vista,vista_kind {
+      nnoremap <buffer><silent> q :<C-U>Vista!!<CR>
+    }
   augroup END
 
   nnoremap <silent> <Leader>v :<C-U>Vista!!<CR>
@@ -1314,7 +1328,9 @@ def ScreensaverVimPost()
   augroup vimrc:screensaver
     autocmd!
     # Clear the cmdline area when starting a screensaver.
-    autocmd FileType screensaver echo
+    autocmd FileType screensaver {
+      echo
+    }
   augroup END
 enddef
 # }}}
@@ -1348,9 +1364,17 @@ def FernVimPre()
 
   augroup vimrc:fern
     autocmd!
-    autocmd Filetype fern t:fern_buffer_id = bufnr()
-    autocmd BufLeave * if &ft !=# 'fern' | t:non_fern_buffer_id = bufnr() | endif
-    autocmd DirChanged * unlet! t:fern_buffer_id
+    autocmd Filetype fern {
+      t:fern_buffer_id = bufnr()
+    }
+    autocmd BufLeave * {
+      if &ft !=# 'fern'
+        t:non_fern_buffer_id = bufnr()
+      endif
+    }
+    autocmd DirChanged * {
+      unlet! t:fern_buffer_id
+    }
   augroup END
 
   command! CurrentFernLogging {
@@ -1489,7 +1513,9 @@ def GinVimPost()
 
   augroup vimrc:gin
     autocmd!
-    autocmd BufReadCmd gin{branch,diff,edit,log,status,}://* setlocal nobuflisted
+    autocmd BufReadCmd gin{branch,diff,edit,log,status,}://* {
+      setlocal nobuflisted
+    }
   augroup END
 enddef
 # }}}
