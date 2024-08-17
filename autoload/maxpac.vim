@@ -33,7 +33,6 @@ enddef
 # Return a dictionary as a plugin configiration base for maxpac.
 export def Plugconf(name: string): dict<any>
   return {
-    name: name,
     config: { type: 'opt' },
     pre: () => null,
     post: () => null,
@@ -85,8 +84,8 @@ enddef
 export def Add(name: string, config = {}): dict<any>
   var conf = extend(Plugconf(name), config)
 
-  add(maxpac.names, conf.name)
-  maxpac.confs[conf.name] = conf
+  add(maxpac.names, name)
+  maxpac.confs[name] = conf
 
   return conf
 enddef
