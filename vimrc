@@ -386,22 +386,35 @@ nmap <Nul> <C-Space>
 # new empty file if the corresponding buffer is empty and unmodified.
 #
 # This is an auxiliary command for keyboard shortcuts.
-command! -bang -bar -range=% Update
-  \ execute printf('<mods> :<line1>,<line2>%s<bang>', expand('%')->filewritable() ? 'update' : 'write')
+command! -bang -bar -range=% Update {
+  execute printf('<mods> :<line1>,<line2>%s<bang>', expand('%')->filewritable() ? 'update' : 'write')
+}
 
 # A helper command to open a file in a split window, or the current one (if it
 # is invoked with a bang mark).
-command! -bang -bar -nargs=1 -complete=file Open execute <q-mods> (<bang>1 ? 'split' : 'edit') <q-args>
+command! -bang -bar -nargs=1 -complete=file Open {
+  execute <q-mods> (<bang>1 ? 'split' : 'edit') <q-args>
+}
 
-command! -bang -bar Vimrc <mods> Open<bang> $MYVIMRC
-command! ReloadVimrc source $MYVIMRC
+command! -bang -bar Vimrc {
+  <mods> Open<bang> $MYVIMRC
+}
+command! ReloadVimrc {
+  source $MYVIMRC
+}
 
 # Run commands to refresh something. Use ":OnRefresh" to register a command.
-command! Refresh doautocmd <nomodeline> User Refresh
+command! Refresh {
+  doautocmd <nomodeline> User Refresh
+}
 
-command! Hitest source $VIMRUNTIME/syntax/hitest.vim
+command! Hitest {
+  source $VIMRUNTIME/syntax/hitest.vim
+}
 
-command! InstallMinpac InstallMinpac()
+command! InstallMinpac {
+  InstallMinpac()
+}
 
 command! XReconnect {
   set clipboard^=unnamedplus
@@ -465,7 +478,9 @@ augroup vimrc
 augroup END
 
 # Register a command to refresh something.
-command! -bar -nargs=+ OnRefresh autocmd refresh User Refresh <args>
+command! -bar -nargs=+ OnRefresh {
+  autocmd refresh User Refresh <args>
+}
 
 augroup refresh
   autocmd!
@@ -523,11 +538,12 @@ def MinpacPost()
   }
 
   # This command is from the minpac help file.
-  command! -nargs=1 -complete=custom,PackComplete PackOpenDir
-    \ term_start(&shell, {
-    \   cwd: minpac#getpluginfo(maxpac.Plugname(<q-args>))['dir'],
-    \   term_finish: 'close',
-    \ })
+  command! -nargs=1 -complete=custom,PackComplete PackOpenDir {
+    term_start(&shell, {
+      cwd: minpac#getpluginfo(maxpac.Plugname(<q-args>))['dir'],
+      term_finish: 'close' }
+    )
+  }
 enddef
 
 def PackComplete(..._): string
@@ -542,7 +558,9 @@ def NeodarkVimPost()
   # Prefer a near black background color.
   g:neodark#background = '#202020'
 
-  command! -bang -bar Neodark ApplyNeodark(<q-bang>)
+  command! -bang -bar Neodark {
+    ApplyNeodark(<q-bang>)
+  }
 
   augroup vimrc:neodark
     autocmd!
@@ -702,7 +720,9 @@ def CtrlpVimPre()
     g:ctrlp_cmd = 'CtrlPp'
   endif
 
-  command! -bang -nargs=? -complete=dir CtrlPp CtrlpProxy(<q-bang>, <f-args>)
+  command! -bang -nargs=? -complete=dir CtrlPp {
+    CtrlpProxy(<q-bang>, <f-args>)
+  }
 
   nnoremap <silent> <Leader>b :<C-U>CtrlPBuffer<CR>
 enddef
@@ -740,7 +760,9 @@ enddef
 
 # a5ob7r/ctrlp-man {{{
 def CtrlpManPost()
-  command! LookupManual LookupManual()
+  command! LookupManual {
+    LookupManual()
+  }
 
   nnoremap <silent> <Leader>m :LookupManual<CR>
 enddef
@@ -801,16 +823,27 @@ def VimLspPre()
     }
   augroup END
 
-  command! CurrentLspLogging echo LspLogFile()
-  command! -nargs=* -complete=file EnableLspLogging
-    \ g:lsp_log_file = empty(<q-args>) ? $'{$VIMHOME}/tmp/vim-lsp.log' : <q-args>
-  command! DisableLspLogging g:lsp_log_file = ''
+  command! CurrentLspLogging {
+    echo LspLogFile()
+  }
+  command! -nargs=* -complete=file EnableLspLogging {
+    g:lsp_log_file = empty(<q-args>) ? $'{$VIMHOME}/tmp/vim-lsp.log' : <q-args>
+  }
+  command! DisableLspLogging {
+    g:lsp_log_file = ''
+  }
 
-  command! ViewLspLog ViewLspLog()
+  command! ViewLspLog {
+    ViewLspLog()
+  }
 
-  command! -nargs=+ -complete=shellcmd RunWithLspLog RunWithLspLog(<q-args>)
+  command! -nargs=+ -complete=shellcmd RunWithLspLog {
+    RunWithLspLog(<q-args>)
+  }
 
-  command! ClearLspLog ClearLspLog()
+  command! ClearLspLog {
+    ClearLspLog()
+  }
 enddef
 
 def LspLogFile(): string
@@ -953,7 +986,9 @@ enddef
 def VimRipgrepPost()
   ripgrep#observe#add_observer(g:ripgrep#event#other, 'RipgrepContextObserver')
 
-  command! -bang -count -nargs=+ -complete=file Rg Ripgrep(['-C<count>', <q-args>], { case: <bang>1, escape: <bang>1 })
+  command! -bang -count -nargs=+ -complete=file Rg {
+    Ripgrep(['-C<count>', <q-args>], { case: <bang>1, escape: <bang>1 })
+  }
 
   map <Leader>f <Plug>(operator-ripgrep-g)
   map g<Leader>f <Plug>(operator-ripgrep)
@@ -1128,10 +1163,12 @@ enddef
 
 # thinca/vim-localrc {{{
 def VimLocalrcPost()
-  command! -bang -bar VimrcLocal
-    \ OpenLocalrc(<q-bang>, <q-mods>, expand('~'))
-  command! -bang -bar -nargs=? -complete=dir OpenLocalrc
-    \ OpenLocalrc(<q-bang>, <q-mods>, empty(<q-args>) ? expand('%:p:h') : <q-args>)
+  command! -bang -bar VimrcLocal {
+    OpenLocalrc(<q-bang>, <q-mods>, expand('~'))
+  }
+  command! -bang -bar -nargs=? -complete=dir OpenLocalrc {
+    OpenLocalrc(<q-bang>, <q-mods>, empty(<q-args>) ? expand('%:p:h') : <q-args>)
+  }
 enddef
 
 def OpenLocalrc(bang: string, mods: string, dir: string)
@@ -1153,7 +1190,9 @@ enddef
 
 # Eliot00/git-lens.vim {{{
 def GitlensVimPost()
-  command! -bar ToggleGitLens ToggleGitLens()
+  command! -bar ToggleGitLens {
+    ToggleGitLens()
+  }
 enddef
 # }}}
 
@@ -1173,7 +1212,9 @@ enddef
 
 # vim-utils/vim-man {{{
 def VimManPost()
-  command! -nargs=* -bar -complete=customlist,man#completion#run M Man <args>
+  command! -nargs=* -bar -complete=customlist,man#completion#run M {
+    Man <args>
+  }
 
   VimManCommon()
 enddef
@@ -1190,7 +1231,9 @@ def ManFallback()
     return
   endtry
 
-  command! -nargs=+ -complete=shellcmd M <mods> Man <args>
+  command! -nargs=+ -complete=shellcmd M {
+    <mods> Man <args>
+  }
 
   VimManCommon()
 enddef
@@ -1299,7 +1342,9 @@ def FernVimPre()
   g:fern#default_hidden = 1
   g:fern#default_exclude = '.*\~$'
 
-  command! -bar ToggleFern ToggleFern()
+  command! -bar ToggleFern {
+    ToggleFern()
+  }
 
   augroup vimrc:fern
     autocmd!
@@ -1308,16 +1353,31 @@ def FernVimPre()
     autocmd DirChanged * unlet! t:fern_buffer_id
   augroup END
 
-  command! CurrentFernLogging echo FernLogFile()
-  command! -nargs=* -complete=file EnableFernLogging
-    \ g:fern#logfile = empty(<q-args>) ? '$VIMHOME/tmp/fern.tsv' : <q-args>
-  command! DisableFernLogging g:fern#logfile = null
-  command! FernLogDebug g:fern#loglevel = g:fern#DEBUG
-  command! FernLogInfo g:fern#loglevel = g:fern#INFO
-  command! FernLogWARN g:fern#loglevel = g:fern#WARN
-  command! FernLogError g:fern#loglevel = g:fern#Error
+  command! CurrentFernLogging {
+    echo FernLogFile()
+  }
+  command! -nargs=* -complete=file EnableFernLogging {
+    g:fern#logfile = empty(<q-args>) ? '$VIMHOME/tmp/fern.tsv' : <q-args>
+  }
+  command! DisableFernLogging {
+    g:fern#logfile = null
+  }
+  command! FernLogDebug {
+    g:fern#loglevel = g:fern#DEBUG
+  }
+  command! FernLogInfo {
+    g:fern#loglevel = g:fern#INFO
+  }
+  command! FernLogWARN {
+    g:fern#loglevel = g:fern#WARN
+  }
+  command! FernLogError {
+    g:fern#loglevel = g:fern#Error
+  }
 
-  command! -nargs=+ -complete=shellcmd RunWithFernLog RunWithFernLog(<q-args>)
+  command! -nargs=+ -complete=shellcmd RunWithFernLog {
+    RunWithFernLog(<q-args>)
+  }
 enddef
 
 def FernVimFallback()
@@ -1373,9 +1433,15 @@ enddef
 def AsyncompleteVimPre()
   g:asyncomplete_enable_for_all = 0
 
-  command! ToggleAsyncomplete ToggleAsyncomplete()
-  command! EnableAsyncomplete ToggleAsyncomplete(0)
-  command! DisableAsyncomplete ToggleAsyncomplete(1)
+  command! ToggleAsyncomplete {
+    ToggleAsyncomplete()
+  }
+  command! EnableAsyncomplete {
+    ToggleAsyncomplete(0)
+  }
+  command! DisableAsyncomplete {
+    ToggleAsyncomplete(1)
+  }
 enddef
 
 def ToggleAsyncomplete(asyncomplete_enable = get(b:, 'asyncomplete_enable'))
@@ -1471,7 +1537,9 @@ enddef
 
 # Einenlum/yaml-revealer {{{
 def YamlRevealerPost()
-  command! SearchYamlKey SearchYamlKey()
+  command! SearchYamlKey {
+    SearchYamlKey()
+  }
 enddef
 # }}}
 # }}}
