@@ -1116,7 +1116,7 @@ def OperatorRipgrep(motion_wiseness: string, opts = {})
   endif
 
   if o_push_history_entry
-    SmartRipgrepCommandHistoryPush(command)
+    histadd('cmd', command)
   endif
 enddef
 
@@ -1139,15 +1139,6 @@ def CommandLineArgumentalizeEscape(s: string): string
   endwhile
 
   return join(tokens, '')
-enddef
-
-def SmartRipgrepCommandHistoryPush(command: string)
-  const history_entry = command
-  const latest_history_entry = histget('cmd', -1)
-
-  if history_entry !=# latest_history_entry
-    histadd('cmd', history_entry)
-  endif
 enddef
 # }}}
 
