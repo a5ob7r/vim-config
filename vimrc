@@ -395,7 +395,9 @@ command! -bang -bar -range=% Update {
 # A helper command to open a file in a split window, or the current one (if it
 # is invoked with a bang mark).
 command! -bang -bar -nargs=1 -complete=file Open {
-  execute <q-mods> (<bang>1 ? 'split' : 'edit') <q-args>
+  const opener = <bang>1 ? 'split' : 'edit'
+
+  execute <q-mods> opener <q-args>
 }
 
 command! -bang -bar Vimrc {
