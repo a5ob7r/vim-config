@@ -1093,8 +1093,8 @@ def OperatorRipgrep(motion_wiseness: string, opts = {})
     words += ['-w']
   endif
 
-  const [_l_bufnum, l_lnum, l_col, _l_off] = getpos("'[")
-  const [_r_bufnum, r_lnum, r_col, _r_off] = getpos("']")
+  const [_l_bufnum, l_lnum, l_col, _l_off] = getcharpos("'[")
+  const [_r_bufnum, r_lnum, r_col, _r_off] = getcharpos("']")
 
   const l_col_idx = l_col - 1
   const r_col_idx = r_col - (&selection ==# 'inclusive' ? 1 : 2)
