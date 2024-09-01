@@ -21,10 +21,6 @@ def InstallMinpac()
   const minpac_path =  $'{packhome}/minpac/opt/minpac'
   const minpac_url = 'https://github.com/k-takata/minpac.git'
 
-  if isdirectory(minpac_path) || ! executable('git')
-    return
-  endif
-
   const command = $'git clone {minpac_url} {minpac_path}'
 
   execute 'terminal' command
