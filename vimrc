@@ -689,92 +689,6 @@ enddef
 
 # =============================================================================
 
-# ctrlpvim/ctrlp.vim {{{
-def CtrlpVimPre()
-  g:ctrlp_map = '<C-Space>'
-
-  g:ctrlp_show_hidden = 1
-  g:ctrlp_lazy_update = 150
-  g:ctrlp_reuse_window = '.*'
-  g:ctrlp_use_caching = 0
-  g:ctrlp_compare_lim = 5000
-
-  g:ctrlp_user_command = {}
-  g:ctrlp_user_command['types'] = {}
-
-  if executable('git')
-    g:ctrlp_user_command['types'][1] = ['.git', 'git -C %s ls-files -co --exclude-standard']
-  endif
-
-  if executable('fd')
-    g:ctrlp_user_command['fallback'] = 'fd --type=file --type=symlink --hidden . %s'
-  elseif executable('find')
-    g:ctrlp_user_command['fallback'] = 'find %s -type f'
-  else
-    g:ctrlp_use_caching = 1
-    g:ctrlp_cmd = 'CtrlPp'
-  endif
-
-  command! -bang -nargs=? -complete=dir CtrlPp {
-    CtrlpProxy(<q-bang>, <f-args>)
-  }
-
-  nnoremap <silent> <Leader>b :<C-U>CtrlPBuffer<CR>
-enddef
-
-def CtrlpProxy(bang: string, dir = getcwd())
-  const home = expand('~')
-
-  # Make vim heavy or freeze to run CtrlP to search many files. For example
-  # this is caused when run `CtrlP` on home directory or edit a file on home
-  # directory.
-  if empty(bang) && home ==# dir
-    throw 'Forbidden to run CtrlP on home directory'
-  endif
-
-  CtrlP dir
-enddef
-# }}}
-
-# mattn/ctrlp-matchfuzzy {{{
-def CtrlpMatchfuzzyPost()
-  g:ctrlp_match_func = { match: 'ctrlp_matchfuzzy#matcher' }
-enddef
-# }}}
-
-# mattn/ctrlp-ghq {{{
-def CtrlpGhqPost()
-  g:ctrlp_ghq_actions = [
-    { label: 'edit', action: 'edit', path: 1 },
-    { label: 'tabnew', action: 'tabnew', path: 1 }
-  ]
-
-  nnoremap <silent> <Leader>gq :<C-U>CtrlPGhq<CR>
-enddef
-# }}}
-
-# a5ob7r/ctrlp-man {{{
-def CtrlpManPost()
-  command! LookupManual {
-    LookupManual()
-  }
-
-  nnoremap <silent> <Leader>m :LookupManual<CR>
-enddef
-
-def LookupManual()
-  const q = input('keyword> ', '', 'shellcmd')
-
-  if empty(q)
-    return
-  endif
-
-  execute 'CtrlPMan' q
-enddef
-# }}}
-
-# =============================================================================
-
 # hrsh7th/vim-vsnip {{{
 def VimVsnipPre()
   g:vsnip_snippet_dir = $'{$VIMHOME}/vsnip'
@@ -1410,11 +1324,6 @@ endif
 
 maxpac.Add('a5ob7r/lightline-otf')
 maxpac.Add('itchyny/lightline.vim', { pre: LightlineVimPre })
-
-maxpac.Add('ctrlpvim/ctrlp.vim', { pre: CtrlpVimPre })
-maxpac.Add('mattn/ctrlp-matchfuzzy', { post: CtrlpMatchfuzzyPost })
-maxpac.Add('mattn/ctrlp-ghq', { post: CtrlpGhqPost })
-maxpac.Add('a5ob7r/ctrlp-man', { post: CtrlpManPost })
 
 maxpac.Add('hrsh7th/vim-vsnip', { pre: VimVsnipPre, post: VimVsnipPost })
 maxpac.Add('hrsh7th/vim-vsnip-integ')
