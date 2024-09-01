@@ -607,7 +607,6 @@ def LightlineVimPre()
         [ 'mode', 'binary', 'paste' ],
         [ 'readonly', 'relativepath', 'modified' ],
         [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_infos', 'linter_ok' ],
-        [ 'lsp_checking', 'lsp_errors', 'lsp_warnings', 'lsp_informations', 'lsp_hints', 'lsp_ok', 'lsp_progress' ]
       ]
     },
     component: {
@@ -622,13 +621,6 @@ def LightlineVimPre()
       linter_warnings: 'lightline#ale#warnings',
       linter_infos: 'lightline#ale#infos',
       linter_ok: 'lightline#ale#ok',
-      lsp_checking: 'lightline#lsp#checking',
-      lsp_errors: 'lightline#lsp#error',
-      lsp_warnings: 'lightline#lsp#warning',
-      lsp_informations: 'lightline#lsp#information',
-      lsp_hints: 'lightline#lsp#hint',
-      lsp_ok: 'lightline#lsp#ok',
-      lsp_progress: 'lightline_lsp_progress#progress'
     },
     component_type: {
       linter_checking: 'left',
@@ -636,13 +628,6 @@ def LightlineVimPre()
       linter_warnings: 'warning',
       linter_infos: 'left',
       linter_ok: 'left',
-      lsp_checking: 'left',
-      lsp_errors: 'error',
-      lsp_warnings: 'warning',
-      lsp_informations: 'left',
-      lsp_hints: 'left',
-      lsp_ok: 'left',
-      lsp_progress: 'left'
     }
   }
 
@@ -794,135 +779,6 @@ enddef
 
 # =============================================================================
 
-# prabirshrestha/vim-lsp {{{
-def VimLspPre()
-  g:lsp_diagnostics_float_cursor = 1
-  g:lsp_diagnostics_float_delay = 200
-
-  g:lsp_semantic_enabled = 1
-  g:lsp_inlay_hints_enabled = 1
-  # FIXME: HLS (haskell-language-server) v1.8+ (and maybe early versions too)
-  # throws such a string, "Error | Failed to parse message header:" if the
-  # native client is on. And the client logs "waiting for lsp server to
-  # initialize". This means we can't use the native client with HLSs
-  # unfortunately at this time, although I want to use the client. The client
-  # is off by default, but I make it off explicitly for this documentation
-  # about why we have to disable it.
-  g:lsp_use_native_client = 0
-
-  g:lsp_async_completion = 1
-
-  g:lsp_diagnostics_virtual_text_align = 'after'
-
-  g:lsp_experimental_workspace_folders = 1
-
-  augroup vimrc:vim_lsp
-    autocmd!
-    autocmd User lsp_buffer_enabled {
-      setlocal omnifunc=lsp#complete
-      setlocal tagfunc=lsp#tagfunc
-
-      nmap <buffer> gd <Plug>(lsp-definition)
-      nmap <buffer> gD <Plug>(lsp-implementation)
-      nmap <buffer> <Leader>r <Plug>(lsp-rename)
-      nmap <buffer> <Leader>h <Plug>(lsp-hover)
-
-      nmap <buffer> <Leader>lf <Plug>(lsp-document-format)
-      nmap <buffer> <Leader>la <Plug>(lsp-code-action)
-      nmap <buffer> <Leader>ll <Plug>(lsp-code-lens)
-      nmap <buffer> <Leader>lr <Plug>(lsp-references)
-
-      nnoremap <silent><buffer><expr> <C-J> lsp#scroll(+1)
-      nnoremap <silent><buffer><expr> <C-K> lsp#scroll(-1)
-    }
-  augroup END
-
-  command! CurrentLspLogging {
-    echo LspLogFile()
-  }
-  command! -nargs=* -complete=file EnableLspLogging {
-    g:lsp_log_file = empty(<q-args>) ? $'{$VIMHOME}/tmp/vim-lsp.log' : <q-args>
-  }
-  command! DisableLspLogging {
-    g:lsp_log_file = ''
-  }
-
-  command! ViewLspLog {
-    ViewLspLog()
-  }
-
-  command! -nargs=+ -complete=shellcmd RunWithLspLog {
-    RunWithLspLog(<q-args>)
-  }
-
-  command! ClearLspLog {
-    ClearLspLog()
-  }
-enddef
-
-def LspLogFile(): string
-  return get(g:, 'lsp_log_file', '')
-enddef
-
-def ViewLspLog()
-  const log = LspLogFile()
-
-  if filereadable(log)
-    term_start(
-      $'less {log}',
-      {
-        env: { LESS: '' },
-        term_finish: 'close',
-      }
-    )
-  endif
-enddef
-
-def RunWithLspLog(template: string)
-  const log = LspLogFile()
-
-  if filereadable(log)
-    term_start([&shell, &shellcmdflag, printf(template, log)], { term_finish: 'close' })
-  endif
-enddef
-
-def ClearLspLog()
-  const log = LspLogFile()
-
-  if filewritable(log)
-    writefile([], log)
-  endif
-enddef
-# }}}
-
-# mattn/vim-lsp-settings {{{
-def VimLspSettingsPre()
-  # Use this only as a preset configuration for LSP, not a installer.
-  g:lsp_settings_enable_suggestions = 0
-
-  g:lsp_settings = get(g:, 'lsp_settings', {})
-  # Prefer Vim + latexmk than texlab for now.
-  g:lsp_settings['texlab'] = {
-    disabled: 1,
-    workspace_config: {
-      latex: {
-        build: {
-          args: ['%f'],
-          onSave: true,
-          forwardSearchAfter: true
-        },
-        forwardSearch: {
-          executable: 'zathura',
-          args: ['--synctex-forward', '%l:1:%f', '%p']
-        }
-      }
-    }
-  }
-enddef
-# }}}
-
-# =============================================================================
-
 # hrsh7th/vim-vsnip {{{
 def VimVsnipPre()
   g:vsnip_snippet_dir = $'{$VIMHOME}/vsnip'
@@ -988,13 +844,6 @@ def AlePre()
 
   g:ale_python_auto_pipenv = 1
   g:ale_python_auto_poetry = 1
-
-  augroup vimrc:ale
-    autocmd!
-    autocmd User lsp_buffer_enabled {
-      ALEDisableBuffer
-    }
-  augroup END
 enddef
 # }}}
 
@@ -1446,45 +1295,6 @@ def FernRendererLsflavorVimPre()
 enddef
 # }}}
 
-#==============================================================================
-
-# prabirshrestha/asyncomplete.vim {{{
-def AsyncompleteVimPre()
-  g:asyncomplete_enable_for_all = 0
-
-  command! ToggleAsyncomplete {
-    ToggleAsyncomplete()
-  }
-  command! EnableAsyncomplete {
-    ToggleAsyncomplete(0)
-  }
-  command! DisableAsyncomplete {
-    ToggleAsyncomplete(1)
-  }
-enddef
-
-def ToggleAsyncomplete(asyncomplete_enable = get(b:, 'asyncomplete_enable'))
-  if asyncomplete_enable
-    asyncomplete#disable_for_buffer()
-
-    execute $'augroup toggle_asyncomplete_{bufnr('%')}'
-      autocmd!
-    augroup END
-  else
-    const bufname = fnameescape(bufname('%'))
-
-    execute $'augroup toggle_asyncomplete_{bufnr('%')}'
-      autocmd!
-      execute $'autocmd BufEnter {bufname} set completeopt=menuone,noinsert,noselect'
-      execute $'autocmd BufLeave {bufname} set completeopt={&completeopt}'
-      execute $'autocmd BufWipeout {bufname} set completeopt={&completeopt}'
-    augroup END
-
-    asyncomplete#enable_for_buffer()
-  endif
-enddef
-# }}}
-
 # =============================================================================
 
 # lambdalisue/gin.vim {{{
@@ -1563,6 +1373,33 @@ def YamlRevealerPost()
   }
 enddef
 # }}}
+
+# yegappan/lsp {{{
+def LspPre()
+  augroup vimrc:lsp
+    autocmd!
+
+    autocmd User LspSetup {
+      SetLspOptions()
+    }
+
+    autocmd User LspAttached {
+      nnoremap <buffer> gd <Cmd>LspGotoDefinition<CR>
+      nnoremap <buffer> gD <Cmd>LspGotoImpl<CR>
+
+      if exists(':ALEDisableBuffer') == 2
+        ALEDisableBuffer
+      endif
+    }
+  augroup END
+enddef
+
+def SetLspOptions()
+  g:LspOptionsSet({
+    autoPopulateDiags: true,
+  })
+enddef
+# }}}
 # }}}
 
 # Plugin registrations. {{{
@@ -1583,12 +1420,6 @@ maxpac.Add('mattn/ctrlp-matchfuzzy', { post: CtrlpMatchfuzzyPost })
 maxpac.Add('mattn/ctrlp-ghq', { post: CtrlpGhqPost })
 maxpac.Add('a5ob7r/ctrlp-man', { post: CtrlpManPost })
 
-maxpac.Add('prabirshrestha/vim-lsp', { pre: VimLspPre })
-maxpac.Add('mattn/vim-lsp-settings', { pre: VimLspSettingsPre })
-
-maxpac.Add('tsuyoshicho/lightline-lsp')
-maxpac.Add('micchy326/lightline-lsp-progress')
-
 maxpac.Add('hrsh7th/vim-vsnip', { pre: VimVsnipPre, post: VimVsnipPost })
 maxpac.Add('hrsh7th/vim-vsnip-integ')
 maxpac.Add('rafamadriz/friendly-snippets')
@@ -1597,9 +1428,6 @@ maxpac.Add('lambdalisue/fern.vim', { pre: FernVimPre, fallback: FernVimFallback 
 maxpac.Add('lambdalisue/fern-hijack.vim')
 maxpac.Add('lambdalisue/fern-git-status.vim')
 maxpac.Add('a5ob7r/fern-renderer-lsflavor.vim', { pre: FernRendererLsflavorVimPre })
-
-maxpac.Add('prabirshrestha/asyncomplete.vim', { pre: AsyncompleteVimPre })
-maxpac.Add('prabirshrestha/asyncomplete-lsp.vim')
 
 # Operators.
 maxpac.Add('kana/vim-operator-user')
@@ -1677,6 +1505,7 @@ maxpac.Add('vim-jp/vital.vim')
 maxpac.Add('vim-utils/vim-man', { post: VimManPost })
 maxpac.Add('w0rp/ale', { pre: AlePre })
 maxpac.Add('yasuhiroki/github-actions-yaml.vim')
+maxpac.Add('yegappan/lsp', { pre: LspPre })
 maxpac.Add('zorab47/procfile.vim')
 
 if IsBundledPackageLoadable('comment')
