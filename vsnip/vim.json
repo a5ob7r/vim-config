@@ -2,20 +2,22 @@
   "A localrc template": {
     "prefix": "localrc",
     "body": [
+      "vim9script noclear",
+      "",
       "if get(s:, 'loaded_local_vimrc')",
       "  finish",
       "endif",
       "",
-      "let s:loaded_local_vimrc = 1",
+      "const loaded_local_vimrc = 1",
       "",
-      "\" vim: set expandtab tabstop=2 shiftwidth=2 foldmethod=marker:"
+      "# vim: set expandtab tabstop=2 shiftwidth=2 foldmethod=marker:"
     ],
     "description": "A template for .local.vimrc loaded by localrc (https://github.com/thinca/vim-localrc)"
   },
   "A modeline for my vimrc": {
     "prefix": "modeline",
     "body": [
-      "\" vim: set expandtab tabstop=2 shiftwidth=2 foldmethod=marker:"
+      "# vim: set expandtab tabstop=2 shiftwidth=2 foldmethod=marker:"
     ],
     "description": "A modeline for my vimrc"
   }
