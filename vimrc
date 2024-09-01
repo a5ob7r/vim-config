@@ -13,10 +13,14 @@ import autoload 'maxpac.vim'
 
 # =============================================================================
 
+# Variables {{{
+$VIMHOME = expand('<sfile>:p:h')
+# }}}
+
 # Functions {{{
 def InstallMinpac()
   # A root directory path of vim packages.
-  const packhome = $'{split(&packpath, ',')[0]}/pack'
+  const packhome = $'{$VIMHOME}/pack'
 
   const minpac_path =  $'{packhome}/minpac/opt/minpac'
   const minpac_url = 'https://github.com/k-takata/minpac.git'
@@ -79,10 +83,6 @@ def IsInTruecolorSupportedTerminal(): bool
 
   return !($TERM_PROGRAM ==# 'Apple_Terminal' || &term ==# 'linux')
 enddef
-# }}}
-
-# Variables {{{
-$VIMHOME = expand('<sfile>:p:h')
 # }}}
 
 # Options {{{
