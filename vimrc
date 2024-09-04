@@ -756,6 +756,14 @@ def AlePre()
 
   g:ale_python_auto_pipenv = 1
   g:ale_python_auto_poetry = 1
+
+  g:ale_linters = {
+    gha: ['actionlint'],
+  }
+
+  g:ale_linter_aliases = {
+    gha: 'yaml',
+  }
 enddef
 # }}}
 
