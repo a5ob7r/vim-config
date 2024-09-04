@@ -752,6 +752,8 @@ def AlePre()
   # Use ALE only as a linter engine.
   g:ale_disable_lsp = 1
 
+  g:ale_linters_explicit = 1
+
   g:ale_python_auto_pipenv = 1
   g:ale_python_auto_poetry = 1
 enddef
@@ -1296,10 +1298,6 @@ def LspPre()
     autocmd User LspAttached {
       nnoremap <buffer> gd <Cmd>LspGotoDefinition<CR>
       nnoremap <buffer> gD <Cmd>LspGotoImpl<CR>
-
-      if exists(':ALEDisableBuffer') == 2
-        ALEDisableBuffer
-      endif
     }
   augroup END
 enddef
