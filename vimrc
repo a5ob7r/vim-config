@@ -559,8 +559,6 @@ def PackComplete(..._): string
 enddef
 # }}}
 
-# =============================================================================
-
 # KeitaNakamura/neodark.vim {{{
 def NeodarkVimPost()
   # Prefer a near black background color.
@@ -654,8 +652,6 @@ def LightlineColorschemes(..._): string
 enddef
 # }}}
 
-# =============================================================================
-
 # airblade/vim-gitgutter {{{
 def VimGitgutterPre()
   g:gitgutter_sign_added = 'A'
@@ -687,8 +683,6 @@ def GitMessengerVimPost()
 enddef
 # }}}
 
-# =============================================================================
-
 # hrsh7th/vim-vsnip {{{
 def VimVsnipPre()
   g:vsnip_snippet_dir = $'{$VIMHOME}/vsnip'
@@ -704,15 +698,11 @@ def VimVsnipPost()
 enddef
 # }}}
 
-# =============================================================================
-
 # kana/vim-operator-replace {{{
 def VimOperatorReplacePost()
   map _ <Plug>(operator-replace)
 enddef
 # }}}
-
-# =============================================================================
 
 # a5ob7r/shellcheckrc.vim {{{
 def ShellcheckrcVimPre()
@@ -1115,8 +1105,6 @@ def VimbitsPre()
 enddef
 # }}}
 
-# =============================================================================
-
 # lambdalisue/fern.vim {{{
 def FernVimPre()
   g:fern#default_hidden = 1
@@ -1214,8 +1202,6 @@ def FernRendererLsflavorVimPre()
   g:fern#renderer = 'lsflavor'
 enddef
 # }}}
-
-# =============================================================================
 
 # lambdalisue/gin.vim {{{
 def GinVimPost()
