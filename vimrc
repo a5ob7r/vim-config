@@ -268,11 +268,6 @@ onoremap ga` a`
 vnoremap <silent><expr> j mode() ==# 'V' ? 'j' : 'gj'
 vnoremap <silent><expr> k mode() ==# 'V' ? 'k' : 'gk'
 
-# Switch buffers. These are similar to "gt" and "gT" for tabs, but for
-# buffers.
-nnoremap <silent> gb :bNext<CR>
-nnoremap <silent> gB :bprevious<CR>
-
 # Browse quickfix/location lists by "<C-N>" and "<C-P>".
 nnoremap <silent> <C-N> :<C-U>execute $'{v:count1}cnext'<CR>
 nnoremap <silent> <C-P> :<C-U>execute $'{v:count1}cprevious'<CR>
@@ -285,12 +280,7 @@ nnoremap <silent> <C-G><C-P> :<C-U>execute $'{v:count1}lprevious'<CR>
 # something.
 nnoremap <silent> <C-L> :<C-U>nohlsearch<CR>:Refresh<CR>
 
-nnoremap <Leader><CR> o<Esc>
-
 nnoremap <silent> <F10> <ScriptCmd>echo SyntaxItemAttribute(line('.'), col('.'))<CR>
-
-nnoremap <silent> <F2> :<C-U>ReloadVimrc<CR>
-nnoremap <silent> <Leader><F2> :<C-U>Vimrc<CR>
 
 # From "$VIMRUNTIME/mswin.vim".
 # Save with "CTRL-S" on normal mode and insert mode.
