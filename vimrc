@@ -720,23 +720,6 @@ def VimMarkdownPre()
 enddef
 # }}}
 
-# tyru/open-browser.vim {{{
-def OpenBrowserVimPost()
-  nmap <Leader>K <Plug>(openbrowser-smart-search)
-  nnoremap <Leader>k <ScriptCmd>SearchUnderCursorEnglishWord()<CR>
-enddef
-
-def SearchEnglishWord(word: string)
-  const url = $'https://dictionary.cambridge.org/dictionary/english/{word}'
-  openbrowser#open(url)
-enddef
-
-def SearchUnderCursorEnglishWord()
-  const word = expand('<cword>')
-  SearchEnglishWord(word)
-enddef
-# }}}
-
 # w0rp/ale {{{
 def AlePre()
   # Use ALE only as a linter engine.
@@ -1397,7 +1380,7 @@ maxpac.Add('thinca/vim-prettyprint')
 maxpac.Add('thinca/vim-themis')
 maxpac.Add('tpope/vim-endwise')
 maxpac.Add('tyru/eskk.vim')
-maxpac.Add('tyru/open-browser.vim', { post: OpenBrowserVimPost })
+maxpac.Add('tyru/open-browser.vim')
 maxpac.Add('vim-jp/vital.vim')
 maxpac.Add('vim-utils/vim-man', { post: VimManPost })
 maxpac.Add('w0rp/ale', { pre: AlePre })
