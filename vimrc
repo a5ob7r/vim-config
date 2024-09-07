@@ -86,18 +86,14 @@ enddef
 # }}}
 
 # Options {{{
-# Allow to delete everything in Insert Mode.
 set backspace=indent,eol,start
 
 set colorcolumn=81,101,121
 set cursorline
 
-# Show characters to fill the screen as much as possible when some characters
-# are out of the screen.
 set display=lastline
 
 # Maybe SKK dictionaries are encoded by "euc-jp".
-# NOTE: "usc-bom" must precede "utf-8" to recognize BOM.
 set fileencodings=ucs-bom,utf-8,iso-2022-jp,euc-jp,cp932,latin1
 
 # Prefer "<NL>" as "<EOL>" even if it is on Windows.
@@ -110,9 +106,6 @@ set autoread
 # Allow to hide buffers even if they are still modified.
 set hidden
 
-# The number of history of commands (":") and previous search patterns ("/").
-#
-# 10000 is the maximum value.
 set history=10000
 
 set hlsearch
@@ -125,11 +118,8 @@ set laststatus=2
 # This option has no effect when "statusline" is not empty.
 set ruler
 
-# The cursor offset value around both of window edges.
 set scrolloff=5
 
-# Show the search count message, such as "[1/24]", when using search commands
-# such as "/" and "n". This is enabled on "8.1.1270".
 set shortmess-=S
 
 set showcmd
@@ -141,19 +131,11 @@ set virtualedit=block
 # then complete the next item when type the key again.
 set wildmode=longest:full,full
 
-# A command mode with an enhanced completion.
 set wildmenu
 set wildoptions+=pum,fuzzy
 
-# "smartindent" isn't a super option for "autoindent", and the two of options
-# work in a complement way for each other. So these options should be on at
-# the same time. This is recommended in the help too.
 set autoindent smartindent
 
-# List mode, which renders alternative characters instead of invisible
-# (non-printable, out of screen or concealed) them.
-#
-# "extends" is only used when "wrap" is off.
 set list
 set listchars+=tab:>\ \|,extends:>,precedes:<
 
@@ -164,7 +146,6 @@ set showbreak=+++\
 set breakindent
 set breakindentopt=shift:2,sbr
 
-# "smartcase" works only if "ignorecase" is on.
 set ignorecase smartcase
 
 set pastetoggle=<F12>
@@ -192,10 +173,8 @@ else
   endif
 endif
 
-# Screen line oriented scrolling.
 set smoothscroll
 
-# Behave ":cd", ":tcd" and ":lcd" like in UNIX even if in MS-Windows.
 set cdhome
 
 set nrformats-=octal nrformats+=unsigned
