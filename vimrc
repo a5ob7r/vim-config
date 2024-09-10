@@ -204,9 +204,9 @@ const directory = exists('$XDG_CACHE_HOME') ? $XDG_CACHE_HOME : expand('~/.cache
 &directory = $'{directory}/vim/swap//'
 &undodir = $'{directory}/vim/undo//'
 
-silent mkdir(expand(&backupdir), 'p', 0700)
-silent mkdir(expand(&directory), 'p', 0700)
-silent mkdir(expand(&undodir), 'p', 0700)
+silent expand(&backupdir)->mkdir('p', 0700)
+silent expand(&directory)->mkdir('p', 0700)
+silent expand(&undodir)->mkdir('p', 0700)
 # }}}
 
 # Key mappings {{{
@@ -405,7 +405,7 @@ augroup vimrc
   # Make parent directories of the file which the written buffer is corresponing
   # if these directories are missing.
   autocmd BufWritePre * {
-    silent mkdir(expand('<afile>:p:h'), 'p')
+    silent expand('<afile>:p:h')->mkdir('p')
   }
 
   # Hide extras on normal mode of terminal.
