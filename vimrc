@@ -408,9 +408,15 @@ augroup vimrc
     silent expand('<afile>:p:h')->mkdir('p')
   }
 
-  # Hide extras on normal mode of terminal.
-  autocmd TerminalOpen * {
+  # Hide extras on Terminal-Normal mode.
+  #
+  # See "options-in-terminal" to set options for non-hidden and hidden terminal
+  # windows for more details.
+  autocmd TerminalWinOpen * {
     setlocal nolist nonumber colorcolumn=
+  }
+  autocmd TerminalOpen * {
+    autocmd BufWinEnter <buffer=abuf> ++once doautocmd vimrc TerminalWinOpen *
   }
 
   autocmd BufReadPre ~/* {
