@@ -230,6 +230,13 @@ nnoremap k gk
 nnoremap gj j
 nnoremap gk k
 
+# Smart linewise upward/downward cursor movements in Vitual mode.
+#
+# Move the cursor line by line phycically not logically(screen) if Visual mode
+# is linewise, otherwise character by character.
+vnoremap <silent><expr> j mode() ==# 'V' ? 'j' : 'gj'
+vnoremap <silent><expr> k mode() ==# 'V' ? 'k' : 'gk'
+
 # By default, "Y" is a synonym of "yy" for Vi-compatibilities.
 noremap Y y$
 
@@ -260,13 +267,6 @@ onoremap a` 2i`
 onoremap ga" a"
 onoremap ga' a'
 onoremap ga` a`
-
-# Smart linewise upward/downward cursor movements in Vitual mode.
-#
-# Move the cursor line by line phycically not logically(screen) if Visual mode
-# is linewise, otherwise character by character.
-vnoremap <silent><expr> j mode() ==# 'V' ? 'j' : 'gj'
-vnoremap <silent><expr> k mode() ==# 'V' ? 'k' : 'gk'
 
 # Browse quickfix/location lists by "<C-N>" and "<C-P>".
 nnoremap <silent> <C-N> :<C-U>execute $'{v:count1}cnext'<CR>
