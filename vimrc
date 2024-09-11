@@ -243,6 +243,19 @@ inoremap <C-F> <C-X><C-F>
 # Quit Visual mode.
 vnoremap <C-L> <Esc>
 
+# This is required for "term_start()" without "{ 'term_finish': 'close' }".
+nnoremap <silent><expr> <CR>
+  \ &buftype ==# 'terminal' && bufnr()->term_getjob()->job_status() ==# 'dead'
+  \ ? ":<C-U>bdelete<CR>"
+  \ : "<Plug>(newline)"
+
+# Delete finished terminal buffers by "<CR>", this behavior is similar to
+# Neovim's builtin terminal.
+tnoremap <silent><expr> <CR>
+  \ bufnr()->term_getjob()->job_status() ==# 'dead'
+  \ ? "<C-W>:bdelete<CR>"
+  \ : "<CR>"
+
 # A newline version of "i_CTRL-G_k" and "i_CTRL-G_j".
 inoremap <C-G><CR> <End><CR>
 
@@ -302,19 +315,6 @@ tnoremap <silent> <C-W><Leader>c <C-W>:Terminal<CR>
 
 nnoremap <silent> <Leader>y :YankComments<CR>
 vnoremap <silent> <Leader>y :YankComments<CR>
-
-# Delete finished terminal buffers by "<CR>", this behavior is similar to
-# Neovim's builtin terminal.
-tnoremap <silent><expr> <CR>
-  \ bufnr()->term_getjob()->job_status() ==# 'dead'
-  \ ? "<C-W>:bdelete<CR>"
-  \ : "<CR>"
-
-# This is required for "term_start()" without "{ 'term_finish': 'close' }".
-nnoremap <silent><expr> <CR>
-  \ &buftype ==# 'terminal' && bufnr()->term_getjob()->job_status() ==# 'dead'
-  \ ? ":<C-U>bdelete<CR>"
-  \ : "<Plug>(newline)"
 
 # Maximize or minimize the current window.
 nnoremap <silent> <C-W>m :<C-U>resize 0<CR>
