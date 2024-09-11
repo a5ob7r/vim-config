@@ -428,29 +428,6 @@ augroup vimrc
       execute "normal! g`\""
     endif
   }
-
-  # Read/Write the binary format, but are these configurations really
-  # comfortable? Maybe we should use a binary editor insated.
-  autocmd BufReadPost * {
-    if &binary
-      execute 'silent %!xxd -g 1'
-      set filetype=xxd
-    endif
-  }
-  autocmd BufWritePre * {
-    if &binary
-      var b:cursorpos = getcurpos()
-      execute '%!xxd -r'
-    endif
-  }
-  autocmd BufWritePost * {
-    if &binary
-      execute 'silent %!xxd -g 1'
-      set nomodified
-      cursor(b:cursorpos[1], b:cursorpos[2], b:cursorpos[3])
-      unlet b:cursorpos
-    endif
-  }
 augroup END
 
 # Register a command to refresh something.
