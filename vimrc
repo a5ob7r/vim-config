@@ -224,20 +224,13 @@ map q <Nop>
 map <F1> <Nop>
 map! <F1> <Nop>
 
-# Swap keybingings of 'j/k' and 'gj/gk' with each other.
 nnoremap j gj
 nnoremap k gk
 nnoremap gj j
 nnoremap gk k
-
-# Smart linewise upward/downward cursor movements in Vitual mode.
-#
-# Move the cursor line by line phycically not logically(screen) if Visual mode
-# is linewise, otherwise character by character.
 vnoremap <silent><expr> j mode() ==# 'V' ? 'j' : 'gj'
 vnoremap <silent><expr> k mode() ==# 'V' ? 'k' : 'gk'
 
-# By default, "Y" is a synonym of "yy" for Vi-compatibilities.
 noremap Y y$
 
 # Change the current window height instantly.
