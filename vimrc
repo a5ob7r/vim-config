@@ -216,12 +216,12 @@ g:mapleader = ' '
 # Use "Q" as the typed key recording starter and the terminator instead of
 # "q".
 noremap Q q
-map q <Nop>
+noremap q <Nop>
 
 # Do not anything even if type "<F1>". I sometimes mistype it instead of
 # typing "<ESC>".
-map <F1> <Nop>
-map! <F1> <Nop>
+noremap <F1> <Nop>
+noremap! <F1> <Nop>
 
 nnoremap j gj
 nnoremap k gk
@@ -311,7 +311,7 @@ tnoremap <silent><expr> <CR>
   \ : "<CR>"
 
 # This is required for "term_start()" without "{ 'term_finish': 'close' }".
-nmap <silent><expr> <CR>
+nnoremap <silent><expr> <CR>
   \ &buftype ==# 'terminal' && bufnr()->term_getjob()->job_status() ==# 'dead'
   \ ? ":<C-U>bdelete<CR>"
   \ : "<Plug>(newline)"
@@ -319,21 +319,21 @@ nmap <silent><expr> <CR>
 # Maximize or minimize the current window.
 nnoremap <silent> <C-W>m :<C-U>resize 0<CR>
 nnoremap <silent> <C-W>Vm :<C-U>vertical resize 0<CR>
-nmap <silent> <C-W>gm <Plug>(xminimize)
+nnoremap <silent> <C-W>gm <Plug>(xminimize)
 
 nnoremap <silent> <C-W>M :<C-U>resize<CR>
 nnoremap <silent> <C-W>VM :<C-U>vertical resize<CR>
 
 tnoremap <silent> <C-W>m <C-W>:resize 0<CR>
 tnoremap <silent> <C-W>Vm <C-W>:vertical resize 0<CR>
-tmap <silent> <C-W>gm <Plug>(xminimize)
+tnoremap <silent> <C-W>gm <Plug>(xminimize)
 
 tnoremap <silent> <C-W>M <C-W>:resize<CR>
 tnoremap <silent> <C-W>VM <C-W>:vertical resize<CR>
 
 # NOTE: "<Nul>" is sent instead of "<C-Space>" when type the "CTRL" key and
 # the "SPACE" one at once if in some terminal emulators.
-nmap <Nul> <C-Space>
+nnoremap <Nul> <C-Space>
 # }}}
 
 # Commands {{{
@@ -609,9 +609,9 @@ enddef
 
 # lambdalisue/gina.vim {{{
 def GinaVimPost()
-  nmap <silent> <Leader>gl :<C-U>Gina log --graph --all<CR>
-  nmap <silent> <Leader>gs :<C-U>Gina status<CR>
-  nmap <silent> <Leader>gc :<C-U>Gina commit<CR>
+  nnoremap <silent> <Leader>gl :<C-U>Gina log --graph --all<CR>
+  nnoremap <silent> <Leader>gs :<C-U>Gina status<CR>
+  nnoremap <silent> <Leader>gc :<C-U>Gina commit<CR>
 
   gina#custom#mapping#nmap('log', 'q', '<C-W>c', { noremap: 1, silent: 1 })
   gina#custom#mapping#nmap('log', 'yy', '<Plug>(gina-yank-rev)', { silent: 1 })
@@ -634,18 +634,18 @@ def VimVsnipPre()
 enddef
 
 def VimVsnipPost()
-  imap <expr> <Tab>
+  inoremap <expr> <Tab>
     \ vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' :
     \ vsnip#expandable() ? '<Plug>(vsnip-expand)' : '<Tab>'
-  smap <expr> <Tab> vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' : '<Tab>'
-  imap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : '<S-Tab>'
-  smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : '<S-Tab>'
+  snoremap <expr> <Tab> vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' : '<Tab>'
+  inoremap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : '<S-Tab>'
+  snoremap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : '<S-Tab>'
 enddef
 # }}}
 
 # kana/vim-operator-replace {{{
 def VimOperatorReplacePost()
-  map _ <Plug>(operator-replace)
+  noremap _ <Plug>(operator-replace)
 enddef
 # }}}
 
@@ -693,8 +693,8 @@ def VimRipgrepPost()
     Ripgrep(['-C<count>', <q-args>], { case: <bang>1, escape: <bang>1 })
   }
 
-  map <Leader>f <Plug>(operator-ripgrep-g)
-  map g<Leader>f <Plug>(operator-ripgrep)
+  noremap <Leader>f <Plug>(operator-ripgrep-g)
+  noremap g<Leader>f <Plug>(operator-ripgrep)
 
   operator#user#define('ripgrep', 'Op_ripgrep')
   operator#user#define('ripgrep-g', 'Op_ripgrep_g')
@@ -836,22 +836,22 @@ def VimAsteriskPost()
   # Keep the cursor offset while searching. See "search-offset".
   g:asterisk#keeppos = 1
 
-  map * <Plug>(asterisk-z*)
-  map # <Plug>(asterisk-z#)
-  map g* <Plug>(asterisk-gz*)
-  map g# <Plug>(asterisk-gz#)
-  map z* <Plug>(asterisk-*)
-  map z# <Plug>(asterisk-#)
-  map gz* <Plug>(asterisk-g*)
-  map gz# <Plug>(asterisk-g#)
+  noremap * <Plug>(asterisk-z*)
+  noremap # <Plug>(asterisk-z#)
+  noremap g* <Plug>(asterisk-gz*)
+  noremap g# <Plug>(asterisk-gz#)
+  noremap z* <Plug>(asterisk-*)
+  noremap z# <Plug>(asterisk-#)
+  noremap gz* <Plug>(asterisk-g*)
+  noremap gz# <Plug>(asterisk-g#)
 enddef
 # }}}
 
 # monaqa/modesearch.vim {{{
 def ModesearchVimPost()
-  nmap <silent> g/ <Plug>(modesearch-slash-rawstr)
-  nmap <silent> g? <Plug>(modesearch-question-regexp)
-  cmap <silent> <C-x> <Plug>(modesearch-toggle-mode)
+  nnoremap <silent> g/ <Plug>(modesearch-slash-rawstr)
+  nnoremap <silent> g? <Plug>(modesearch-question-regexp)
+  cnoremap <silent> <C-x> <Plug>(modesearch-toggle-mode)
 enddef
 # }}}
 
@@ -894,13 +894,13 @@ enddef
 def LinefeedVimPost()
   # TODO: These keymappings override some default them and conflict with other
   # plugin's default one.
-  # imap <silent> <C-K> <Plug>(linefeed-goup)
-  # imap <silent> <C-G>k <Plug>(linefeed-up)
-  # imap <silent> <C-G><C-K> <Plug>(linefeed-up)
-  # imap <silent> <C-G><C-K> <Plug>(linefeed-up)
-  # imap <silent> <C-J> <Plug>(linefeed-godown)
-  # imap <silent> <C-G>j <Plug>(linefeed-down)
-  # imap <silent> <C-G><C-J> <Plug>(linefeed-down)
+  # inoremap <silent> <C-K> <Plug>(linefeed-goup)
+  # inoremap <silent> <C-G>k <Plug>(linefeed-up)
+  # inoremap <silent> <C-G><C-K> <Plug>(linefeed-up)
+  # inoremap <silent> <C-G><C-K> <Plug>(linefeed-up)
+  # inoremap <silent> <C-J> <Plug>(linefeed-godown)
+  # inoremap <silent> <C-G>j <Plug>(linefeed-down)
+  # inoremap <silent> <C-G><C-J> <Plug>(linefeed-down)
 enddef
 # }}}
 
@@ -1145,10 +1145,10 @@ def GinVimPost()
   # is too slow in a large repository.
   #
   # https://github.com/lambdalisue/gin.vim/issues/116
-  nmap <silent> <Leader>gl :<C-U>GinLog --graph --oneline --all -500<CR>
-  nmap <silent> <Leader>gs :<C-U>GinStatus<CR>
-  nmap <silent> <Leader>gb <Cmd>GinBranch<CR>
-  nmap <silent> <Leader>gc :<C-U>Gin commit<CR>
+  nnoremap <silent> <Leader>gl :<C-U>GinLog --graph --oneline --all -500<CR>
+  nnoremap <silent> <Leader>gs :<C-U>GinStatus<CR>
+  nnoremap <silent> <Leader>gb <Cmd>GinBranch<CR>
+  nnoremap <silent> <Leader>gc :<C-U>Gin commit<CR>
 
   augroup vimrc:gin
     autocmd!
