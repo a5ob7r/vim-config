@@ -162,8 +162,7 @@ if has('win32') || has('osxdarwin')
   # register is synchronous with the system clipboard's them.
   set clipboard=unnamed
 else
-  # No connection to the X server if in a console.
-  set clipboard=exclude:cons\|linux
+  set clipboard-=autoselect
 
   if has('unnamedplus')
     # This is similar to "unnamed", but use the "+" register instead. The
@@ -228,6 +227,7 @@ nnoremap j gj
 nnoremap k gk
 nnoremap gj j
 nnoremap gk k
+
 vnoremap <silent><expr> j mode() ==# 'V' ? 'j' : 'gj'
 vnoremap <silent><expr> k mode() ==# 'V' ? 'k' : 'gk'
 
