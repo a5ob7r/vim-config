@@ -416,8 +416,7 @@ augroup vimrc
     setlocal undofile
   }
 
-  # From "$VIMRUNTIME/defaults.vim".
-  # Jump cursor to last editting line.
+  # See "restore-cursor".
   autocmd BufReadPost * {
     const line = line("'\"")
 
