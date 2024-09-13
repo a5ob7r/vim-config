@@ -368,19 +368,24 @@ command! XDisconnect {
 # }}}
 
 # Auto commands {{{
-augroup vimrc
+augroup vimrc:OpenQuickFixWindow
   autocmd!
-
   autocmd QuickFixCmdPost *grep* {
     cwindow
   }
+augroup END
 
+augroup vimrc:MakeParentDirectories
+  autocmd!
   # Make parent directories of the file which the written buffer is corresponing
   # if these directories are missing.
   autocmd BufWritePre * {
     silent expand('<afile>:p:h')->mkdir('p')
   }
+augroup END
 
+augroup vimrc:NoExtrasOnTerminalNormalMode
+  autocmd!
   # Hide extras on Terminal-Normal mode.
   #
   # See "options-in-terminal" to set options for non-hidden and hidden terminal
@@ -391,11 +396,16 @@ augroup vimrc
   autocmd TerminalOpen * {
     autocmd BufWinEnter <buffer=abuf> ++once doautocmd vimrc TerminalWinOpen *
   }
+augroup END
 
+augroup vimrc:Undoable
+  autocmd!
   autocmd BufReadPre ~/* {
     setlocal undofile
   }
+augroup END
 
+augroup vimrc:RestoreCursor
   # See "restore-cursor".
   autocmd BufReadPost * {
     const line = line("'\"")
