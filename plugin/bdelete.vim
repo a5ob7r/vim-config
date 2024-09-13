@@ -29,8 +29,6 @@ endfunction
 " Normal buffers are just for editing files and not terminal or unlisted (i.e.
 " help) buffers.
 function! s:bdelete(bang) abort
-  let l:bang = empty(a:bang) ? '' : '!'
-
   let l:bufid = bufnr('%')
   " Ignore non normal buffers.
   let l:buffers = filter(tabpagebuflist(), "empty(getbufvar(v:val, '&buftype'))")
@@ -45,16 +43,14 @@ function! s:bdelete(bang) abort
     else
       " This does nothing if the current buffer is already an new empty
       " buffer.
-      execute printf('enew%s', l:bang)
+      execute printf('enew%s', a:bang)
     endif
   else
-    execute printf('bdelete%s %s', l:bang, l:bufid)
+    execute printf('bdelete%s %s', a:bang, l:bufid)
   endif
 endfunction
 
 function! s:delete_empty_buffers(bang, line1, line2) abort
-  let l:bang = empty(a:bang) ? '' : '!'
-
   let l:buffers = {}
 
   for l:tn in range(1, tabpagenr('$'))
@@ -65,7 +61,7 @@ function! s:delete_empty_buffers(bang, line1, line2) abort
 
   for l:bn in range(a:line1, a:line2)
     if buflisted(l:bn) && s:is_empty_buffer(l:bn) && !get(l:buffers, l:bn, 0)
-      execute printf('bdelete%s', l:bang) l:bn
+      execute printf('bdelete%s', a:bang) l:bn
     endif
   endfor
 endfunction
