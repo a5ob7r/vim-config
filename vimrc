@@ -18,18 +18,6 @@ $VIMHOME = expand('<sfile>:p:h')
 # }}}
 
 # Functions {{{
-def InstallMinpac()
-  # A root directory path of vim packages.
-  const packhome = $'{$VIMHOME}/pack'
-
-  const minpac_path =  $'{packhome}/minpac/opt/minpac'
-  const minpac_url = 'https://github.com/k-takata/minpac.git'
-
-  const command = $'git clone {minpac_url} {minpac_path}'
-
-  execute 'terminal' command
-enddef
-
 # Get syntax item information at a position.
 #
 # https://vim.fandom.com/wiki/Identify_the_syntax_highlighting_group_used_at_the_cursor
@@ -355,7 +343,15 @@ command! Hitest {
 }
 
 command! InstallMinpac {
-  InstallMinpac()
+  # A root directory path of vim packages.
+  const packhome = $'{$VIMHOME}/pack'
+
+  const minpac_path =  $'{packhome}/minpac/opt/minpac'
+  const minpac_url = 'https://github.com/k-takata/minpac.git'
+
+  const command = $'git clone {minpac_url} {minpac_path}'
+
+  execute 'terminal' command
 }
 
 command! XReconnect {
