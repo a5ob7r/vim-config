@@ -346,10 +346,10 @@ command! InstallMinpac {
   # A root directory path of vim packages.
   const packhome = $'{$VIMHOME}/pack'
 
-  const minpac_path =  $'{packhome}/minpac/opt/minpac'
-  const minpac_url = 'https://github.com/k-takata/minpac.git'
+  const repository = 'https://github.com/k-takata/minpac.git'
+  const directory =  $'{packhome}/minpac/opt/minpac'
 
-  const command = $'git clone {minpac_url} {minpac_path}'
+  const command = $'git clone {repository} {directory}'
 
   execute 'terminal' command
 }
