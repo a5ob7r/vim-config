@@ -288,15 +288,8 @@ nnoremap <silent> <C-L> :<C-U>nohlsearch<CR>:Refresh<CR>
 
 nnoremap <silent> <F10> <ScriptCmd>echo SyntaxItemAttribute(line('.'), col('.'))<CR>
 
-# From "$VIMRUNTIME/mswin.vim".
-# Save with "CTRL-S" on normal mode and insert mode.
-#
-# I usually save buffers to files every line editing by switching to the
-# normal mode and typing ":w". However doing them every editing is a little
-# bit bothersome. So I want to use these shortcuts which are often used to
-# save files by GUI editros.
-nnoremap <silent> <C-S> :<C-U>Update<CR>
-inoremap <silent> <C-S> <Cmd>Update<CR>
+nnoremap <silent> <C-S> <Cmd>update<CR>
+inoremap <silent> <C-S> <Cmd>update<CR>
 
 nnoremap <silent> <Leader>t :<C-U>tabnew<CR>
 
@@ -337,19 +330,6 @@ nmap <Nul> <C-Space>
 # }}}
 
 # Commands {{{
-# ":update" with new empty file creations for the current buffer.
-#
-# Run ":update" if the file which the current buffer is corresponding exists,
-# otherwise run ":write" instead. This is because ":update" doesn't create a
-# new empty file if the corresponding buffer is empty and unmodified.
-#
-# This is an auxiliary command for keyboard shortcuts.
-command! -bang -bar -range=% Update {
-  const command = expand('%')->filewritable() ? 'update' : 'write'
-
-  execute $'<mods> :<line1>,<line2>{command}<bang>'
-}
-
 # A helper command to open a file in a split window, or the current one (if it
 # is invoked with a bang mark).
 command! -bang -bar -nargs=1 -complete=file Open {
