@@ -166,6 +166,8 @@ set cdhome
 
 set nrformats-=octal nrformats+=unsigned
 
+set spelllang+=cjk
+
 if has('gui_running')
   # Add a "M" to the "guioptions" before executing ":syntax enable" or
   # ":filetype on" to avoid sourcing the "menu.vim".
