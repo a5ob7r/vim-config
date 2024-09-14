@@ -103,7 +103,6 @@ set incsearch
 # separate windows.
 set laststatus=2
 
-# This option has no effect when "statusline" is not empty.
 set ruler
 
 set scrolloff=5
