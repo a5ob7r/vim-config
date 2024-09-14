@@ -74,12 +74,34 @@ enddef
 # }}}
 
 # Options {{{
+set autoindent smartindent
 set backspace=indent,eol,start
-
+set breakindent breakindentopt=shift:2,sbr
+set cdhome
 set colorcolumn=81,101,121
+set completeopt=menuone,longest,popup
 set cursorline
-
 set display=lastline
+set history=10000
+set hlsearch
+set ignorecase smartcase
+set incsearch
+set list listchars+=tab:>\ \|,extends:>,precedes:<
+set nrformats-=octal nrformats+=unsigned
+set pastetoggle=<F12>
+set ruler
+set scrolloff=5
+set shortmess-=S
+set showcmd
+set showmatch
+set smoothscroll
+set spelllang+=cjk
+set virtualedit=block
+set wildmenu wildoptions+=pum,fuzzy
+
+if IsInTruecolorSupportedTerminal()
+  set termguicolors
+endif
 
 # Maybe SKK dictionaries are encoded by "euc-jp".
 set fileencodings=ucs-bom,utf-8,iso-2022-jp,euc-jp,cp932,latin1
@@ -94,54 +116,18 @@ set autoread
 # Allow to hide buffers even if they are still modified.
 set hidden
 
-set history=10000
-
-set hlsearch
-set incsearch
-
 # Render "statusline" for all of windows, to show window statuses not to
 # separate windows.
 set laststatus=2
-
-set ruler
-
-set scrolloff=5
-
-set shortmess-=S
-
-set showcmd
-set showmatch
-set virtualedit=block
 
 # When type the "wildchar" key that the default value is "<Tab>" in Vim,
 # complete the longest match part and start "wildmenu" at the same time. And
 # then complete the next item when type the key again.
 set wildmode=longest:full,full
 
-set wildmenu
-set wildoptions+=pum,fuzzy
-
-set autoindent smartindent
-
-set list
-set listchars+=tab:>\ \|,extends:>,precedes:<
-
 # Strings that start with '>' isn't compatible with the block quotation syntax
 # of markdown.
 set showbreak=+++\ 
-
-set breakindent
-set breakindentopt=shift:2,sbr
-
-set ignorecase smartcase
-
-set pastetoggle=<F12>
-
-set completeopt=menuone,longest,popup
-
-if IsInTruecolorSupportedTerminal()
-  set termguicolors
-endif
 
 if has('win32') || has('osxdarwin')
   # Use the "*" register as a default one, for yank, delete, change and put
@@ -158,14 +144,6 @@ else
     set clipboard^=unnamedplus
   endif
 endif
-
-set smoothscroll
-
-set cdhome
-
-set nrformats-=octal nrformats+=unsigned
-
-set spelllang+=cjk
 
 if has('gui_running')
   # Add a "M" to the "guioptions" before executing ":syntax enable" or
