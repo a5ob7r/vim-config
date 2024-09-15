@@ -249,14 +249,14 @@ nnoremap <silent> <Leader>t <Cmd>tabnew<CR>
 
 # Like default configurations of Tmux.
 nnoremap <silent> <Leader>" <Cmd>terminal<CR>
-nnoremap <silent> <Leader>' <ScriptCmd>Terminal()<CR>
+nnoremap <silent> <Leader>g" <ScriptCmd>Terminal()<CR>
 nnoremap <silent> <Leader>% <Cmd>vertical terminal<CR>
-nnoremap <silent> <Leader>5 <ScriptCmd>vertical Terminal()<CR>
+nnoremap <silent> <Leader>g% <ScriptCmd>vertical Terminal()<CR>
 
 tnoremap <silent> <C-W><Leader>" <Cmd>terminal<CR>
-tnoremap <silent> <C-W><Leader>' <ScriptCmd>Terminal()<CR>
+tnoremap <silent> <C-W><Leader>g" <ScriptCmd>Terminal()<CR>
 tnoremap <silent> <C-W><Leader>% <Cmd>vertical terminal<CR>
-tnoremap <silent> <C-W><Leader>5 <ScriptCmd>vertical Terminal()<CR>
+tnoremap <silent> <C-W><Leader>g% <ScriptCmd>vertical Terminal()<CR>
 
 nnoremap <silent> <Leader>y :YankComments<CR>
 vnoremap <silent> <Leader>y :YankComments<CR>
