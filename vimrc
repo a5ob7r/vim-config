@@ -252,13 +252,11 @@ nnoremap <silent> <Leader>" <Cmd>terminal<CR>
 nnoremap <silent> <Leader>' <ScriptCmd>Terminal()<CR>
 nnoremap <silent> <Leader>% <Cmd>vertical terminal<CR>
 nnoremap <silent> <Leader>5 <ScriptCmd>vertical Terminal()<CR>
-nnoremap <silent> <Leader>c <Cmd>Terminal<CR>
 
 tnoremap <silent> <C-W><Leader>" <Cmd>terminal<CR>
 tnoremap <silent> <C-W><Leader>' <ScriptCmd>Terminal()<CR>
 tnoremap <silent> <C-W><Leader>% <Cmd>vertical terminal<CR>
 tnoremap <silent> <C-W><Leader>5 <ScriptCmd>vertical Terminal()<CR>
-tnoremap <silent> <C-W><Leader>c <Cmd>Terminal<CR>
 
 nnoremap <silent> <Leader>y :YankComments<CR>
 vnoremap <silent> <Leader>y :YankComments<CR>
