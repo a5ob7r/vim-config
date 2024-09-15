@@ -182,8 +182,8 @@ nnoremap k gk
 nnoremap gj j
 nnoremap gk k
 
-vnoremap <silent><expr> j mode() ==# 'V' ? 'j' : 'gj'
-vnoremap <silent><expr> k mode() ==# 'V' ? 'k' : 'gk'
+vnoremap <expr> j mode() ==# 'V' ? 'j' : 'gj'
+vnoremap <expr> k mode() ==# 'V' ? 'k' : 'gk'
 
 noremap Y y$
 
@@ -198,14 +198,14 @@ inoremap <C-F> <C-X><C-F>
 vnoremap <C-L> <Esc>
 
 # This is required for "term_start()" without "{ 'term_finish': 'close' }".
-nnoremap <silent><expr> <CR>
+nnoremap <expr> <CR>
   \ &buftype ==# 'terminal' && bufnr()->term_getjob()->job_status() ==# 'dead'
   \ ? "<Cmd>bdelete<CR>"
   \ : "<Plug>(newline)"
 
 # Delete finished terminal buffers by "<CR>", this behavior is similar to
 # Neovim's builtin terminal.
-tnoremap <silent><expr> <CR>
+tnoremap <expr> <CR>
   \ bufnr()->term_getjob()->job_status() ==# 'dead'
   \ ? "<Cmd>bdelete<CR>"
   \ : "<CR>"
@@ -229,52 +229,52 @@ onoremap ga' a'
 onoremap ga` a`
 
 # Browse quickfix/location lists by "<C-N>" and "<C-P>".
-nnoremap <silent> <C-N> <Cmd>execute $'{v:count1}cnext'<CR>
-nnoremap <silent> <C-P> <Cmd>execute $'{v:count1}cprevious'<CR>
-nnoremap <silent> g<C-N> <Cmd>execute $'{v:count1}lnext'<CR>
-nnoremap <silent> g<C-P> <Cmd>execute $'{v:count1}lprevious'<CR>
-nnoremap <silent> <C-G><C-N> <Cmd>execute $'{v:count1}lnext'<CR>
-nnoremap <silent> <C-G><C-P> <Cmd>execute $'{v:count1}lprevious'<CR>
+nnoremap <C-N> <Cmd>execute $'{v:count1}cnext'<CR>
+nnoremap <C-P> <Cmd>execute $'{v:count1}cprevious'<CR>
+nnoremap g<C-N> <Cmd>execute $'{v:count1}lnext'<CR>
+nnoremap g<C-P> <Cmd>execute $'{v:count1}lprevious'<CR>
+nnoremap <C-G><C-N> <Cmd>execute $'{v:count1}lnext'<CR>
+nnoremap <C-G><C-P> <Cmd>execute $'{v:count1}lprevious'<CR>
 
 # Clear the highlightings for pattern searching and run a command to refresh
 # something.
-nnoremap <silent> <C-L> <Cmd>nohlsearch<CR><Cmd>Refresh<CR>
+nnoremap <C-L> <Cmd>nohlsearch<CR><Cmd>Refresh<CR>
 
-nnoremap <silent> <F10> <ScriptCmd>echo SyntaxItemAttribute(line('.'), col('.'))<CR>
+nnoremap <F10> <ScriptCmd>echo SyntaxItemAttribute(line('.'), col('.'))<CR>
 
-nnoremap <silent> <C-S> <Cmd>update<CR>
-inoremap <silent> <C-S> <Cmd>update<CR>
+nnoremap <C-S> <Cmd>update<CR>
+inoremap <C-S> <Cmd>update<CR>
 
-nnoremap <silent> <Leader>t <Cmd>tabnew<CR>
+nnoremap <Leader>t <Cmd>tabnew<CR>
 
 # Like default configurations of Tmux.
-nnoremap <silent> <Leader>" <Cmd>terminal<CR>
-nnoremap <silent> <Leader>g" <ScriptCmd>Terminal()<CR>
-nnoremap <silent> <Leader>% <Cmd>vertical terminal<CR>
-nnoremap <silent> <Leader>g% <ScriptCmd>vertical Terminal()<CR>
+nnoremap <Leader>" <Cmd>terminal<CR>
+nnoremap <Leader>g" <ScriptCmd>Terminal()<CR>
+nnoremap <Leader>% <Cmd>vertical terminal<CR>
+nnoremap <Leader>g% <ScriptCmd>vertical Terminal()<CR>
 
-tnoremap <silent> <C-W><Leader>" <Cmd>terminal<CR>
-tnoremap <silent> <C-W><Leader>g" <ScriptCmd>Terminal()<CR>
-tnoremap <silent> <C-W><Leader>% <Cmd>vertical terminal<CR>
-tnoremap <silent> <C-W><Leader>g% <ScriptCmd>vertical Terminal()<CR>
+tnoremap <C-W><Leader>" <Cmd>terminal<CR>
+tnoremap <C-W><Leader>g" <ScriptCmd>Terminal()<CR>
+tnoremap <C-W><Leader>% <Cmd>vertical terminal<CR>
+tnoremap <C-W><Leader>g% <ScriptCmd>vertical Terminal()<CR>
 
 nnoremap <silent> <Leader>y :YankComments<CR>
 vnoremap <silent> <Leader>y :YankComments<CR>
 
 # Maximize or minimize the current window.
-nnoremap <silent> <C-W>m <Cmd>resize 0<CR>
-nnoremap <silent> <C-W>Vm <Cmd>vertical resize 0<CR>
-nnoremap <silent> <C-W>gm <Plug>(xminimize)
+nnoremap <C-W>m <Cmd>resize 0<CR>
+nnoremap <C-W>Vm <Cmd>vertical resize 0<CR>
+nnoremap <C-W>gm <Plug>(xminimize)
 
-nnoremap <silent> <C-W>M <Cmd>resize<CR>
-nnoremap <silent> <C-W>VM <Cmd>vertical resize<CR>
+nnoremap <C-W>M <Cmd>resize<CR>
+nnoremap <C-W>VM <Cmd>vertical resize<CR>
 
-tnoremap <silent> <C-W>m <Cmd>resize 0<CR>
-tnoremap <silent> <C-W>Vm <Cmd>vertical resize 0<CR>
-tnoremap <silent> <C-W>gm <Plug>(xminimize)
+tnoremap <C-W>m <Cmd>resize 0<CR>
+tnoremap <C-W>Vm <Cmd>vertical resize 0<CR>
+tnoremap <C-W>gm <Plug>(xminimize)
 
-tnoremap <silent> <C-W>M <Cmd>resize<CR>
-tnoremap <silent> <C-W>VM <Cmd>vertical resize<CR>
+tnoremap <C-W>M <Cmd>resize<CR>
+tnoremap <C-W>VM <Cmd>vertical resize<CR>
 
 # NOTE: "<Nul>" is sent instead of "<C-Space>" when type the "CTRL" key and
 # the "SPACE" one at once if in some terminal emulators.
@@ -562,9 +562,9 @@ enddef
 
 # lambdalisue/gina.vim {{{
 def GinaVimPost()
-  nnoremap <silent> <Leader>gl <Cmd>Gina log --graph --all<CR>
-  nnoremap <silent> <Leader>gs <Cmd>Gina status<CR>
-  nnoremap <silent> <Leader>gc <Cmd>Gina commit<CR>
+  nnoremap <Leader>gl <Cmd>Gina log --graph --all<CR>
+  nnoremap <Leader>gs <Cmd>Gina status<CR>
+  nnoremap <Leader>gc <Cmd>Gina commit<CR>
 
   gina#custom#mapping#nmap('log', 'q', '<C-W>c', { noremap: 1, silent: 1 })
   gina#custom#mapping#nmap('log', 'yy', '<Plug>(gina-yank-rev)', { silent: 1 })
@@ -802,9 +802,9 @@ enddef
 
 # monaqa/modesearch.vim {{{
 def ModesearchVimPost()
-  nnoremap <silent> g/ <Plug>(modesearch-slash-rawstr)
-  nnoremap <silent> g? <Plug>(modesearch-question-regexp)
-  cnoremap <silent> <C-x> <Plug>(modesearch-toggle-mode)
+  nnoremap g/ <Plug>(modesearch-slash-rawstr)
+  nnoremap g? <Plug>(modesearch-question-regexp)
+  cnoremap <C-x> <Plug>(modesearch-toggle-mode)
 enddef
 # }}}
 
@@ -847,13 +847,13 @@ enddef
 def LinefeedVimPost()
   # TODO: These keymappings override some default them and conflict with other
   # plugin's default one.
-  # inoremap <silent> <C-K> <Plug>(linefeed-goup)
-  # inoremap <silent> <C-G>k <Plug>(linefeed-up)
-  # inoremap <silent> <C-G><C-K> <Plug>(linefeed-up)
-  # inoremap <silent> <C-G><C-K> <Plug>(linefeed-up)
-  # inoremap <silent> <C-J> <Plug>(linefeed-godown)
-  # inoremap <silent> <C-G>j <Plug>(linefeed-down)
-  # inoremap <silent> <C-G><C-J> <Plug>(linefeed-down)
+  # inoremap <C-K> <Plug>(linefeed-goup)
+  # inoremap <C-G>k <Plug>(linefeed-up)
+  # inoremap <C-G><C-K> <Plug>(linefeed-up)
+  # inoremap <C-G><C-K> <Plug>(linefeed-up)
+  # inoremap <C-J> <Plug>(linefeed-godown)
+  # inoremap <C-G>j <Plug>(linefeed-down)
+  # inoremap <C-G><C-J> <Plug>(linefeed-down)
 enddef
 # }}}
 
@@ -950,11 +950,11 @@ def VistaVimPre()
   augroup vimrc:vista
     autocmd!
     autocmd FileType vista,vista_kind {
-      nnoremap <buffer><silent> q <Cmd>Vista!!<CR>
+      nnoremap <buffer> q <Cmd>Vista!!<CR>
     }
   augroup END
 
-  nnoremap <silent> <Leader>v <Cmd>Vista!!<CR>
+  nnoremap <Leader>v <Cmd>Vista!!<CR>
 enddef
 # }}}
 
@@ -1041,8 +1041,8 @@ def FernVimFallback()
   unlet g:loaded_netrw
   unlet g:loaded_netrwPlugin
 
-  nnoremap <silent> <Leader>n <Cmd>ToggleNetrw<CR>
-  nnoremap <silent> <Leader>N <Cmd>ToggleNetrw!<CR>
+  nnoremap <Leader>n <Cmd>ToggleNetrw<CR>
+  nnoremap <Leader>N <Cmd>ToggleNetrw!<CR>
 enddef
 
 # Toggle a fern buffer to keep the cursor position. A tab should only have
@@ -1098,10 +1098,10 @@ def GinVimPost()
   # is too slow in a large repository.
   #
   # https://github.com/lambdalisue/gin.vim/issues/116
-  nnoremap <silent> <Leader>gl <Cmd>GinLog --graph --oneline --all -500<CR>
-  nnoremap <silent> <Leader>gs <Cmd>GinStatus<CR>
-  nnoremap <silent> <Leader>gb <Cmd>GinBranch<CR>
-  nnoremap <silent> <Leader>gc <Cmd>Gin commit<CR>
+  nnoremap <Leader>gl <Cmd>GinLog --graph --oneline --all -500<CR>
+  nnoremap <Leader>gs <Cmd>GinStatus<CR>
+  nnoremap <Leader>gb <Cmd>GinBranch<CR>
+  nnoremap <Leader>gc <Cmd>Gin commit<CR>
 
   augroup vimrc:gin
     autocmd!
@@ -1135,19 +1135,19 @@ def DduVimPost()
     return 0
   })
 
-  nnoremap <silent> <C-Space> <ScriptCmd>ddu#start()<CR>
+  nnoremap <C-Space> <ScriptCmd>ddu#start()<CR>
 
-  nnoremap <silent> <Leader>b <ScriptCmd>ddu#start({ sources: ['buffer'] })<CR>
-  nnoremap <silent> <Leader>gq <ScriptCmd>ddu#start({ sources: ['ghq'], kindOptions: { file: { defaultAction: 'tcd' } } })<CR>
+  nnoremap <Leader>b <ScriptCmd>ddu#start({ sources: ['buffer'] })<CR>
+  nnoremap <Leader>gq <ScriptCmd>ddu#start({ sources: ['ghq'], kindOptions: { file: { defaultAction: 'tcd' } } })<CR>
 
   augroup vimrc:ddu
     autocmd!
 
     autocmd FileType ddu-ff {
-      nnoremap <buffer><silent> <CR> <ScriptCmd>ddu#ui#do_action('itemAction')<CR>
-      nnoremap <buffer><silent> <C-X> <ScriptCmd>ddu#ui#do_action('itemAction', { name: 'open', params: { command: 'split' } })<CR>
-      nnoremap <buffer><silent> i <ScriptCmd>ddu#ui#do_action('openFilterWindow')<CR>
-      nnoremap <buffer><silent> q <ScriptCmd>ddu#ui#do_action('quit')<CR>
+      nnoremap <buffer> <CR> <ScriptCmd>ddu#ui#do_action('itemAction')<CR>
+      nnoremap <buffer> <C-X> <ScriptCmd>ddu#ui#do_action('itemAction', { name: 'open', params: { command: 'split' } })<CR>
+      nnoremap <buffer> i <ScriptCmd>ddu#ui#do_action('openFilterWindow')<CR>
+      nnoremap <buffer> q <ScriptCmd>ddu#ui#do_action('quit')<CR>
     }
   augroup END
 enddef
