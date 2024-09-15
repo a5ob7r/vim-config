@@ -96,6 +96,7 @@ set showcmd
 set showmatch
 set smoothscroll
 set spelllang+=cjk
+set spelloptions+=camel
 set virtualedit=block
 set wildmenu wildoptions+=pum,fuzzy
 
