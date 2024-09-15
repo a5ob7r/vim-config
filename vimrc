@@ -371,6 +371,7 @@ augroup vimrc:Undoable
 augroup END
 
 augroup vimrc:RestoreCursor
+  autocmd!
   # See "restore-cursor".
   autocmd BufReadPost * {
     const line = line("'\"")
