@@ -75,6 +75,7 @@ enddef
 
 # Options {{{
 set autoindent smartindent
+set autoread
 set backspace=indent,eol,start
 set breakindent breakindentopt=shift:2,sbr
 set cdhome
@@ -82,10 +83,13 @@ set colorcolumn=81,101,121
 set completeopt=menuone,longest,popup
 set cursorline
 set display=lastline
+set fileformats=unix,dos,mac
+set hidden
 set history=10000
 set hlsearch
 set ignorecase smartcase
 set incsearch
+set laststatus=2
 set list listchars+=tab:>\ \|,extends:>,precedes:<
 set nrformats-=octal nrformats+=unsigned
 set pastetoggle=<F12>
@@ -99,6 +103,7 @@ set spelllang+=cjk
 set spelloptions+=camel
 set virtualedit=block
 set wildmenu wildoptions+=pum,fuzzy
+set wildmode=longest:full,full
 
 if IsInTruecolorSupportedTerminal()
   set termguicolors
@@ -106,25 +111,6 @@ endif
 
 # Maybe SKK dictionaries are encoded by "euc-jp".
 set fileencodings=ucs-bom,utf-8,iso-2022-jp,euc-jp,cp932,latin1
-
-# Prefer "<NL>" as "<EOL>" even if it is on Windows.
-set fileformats=unix,dos,mac
-
-# Automatically reload the file which is changed outside of Vim. For example
-# this is useful when discarding modifications using VCS such as git.
-set autoread
-
-# Allow to hide buffers even if they are still modified.
-set hidden
-
-# Render "statusline" for all of windows, to show window statuses not to
-# separate windows.
-set laststatus=2
-
-# When type the "wildchar" key that the default value is "<Tab>" in Vim,
-# complete the longest match part and start "wildmenu" at the same time. And
-# then complete the next item when type the key again.
-set wildmode=longest:full,full
 
 # Strings that start with '>' isn't compatible with the block quotation syntax
 # of markdown.
