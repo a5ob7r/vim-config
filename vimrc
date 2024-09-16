@@ -180,8 +180,8 @@ nnoremap k gk
 nnoremap gj j
 nnoremap gk k
 
-vnoremap <expr> j mode() ==# 'V' ? 'j' : 'gj'
-vnoremap <expr> k mode() ==# 'V' ? 'k' : 'gk'
+xnoremap <expr> j mode() ==# 'V' ? 'j' : 'gj'
+xnoremap <expr> k mode() ==# 'V' ? 'k' : 'gk'
 
 noremap Y y$
 
@@ -193,7 +193,7 @@ nnoremap - <C-W>-
 inoremap <C-F> <C-X><C-F>
 
 # Quit Visual mode.
-vnoremap <C-L> <Esc>
+xnoremap <C-L> <Esc>
 
 # This is required for "term_start()" without "{ 'term_finish': 'close' }".
 nnoremap <expr> <CR>
@@ -257,7 +257,7 @@ tnoremap <C-W><Leader>% <Cmd>vertical terminal<CR>
 tnoremap <C-W><Leader>g% <ScriptCmd>vertical Terminal()<CR>
 
 nnoremap <silent> <Leader>y :YankComments<CR>
-vnoremap <silent> <Leader>y :YankComments<CR>
+xnoremap <silent> <Leader>y :YankComments<CR>
 
 # Maximize or minimize the current window.
 nnoremap <C-W>m <Cmd>resize 0<CR>
