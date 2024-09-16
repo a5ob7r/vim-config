@@ -133,9 +133,7 @@ else
 endif
 
 if has('gui_running')
-  # Add a "M" to the "guioptions" before executing ":syntax enable" or
-  # ":filetype on" to avoid sourcing the "menu.vim".
-  set guioptions=M
+  set guioptions+=M
 endif
 
 # Keep other window sizes when opening/closing new windows.
