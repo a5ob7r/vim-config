@@ -183,7 +183,7 @@ nnoremap gk k
 xnoremap <expr> j mode() ==# 'V' ? 'j' : 'gj'
 xnoremap <expr> k mode() ==# 'V' ? 'k' : 'gk'
 
-noremap Y y$
+map Y y$
 
 # Change the current window height instantly.
 nnoremap + <C-W>+
