@@ -355,7 +355,7 @@ augroup vimrc:NoExtrasOnTerminalNormalMode
     setlocal nolist nonumber colorcolumn=
   }
   autocmd TerminalOpen * {
-    autocmd BufWinEnter <buffer=abuf> ++once doautocmd vimrc TerminalWinOpen *
+    autocmd BufWinEnter <buffer=abuf> ++once doautocmd vimrc:NoExtrasOnTerminalNormalMode TerminalWinOpen *
   }
 augroup END
 
