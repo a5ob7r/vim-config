@@ -119,7 +119,13 @@ if has('win32') || has('osxdarwin')
   set clipboard=unnamed
 elseif has('X11')
   set clipboard-=autoselect
-  set clipboard^=unnamedplus
+
+  if exists('$XTERM_VERSION')
+    # See "x11-cut-buffer".
+    set clipboard^=unnamed
+  else
+    set clipboard^=unnamedplus
+  endif
 endif
 
 if has('gui_running')
