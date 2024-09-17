@@ -116,19 +116,10 @@ set fileencodings=ucs-bom,utf-8,iso-2022-jp,euc-jp,cp932,latin1
 set showbreak=+++\ 
 
 if has('win32') || has('osxdarwin')
-  # Use the "*" register as a default one, for yank, delete, change and put
-  # operations instead of the '"' unnamed one. The contents of the "*"
-  # register is synchronous with the system clipboard's them.
   set clipboard=unnamed
-else
+elseif has('X11')
   set clipboard-=autoselect
-
-  if has('unnamedplus')
-    # This is similar to "unnamed", but use the "+" register instead. The
-    # register is used for reading and writing of the CLIPBOARD selection but
-    # not the PRIMARY one.
-    set clipboard^=unnamedplus
-  endif
+  set clipboard^=unnamedplus
 endif
 
 if has('gui_running')
