@@ -25,12 +25,11 @@ def SyntaxItemAttribute(line: number, column: number): string
   const item_id = synID(line, column, 1)
   const trans_item_id = synID(line, column, 0)
 
-  return printf(
-    'hi<%s> trans<%s> lo<%s>',
-    synIDattr(item_id, 'name'),
-    synIDattr(trans_item_id, 'name'),
-    synIDattr(synIDtrans(item_id), 'name')
-  )
+  const hi = synIDattr(item_id, 'name')
+  const trans = synIDattr(trans_item_id, 'name')
+  const lo = synIDattr(synIDtrans(item_id), 'name')
+
+  return $'hi<{hi}> trans<{trans}> lo<{lo}>'
 enddef
 
 # Join and normalize filepaths.
