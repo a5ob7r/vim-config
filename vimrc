@@ -349,7 +349,9 @@ command! XDisconnect {
   set clipboard-=unnamedplus
 }
 
-command! -bang YankCurrentFilename YankCurrentFilename({ lineno: <bang>false })
+command! -bang YankCurrentFilename {
+  YankCurrentFilename({ lineno: <bang>false })
+}
 # }}}
 
 # Auto commands {{{
