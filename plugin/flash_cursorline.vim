@@ -58,7 +58,7 @@ enddef
 
 def ResetFlashCursorLine()
   if timer_id == -1
-    original_cursorline_highlight = execute('highlight CursorLine')->substitute('\n\|\sxxx\s', '', '')
+    original_cursorline_highlight = execute('highlight CursorLine')->substitute('\n\|\sxxx\s', '', 'g')
   endif
 
   timer_stop(timer_id)
