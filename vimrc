@@ -1201,7 +1201,10 @@ enddef
 
 def SetLspOptions()
   g:LspOptionsSet({
+    aleSupport: true,
     autoPopulateDiags: true,
+    showDiagOnStatusLine: true,
+    showDiagWithVirtualText: true,
   })
 enddef
 # }}}
