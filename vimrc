@@ -357,7 +357,7 @@ command! -bang YankCurrentFilename {
 # Auto commands {{{
 augroup vimrc:OpenQuickFixWindow
   autocmd!
-  autocmd QuickFixCmdPost *grep* {
+  autocmd QuickFixCmdPost {,vim,help}grep* {
     cwindow
   }
 augroup END
