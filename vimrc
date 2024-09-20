@@ -39,14 +39,13 @@ def Pathjoin(...paths: list<string>): string
 enddef
 
 def Terminal()
-  # If the current buffer is for normal exsisting file editing.
-  const cwd = empty(&buftype) && !expand('%')->empty() ? expand('%:p:h') : getcwd()
-  const opts = {
+  const parent_directory = empty(&buftype) ? expand('%:p:h') : ''
+  const cwd = parent_directory ?? getcwd()
+
+  term_start(&shell, {
     cwd: cwd,
     term_finish: 'close'
-  }
-
-  term_start(&shell, opts)
+  })
 enddef
 
 def IsBundledPackageLoadable(package_name: string): bool
