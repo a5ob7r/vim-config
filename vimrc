@@ -68,7 +68,7 @@ def IsInTruecolorSupportedTerminal(): bool
     return index(['truecolor', '24bit'], $COLORTERM) >= 0
   endif
 
-  return !($TERM_PROGRAM ==# 'Apple_Terminal' || &term ==# 'linux')
+  return $TERM_PROGRAM !=# 'Apple_Terminal' && &term !=# 'linux'
 enddef
 
 def SetClipboardRegisters(value: string)
