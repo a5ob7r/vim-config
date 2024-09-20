@@ -357,10 +357,10 @@ command! -bang YankCurrentFilename {
 # Auto commands {{{
 augroup vimrc:OpenQuickFixWindow
   autocmd!
-  autocmd QuickFixCmdPost {,vim,help}grep* {
+  autocmd QuickFixCmdPost {,vim,help}grep*,make {
     cwindow
   }
-  autocmd QuickFixCmdPost l{,vim,help}grep* {
+  autocmd QuickFixCmdPost l{,vim,help}grep*,lmake {
     lwindow
   }
 augroup END
