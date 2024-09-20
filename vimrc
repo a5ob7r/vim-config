@@ -360,6 +360,9 @@ augroup vimrc:OpenQuickFixWindow
   autocmd QuickFixCmdPost {,vim,help}grep* {
     cwindow
   }
+  autocmd QuickFixCmdPost l{,vim,help}grep* {
+    lwindow
+  }
 augroup END
 
 augroup vimrc:MakeParentDirectories
