@@ -69,32 +69,6 @@ def IsInTruecolorSupportedTerminal(): bool
 
   return $TERM_PROGRAM !=# 'Apple_Terminal' && &term !=# 'linux'
 enddef
-
-def SetClipboardRegisters(value: string)
-  @" = value
-  @* = value
-  @+ = value
-enddef
-
-def YankCurrentFilename(opts = {})
-  const filename = expand('%')
-
-  if empty(filename)
-    echohl WarningMsg
-    echomsg 'No filename for the current buffer.'
-    echohl None
-    return
-  endif
-
-  const o_lineno = get(opts, 'lineno')
-
-  if o_lineno
-    const lineno = getpos('.')[1]
-    SetClipboardRegisters($'{filename}:{lineno}')
-  else
-    SetClipboardRegisters(filename)
-  endif
-enddef
 # }}}
 
 # Options {{{
@@ -346,10 +320,6 @@ command! XReconnect {
 }
 command! XDisconnect {
   set clipboard-=unnamedplus
-}
-
-command! -bang YankCurrentFilename {
-  YankCurrentFilename({ lineno: <bang>false })
 }
 # }}}
 
