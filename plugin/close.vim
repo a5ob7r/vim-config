@@ -1,15 +1,21 @@
-" ":close" but doesn't close the last window on the current tab.
-function! s:close(bang, count) abort
-  let l:count = a:count >= 0 ? a:count : ''
+vim9script
 
-  if tabpagewinnr('', '$') <= 1
+# ":close" but doesn't close the last window on the current tab.
+def Close(bang: string, count: string)
+  if tabpagewinnr(tabpagenr(), '$') <= 1
     echohl ErrorMsg
     echo "[Close] Can't close the last window on the current tab."
     echohl None
     return
   endif
 
-  execute printf('%sclose%s', l:count, a:bang)
-endfunction
+  const window_number = count ==# '0' ? '' : count
 
-command! -bang -bar -count=-1 -addr=windows Close call s:close(<q-bang>, <count>)
+  execute $':{window_number}close{bang}'
+enddef
+
+command! -bang -bar -count -addr=windows Close {
+  Close(<q-bang>, <q-count>)
+}
+
+# vim: set expandtab tabstop=2 shiftwidth=2 foldmethod=marker:
