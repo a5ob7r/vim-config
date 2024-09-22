@@ -486,9 +486,9 @@ def LightlineVimPre()
   g:lightline = {
     active: {
       left: [
-        [ 'mode', 'binary', 'paste' ],
-        [ 'readonly', 'relativepath', 'modified' ],
-        [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_infos', 'linter_ok' ],
+        ['mode', 'binary', 'paste'],
+        ['readonly', 'relativepath', 'modified'],
+        ['linter_checking', 'linter_errors', 'linter_warnings', 'linter_infos', 'linter_ok'],
       ]
     },
     component: {
