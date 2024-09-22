@@ -1130,6 +1130,8 @@ def GinVimPost()
     autocmd!
     autocmd BufReadCmd gin{branch,diff,edit,log,status,}://* {
       setlocal nobuflisted
+
+      nnoremap <buffer> q <Cmd>Close<CR>
     }
   augroup END
 enddef
