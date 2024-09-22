@@ -1,6 +1,9 @@
 vim9script
 
-# ":close" but doesn't close the last window on the current tabpage.
+# ":close" with some exception.
+#
+# - Do not close the last window on the current tabpage.
+# - "0" (by default) of "[count]" means the current window number.
 def Close(bang: string, count: string)
   if tabpagewinnr(tabpagenr(), '$') <= 1
     echohl WarningMsg
