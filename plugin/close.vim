@@ -1,10 +1,10 @@
 vim9script
 
-# ":close" but doesn't close the last window on the current tab.
+# ":close" but doesn't close the last window on the current tabpage.
 def Close(bang: string, count: string)
   if tabpagewinnr(tabpagenr(), '$') <= 1
     echohl ErrorMsg
-    echo "[Close] Can't close the last window on the current tab."
+    echo "[Close] Can't close the last window on the current tabpage."
     echohl None
     return
   endif
