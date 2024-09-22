@@ -319,7 +319,7 @@ command! ReloadVimrc {
   source $MYVIMRC
 }
 
-# Run commands to refresh something. Use ":OnRefresh" to register a command.
+# Run commands to refresh something.
 command! Refresh {
   doautocmd <nomodeline> User Refresh
 }
@@ -409,16 +409,10 @@ augroup vimrc:RestoreCursor
   }
 augroup END
 
-# Register a command to refresh something.
-command! -bar -nargs=+ OnRefresh {
-  autocmd refresh User Refresh <args>
-}
-
-augroup refresh
+augroup vimrc:refresh:Redraw
   autocmd!
+  autocmd User Refresh redraw
 augroup END
-
-OnRefresh redraw
 # }}}
 
 # Standard plugins {{{
@@ -557,7 +551,10 @@ def LightlineVimPre()
     endif
   }
 
-  OnRefresh lightline#update()
+  augroup vimrc:refresh:UpdateLightline
+    autocmd!
+    autocmd User Refresh lightline#update()
+  augroup END
 enddef
 
 def SetLightlineColorscheme(colorscheme: string)
