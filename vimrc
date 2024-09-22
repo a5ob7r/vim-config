@@ -1150,9 +1150,19 @@ def DduVimPost()
     },
     kindOptions: {
       file: {
-        defaultAction: 'open',
+        defaultAction: 'mopen',
       },
     },
+  })
+
+  ddu#custom#action('kind', 'file', 'mopen', (args) => {
+    foreach(args.items, (idx, item) => {
+      const opener = idx == 0 ? 'edit' : 'split'
+
+      execute opener item.action.path
+    })
+
+    return 0
   })
 
   ddu#custom#action('kind', 'file', 'tcd', (args) => {
@@ -1173,6 +1183,7 @@ def DduVimPost()
       nnoremap <buffer> <CR> <ScriptCmd>ddu#ui#do_action('itemAction')<CR>
       nnoremap <buffer> <C-X> <ScriptCmd>ddu#ui#do_action('itemAction', { name: 'open', params: { command: 'split' } })<CR>
       nnoremap <buffer> i <ScriptCmd>ddu#ui#do_action('openFilterWindow')<CR>
+      nnoremap <buffer> <Space> <ScriptCmd>ddu#ui#do_action('toggleSelectItem')<CR>
       nnoremap <buffer> q <ScriptCmd>ddu#ui#do_action('quit')<CR>
     }
   augroup END
