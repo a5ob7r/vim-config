@@ -1113,6 +1113,9 @@ def DduVimPost()
     ui: 'ff',
     sources: ['file_rec'],
     sourceOptions: {
+      ghq: {
+        defaultAction: 'tcd',
+      },
       _: {
         matchers: ['matcher_fzy'],
       },
@@ -1143,7 +1146,7 @@ def DduVimPost()
   nnoremap <C-Space> <ScriptCmd>ddu#start()<CR>
 
   nnoremap <Leader>b <ScriptCmd>ddu#start({ sources: ['buffer'] })<CR>
-  nnoremap <Leader>gq <ScriptCmd>ddu#start({ sources: ['ghq'], kindOptions: { file: { defaultAction: 'tcd' } } })<CR>
+  nnoremap <Leader>gq <ScriptCmd>ddu#start({ sources: ['ghq'] })<CR>
 
   augroup vimrc:ddu
     autocmd!
