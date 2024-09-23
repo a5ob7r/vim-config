@@ -302,18 +302,6 @@ command! Hitest {
   source $VIMRUNTIME/syntax/hitest.vim
 }
 
-command! InstallMinpac {
-  # A root directory path of vim packages.
-  const packhome = $'{$VIMHOME}/pack'
-
-  const repository = 'https://github.com/k-takata/minpac.git'
-  const directory =  $'{packhome}/minpac/opt/minpac'
-
-  const command = $'git clone {repository} {directory}'
-
-  execute 'terminal' command
-}
-
 command! XReconnect {
   set clipboard^=unnamedplus
   xrestore
@@ -439,6 +427,20 @@ def MinpacPost()
       cwd: minpac#getpluginfo(maxpac.Plugname(<q-args>))['dir'],
       term_finish: 'close' }
     )
+  }
+enddef
+
+def MinpacFallback()
+  command! InstallMinpac {
+    # A root directory path of vim packages.
+    const packhome = $'{$VIMHOME}/pack'
+
+    const repository = 'https://github.com/k-takata/minpac.git'
+    const directory =  $'{packhome}/minpac/opt/minpac'
+
+    const command = $'git clone {repository} {directory}'
+
+    execute 'terminal' command
   }
 enddef
 
@@ -1285,7 +1287,7 @@ maxpac.Add('itchyny/screensaver.vim', { post: ScreensaverVimPost })
 maxpac.Add('junegunn/goyo.vim')
 maxpac.Add('junegunn/vader.vim')
 maxpac.Add('junegunn/vim-easy-align')
-maxpac.Add('k-takata/minpac', { post: MinpacPost })
+maxpac.Add('k-takata/minpac', { post: MinpacPost, fallback: MinpacFallback })
 maxpac.Add('kannokanno/previm')
 maxpac.Add('kchmck/vim-coffee-script')
 maxpac.Add('keith/rspec.vim')
