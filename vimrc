@@ -423,10 +423,10 @@ def MinpacPost()
 
   # This command is from the minpac help file.
   command! -nargs=1 -complete=custom,PackComplete PackOpenDir {
-    term_start(&shell, {
-      cwd: minpac#getpluginfo(maxpac.Plugname(<q-args>))['dir'],
-      term_finish: 'close' }
-    )
+    const plugname = maxpac.Plugname(<q-args>)
+    const pluginfo = minpac#getpluginfo(plugname)
+
+    term_start(&shell, { cwd: pluginfo['dir'], term_finish: 'close' })
   }
 enddef
 
