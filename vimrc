@@ -1110,21 +1110,44 @@ enddef
 # Shougo/ddu.vim {{{
 def DduVimPost()
   ddu#custom#patch_global({
-    ui: 'ff',
-    sources: ['file_rec'],
-    sourceOptions: {
-      ghq: {
-        defaultAction: 'tcd',
+    kindOptions: {
+      file: {
+        defaultAction: 'open',
       },
+    },
+    sourceOptions: {
       _: {
         matchers: ['matcher_fzy'],
       },
     },
-    kindOptions: {
-      file: {
+    ui: 'ff',
+  })
+
+  ddu#custom#patch_local('file', {
+    sourceOptions: {
+      file_rec: {
         defaultAction: 'mopen',
       },
     },
+    sources: ['file_rec'],
+  })
+
+  ddu#custom#patch_local('buffer', {
+    sourceOptions: {
+      buffer: {
+        defaultAction: 'mopen',
+      },
+    },
+    sources: ['buffer'],
+  })
+
+  ddu#custom#patch_local('ghq', {
+    actionParams: {
+      open: {
+        command: 'tcd'
+      },
+    },
+    sources: ['ghq'],
   })
 
   ddu#custom#action('kind', 'file', 'mopen', (args) => {
@@ -1137,16 +1160,9 @@ def DduVimPost()
     return 0
   })
 
-  ddu#custom#action('kind', 'file', 'tcd', (args) => {
-    execute $'tcd {args.items[0].action.path}'
-
-    return 0
-  })
-
-  nnoremap <C-Space> <ScriptCmd>ddu#start()<CR>
-
-  nnoremap <Leader>b <ScriptCmd>ddu#start({ sources: ['buffer'] })<CR>
-  nnoremap <Leader>gq <ScriptCmd>ddu#start({ sources: ['ghq'] })<CR>
+  nnoremap <C-Space> <ScriptCmd>ddu#start({ name: 'file' })<CR>
+  nnoremap <Leader>b <ScriptCmd>ddu#start({ name: 'buffer' })<CR>
+  nnoremap <Leader>gq <ScriptCmd>ddu#start({ name: 'ghq' })<CR>
 
   augroup vimrc:ddu
     autocmd!
