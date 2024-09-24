@@ -14,7 +14,7 @@ import autoload 'maxpac.vim'
 # =============================================================================
 
 # Variables {{{
-$VIMHOME = expand('<sfile>:p:h')
+$VIMHOME = expand('<script>:p:h')
 # }}}
 
 # Functions {{{
