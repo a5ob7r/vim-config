@@ -39,5 +39,6 @@ setup::ln () {
 setup::ln "$PWD" ~/.vim
 setup::ln "$PWD/.ctags.d" ~/.ctags.d
 setup::ln "$PWD/bin/xvim" ~/bin/xvim
+setup::ln "$PWD/bin/vimrc" ~/bin/vimrc
 setup::ln "$PWD/bin/build" ~/bin/vimbuild
 setup::ln "$PWD/bin/startuptime" ~/bin/vimstartuptime

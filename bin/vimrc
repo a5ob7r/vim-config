@@ -1,0 +1,9 @@
+#!/usr/bin/env -S vim -S
+"
+" Open "$MYVIMRC" in the personal runtime directory.
+"
+
+tcd `=fnamemodify($MYVIMRC, ':h')`
+edit vimrc
+
+" vim: set expandtab tabstop=2 shiftwidth=2 foldmethod=marker:
