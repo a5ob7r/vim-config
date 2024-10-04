@@ -1195,6 +1195,7 @@ def LspPre()
 
     autocmd User LspSetup {
       SetLspOptions()
+      AddLspServers()
     }
 
     autocmd User LspAttached {
@@ -1211,6 +1212,17 @@ def SetLspOptions()
     showDiagOnStatusLine: true,
     showDiagWithVirtualText: true,
   })
+enddef
+
+def AddLspServers()
+  g:LspAddServer([
+    {
+      name: 'bash-language-server',
+      filetype: ['sh'],
+      path: 'bash-language-server',
+      args: ['start'],
+    },
+  ])
 enddef
 # }}}
 # }}}
