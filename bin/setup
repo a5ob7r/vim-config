@@ -32,8 +32,8 @@ xln () {
     return
   fi
 
-  command mkdir -p "$dst_dir"
-  command ln -sv "$src" "$dst"
+  mkdir -p "$dst_dir"
+  ln -sv "$src" "$dst"
 }
 
 xln "$PWD" ~/.vim
