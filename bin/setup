@@ -23,7 +23,7 @@ cd "$parent/.."
 # Return:
 #   None.
 #######################################
-setup::ln () {
+xln () {
   local -r src=$1 dst=$2
   local -r dst_dir=${dst%/*}
 
@@ -36,9 +36,9 @@ setup::ln () {
   command ln -sv "$src" "$dst"
 }
 
-setup::ln "$PWD" ~/.vim
-setup::ln "$PWD/.ctags.d" ~/.ctags.d
-setup::ln "$PWD/bin/xvim" ~/bin/xvim
-setup::ln "$PWD/bin/vimrc" ~/bin/vimrc
-setup::ln "$PWD/bin/build" ~/bin/vimbuild
-setup::ln "$PWD/bin/startuptime" ~/bin/vimstartuptime
+xln "$PWD" ~/.vim
+xln "$PWD/.ctags.d" ~/.ctags.d
+xln "$PWD/bin/xvim" ~/bin/xvim
+xln "$PWD/bin/vimrc" ~/bin/vimrc
+xln "$PWD/bin/build" ~/bin/vimbuild
+xln "$PWD/bin/startuptime" ~/bin/vimstartuptime
