@@ -28,7 +28,7 @@ xln () {
   local -r dst_dir=${dst%/*}
 
   if [[ -e $dst ]]; then
-    echo "already exist: $dst" 1>&2
+    echo "already exist: $dst" >&2
     return
   fi
 
