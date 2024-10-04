@@ -5,7 +5,7 @@
 
 set -Ceuo pipefail
 
-parent="${0%/*}"
+parent=${0%/*}
 
 cd "$parent/.."
 
@@ -24,10 +24,10 @@ cd "$parent/.."
 #   None.
 #######################################
 setup::ln () {
-  local -r src="$1" dst="$2"
-  local -r dst_dir="${dst%/*}"
+  local -r src=$1 dst=$2
+  local -r dst_dir=${dst%/*}
 
-  if [[ -e "$dst" ]]; then
+  if [[ -e $dst ]]; then
     echo "already exist: $dst" 1>&2
     return
   fi
