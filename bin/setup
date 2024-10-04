@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Setup script.
+# A setup script.
 #
 
 set -Ceuo pipefail
@@ -10,7 +10,7 @@ parent=${0%/*}
 cd "$parent/.."
 
 #######################################
-# `ln` wrapper.
+# A `ln` wrapper.
 # Global:
 #   None.
 # Arguments:
