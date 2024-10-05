@@ -3,20 +3,13 @@ vim9script
 # Whether or not the buffer is the same as a new, unnamed and empty buffer.
 # This function returns "0" if the buffer id is invalid.
 def IsEmptyBuffer(buffer_id: number): bool
-  if buffer_id == bufnr()
-    return empty(bufname())
-      && line('$') <= 1
-      && empty(getbufline(buffer_id, 1)[0])
-      && !getbufvar(buffer_id, '&modified')
-  else
-    const bufinfo = getbufinfo(buffer_id)->get(0, {})
+  const bufinfo = getbufinfo(buffer_id)->get(0, {})
 
-    return !empty(bufinfo)
-      && empty(bufinfo['name'])
-      && bufinfo['lnum'] <= 1
-      && empty(getbufline(buffer_id, 1)[0])
-      && !bufinfo['changed']
-  endif
+  return !empty(bufinfo)
+    && empty(bufinfo['name'])
+    && bufinfo['lnum'] <= 1
+    && empty(getbufline(buffer_id, 1)[0])
+    && !bufinfo['changed']
 enddef
 
 # Execute ":bdelete" only if the current buffer isn't the last normal buffer.
