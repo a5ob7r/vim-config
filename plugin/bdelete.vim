@@ -12,29 +12,17 @@ def IsEmptyBuffer(buffer_id: number): bool
     && !bufinfo['changed']
 enddef
 
-# Execute ":bdelete" only if the current buffer isn't the last normal buffer.
-# Normal buffers are just for editing files and not terminal or unlisted (i.e.
-# help) buffers.
+# Execute ":bdelete", but this command try to keep at least one window or a
+# normal buffer in the current tabpage.
 def Bdelete(bang: string)
-  const bufid = bufnr()
-  # Ignore non normal buffers.
-  const buffers = tabpagebuflist()->filter((i, v) => getbufvar(v, '&buftype')->empty())
+  const current_bufnr = bufnr()
+  const normal_buffers = tabpagebuflist()->filter((i, v) => getbufvar(v, '&buftype')->empty())
 
-  # Create a new empty buffer at the current buffer to keep the current
-  # tabpage if the current buffer is the last one in the current tabpage.
-  if len(buffers) < 2
-    if IsEmptyBuffer(bufid) && tabpagenr('$') > 1
-      # No need to do anything if the last buffer on the current tab is just
-      # an empty buffer.
-      return
-    else
-      # This does nothing if the current buffer is already an new empty
-      # buffer.
-      execute $'enew{bang}'
-    endif
-  else
-    execute $'bdelete{bang} {bufid}'
+  if empty(&buftype) ? len(normal_buffers) <= 1 : winnr('$') <= 1
+    execute $'enew{bang}'
   endif
+
+  execute $'bdelete{bang} {current_bufnr}'
 enddef
 
 def DeleteEmptyBuffers(bang: string, line1: number, line2: number)
