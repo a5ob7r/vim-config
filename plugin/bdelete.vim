@@ -9,14 +9,10 @@ def IsEmptyBuffer(buffer_id: number): bool
       && empty(getbufline(buffer_id, 1)[0])
       && !getbufvar(buffer_id, '&modified')
   elseif exists('?getbufinfo')
-    try
-      const bufinfo = getbufinfo(buffer_id)[0]
-    catch /^Vim\%((\a\+)\)\=:E684:/
-      # If buffer_id is invalid.
-      return false
-    endtry
+    const bufinfo = getbufinfo(buffer_id)->get(0, {})
 
-    return empty(bufinfo['name'])
+    return !empty(bufinfo)
+      && empty(bufinfo['name'])
       && bufinfo['lnum'] <= 1
       && empty(getbufline(buffer_id, 1)[0])
       && !bufinfo['changed']
