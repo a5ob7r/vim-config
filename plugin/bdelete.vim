@@ -3,12 +3,12 @@ vim9script
 # Whether or not the buffer is the same as a new, unnamed and empty buffer.
 # This function returns "0" if the buffer id is invalid.
 def IsEmptyBuffer(buffer_id: number): bool
-  if buffer_id == bufnr('%')
-    return empty(bufname('%'))
+  if buffer_id == bufnr()
+    return empty(bufname())
       && line('$') <= 1
       && empty(getbufline(buffer_id, 1)[0])
       && !getbufvar(buffer_id, '&modified')
-  elseif exists('?getbufinfo')
+  else
     const bufinfo = getbufinfo(buffer_id)->get(0, {})
 
     return !empty(bufinfo)
@@ -16,10 +16,6 @@ def IsEmptyBuffer(buffer_id: number): bool
       && bufinfo['lnum'] <= 1
       && empty(getbufline(buffer_id, 1)[0])
       && !bufinfo['changed']
-  else
-    return empty(bufname(buffer_id))
-      && getbufline(buffer_id, 1, '$') == ['']
-      && !getbufvar(buffer_id, '&modified')
   endif
 enddef
 
@@ -27,9 +23,9 @@ enddef
 # Normal buffers are just for editing files and not terminal or unlisted (i.e.
 # help) buffers.
 def Bdelete(bang: string)
-  const bufid = bufnr('%')
+  const bufid = bufnr()
   # Ignore non normal buffers.
-  const buffers = filter(tabpagebuflist(), "empty(getbufvar(v:val, '&buftype'))")
+  const buffers = tabpagebuflist()->filter((i, v) => getbufvar(v, '&buftype')->empty())
 
   # Create a new empty buffer at the current buffer to keep the current
   # tabpage if the current buffer is the last one in the current tabpage.
@@ -41,10 +37,10 @@ def Bdelete(bang: string)
     else
       # This does nothing if the current buffer is already an new empty
       # buffer.
-      execute printf('enew%s', bang)
+      execute $'enew{bang}'
     endif
   else
-    execute printf('bdelete%s %s', bang, bufid)
+    execute $'bdelete{bang} {bufid}'
   endif
 enddef
 
@@ -58,8 +54,8 @@ def DeleteEmptyBuffers(bang: string, line1: number, line2: number)
   endfor
 
   for bn in range(line1, line2)
-    if buflisted(bn) && IsEmptyBuffer(bn) && !get(buffers, bn, 0)
-      execute printf('bdelete%s', bang) bn
+    if buflisted(bn) && IsEmptyBuffer(bn) && !get(buffers, bn)
+      execute $'bdelete{bang} {bn}'
     endif
   endfor
 enddef
