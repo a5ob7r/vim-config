@@ -1,72 +1,79 @@
-" Whether or not the buffer is the same as a new, unnamed and empty buffer.
-" This function returns "0" if the buffer id is invalid.
-function! s:is_empty_buffer(buffer_id) abort
-  if a:buffer_id == bufnr('%')
+vim9script
+
+# Whether or not the buffer is the same as a new, unnamed and empty buffer.
+# This function returns "0" if the buffer id is invalid.
+def IsEmptyBuffer(buffer_id: number): bool
+  if buffer_id == bufnr('%')
     return empty(bufname('%'))
-      \ && line('$') <= 1
-      \ && empty(getbufline(a:buffer_id, 1)[0])
-      \ && !getbufvar(a:buffer_id, '&modified')
+      && line('$') <= 1
+      && empty(getbufline(buffer_id, 1)[0])
+      && !getbufvar(buffer_id, '&modified')
   elseif exists('?getbufinfo')
     try
-      let l:bufinfo = getbufinfo(a:buffer_id)[0]
+      const bufinfo = getbufinfo(buffer_id)[0]
     catch /^Vim\%((\a\+)\)\=:E684:/
-      " If buffer_id is invalid.
-      return 0
+      # If buffer_id is invalid.
+      return false
     endtry
 
-    return empty(l:bufinfo['name'])
-      \ && l:bufinfo['lnum'] <= 1
-      \ && empty(getbufline(a:buffer_id, 1)[0])
-      \ && !l:bufinfo['changed']
+    return empty(bufinfo['name'])
+      && bufinfo['lnum'] <= 1
+      && empty(getbufline(buffer_id, 1)[0])
+      && !bufinfo['changed']
   else
-    return empty(bufname(a:buffer_id))
-      \ && getbufline(a:buffer_id, 1, '$') == ['']
-      \ && !getbufvar(a:buffer_id, '&modified')
+    return empty(bufname(buffer_id))
+      && getbufline(buffer_id, 1, '$') == ['']
+      && !getbufvar(buffer_id, '&modified')
   endif
-endfunction
+enddef
 
-" Execute ":bdelete" only if the current buffer isn't the last normal buffer.
-" Normal buffers are just for editing files and not terminal or unlisted (i.e.
-" help) buffers.
-function! s:bdelete(bang) abort
-  let l:bufid = bufnr('%')
-  " Ignore non normal buffers.
-  let l:buffers = filter(tabpagebuflist(), "empty(getbufvar(v:val, '&buftype'))")
+# Execute ":bdelete" only if the current buffer isn't the last normal buffer.
+# Normal buffers are just for editing files and not terminal or unlisted (i.e.
+# help) buffers.
+def Bdelete(bang: string)
+  const bufid = bufnr('%')
+  # Ignore non normal buffers.
+  const buffers = filter(tabpagebuflist(), "empty(getbufvar(v:val, '&buftype'))")
 
-  " Create a new empty buffer at the current buffer to keep the current
-  " tabpage if the current buffer is the last one in the current tabpage.
-  if len(l:buffers) < 2
-    if s:is_empty_buffer(l:bufid) && tabpagenr('$') > 1
-      " No need to do anything if the last buffer on the current tab is just
-      " an empty buffer.
+  # Create a new empty buffer at the current buffer to keep the current
+  # tabpage if the current buffer is the last one in the current tabpage.
+  if len(buffers) < 2
+    if IsEmptyBuffer(bufid) && tabpagenr('$') > 1
+      # No need to do anything if the last buffer on the current tab is just
+      # an empty buffer.
       return
     else
-      " This does nothing if the current buffer is already an new empty
-      " buffer.
-      execute printf('enew%s', a:bang)
+      # This does nothing if the current buffer is already an new empty
+      # buffer.
+      execute printf('enew%s', bang)
     endif
   else
-    execute printf('bdelete%s %s', a:bang, l:bufid)
+    execute printf('bdelete%s %s', bang, bufid)
   endif
-endfunction
+enddef
 
-function! s:delete_empty_buffers(bang, line1, line2) abort
-  let l:buffers = {}
+def DeleteEmptyBuffers(bang: string, line1: number, line2: number)
+  var buffers = {}
 
-  for l:tn in range(1, tabpagenr('$'))
-    for l:bn in tabpagebuflist(l:tn)
-      let l:buffers[l:bn] = 1
+  for tn in range(1, tabpagenr('$'))
+    for bn in tabpagebuflist(tn)
+      buffers[bn] = 1
     endfor
   endfor
 
-  for l:bn in range(a:line1, a:line2)
-    if buflisted(l:bn) && s:is_empty_buffer(l:bn) && !get(l:buffers, l:bn, 0)
-      execute printf('bdelete%s', a:bang) l:bn
+  for bn in range(line1, line2)
+    if buflisted(bn) && IsEmptyBuffer(bn) && !get(buffers, bn, 0)
+      execute printf('bdelete%s', bang) bn
     endif
   endfor
-endfunction
+enddef
 
-command! -bang -bar Bdelete call s:bdelete(<q-bang>)
+command! -bang -bar Bdelete {
+  Bdelete(<q-bang>)
+}
 
-command! -bang -bar -range=% -addr=loaded_buffers DeleteEmptyBuffers
-  \ call s:delete_empty_buffers(<q-bang>, <line1>, <line2>)
+command! -bang -bar -range=% -addr=loaded_buffers DeleteEmptyBuffers {
+  DeleteEmptyBuffers(<q-bang>, <line1>, <line2>)
+}
+
+# vim: set expandtab tabstop=2 shiftwidth=2 foldmethod=marker:
