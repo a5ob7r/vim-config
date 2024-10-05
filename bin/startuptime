@@ -9,7 +9,9 @@
 
 set -Ceuo pipefail
 
-readonly startuplog="$(command mktemp /tmp/vimstartup_XXXXXXXX.log)"
-command vim "${@}" -c quit --startuptime "${startuplog}"
-command view -c 'nnoremap q :q<CR>' "${startuplog}"
-command rm "${startuplog}"
+startuplog="$(mktemp /tmp/vimstartup_XXXXXXXX.log)"
+readonly startuplog
+trap 'rm '"$startuplog" EXIT ERR
+
+vim "$@" -c quit --startuptime "$startuplog"
+view -c 'nnoremap q <Cmd>q<CR>' "$startuplog"
