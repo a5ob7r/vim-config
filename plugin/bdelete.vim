@@ -40,17 +40,18 @@ enddef
 def DeleteEmptyBuffers(bang: string, line1: number, line2: number)
   var buffers = {}
 
-  for tn in range(1, tabpagenr('$'))
-    for bn in tabpagebuflist(tn)
-      buffers[bn] = 1
-    endfor
-  endfor
+  range(1, tabpagenr('$'))
+    ->map((i, v) => tabpagebuflist(v))
+    ->flattennew()
+    ->foreach((i, v) => {
+      buffers[v] = 1
+    })
 
-  for bn in range(line1, line2)
-    if buflisted(bn) && IsEmptyBuffer(bn) && !get(buffers, bn)
-      execute $'bdelete{bang} {bn}'
-    endif
-  endfor
+  range(line1, line2)
+    ->filter((i, v) => buflisted(v) && IsEmptyBuffer(v) && !get(buffers, v))
+    ->foreach((i, v) => {
+      execute $'bdelete{bang} {v}'
+    })
 enddef
 
 command! -bang -bar Bdelete {
