@@ -1222,6 +1222,12 @@ def AddLspServers()
       path: 'bash-language-server',
       args: ['start'],
     },
+    {
+      name: 'yaml-language-server',
+      filetype: ['yaml'],
+      path: 'yaml-language-server',
+      args: ['--stdio'],
+    },
   ])
 enddef
 # }}}
