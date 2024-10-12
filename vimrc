@@ -1100,6 +1100,9 @@ def GinVimPost()
 
   augroup vimrc:gin
     autocmd!
+    autocmd FileType gin {
+      setlocal nomodeline
+    }
     autocmd BufReadCmd gin{branch,diff,edit,log,status,}://* {
       setlocal nobuflisted
 
