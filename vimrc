@@ -1218,20 +1218,27 @@ def SetLspOptions()
 enddef
 
 def AddLspServers()
-  g:LspAddServer([
-    {
+  var servers = []
+
+  if executable('bash-language-server')
+    add(servers, {
       name: 'bash-language-server',
       filetype: ['sh'],
       path: 'bash-language-server',
       args: ['start'],
-    },
-    {
+    })
+  endif
+
+  if executable('yaml-language-server')
+    add(servers, {
       name: 'yaml-language-server',
       filetype: ['yaml'],
       path: 'yaml-language-server',
       args: ['--stdio'],
-    },
-  ])
+    })
+  endif
+
+  g:LspAddServer(servers)
 enddef
 # }}}
 # }}}
