@@ -375,10 +375,6 @@ augroup END
 
 # Standard plugins {{{
 # Avoid loading some standard plugins. {{{
-# netrw
-g:loaded_netrw = 1
-g:loaded_netrwPlugin = 1
-
 # These two plugins provide plugin management, but they are already obsolete.
 g:loaded_getscriptPlugin = 1
 g:loaded_vimballPlugin = 1
@@ -981,104 +977,6 @@ def VimbitsPre()
 enddef
 # }}}
 
-# lambdalisue/fern.vim {{{
-def FernVimPre()
-  g:fern#default_hidden = 1
-  g:fern#default_exclude = '.*\~$'
-
-  command! -bar ToggleFern {
-    ToggleFern()
-  }
-
-  augroup vimrc:fern
-    autocmd!
-    autocmd Filetype fern {
-      t:fern_buffer_id = bufnr()
-    }
-    autocmd BufLeave * {
-      if &ft !=# 'fern'
-        t:non_fern_buffer_id = bufnr()
-      endif
-    }
-    autocmd DirChanged * {
-      unlet! t:fern_buffer_id
-    }
-  augroup END
-
-  command! CurrentFernLogging {
-    echo FernLogFile()
-  }
-  command! -nargs=* -complete=file EnableFernLogging {
-    g:fern#logfile = empty(<q-args>) ? '$VIMHOME/tmp/fern.tsv' : <q-args>
-  }
-  command! DisableFernLogging {
-    g:fern#logfile = null
-  }
-  command! FernLogDebug {
-    g:fern#loglevel = g:fern#DEBUG
-  }
-  command! FernLogInfo {
-    g:fern#loglevel = g:fern#INFO
-  }
-  command! FernLogWARN {
-    g:fern#loglevel = g:fern#WARN
-  }
-  command! FernLogError {
-    g:fern#loglevel = g:fern#Error
-  }
-
-  command! -nargs=+ -complete=shellcmd RunWithFernLog {
-    RunWithFernLog(<q-args>)
-  }
-enddef
-
-def FernVimFallback()
-  unlet g:loaded_netrw
-  unlet g:loaded_netrwPlugin
-
-  nnoremap <Leader>n <Cmd>ToggleNetrw<CR>
-  nnoremap <Leader>N <Cmd>ToggleNetrw!<CR>
-enddef
-
-# Toggle a fern buffer to keep the cursor position. A tab should only have
-# one fern buffer.
-def ToggleFern()
-  if &filetype ==# 'fern'
-    if exists('t:non_fern_buffer_id')
-      execute 'buffer' t:non_fern_buffer_id
-    else
-      echohl WarningMsg
-      echo 'No non fern buffer exists'
-      echohl None
-    endif
-  else
-    if exists('t:fern_buffer_id')
-      execute 'buffer' t:fern_buffer_id
-    else
-      Fern .
-    endif
-  endif
-enddef
-
-def FernLogFile(): string
-  return get(g:, 'fern#logfile', null)
-enddef
-
-def RunWithFernLog(template: string)
-  const log = FernLogFile()
-
-  if filereadable(log)
-    term_start([&shell, &shellcmdflag, printf(template, log)], { term_finish: 'close' })
-  endif
-enddef
-# }}}
-
-# a5ob7r/fern-renderer-lsflavor.vim {{{
-def FernRendererLsflavorVimPre()
-  g:fern#renderer = 'lsflavor'
-enddef
-# }}}
-
 # lambdalisue/gin.vim {{{
 def GinVimPost()
   g:gin_diff_persistent_args = ['--patch', '--stat']
@@ -1259,11 +1157,6 @@ maxpac.Add('itchyny/lightline.vim', { pre: LightlineVimPre })
 maxpac.Add('hrsh7th/vim-vsnip', { pre: VimVsnipPre, post: VimVsnipPost })
 maxpac.Add('hrsh7th/vim-vsnip-integ')
 maxpac.Add('rafamadriz/friendly-snippets')
-
-maxpac.Add('lambdalisue/fern.vim', { pre: FernVimPre, fallback: FernVimFallback })
-maxpac.Add('lambdalisue/fern-hijack.vim')
-maxpac.Add('lambdalisue/fern-git-status.vim')
-maxpac.Add('a5ob7r/fern-renderer-lsflavor.vim', { pre: FernRendererLsflavorVimPre })
 
 # Operators.
 maxpac.Add('kana/vim-operator-user')
