@@ -280,14 +280,14 @@ nnoremap <C-W>g<BS> <Cmd>bdelete<CR>
 # Commands {{{
 # A helper command to open a file in a split window, or the current one (if it
 # is invoked with a bang mark).
-command! -bang -bar -nargs=1 -complete=file Open {
+command! -bang -bar -nargs=1 -complete=file OpenHelper {
   const opener = <bang>1 ? 'split' : 'edit'
 
   execute <q-mods> opener <q-args>
 }
 
 command! -bang -bar Vimrc {
-  <mods> Open<bang> $MYVIMRC
+  <mods> OpenHelper<bang> $MYVIMRC
 }
 command! ReloadVimrc {
   source $MYVIMRC
@@ -813,7 +813,7 @@ def OpenLocalrc(bang: string, mods: string, dir: string)
   const localrc_filename = get(g:, 'localrc_filename', '.local.vimrc')
   const localrc_filepath = Pathjoin(dir, fnameescape(localrc_filename))
 
-  execute $'{mods} Open{bang} {localrc_filepath}'
+  execute $'{mods} OpenHelper{bang} {localrc_filepath}'
 enddef
 # }}}
 

@@ -1,6 +1,6 @@
 function! s:readonly(bang, mods, args) abort
   if !empty(a:args)
-    execute printf('%s Open%s %s', a:mods, a:bang, a:args)
+    execute printf('%s OpenHelper%s %s', a:mods, a:bang, a:args)
   endif
 
   Unwritable
