@@ -15,7 +15,7 @@
 ### Linux or macOS
 
 ```sh
-$ bin/setup
+bin/setup
 ```
 
 ### Windows
