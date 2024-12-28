@@ -153,6 +153,10 @@ const directory = exists('$XDG_CACHE_HOME') ? $XDG_CACHE_HOME : expand('~/.cache
 silent expand(&backupdir)->mkdir('p', 0700)
 silent expand(&directory)->mkdir('p', 0700)
 silent expand(&undodir)->mkdir('p', 0700)
+
+if has('patch-9.1.0463')
+  set completeopt+=fuzzy
+endif
 # }}}
 
 # Key mappings {{{
