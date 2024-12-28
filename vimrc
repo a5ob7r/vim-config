@@ -1143,6 +1143,17 @@ def AddLspServers()
   g:LspAddServer(servers)
 enddef
 # }}}
+
+# dstein64/vim-startuptime {{{
+def VimStartuptimePost()
+  augroup vimrc:VimStartuptime
+    autocmd!
+    autocmd Filetype startuptime {
+      nnoremap <buffer> q <Cmd>quit<CR>
+    }
+  augroup END
+enddef
+# }}}
 # }}}
 
 # Plugin registrations. {{{
@@ -1204,6 +1215,7 @@ maxpac.Add('andymass/vim-matchup', { fallback: VimMatchupFallback })
 maxpac.Add('azabiong/vim-highlighter')
 maxpac.Add('bronson/vim-trailing-whitespace', { post: VimTrailingWhitespacePost })
 maxpac.Add('chrisbra/csv.vim')
+maxpac.Add('dstein64/vim-startuptime', { post: VimStartuptimePost })
 maxpac.Add('fladson/vim-kitty')
 maxpac.Add('girishji/vimbits', { pre: VimbitsPre }) # For ":h vimtips".
 maxpac.Add('gpanders/vim-oldfiles')
