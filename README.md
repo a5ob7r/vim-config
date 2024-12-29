@@ -8,7 +8,6 @@
   - required by [ripgrep.vim](https://github.com/kyoh86/vim-ripgrep)
 - [deno](https://github.com/denoland/deno)
   - required by [denops.vim](https://github.com/vim-denops/denops.vim)
-  - experimental
 
 ## Setup
 
