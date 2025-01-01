@@ -69,6 +69,17 @@ def IsInTruecolorSupportedTerminal(): bool
 
   return $TERM_PROGRAM !=# 'Apple_Terminal' && &term !=# 'linux'
 enddef
+
+# Define a simple command to open a specific file using ":DefineOpener".
+def! g:DefineOpener(name: string, filename: string)
+  const lines =<< trim eval END
+    command! -bang -bar {name} {'{'}
+      <mods> OpenHelper<bang> {filename}
+    {'}'}
+  END
+
+  execute join(lines, "\n")
+enddef
 # }}}
 
 # Options {{{
@@ -290,9 +301,8 @@ command! -bang -bar -nargs=1 -complete=file OpenHelper {
   execute <q-mods> opener <q-args>
 }
 
-command! -bang -bar Vimrc {
-  <mods> OpenHelper<bang> $MYVIMRC
-}
+g:DefineOpener('Vimrc', $MYVIMRC)
+
 command! ReloadVimrc {
   source $MYVIMRC
 }
