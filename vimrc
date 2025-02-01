@@ -819,7 +819,7 @@ def VimLocalrcPost()
     OpenLocalrc(<q-bang>, <q-mods>, expand('~'))
   }
   command! -bang -bar -nargs=? -complete=dir OpenLocalrc {
-    OpenLocalrc(<q-bang>, <q-mods>, empty(<q-args>) ? expand('%:p:h') : <q-args>)
+    OpenLocalrc(<q-bang>, <q-mods>, <q-args> ?? expand('%:p:h'))
   }
 enddef
 
