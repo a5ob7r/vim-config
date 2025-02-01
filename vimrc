@@ -73,9 +73,9 @@ enddef
 # Define a simple command to open a specific file using ":DefineOpener".
 def! g:DefineOpener(name: string, filename: string)
   const lines =<< trim eval END
-    command! -bang -bar {name} {'{'}
+    command! -bang -bar {name} {{
       <mods> OpenHelper<bang> {filename}
-    {'}'}
+    }}
   END
 
   execute join(lines, "\n")
