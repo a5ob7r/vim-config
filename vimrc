@@ -1164,6 +1164,19 @@ def VimStartuptimePost()
   augroup END
 enddef
 # }}}
+
+# vim-denops/denops.vim {{{
+def DenopsVimPost()
+  # See "denops-recommended".
+  noremap <silent> <C-C> <ScriptCmd>denops#interrupt()<CR><C-C>
+  inoremap <silent> <C-C> <ScriptCmd>denops#interrupt()<CR><C-C>
+  cnoremap <silent> <C-C> <ScriptCmd>denops#interrupt()<CR><C-C>
+
+  command! DenopsRestart denops#server#restart()
+  command! DenopsFixCache denops#cache#update({ reload: true })
+enddef
+
+# }}}
 # }}}
 
 # Plugin registrations. {{{
@@ -1276,7 +1289,7 @@ endif
 # denops.vim
 
 if executable('deno')
-  maxpac.Add('vim-denops/denops.vim')
+  maxpac.Add('vim-denops/denops.vim', { post: DenopsVimPost })
 
   maxpac.Add('lambdalisue/gin.vim', { post: GinVimPost })
 
