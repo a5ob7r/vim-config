@@ -290,6 +290,9 @@ nmap <Nul> <C-Space>
 
 nnoremap <C-W><BS> <Cmd>Bdelete<CR>
 nnoremap <C-W>g<BS> <Cmd>bdelete<CR>
+
+nnoremap <Leader>n <Cmd>ToggleNetrw<CR>
+nnoremap <Leader>N <Cmd>ToggleNetrw!<CR>
 # }}}
 
 # Commands {{{
