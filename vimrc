@@ -1063,8 +1063,13 @@ def DduVimPost()
 
   ddu#custom#patch_local('ghq', {
     actionParams: {
-      open: {
+      execute: {
         command: 'tcd'
+      },
+    },
+    sourceOptions: {
+      ghq: {
+        defaultAction: 'execute',
       },
     },
     sources: ['ghq'],
