@@ -1263,7 +1263,6 @@ maxpac.Add('keith/rspec.vim')
 maxpac.Add('lambdalisue/gina.vim', { post: GinaVimPost })
 maxpac.Add('lambdalisue/vital-Whisky')
 maxpac.Add('liuchengxu/vista.vim', { pre: VistaVimPre })
-maxpac.Add('machakann/vim-highlightedyank')
 maxpac.Add('machakann/vim-sandwich', { post: VimSandwichPost })
 maxpac.Add('machakann/vim-swap')
 maxpac.Add('maximbaz/lightline-ale')
@@ -1290,6 +1289,13 @@ if IsBundledPackageLoadable('comment')
   packadd! comment
 else
   maxpac.Add('tpope/vim-commentary')
+endif
+
+if IsBundledPackageLoadable('hlyank')
+  # "highlight-yank" package is bundled since 83d74404bb355956e9ce23fa62dd5bf1f2549c05.
+  packadd! hlyank
+else
+  maxpac.Add('machakann/vim-highlightedyank')
 endif
 
 # =============================================================================
