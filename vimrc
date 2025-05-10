@@ -151,15 +151,17 @@ set nojoinspaces
 # Stop at a TOP or BOTTOM match even if hitting "n" or "N" repeatedly.
 set nowrapscan
 
-# Create temporary files(backup, swap, undo) under secure locations to avoid
-# CVE-2017-1000382.
-#
-# https://github.com/archlinux/svntogit-packages/blob/68635a69f0c5525210adca6ff277dc13c590399b/trunk/archlinux.vim#L22
-const directory = exists('$XDG_CACHE_HOME') ? $XDG_CACHE_HOME : expand('~/.cache')
+{
+  # Create temporary files(backup, swap, undo) under secure locations to avoid
+  # CVE-2017-1000382.
+  #
+  # https://github.com/archlinux/svntogit-packages/blob/68635a69f0c5525210adca6ff277dc13c590399b/trunk/archlinux.vim#L22
+  const directory = exists('$XDG_CACHE_HOME') ? $XDG_CACHE_HOME : expand('~/.cache')
 
-&backupdir = $'{directory}/vim/backup//'
-&directory = $'{directory}/vim/swap//'
-&undodir = $'{directory}/vim/undo//'
+  &backupdir = $'{directory}/vim/backup//'
+  &directory = $'{directory}/vim/swap//'
+  &undodir = $'{directory}/vim/undo//'
+}
 
 silent expand(&backupdir)->mkdir('p', 0o700)
 silent expand(&directory)->mkdir('p', 0o700)
