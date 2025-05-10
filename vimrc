@@ -161,9 +161,9 @@ const directory = exists('$XDG_CACHE_HOME') ? $XDG_CACHE_HOME : expand('~/.cache
 &directory = $'{directory}/vim/swap//'
 &undodir = $'{directory}/vim/undo//'
 
-silent expand(&backupdir)->mkdir('p', 0700)
-silent expand(&directory)->mkdir('p', 0700)
-silent expand(&undodir)->mkdir('p', 0700)
+silent expand(&backupdir)->mkdir('p', 0o700)
+silent expand(&directory)->mkdir('p', 0o700)
+silent expand(&undodir)->mkdir('p', 0o700)
 
 if has('patch-9.1.0463')
   set completeopt+=fuzzy
