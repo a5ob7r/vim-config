@@ -80,6 +80,27 @@ def! g:DefineOpener(name: string, filename: string)
 
   execute join(lines, "\n")
 enddef
+
+def g:TabPanel(): string
+  return FormatTabPanel(g:actual_curtabpage)
+enddef
+
+# +---------------+----------------------------------
+# |(1)            |text text text text text text text
+# |* ~/foo.txt    |text text text text text text text
+# |  /a/b/bar.txt |text text text text text text text
+# |(2)            |text text text text text text text
+# |  ~/.c/v/vimrc |text text text text text text text
+def FormatTabPanel(actual_curtabpage: number): string
+  const buffers = tabpagebuflist(actual_curtabpage)->map((_k, v) => {
+    const marker = bufwinnr(v) == winnr() ? '*' : ' '
+    const name = bufname(v)->fnamemodify(':~')->pathshorten()
+
+    return $"{marker} {name}"
+  })
+
+  return $"({g:actual_curtabpage})\n{buffers->join("\n")}"
+enddef
 # }}}
 
 # Options {{{
@@ -169,6 +190,11 @@ silent expand(&undodir)->mkdir('p', 0o700)
 
 if has('patch-9.1.0463')
   set completeopt+=fuzzy
+endif
+
+if has('tabpanel')
+  set tabpanelopt=columns:30,vert
+  set tabpanel=%!TabPanel()
 endif
 # }}}
 
@@ -327,6 +353,16 @@ command! XReconnect {
 }
 command! XDisconnect {
   set clipboard-=unnamedplus
+}
+
+command! ToggleTabpanel {
+  if &showtabpanel == 0
+    set showtabpanel=2
+    set showtabline=0
+  else
+    set showtabpanel=0
+    set showtabline=1
+  endif
 }
 # }}}
 
