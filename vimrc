@@ -196,6 +196,10 @@ if has('tabpanel')
   set tabpanelopt=columns:30,vert
   set tabpanel=%!TabPanel()
 endif
+
+if has('patch-9.1.0572')
+  set tabclose=left
+endif
 # }}}
 
 # Key mappings {{{
