@@ -1226,6 +1226,17 @@ def DenopsVimPost()
   command! DenopsFixCache denops#cache#update({ reload: true })
 enddef
 # }}}
+
+# bfrg/vim-qf-preview {{{
+def VimQfPreviewPost()
+  augroup vimrc:VimQfPreview
+    autocmd!
+    autocmd FileType qf {
+      nnoremap <buffer> p <Plug>(qf-preview-open)
+    }
+  augroup END
+enddef
+# }}}
 # }}}
 
 # Plugin registrations. {{{
@@ -1286,6 +1297,8 @@ maxpac.Add('airblade/vim-gitgutter', { pre: VimGitgutterPre })
 maxpac.Add('aliou/bats.vim')
 maxpac.Add('andymass/vim-matchup', { fallback: VimMatchupFallback })
 maxpac.Add('azabiong/vim-highlighter')
+maxpac.Add('bfrg/vim-qf-history')
+maxpac.Add('bfrg/vim-qf-preview', { post: VimQfPreviewPost })
 maxpac.Add('bronson/vim-trailing-whitespace', { post: VimTrailingWhitespacePost })
 maxpac.Add('chrisbra/csv.vim')
 maxpac.Add('dstein64/vim-startuptime', { post: VimStartuptimePost })
