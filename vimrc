@@ -1225,7 +1225,6 @@ def DenopsVimPost()
   command! DenopsRestart denops#server#restart()
   command! DenopsFixCache denops#cache#update({ reload: true })
 enddef
-
 # }}}
 # }}}
 
