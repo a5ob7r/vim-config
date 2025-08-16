@@ -280,6 +280,10 @@ nnoremap <C-G><C-P> <Cmd>execute $'{v:count1}lprevious'<CR>
 # something.
 nnoremap <C-L> <Cmd>nohlsearch<CR><Cmd>Refresh<CR>
 
+noremap <C-C> <Cmd>Interrupt<CR><C-C>
+inoremap <C-C> <Cmd>Interrupt<CR><C-C>
+cnoremap <C-C> <Cmd>Interrupt<CR><C-C>
+
 nnoremap <F10> <ScriptCmd>echo SyntaxItemAttribute(line('.'), col('.'))<CR>
 
 nnoremap <C-S> <Cmd>update<CR>
@@ -345,6 +349,10 @@ command! ReloadVimrc {
 # Run commands to refresh something.
 command! Refresh {
   doautocmd <nomodeline> User Refresh
+}
+
+command! Interrupt {
+  doautocmd <nomodeline> User Interrupt
 }
 
 command! Hitest {
@@ -690,6 +698,13 @@ enddef
 
 # kyoh86/vim-ripgrep {{{
 def VimRipgrepPost()
+  augroup vimrc:interrupt:ripgrep
+    autocmd!
+    autocmd User Interrupt {
+      ripgrep#stop()
+    }
+  augroup END
+
   ripgrep#observe#add_observer(g:ripgrep#event#other, 'RipgrepContextObserver')
 
   command! -bang -count -nargs=+ -complete=file Rg {
@@ -1218,9 +1233,12 @@ enddef
 # vim-denops/denops.vim {{{
 def DenopsVimPost()
   # See "denops-recommended".
-  noremap <silent> <C-C> <ScriptCmd>denops#interrupt()<CR><C-C>
-  inoremap <silent> <C-C> <ScriptCmd>denops#interrupt()<CR><C-C>
-  cnoremap <silent> <C-C> <ScriptCmd>denops#interrupt()<CR><C-C>
+  augroup vimrc:interrupt:denops
+    autocmd!
+    autocmd User Interrupt {
+      denops#interrupt()
+    }
+  augroup END
 
   command! DenopsRestart denops#server#restart()
   command! DenopsFixCache denops#cache#update({ reload: true })
