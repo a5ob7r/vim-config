@@ -119,6 +119,7 @@ set history=10000
 set hlsearch
 set ignorecase smartcase
 set incsearch
+set keywordprg=:Man
 set laststatus=2
 set list listchars+=tab:>\ \|,extends:>,precedes:<
 set nrformats-=octal nrformats+=unsigned
@@ -452,6 +453,14 @@ g:loaded_vimballPlugin = 1
 # the commit hash of vim/vim: a452b808b4da2d272ca4a50865eb8ca89a58f239
 g:netrw_list_hide = '^\..*\~ *'
 g:netrw_sizestyle = 'H'
+# }}}
+
+# ":Man" {{{
+# NOTE: A recommended way to enable ":Man" command on vim help page is to
+# source a default man ftplugin by ":runtime ftplugin/man.vim" in vimrc.
+# However it sources other ftplugin files which probably have side-effects.
+# So exlicitly specify the default man ftplugin.
+source $VIMRUNTIME/ftplugin/man.vim
 # }}}
 # }}}
 
@@ -922,39 +931,6 @@ def LinefeedVimPost()
 enddef
 # }}}
 
-# vim-utils/vim-man {{{
-def VimManPost()
-  command! -nargs=* -bar -complete=customlist,man#completion#run M {
-    Man <args>
-  }
-
-  VimManCommon()
-enddef
-
-def ManFallback()
-  # NOTE: A recommended way to enable ":Man" command on vim help page is to
-  # source a default man ftplugin by ":runtime ftplugin/man.vim" in vimrc.
-  # However it sources other ftplugin files which probably have side-effects.
-  # So exlicitly specify the default man ftplugin.
-  try
-    source $VIMRUNTIME/ftplugin/man.vim
-  catch
-    echoerr v:exception
-    return
-  endtry
-
-  command! -nargs=+ -complete=shellcmd M {
-    <mods> Man <args>
-  }
-
-  VimManCommon()
-enddef
-
-def VimManCommon()
-  set keywordprg=:Man
-enddef
-# }}}
-
 # machakann/vim-sandwich {{{
 def VimSandwichPost()
   g:sandwich#recipes = get(g:, 'sandwich#recipes', deepcopy(g:sandwich#default_recipes))
@@ -1350,7 +1326,6 @@ maxpac.Add('tpope/vim-endwise')
 maxpac.Add('tyru/eskk.vim')
 maxpac.Add('tyru/open-browser.vim')
 maxpac.Add('vim-jp/vital.vim')
-maxpac.Add('vim-utils/vim-man', { post: VimManPost })
 maxpac.Add('w0rp/ale', { pre: AlePre })
 maxpac.Add('yasuhiroki/github-actions-yaml.vim')
 maxpac.Add('yegappan/lsp', { pre: LspPre })
