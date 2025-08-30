@@ -101,6 +101,13 @@ def FormatTabPanel(actual_curtabpage: number): string
 
   return $"({g:actual_curtabpage})\n{buffers->join("\n")}"
 enddef
+
+# XDG Base Directory Specification
+#
+# https://specifications.freedesktop.org/basedir-spec/latest/
+def XdgCacheHome(): string
+  return $XDG_CACHE_HOME ?? $'{$HOME}/.cache'
+enddef
 # }}}
 
 # Options {{{
@@ -178,11 +185,11 @@ set nowrapscan
   # CVE-2017-1000382.
   #
   # https://github.com/archlinux/svntogit-packages/blob/68635a69f0c5525210adca6ff277dc13c590399b/trunk/archlinux.vim#L22
-  const directory = exists('$XDG_CACHE_HOME') ? $XDG_CACHE_HOME : expand('~/.cache')
+  const vim_cache_home = $'{XdgCacheHome()}/vim'
 
-  &backupdir = $'{directory}/vim/backup//'
-  &directory = $'{directory}/vim/swap//'
-  &undodir = $'{directory}/vim/undo//'
+  &backupdir = $'{vim_cache_home}/backup//'
+  &directory = $'{vim_cache_home}/swap//'
+  &undodir = $'{vim_cache_home}/undo//'
 }
 
 silent expand(&backupdir)->mkdir('p', 0o700)
