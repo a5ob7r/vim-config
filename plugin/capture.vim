@@ -1,38 +1,76 @@
-" A wrapper for "execute()".
-function! s:redirect(bang, command) abort
-  let l:bang = empty(a:bang) ? '' : '!'
+vim9script
 
-  return split(execute(a:command, printf('silent%s', l:bang)), '\n')
-endfunction
+# A lock to avoid nested ":Capture" executions.
+var is_execution_locked = false
 
-function! s:capture(bang, mods, command) abort
-  let l:command = empty(a:command) ? @: : a:command
-  let l:words = split(l:command)
+def IsExecutionLocked(): bool
+  return is_execution_locked
+enddef
 
-  if empty(l:words)
-    echoerr 'Not found a capturable command. Run a command which you want to capture before run :Capture.'
-    return
-  elseif fullcommand(l:words[0]) ==# 'Capture'
-    echoerr ':Capture does not capture itself.'
-    return
-  endif
+def LockExecution()
+  is_execution_locked = true
+enddef
 
-  let l:bufs = s:redirect(a:bang, l:command)
+def UnlockExecution()
+  is_execution_locked = false
+enddef
 
-  execute a:mods 'new'
+def MakeBufferScratch()
   setlocal buftype=nofile
   setlocal bufhidden=hide
   setlocal noswapfile
+enddef
 
-  call setline('.', l:bufs)
-
+def MakeBufferReadonly()
   setlocal readonly
   setlocal nomodifiable
-endfunction
+enddef
 
-" Capture Ex command outputs and redirect it to a new empty buffer.
-command! -nargs=* -complete=command -bang Capture
-  \ call s:capture(<q-bang>, <q-mods>, <q-args>)
+def SetOption(name: string, value: any)
+  execute $'&{name} = {value}'
+enddef
 
-command! -nargs=+ -complete=command -bang Redirect
-  \ call append('.', s:redirect(<q-bang>, <q-args>))
+# A wrapper for "execute()".
+def Redirect(command: string): list<string>
+  defer SetOption('list', &list)
+
+  # Do not output extra characters displayed by the "list" option.
+  set nolist
+
+  return execute(command)->split('\n')
+enddef
+
+def Capture(command: string, opts = {})
+  const mods = get(opts, 'mods', '')
+
+  if IsExecutionLocked()
+    throw ':Capture does not capture itself.'
+  endif
+
+  if empty(command)
+    throw 'Not found a capturable command. Run with arguments or run a command which you want to capture before run :Capture.'
+  endif
+
+  try
+    LockExecution()
+
+    const lines = Redirect(command)
+
+    execute mods 'new'
+    MakeBufferScratch()
+
+    call setline('.', lines)
+
+    MakeBufferReadonly()
+  finally
+    # TODO: Switch to ":defer".
+    UnlockExecution()
+  endtry
+enddef
+
+# Capture Ex command outputs and write it to a new scratch buffer.
+command! -nargs=* -complete=command Capture {
+  Capture(<q-args> ?? @:, { mods: <q-mods> })
+}
+
+# vim: set expandtab tabstop=2 shiftwidth=2 foldmethod=marker:
