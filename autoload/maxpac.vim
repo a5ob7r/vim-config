@@ -109,7 +109,7 @@ export def Load(uri: string, config: dict<any> = { type: 'opt' }): bool
     const path = substitute(uri, '^file://', '', '')
 
     if glob(path)->empty()
-      return 0
+      return false
     endif
 
     execute $'set runtimepath^={fnameescape(path)}'
@@ -123,7 +123,7 @@ export def Load(uri: string, config: dict<any> = { type: 'opt' }): bool
       execute 'source' fnameescape(plugin)
     endfor
 
-    return 1
+    return true
   else
     const name = Plugname(uri)
 
