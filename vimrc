@@ -105,7 +105,6 @@ enddef
 # Options {{{
 set autoindent smartindent
 set autoread
-set backspace=indent,eol,start
 set breakindent breakindentopt=shift:2,sbr
 set cdhome
 set colorcolumn=81,101,121
