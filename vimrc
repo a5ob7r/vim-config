@@ -3,7 +3,7 @@ vim9script
 #
 # vimrc
 #
-# - The minimal requirement version is 9.1.0000 with default huge features.
+# - The minimal requirement version is 9.1.1391 with default huge features.
 # - Nowadays we are always in UTF-8 environment, aren't we?
 # - Work well even if no (non-default) plugin is installed.
 # - Support Unix and Windows.
@@ -46,10 +46,6 @@ def Terminal()
     cwd: cwd,
     term_finish: 'close'
   })
-enddef
-
-def IsBundledPackageLoadable(package_name: string): bool
-  return !glob($'{$VIMRUNTIME}/pack/dist/opt/{package_name}/plugin/*.vim')->empty()
 enddef
 
 # A naive truecolor support terminal detection in the two ways.
@@ -117,7 +113,7 @@ set backspace=indent,eol,start
 set breakindent breakindentopt=shift:2,sbr
 set cdhome
 set colorcolumn=81,101,121
-set completeopt=menuone,longest,popup
+set completeopt=menuone,longest,popup,fuzzy
 set cursorline
 set display=lastline
 set fileformats=unix,dos,mac
@@ -139,6 +135,9 @@ set showmatch
 set smoothscroll
 set spelllang+=cjk
 set spelloptions+=camel
+set tabclose=left
+set tabpanel=%!TabPanel()
+set tabpanelopt=columns:30,vert
 set virtualedit=block
 set wildmenu wildoptions+=pum,fuzzy
 set wildmode=longest:full,full
@@ -195,19 +194,6 @@ set nowrapscan
 silent expand(&backupdir)->mkdir('p', 0o700)
 silent expand(&directory)->mkdir('p', 0o700)
 silent expand(&undodir)->mkdir('p', 0o700)
-
-if has('patch-9.1.0463')
-  set completeopt+=fuzzy
-endif
-
-if has('tabpanel')
-  set tabpanelopt=columns:30,vert
-  set tabpanel=%!TabPanel()
-endif
-
-if has('patch-9.1.0572')
-  set tabclose=left
-endif
 # }}}
 
 # Key mappings {{{
@@ -472,7 +458,9 @@ source $VIMRUNTIME/ftplugin/man.vim
 # }}}
 
 # Bundled plugins {{{
+packadd! comment
 packadd! editorconfig
+packadd! hlyank
 # }}}
 
 # =============================================================================
@@ -1337,20 +1325,6 @@ maxpac.Add('w0rp/ale', { pre: AlePre })
 maxpac.Add('yasuhiroki/github-actions-yaml.vim')
 maxpac.Add('yegappan/lsp', { pre: LspPre })
 maxpac.Add('zorab47/procfile.vim')
-
-if IsBundledPackageLoadable('comment')
-  # "comment.vim" package is bundled since 5400a5d4269874fe4f1c35dfdd3c039ea17dfd62.
-  packadd! comment
-else
-  maxpac.Add('tpope/vim-commentary')
-endif
-
-if IsBundledPackageLoadable('hlyank')
-  # "highlight-yank" package is bundled since 83d74404bb355956e9ce23fa62dd5bf1f2549c05.
-  packadd! hlyank
-else
-  maxpac.Add('machakann/vim-highlightedyank')
-endif
 
 # =============================================================================
 
