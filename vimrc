@@ -13,10 +13,6 @@ import autoload 'maxpac.vim'
 
 # =============================================================================
 
-# Variables {{{
-$VIMHOME = expand('<script>:p:h')
-# }}}
-
 # Functions {{{
 # Get syntax item information at a position.
 #
@@ -500,7 +496,7 @@ enddef
 def MinpacFallback()
   command! InstallMinpac {
     # A root directory path of vim packages.
-    const packhome = $'{$VIMHOME}/pack'
+    const packhome = simplify($'{$MYVIMDIR}/pack')
 
     const repository = 'https://github.com/k-takata/minpac.git'
     const directory =  $'{packhome}/minpac/opt/minpac'
@@ -645,7 +641,7 @@ enddef
 
 # hrsh7th/vim-vsnip {{{
 def VimVsnipPre()
-  g:vsnip_snippet_dir = $'{$VIMHOME}/vsnip'
+  g:vsnip_snippet_dir = simplify($'{$MYVIMDIR}/vsnip')
 enddef
 
 def VimVsnipPost()
