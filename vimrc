@@ -1223,19 +1223,12 @@ endif
 maxpac.Add('a5ob7r/lightline-otf')
 maxpac.Add('itchyny/lightline.vim', { pre: LightlineVimPre })
 
-maxpac.Add('hrsh7th/vim-vsnip', { pre: VimVsnipPre, post: VimVsnipPost })
-maxpac.Add('hrsh7th/vim-vsnip-integ')
-maxpac.Add('rafamadriz/friendly-snippets')
-
 # Operators.
 maxpac.Add('kana/vim-operator-user')
 maxpac.Add('kana/vim-operator-replace', { post: VimOperatorReplacePost })
 
-maxpac.Add('kyoh86/vim-ripgrep', { post: VimRipgrepPost })
-
 # Text objects.
 maxpac.Add('kana/vim-textobj-user')
-
 maxpac.Add('D4KU/vim-textobj-chainmember')
 maxpac.Add('Julian/vim-textobj-variable-segment')
 maxpac.Add('deris/vim-textobj-enclosedsyntax')
@@ -1277,6 +1270,8 @@ maxpac.Add('fladson/vim-kitty')
 maxpac.Add('girishji/vimbits', { pre: VimbitsPre }) # For ":h vimtips".
 maxpac.Add('gpanders/vim-oldfiles')
 maxpac.Add('haya14busa/vim-asterisk', { post: VimAsteriskPost })
+maxpac.Add('hrsh7th/vim-vsnip', { pre: VimVsnipPre, post: VimVsnipPost })
+maxpac.Add('hrsh7th/vim-vsnip-integ')
 maxpac.Add('itchyny/screensaver.vim', { post: ScreensaverVimPost })
 maxpac.Add('junegunn/goyo.vim')
 maxpac.Add('junegunn/vader.vim')
@@ -1285,6 +1280,7 @@ maxpac.Add('k-takata/minpac', { post: MinpacPost, fallback: MinpacFallback })
 maxpac.Add('kannokanno/previm')
 maxpac.Add('kchmck/vim-coffee-script')
 maxpac.Add('keith/rspec.vim')
+maxpac.Add('kyoh86/vim-ripgrep', { post: VimRipgrepPost })
 maxpac.Add('lambdalisue/vital-Whisky')
 maxpac.Add('liuchengxu/vista.vim', { pre: VistaVimPre })
 maxpac.Add('machakann/vim-sandwich', { post: VimSandwichPost })
@@ -1294,6 +1290,7 @@ maxpac.Add('monaqa/modesearch.vim', { post: ModesearchVimPost })
 maxpac.Add('neovimhaskell/haskell-vim')
 maxpac.Add('pocke/rbs.vim')
 maxpac.Add('preservim/vim-markdown', { pre: VimMarkdownPre })
+maxpac.Add('rafamadriz/friendly-snippets')
 maxpac.Add('rhysd/git-messenger.vim', { post: GitMessengerVimPost })
 maxpac.Add('thinca/vim-localrc', { post: VimLocalrcPost })
 maxpac.Add('thinca/vim-prettyprint')
@@ -1315,7 +1312,6 @@ if executable('deno')
   maxpac.Add('vim-denops/denops.vim', { post: DenopsVimPost })
 
   maxpac.Add('lambdalisue/gin.vim', { post: GinVimPost })
-
   maxpac.Add('Shougo/ddu.vim', { post: DduVimPost })
 
   maxpac.Add('Shougo/ddu-ui-ff')
