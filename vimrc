@@ -617,19 +617,6 @@ def VimGitgutterPre()
 enddef
 # }}}
 
-# lambdalisue/gina.vim {{{
-def GinaVimPost()
-  nnoremap <Leader>gl <Cmd>Gina log --graph --all<CR>
-  nnoremap <Leader>gs <Cmd>Gina status<CR>
-  nnoremap <Leader>gc <Cmd>Gina commit<CR>
-
-  gina#custom#mapping#nmap('log', 'q', '<C-W>c', { noremap: 1, silent: 1 })
-  gina#custom#mapping#nmap('log', 'yy', '<Plug>(gina-yank-rev)', { silent: 1 })
-  gina#custom#mapping#nmap('status', 'q', '<C-W>c', { noremap: 1, silent: 1 })
-  gina#custom#mapping#nmap('status', 'yy', '<Plug>(gina-yank-path)', { silent: 1 })
-enddef
-# }}}
-
 # rhysd/git-messenger.vim {{{
 def GitMessengerVimPost()
   g:git_messenger_include_diff = 'all'
@@ -1298,7 +1285,6 @@ maxpac.Add('k-takata/minpac', { post: MinpacPost, fallback: MinpacFallback })
 maxpac.Add('kannokanno/previm')
 maxpac.Add('kchmck/vim-coffee-script')
 maxpac.Add('keith/rspec.vim')
-maxpac.Add('lambdalisue/gina.vim', { post: GinaVimPost })
 maxpac.Add('lambdalisue/vital-Whisky')
 maxpac.Add('liuchengxu/vista.vim', { pre: VistaVimPre })
 maxpac.Add('machakann/vim-sandwich', { post: VimSandwichPost })
