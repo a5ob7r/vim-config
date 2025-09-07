@@ -696,7 +696,7 @@ def VimRipgrepPost()
   command! -bang -count -nargs=+ -complete=customlist,RgComplete Rg {
     const arguments = RgArgsParser.new(<q-args>, { filename_expand: true }).Call()
       ->copy()
-      ->map((_, arg) => $'"{arg.Value()}"')
+      ->map((_, arg) => arg.Value())
 
     Ripgrep(['-C<count>'] + arguments, { case: <bang>1, escape: <bang>1 })
   }
@@ -735,8 +735,8 @@ def Ripgrep(args: list<string>, opts = {})
   endif
 
   if o_escape
-    # Change the "<q-args>" to the "{command}" argument for "job_start()" literally.
-    arguments += copy(args)->map(( _, val) => JobArgumentalizeEscape(val))
+    # Escape the strings for "string" type of "{command}" of "job_start()".
+    arguments += copy(args)->map(( _, val) => escape(val, ' "\'))
   else
     arguments += args
   endif
@@ -744,36 +744,14 @@ def Ripgrep(args: list<string>, opts = {})
   ripgrep#search(join(arguments))
 enddef
 
-# Escape backslashes without them escaping a double quote or a space.
-#
-# :Rg \bvim\b -> job_start('rg \\bvim\\b')
-# :Rg \"\ vim\b -> job_start('rg \"\ vim\\b')
-#
-def JobArgumentalizeEscape(s: string): string
-  var tokens = []
-  var str = s
-
-  while 1
-    var [matched, start, end] = matchstrpos(str, '\%(\%(\\\\\)*\)\@<=\\[" ]')
-
-    if !!(start + 1)
-      tokens += (!!start ? [escape(str[0 : start - 1], '\')] : []) + [matched]
-      str = str[end :]
-    else
-      tokens += [escape(str, '\')]
-      break
-    endif
-  endwhile
-
-  return join(tokens, '')
-enddef
-
 def RgComplete(ArgLead: string, CmdLine: string, CursorPos: number): list<string>
   const cmd_line_lead = slice(CmdLine, 0, CursorPos)
 
   const args = RgCmdLineParser.new(cmd_line_lead).Call()
+  const is_cursor_at_filename =
+    !empty(args) && typename(args[-1]) ==# (empty(ArgLead) ? 'object<RgPatternArg>' : 'object<RgFilenameArg>')
 
-  if !empty(args) && typename(args[-1]) ==# 'object<RgFilenameArg>'
+  if is_cursor_at_filename
     return getcompletion(ArgLead, 'file')
   else
     return []
@@ -828,39 +806,6 @@ def StripLeadingWhitespaces(s: string): string
   return substitute(s, '^\s\+', '', '')
 enddef
 
-# Emulate string splitting of "job_start()" with a string "{command}" argument.
-#
-# SplitIntoWords('foo "" "foo" "foo bar" "foo  \"  bar" "fo \" \\\" bar"')
-# # => ['foo', '', 'foo', 'foo bar', 'foo  \"  bar', 'fo \" \\\" bar']
-def SplitIntoWords(s: string): list<string>
-  final words = []
-
-  var remains = s
-
-  while !empty(remains)
-    remains = StripLeadingWhitespaces(remains)
-
-    if remains[0] ==# '"'
-      const [word, _, end] = matchstrpos(remains, '^""\|^"[^\\"]*"\|^"\%([^\\"]*\\.[^\\"]*\)\{-}"')
-
-      if end == -1
-        add(words, remains)
-        remains = ''
-      else
-        add(words, slice(word, 1, -1))
-        remains = remains[end :]
-      endif
-    else
-      const [word, _, end] = matchstrpos(remains, '^\S\+')
-
-      add(words, word)
-      remains = remains[end :]
-    endif
-  endwhile
-
-  return words
-enddef
-
 class RgCmdLineParser
   static const COMMAND_NAME = 'Rg'
 
@@ -913,6 +858,10 @@ class RgCmdLineParser
   enddef
 endclass
 
+# :Rg -w --ignore-case foo
+# :Rg the\ .\"\'word\\ vimrc gvimrc
+# :Rg "\\ \"word \\bthe\\b . \\" vimrc
+# :Rg '\bthe\b \. ''\\\' vimrc
 class RgArgsParser
   const args: string
   const o_filename_expand: bool
@@ -928,7 +877,7 @@ class RgArgsParser
     var pattern_found = false
 
     var word: string
-    var remains = SplitIntoWords(this.args)
+    var remains = this._SplitIntoWords(this.args)
 
     while !empty(remains)
       [word; remains] = remains
@@ -949,6 +898,45 @@ class RgArgsParser
     endwhile
 
     return arguments
+  enddef
+
+  def _SplitIntoWords(s: string): list<string>
+    var remains = StripLeadingWhitespaces(s)
+
+    final args = []
+
+    var matched: string
+    var end: number
+
+    while !empty(remains)
+      if remains[0] ==# '"'
+        [matched, _, end] = matchstrpos(remains, '^""\|^"[^\\"]*"\|^"\%([^\\"]*\\.[^\\"]*\)\{-}"')
+
+        if end == -1
+          add(args, remains)
+          remains = ''
+        else
+          add(args, slice(matched, 1, -1)->substitute('\\\(.\)', '\1', 'g'))
+          remains = StripLeadingWhitespaces(remains[end :])
+        endif
+      elseif remains[0] ==# "'"
+        [matched, _, end] = matchstrpos(remains, '^''\%([^'']*\%(''''\)\=\)\+''')
+
+        if end == -1
+          add(args, remains)
+          remains = ''
+        else
+          add(args, slice(matched, 1, -1)->substitute("''", "'", 'g'))
+          remains = StripLeadingWhitespaces(remains[end :])
+        endif
+      else
+        [matched, _, end] = matchstrpos(remains, '\%(\\.\|\S\)\+')
+        add(args, matched)
+        remains = StripLeadingWhitespaces(remains[end :])
+      endif
+    endwhile
+
+    return args
   enddef
 endclass
 
@@ -984,9 +972,9 @@ def OperatorRipgrep(motion_wiseness: string, opts = {})
     bufname('%')->getbufline(l_lnum)->map((_, val) => val[l_col_idx : r_col_idx])
 
   words += match(buflines, '^\s*-') + 1 ? ['--'] : []
-  words += match(buflines, ' ') + 1
-    ? [printf('"%s"', copy(buflines)->map((_, val) => CommandLineArgumentalizeEscape(val))->join("\n"))]
-    : [copy(buflines)->map((_, val) => CommandLineArgumentalizeEscape(val))->join("\n")]
+  words += match(buflines, ' \|"\|''') + 1
+    ? [$"'{copy(buflines)->map((_, val) => substitute(val, "'", "''", 'g'))->join("\n")}'"]
+    : [join(buflines, "\n")]
 
   const command = join(words)
 
@@ -999,27 +987,6 @@ def OperatorRipgrep(motion_wiseness: string, opts = {})
   if o_push_history_entry
     histadd('cmd', command)
   endif
-enddef
-
-# Escape command line special characters ("cmdline-special"), any
-# double-quotes and any backslashes preceding spaces.
-def CommandLineArgumentalizeEscape(s: string): string
-  var tokens = []
-  var str = s
-
-  while 1
-    var [matched, start, end] = matchstrpos(str, '\C<\(cword\|cWORD\|cexpr\|cfile\|afile\|abuf\|amatch\|sfile\|stack\|script\|slnum\|sflnum\|client\)>\|\\ ')
-
-    if !!(start + 1)
-      tokens += (!!start ? [escape(str[0 : start - 1], '"%#')] : []) + [escape(matched, '<\')]
-      str = str[end : ]
-    else
-      tokens += [escape(str, '"%#')]
-      break
-    endif
-  endwhile
-
-  return join(tokens, '')
 enddef
 # }}}
 
