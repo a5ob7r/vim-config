@@ -693,7 +693,7 @@ def VimRipgrepPost()
 
   ripgrep#observe#add_observer(g:ripgrep#event#other, 'RipgrepContextObserver')
 
-  command! -bang -count -nargs=+ -complete=file Rg {
+  command! -bang -count -nargs=+ -complete=customlist,RgComplete Rg {
     Ripgrep(['-C<count>', <q-args>], { case: <bang>1, escape: <bang>1 })
   }
 
@@ -763,6 +763,190 @@ def JobArgumentalizeEscape(s: string): string
 
   return join(tokens, '')
 enddef
+
+def RgComplete(ArgLead: string, CmdLine: string, CursorPos: number): list<string>
+  const cmd_line_lead = slice(CmdLine, 0, CursorPos)
+
+  const args = RgCmdLineParser.new(cmd_line_lead).Call()
+
+  if !empty(args) && typename(args[-1]) ==# 'object<RgFilenameArg>'
+    return getcompletion(ArgLead, 'file')
+  else
+    return []
+  endif
+enddef
+
+abstract class RgArg
+  var value: string
+
+  def Value(): string
+    return this.value
+  enddef
+endclass
+
+class RgModifierArg extends RgArg
+  def new(this.value)
+  enddef
+endclass
+
+class RgCommandArg extends RgArg
+  def new(this.value)
+  enddef
+endclass
+
+class RgOptionArg extends RgArg
+  def new(this.value)
+  enddef
+endclass
+
+class RgDoubleHyphensArg extends RgArg
+  def new(this.value)
+  enddef
+endclass
+
+class RgPatternArg extends RgArg
+  def new(this.value)
+  enddef
+endclass
+
+class RgFilenameArg extends RgArg
+  def new(this.value)
+  enddef
+
+  def Expand(): RgFilenameArg
+    this.value = expand(this.value)
+
+    return this
+  enddef
+endclass
+
+def StripLeadingWhitespaces(s: string): string
+  return substitute(s, '^\s\+', '', '')
+enddef
+
+# Emulate string splitting of "job_start()" with a string "{command}" argument.
+#
+# SplitIntoWords('foo "" "foo" "foo bar" "foo  \"  bar" "fo \" \\\" bar"')
+# # => ['foo', '', 'foo', 'foo bar', 'foo  \"  bar', 'fo \" \\\" bar']
+def SplitIntoWords(s: string): list<string>
+  final words = []
+
+  var remains = s
+
+  while !empty(remains)
+    remains = StripLeadingWhitespaces(remains)
+
+    if remains[0] ==# '"'
+      const [word, _, end] = matchstrpos(remains, '^""\|^"[^\\"]*"\|^"\%([^\\"]*\\.[^\\"]*\)\{-}"')
+
+      if end == -1
+        add(words, remains)
+        remains = ''
+      else
+        add(words, slice(word, 1, -1))
+        remains = remains[end :]
+      endif
+    else
+      const [word, _, end] = matchstrpos(remains, '^\S\+')
+
+      add(words, word)
+      remains = remains[end :]
+    endif
+  endwhile
+
+  return words
+enddef
+
+class RgCmdLineParser
+  static const COMMAND_NAME = 'Rg'
+
+  const cmd_line: string
+
+  def new(this.cmd_line)
+  enddef
+
+  def Call(): list<object<RgArg>>
+    var matched: string
+    var start: number
+    var end: number
+
+    var modifiers: list<object<RgModifierArg>> = []
+    var commands: list<object<RgCommandArg>> = []
+    var arguments: list<object<RgArg>> = []
+
+    var remains = StripLeadingWhitespaces(this.cmd_line)
+
+    [modifiers, remains] = this._ParseModifiers(remains)
+    [commands, remains] = this._ParseCommand(remains)
+    [arguments, _] = this._ParseArguments(remains)
+
+    return modifiers + commands + arguments
+  enddef
+
+  def _ParseModifiers(s: string): tuple<list<object<RgModifierArg>>, string>
+    const [matched, _, end] = matchstrpos(s, '\C^\%(\s*\<[a-z]\+\>\)\+')
+    const modifiers = split(matched)->map((_, modifier) => RgModifierArg.new(modifier))
+    const remains = end == -1 ? s : s[end :]
+
+    return (modifiers, remains)
+  enddef
+
+  # TODO: Support "[range]".
+  # TODO: Support "<bang>".
+  # TODO: Support ":".
+  def _ParseCommand(s: string): tuple<list<object<RgCommandArg>>, string>
+    const stripped = StripLeadingWhitespaces(s)
+    const [matched, _, end] = matchstrpos(stripped, $'\C^\<{COMMAND_NAME}\>')
+    const command = RgCommandArg.new(matched)
+
+    return ([command], stripped[end :])
+  enddef
+
+  def _ParseArguments(s: string): tuple<list<object<RgArg>>, string>
+    const stripped = StripLeadingWhitespaces(s)
+
+    return (RgArgsParser.new(stripped).Call(), '')
+  enddef
+endclass
+
+class RgArgsParser
+  const args: string
+  const o_filename_expand: bool
+
+  def new(this.args, opts = {})
+    this.o_filename_expand = get(opts, 'filename_expand', false)
+  enddef
+
+  def Call(): list<object<RgArg>>
+    final arguments: list<object<RgArg>> = []
+
+    var double_hyphens_found = false
+    var pattern_found = false
+
+    var word: string
+    var remains = SplitIntoWords(this.args)
+
+    while !empty(remains)
+      [word; remains] = remains
+
+      if !double_hyphens_found && word ==# '--'
+        double_hyphens_found = true
+        add(arguments, RgDoubleHyphensArg.new(word))
+      elseif !double_hyphens_found && word =~# '^-'
+        add(arguments, RgOptionArg.new(word))
+      else
+        if pattern_found
+          add(arguments, this.o_filename_expand ? RgFilenameArg.new(word).Expand() : RgFilenameArg.new(word))
+        else
+          pattern_found = true
+          add(arguments, RgPatternArg.new(word))
+        endif
+      endif
+    endwhile
+
+    return arguments
+  enddef
+endclass
 
 def! g:Op_ripgrep(motion_wiseness: string)
   OperatorRipgrep(motion_wiseness, { boundaries: 0, push_history_entry: 1, highlight: 1 })
