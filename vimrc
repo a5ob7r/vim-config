@@ -694,7 +694,11 @@ def VimRipgrepPost()
   ripgrep#observe#add_observer(g:ripgrep#event#other, 'RipgrepContextObserver')
 
   command! -bang -count -nargs=+ -complete=customlist,RgComplete Rg {
-    Ripgrep(['-C<count>', <q-args>], { case: <bang>1, escape: <bang>1 })
+    const arguments = RgArgsParser.new(<q-args>, { filename_expand: true }).Call()
+      ->copy()
+      ->map((_, arg) => $'"{arg.Value()}"')
+
+    Ripgrep(['-C<count>'] + arguments, { case: <bang>1, escape: <bang>1 })
   }
 
   noremap <Leader>f <Plug>(operator-ripgrep-g)
