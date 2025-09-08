@@ -841,10 +841,9 @@ class RgCmdLineParser
   enddef
 
   # TODO: Support "[range]".
-  # TODO: Support "<bang>".
   def _ParseCommand(s: string): tuple<list<object<RgCommandArg>>, string>
     const stripped = substitute(s, '^[[:space:]:]*', '', '')
-    const [matched, _, end] = matchstrpos(stripped, $'\C^[A-Z][a-zA-Z0-9]*\>')
+    const [matched, _, end] = matchstrpos(stripped, $'\C^[A-Z][a-zA-Z0-9]*!\=')
     const command = RgCommandArg.new(matched)
 
     return ([command], stripped[end :])
