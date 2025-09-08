@@ -746,10 +746,12 @@ enddef
 
 def RgComplete(ArgLead: string, CmdLine: string, CursorPos: number): list<string>
   const cmd_line_lead = slice(CmdLine, 0, CursorPos)
-
   const args = RgCmdLineParser.new(cmd_line_lead).Call()
+
+  const last_arg_typename = empty(args) ? null_string : typename(args[-1])
   const is_cursor_at_filename =
-    !empty(args) && typename(args[-1]) ==# (empty(ArgLead) ? 'object<RgPatternArg>' : 'object<RgFilenameArg>')
+       last_arg_typename ==# 'object<RgFilenameArg>'
+    || empty(ArgLead) && last_arg_typename ==# 'object<RgPatternArg>'
 
   if is_cursor_at_filename
     return getcompletion(ArgLead, 'file')
