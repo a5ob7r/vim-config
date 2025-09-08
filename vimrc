@@ -833,8 +833,8 @@ class RgCmdLineParser
   enddef
 
   def _ParseModifiers(s: string): tuple<list<object<RgModifierArg>>, string>
-    const [matched, _, end] = matchstrpos(s, '\C^\%(\s*\<[a-z]\+\>\)\+')
-    const modifiers = split(matched)->map((_, modifier) => RgModifierArg.new(modifier))
+    const [matched, _, end] = matchstrpos(s, '\C^\%([[:space:]:]*\<[a-z]\+\>\)\+')
+    const modifiers = split(matched, '[[:space:]:]\+')->map((_, modifier) => RgModifierArg.new(modifier))
     const remains = end == -1 ? s : s[end :]
 
     return (modifiers, remains)
@@ -842,9 +842,8 @@ class RgCmdLineParser
 
   # TODO: Support "[range]".
   # TODO: Support "<bang>".
-  # TODO: Support ":".
   def _ParseCommand(s: string): tuple<list<object<RgCommandArg>>, string>
-    const stripped = StripLeadingWhitespaces(s)
+    const stripped = substitute(s, '^[[:space:]:]*', '', '')
     const [matched, _, end] = matchstrpos(stripped, $'\C^\<{COMMAND_NAME}\>')
     const command = RgCommandArg.new(matched)
 
