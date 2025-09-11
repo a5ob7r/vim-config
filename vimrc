@@ -945,6 +945,28 @@ def! g:Op_ripgrep_g(motion_wiseness: string)
   OperatorRipgrep(motion_wiseness, { boundaries: 1, push_history_entry: 1, highlight: 1 })
 enddef
 
+enum RegionSelectionType
+  Char('v'),
+  Line('V'),
+  Block('')
+
+  const value: string
+
+  def Value(): string
+    return this.value
+  enddef
+
+  static const _MAP = {
+    char: RegionSelectionType.Char,
+    line: RegionSelectionType.Line,
+    block: RegionSelectionType.Block,
+  }
+
+  static def Fetch(motion_wiseness: string): RegionSelectionType
+    return _MAP[motion_wiseness]
+  enddef
+endenum
+
 # TODO: Consider ideal linewise and blockwise operations.
 def OperatorRipgrep(motion_wiseness: string, opts = {})
   const o_boundaries = get(opts, 'boundaries')
@@ -957,16 +979,9 @@ def OperatorRipgrep(motion_wiseness: string, opts = {})
     add(words, '-w')
   endif
 
-  const [_l_bufnum, l_lnum, l_col, _l_off] = getcharpos("'[")
-  const [_r_bufnum, r_lnum, r_col, _r_off] = getcharpos("']")
-
-  const l_col_idx = l_col - 1
-  const r_col_idx = r_col - (&selection ==# 'inclusive' ? 1 : 2)
-
-  const buflines =
-    motion_wiseness ==# 'block' ? bufname('%')->getbufline(l_lnum, r_lnum)->map((_, val) => val[l_col_idx : r_col_idx]) :
-    motion_wiseness ==# 'line' ? bufname('%')->getbufline(l_lnum, r_lnum) :
-    bufname('%')->getbufline(l_lnum)->map((_, val) => val[l_col_idx : r_col_idx])
+  const buflines = getregion(getpos("'["), getpos("']"), {
+    type: RegionSelectionType.Fetch(motion_wiseness).Value()
+  })
 
   if match(buflines, '^\s*-') >= 0
     add(words, '--')
