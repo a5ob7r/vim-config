@@ -983,6 +983,10 @@ def OperatorRipgrep(motion_wiseness: string, opts = {})
     type: RegionSelectionType.Fetch(motion_wiseness).Value()
   })
 
+  if len(buflines) >= 2
+    add(words, '-U')
+  endif
+
   if match(buflines, '^\s*-') >= 0
     add(words, '--')
   endif
