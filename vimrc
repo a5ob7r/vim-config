@@ -969,7 +969,7 @@ def OperatorRipgrep(motion_wiseness: string, opts = {})
     bufname('%')->getbufline(l_lnum)->map((_, val) => val[l_col_idx : r_col_idx])
 
   words += match(buflines, '^\s*-') + 1 ? ['--'] : []
-  words += match(buflines, ' \|"\|''') + 1
+  words += match(buflines, '[ "'']') + 1
     ? [$"'{copy(buflines)->map((_, val) => substitute(val, "'", "''", 'g'))->join("\n")}'"]
     : [join(buflines, "\n")]
 
