@@ -978,16 +978,16 @@ def OperatorRipgrep(motion_wiseness: string, opts = {})
     add(words, join(buflines, "\n"))
   endif
 
-  const command = join(words)
+  const cmdline = join(words)
 
-  execute command
+  execute cmdline
 
   if o_highlight && motion_wiseness ==# 'char'
     @/ = o_boundaries ? printf('\V\<%s\>', escape(buflines[0], '\/')) : printf('\V%s', escape(buflines[0], '\/'))
   endif
 
   if o_push_history_entry
-    histadd('cmd', command)
+    histadd('cmd', cmdline)
   endif
 enddef
 # }}}
