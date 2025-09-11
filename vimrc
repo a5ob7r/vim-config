@@ -951,10 +951,10 @@ def OperatorRipgrep(motion_wiseness: string, opts = {})
   const o_push_history_entry = get(opts, 'push_history_entry')
   const o_highlight = get(opts, 'highlight')
 
-  var words = ['Rg', '-F']
+  final words = ['Rg', '-F']
 
   if o_boundaries
-    words += ['-w']
+    add(words, '-w')
   endif
 
   const [_l_bufnum, l_lnum, l_col, _l_off] = getcharpos("'[")
@@ -968,10 +968,15 @@ def OperatorRipgrep(motion_wiseness: string, opts = {})
     motion_wiseness ==# 'line' ? bufname('%')->getbufline(l_lnum, r_lnum) :
     bufname('%')->getbufline(l_lnum)->map((_, val) => val[l_col_idx : r_col_idx])
 
-  words += match(buflines, '^\s*-') >= 0 ? ['--'] : []
-  words += match(buflines, '[ "'']') >= 0
-    ? [$"'{copy(buflines)->map((_, val) => substitute(val, "'", "''", 'g'))->join("\n")}'"]
-    : [join(buflines, "\n")]
+  if match(buflines, '^\s*-') >= 0
+    add(words, '--')
+  endif
+
+  if match(buflines, '[ "'']') >= 0
+    add(words, $"'{copy(buflines)->map((_, val) => substitute(val, "'", "''", 'g'))->join("\n")}'")
+  else
+    add(words, join(buflines, "\n"))
+  endif
 
   const command = join(words)
 
