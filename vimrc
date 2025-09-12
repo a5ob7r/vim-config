@@ -13,6 +13,46 @@ import autoload 'maxpac.vim'
 
 # =============================================================================
 
+# Classes {{{
+class Pathname
+  const value: string
+
+  def new(value: string)
+    this.value = simplify(value)
+  enddef
+
+  def Value(): string
+    return this.value
+  enddef
+
+  def Join(...values: list<string>): object<Pathname>
+    return reduce(values, (acc, v) => acc.Add(v), Pathname.new(this.value))
+  enddef
+
+  def Add(value: string): object<Pathname>
+    const pathname = Pathname.new(value)
+
+    if pathname.IsEmpty()
+      return Pathname.new(this.value)
+    endif
+
+    if pathname.IsAbsolute()
+      return pathname
+    endif
+
+    return Pathname.new($'{this.value}/{value}')
+  enddef
+
+  def IsEmpty(): bool
+    return empty(this.value)
+  enddef
+
+  def IsAbsolute(): bool
+    return this.value =~# '^/'
+  enddef
+endclass
+# }}}
+
 # Functions {{{
 # Get syntax item information at a position.
 #
