@@ -51,21 +51,72 @@ class Pathname
     return this.value =~# '^/'
   enddef
 endclass
+
+class SyntaxInfo
+  const name: string
+
+  def new(id: number)
+    this.name = synIDattr(id, 'name')
+  enddef
+
+  def Name(): string
+    return this.name
+  enddef
+endclass
+
+class SyntaxAt
+  const id: number
+  const info: object<SyntaxInfo>
+
+  def new(line: number, column: number)
+    this.id = this._FetchID(line, column)
+    this.info = SyntaxInfo.new(this.id)
+  enddef
+
+  def Name(): string
+    return this.info.Name()
+  enddef
+
+  def _FetchID(line: number, column: number): number
+    return synID(line, column, 1)
+  enddef
+endclass
+
+class TransparentSyntaxAt extends SyntaxAt
+  # NOTE: No inherit "new()" from the super class?
+  def new(line: number, column: number)
+    this.id = this._FetchID(line, column)
+    this.info = SyntaxInfo.new(this.id)
+  enddef
+
+  def _FetchID(line: number, column: number): number
+    return synID(line, column, 0)
+  enddef
+endclass
+
+class TranslatedSyntaxAt extends SyntaxAt
+  # NOTE: No inherit "new()" from the super class?
+  def new(line: number, column: number)
+    this.id = this._FetchID(line, column)
+    this.info = SyntaxInfo.new(this.id)
+  enddef
+
+  def _FetchID(line: number, column: number): number
+    return synID(line, column, 1)->synIDtrans()
+  enddef
+endclass
 # }}}
 
 # Functions {{{
-# Get syntax item information at a position.
+# Format syntax item names at a position.
 #
 # https://vim.fandom.com/wiki/Identify_the_syntax_highlighting_group_used_at_the_cursor
-def SyntaxItemAttribute(line: number, column: number): string
-  const item_id = synID(line, column, 1)
-  const trans_item_id = synID(line, column, 0)
+def FormatSyntaxNamesAt(line: number, column: number): string
+  const hi = SyntaxAt.new(line, column).Name()
+  const trans = TransparentSyntaxAt.new(line, column).Name()
+  const lo = TranslatedSyntaxAt.new(line, column).Name()
 
-  const hi = synIDattr(item_id, 'name')
-  const trans = synIDattr(trans_item_id, 'name')
-  const lo = synIDattr(synIDtrans(item_id), 'name')
-
-  return $'hi<{hi}> trans<{trans}> lo<{lo}>'
+  return $'hi: "{hi}", trans: "{trans}", lo: "{lo}"'
 enddef
 
 def Terminal()
@@ -307,7 +358,7 @@ noremap <C-C> <Cmd>Interrupt<CR><C-C>
 inoremap <C-C> <Cmd>Interrupt<CR><C-C>
 cnoremap <C-C> <Cmd>Interrupt<CR><C-C>
 
-nnoremap <F10> <ScriptCmd>echo SyntaxItemAttribute(line('.'), col('.'))<CR>
+nnoremap <F10> <ScriptCmd>echo FormatSyntaxNamesAt(line('.'), col('.'))<CR>
 
 nnoremap <C-S> <Cmd>update<CR>
 inoremap <C-S> <Cmd>update<CR>
