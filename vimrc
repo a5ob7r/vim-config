@@ -1099,7 +1099,7 @@ enddef
 # Eliot00/git-lens.vim {{{
 def GitlensVimPost()
   command! -bar ToggleGitLens {
-    ToggleGitLens()
+    g:ToggleGitLens()
   }
 enddef
 # }}}
