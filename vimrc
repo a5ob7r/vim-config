@@ -68,12 +68,6 @@ def SyntaxItemAttribute(line: number, column: number): string
   return $'hi<{hi}> trans<{trans}> lo<{lo}>'
 enddef
 
-# Join and normalize filepaths.
-def Pathjoin(...paths: list<string>): string
-  const sep = has('win32') ? '\\' : '/'
-  return join(paths, sep)->simplify()->substitute(printf('^\.%s', sep), '', '')
-enddef
-
 def Terminal()
   const parent_directory = empty(&buftype) ? expand('%:p:h') : ''
   const cwd = parent_directory ?? getcwd()
@@ -138,7 +132,7 @@ enddef
 #
 # https://specifications.freedesktop.org/basedir-spec/latest/
 def XdgCacheHome(): string
-  return $XDG_CACHE_HOME ?? $'{$HOME}/.cache'
+  return $XDG_CACHE_HOME ?? Pathname.new($HOME).Join('.cache').Value()
 enddef
 # }}}
 
@@ -219,11 +213,11 @@ set nowrapscan
   # CVE-2017-1000382.
   #
   # https://github.com/archlinux/svntogit-packages/blob/68635a69f0c5525210adca6ff277dc13c590399b/trunk/archlinux.vim#L22
-  const vim_cache_home = $'{XdgCacheHome()}/vim'
+  const vim_cache_home = Pathname.new(XdgCacheHome()).Join('vim')
 
-  &backupdir = $'{vim_cache_home}/backup//'
-  &directory = $'{vim_cache_home}/swap//'
-  &undodir = $'{vim_cache_home}/undo//'
+  &backupdir = $'{vim_cache_home.Join('backup').Value()}//'
+  &directory = $'{vim_cache_home.Join('swap').Value()}//'
+  &undodir = $'{vim_cache_home.Join('undo').Value()}//'
 }
 
 silent expand(&backupdir)->mkdir('p', 0o700)
@@ -535,10 +529,10 @@ enddef
 def MinpacFallback()
   command! InstallMinpac {
     # A root directory path of vim packages.
-    const packhome = simplify($'{$MYVIMDIR}/pack')
+    const packhome = Pathname.new($MYVIMDIR).Join('pack')
 
     const repository = 'https://github.com/k-takata/minpac.git'
-    const directory =  $'{packhome}/minpac/opt/minpac'
+    const directory =  packhome.Join('minpac/opt/minpac').Value()
 
     const command = $'git clone {repository} {directory}'
 
@@ -667,7 +661,7 @@ enddef
 
 # hrsh7th/vim-vsnip {{{
 def VimVsnipPre()
-  g:vsnip_snippet_dir = simplify($'{$MYVIMDIR}/vsnip')
+  g:vsnip_snippet_dir = Pathname.new($MYVIMDIR).Join('vsnip').Value()
 enddef
 
 def VimVsnipPost()
@@ -1087,9 +1081,9 @@ enddef
 
 def OpenLocalrc(bang: string, mods: string, dir: string)
   const localrc_filename = get(g:, 'localrc_filename', '.local.vimrc')
-  const localrc_filepath = Pathjoin(dir, fnameescape(localrc_filename))
+  const localrc_filepath = Pathname.new(dir).Join(localrc_filename).Value()
 
-  execute $'{mods} OpenHelper{bang} {localrc_filepath}'
+  execute $'{mods} OpenHelper{bang} {fnameescape(localrc_filepath)}'
 enddef
 # }}}
 
