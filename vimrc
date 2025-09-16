@@ -3,7 +3,7 @@ vim9script
 #
 # vimrc
 #
-# - The minimal requirement version is 9.1.1391 with default huge features.
+# - The minimal requirement version is 9.1.1761 with default huge features.
 # - Nowadays we are always in UTF-8 environment, aren't we?
 # - Work well even if no (non-default) plugin is installed.
 # - Support Unix and Windows.
@@ -207,7 +207,6 @@ set laststatus=2
 set list listchars+=tab:>\ \|,extends:>,precedes:<
 set nrformats-=octal nrformats+=unsigned
 set pastetoggle=<F12>
-set ruler
 set scrolloff=5
 set shortmess-=S
 set showcmd
