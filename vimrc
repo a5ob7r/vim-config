@@ -207,6 +207,7 @@ set laststatus=2
 set list listchars+=tab:>\ \|,extends:>,precedes:<
 set nrformats-=octal nrformats+=unsigned
 set pastetoggle=<F12>
+set pumheight=16
 set scrolloff=5
 set shortmess-=S
 set showcmd
