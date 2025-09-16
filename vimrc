@@ -1224,15 +1224,6 @@ enddef
 
 # liuchengxu/vista.vim {{{
 def VistaVimPre()
-  g:vista_no_mappings = 1
-
-  augroup vimrc:vista
-    autocmd!
-    autocmd FileType vista,vista_kind {
-      nnoremap <buffer> q <Cmd>Vista!!<CR>
-    }
-  augroup END
-
   nnoremap <Leader>v <Cmd>Vista!!<CR>
 enddef
 # }}}
