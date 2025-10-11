@@ -5,6 +5,8 @@
 
 set -euo pipefail
 
+export XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-~/.config}
+
 has () {
   type "$1" &>/dev/null
 }
@@ -31,7 +33,7 @@ if has dtach; then
     tput smcup || true
   fi
 
-  dtach -A ~/.vim/.dtach.sock -r winch "${words[@]}"
+  dtach -A "$XDG_CONFIG_HOME/vim/.dtach.sock" -r winch "${words[@]}"
 
   if has tput; then
     tput rmcup || true

@@ -5,6 +5,8 @@
 
 set -Ceuo pipefail
 
+export XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-~/.config}
+
 parent=${0%/*}
 
 cd "$parent/.."
@@ -36,7 +38,7 @@ xln () {
   ln -sv "$src" "$dst"
 }
 
-xln "$PWD" ~/.vim
+xln "$PWD" "$XDG_CONFIG_HOME/vim"
 xln "$PWD/.ctags.d" ~/.ctags.d
 xln "$PWD/bin/xvim" ~/bin/xvim
 xln "$PWD/bin/vimrc" ~/bin/vimrc

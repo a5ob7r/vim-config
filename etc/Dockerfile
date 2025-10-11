@@ -49,6 +49,6 @@ EOF
 
 USER a5ob7r
 
-ADD --chown=a5ob7r https://github.com/a5ob7r/vim-config.git#${MYVIMRC_COMMIT_HASH} /home/a5ob7r/.vim
+ADD --chown=a5ob7r https://github.com/a5ob7r/vim-config.git#${MYVIMRC_COMMIT_HASH} /home/a5ob7r/.config/vim
 
 WORKDIR /home/a5ob7r
