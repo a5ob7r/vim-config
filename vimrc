@@ -32,7 +32,7 @@ class Pathname
   def Add(value: string): object<Pathname>
     const pathname = Pathname.new(value)
 
-    if pathname.IsEmpty()
+    if pathname.empty()
       return Pathname.new(this.value)
     endif
 
@@ -43,7 +43,7 @@ class Pathname
     return Pathname.new($'{this.value}/{value}')
   enddef
 
-  def IsEmpty(): bool
+  def empty(): bool
     return empty(this.value)
   enddef
 
