@@ -620,10 +620,9 @@ enddef
 def Neodark()
   colorscheme neodark
 
-  # Cyan, but the default is orange in a strange way.
+  # Cyan; prefer cyan over orange that is the default neodark color.
   g:terminal_ansi_colors[6] = '#72c7d1'
-  # Light black
-  # Adjust the autosuggested text color for zsh.
+  # Light black; Adjust the autosuggested text color for zsh.
   g:terminal_ansi_colors[8] = '#5f5f5f'
 enddef
 # }}}
