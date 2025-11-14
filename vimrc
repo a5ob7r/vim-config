@@ -601,25 +601,23 @@ def NeodarkVimPost()
   # Prefer a near black background color.
   g:neodark#background = '#202020'
 
-  command! -bang -bar Neodark {
-    ApplyNeodark(<q-bang>)
+  command! -bar Neodark {
+    ApplyNeodark()
   }
 
   augroup vimrc:neodark
     autocmd!
     autocmd VimEnter * ++nested {
-      Neodark
+      # Neodark requires 256 colors at least. For example Linux console
+      # supports only 8 colors.
+      if str2nr(&t_Co) >= 256
+        Neodark
+      endif
     }
   augroup END
 enddef
 
-def ApplyNeodark(bang: string)
-  # Neodark requires 256 colors at least. For example Linux console supports
-  # only 8 colors.
-  if empty(bang) && str2nr(&t_Co) < 256
-    return
-  endif
-
+def ApplyNeodark()
   colorscheme neodark
 
   # Cyan, but the default is orange in a strange way.
