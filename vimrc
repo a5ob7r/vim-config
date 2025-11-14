@@ -602,7 +602,7 @@ def NeodarkVimPost()
   g:neodark#background = '#202020'
 
   command! -bar Neodark {
-    ApplyNeodark()
+    Neodark()
   }
 
   augroup vimrc:neodark
@@ -617,7 +617,7 @@ def NeodarkVimPost()
   augroup END
 enddef
 
-def ApplyNeodark()
+def Neodark()
   colorscheme neodark
 
   # Cyan, but the default is orange in a strange way.
