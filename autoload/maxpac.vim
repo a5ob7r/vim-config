@@ -33,7 +33,7 @@ enddef
 # Return a dictionary as a plugin configiration base for maxpac.
 export def Plugconf(name: string): dict<any>
   return {
-    config: { type: 'opt' },
+    config: {},
     pre: () => null,
     post: () => null,
     fallback: () => null
@@ -95,7 +95,9 @@ enddef
 # NOTE: This function initializes minpac without any arguments if minpac isn't
 # initialized yet. If you want to initialize with non-default value,
 # initialize with the value beforehand.
-export def Load(uri: string, config: dict<any> = { type: 'opt' }): bool
+export def Load(uri: string, config: dict<any> = {}): bool
+  const minpac_add_config = extend({ type: 'opt' }, config)
+
   try
     if !exists('g:minpac#opt')
       minpac#init()
@@ -128,7 +130,7 @@ export def Load(uri: string, config: dict<any> = { type: 'opt' }): bool
     const name = Plugname(uri)
 
     # Register the plugin to minpac to update.
-    minpac#add(uri, config)
+    minpac#add(uri, minpac_add_config)
 
     # Load the plugin instantly.
     try
