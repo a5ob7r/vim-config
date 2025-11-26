@@ -2,3 +2,6 @@
 /.netrwhist
 
 /*.sock
+
+# For psliwka/vim-dirtytalk.
+/spell/programming.*.spl
