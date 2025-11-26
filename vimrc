@@ -1417,6 +1417,15 @@ def AddLspServers()
     })
   endif
 
+  if executable('docker-language-server')
+    add(servers, {
+      name: 'docker-language-server',
+      filetype: ['dockerfile'],
+      path: 'docker-language-server',
+      args: ['start', '--stdio'],
+    })
+  endif
+
   g:LspAddServer(servers)
 enddef
 # }}}
