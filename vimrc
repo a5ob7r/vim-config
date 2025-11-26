@@ -1475,6 +1475,12 @@ def VimDirtytalkPost()
     execute 'silent DirtytalkUpdate'
   endif
 enddef
+
+def VimDirtytalkPostUpdate(_hooktype: string, _name: string)
+  if exists(':DirtytalkUpdate') == 2
+    execute 'silent DirtytalkUpdate'
+  endif
+enddef
 # }}}
 # }}}
 
@@ -1558,7 +1564,7 @@ maxpac.Add('monaqa/modesearch.vim', { post: ModesearchVimPost })
 maxpac.Add('neovimhaskell/haskell-vim')
 maxpac.Add('pocke/rbs.vim')
 maxpac.Add('preservim/vim-markdown', { pre: VimMarkdownPre })
-maxpac.Add('psliwka/vim-dirtytalk', { config: { do: 'silent DirtytalkUpdate' }, post: VimDirtytalkPost })
+maxpac.Add('psliwka/vim-dirtytalk', { config: { do: VimDirtytalkPostUpdate }, post: VimDirtytalkPost })
 maxpac.Add('rafamadriz/friendly-snippets')
 maxpac.Add('rhysd/git-messenger.vim', { post: GitMessengerVimPost })
 maxpac.Add('thinca/vim-localrc', { post: VimLocalrcPost })
