@@ -1482,6 +1482,20 @@ def VimDirtytalkPostUpdate(_hooktype: string, _name: string)
   endif
 enddef
 # }}}
+
+# bfrg/vim-qf-history {{{
+def VimQfHistoryPost()
+  augroup vimrc:VimQfHistory
+    autocmd!
+    autocmd QuickFixCmdPost chistory {
+      cwindow
+    }
+    autocmd QuickFixCmdPost lhistory {
+      lwindow
+    }
+  augroup END
+enddef
+# }}}
 # }}}
 
 # Plugin registrations. {{{
@@ -1535,7 +1549,7 @@ maxpac.Add('airblade/vim-gitgutter', { pre: VimGitgutterPre })
 maxpac.Add('aliou/bats.vim')
 maxpac.Add('andymass/vim-matchup', { fallback: VimMatchupFallback })
 maxpac.Add('azabiong/vim-highlighter')
-maxpac.Add('bfrg/vim-qf-history')
+maxpac.Add('bfrg/vim-qf-history', { post: VimQfHistoryPost })
 maxpac.Add('bfrg/vim-qf-preview', { post: VimQfPreviewPost })
 maxpac.Add('bronson/vim-trailing-whitespace', { post: VimTrailingWhitespacePost })
 maxpac.Add('chrisbra/csv.vim')
