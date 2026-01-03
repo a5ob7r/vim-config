@@ -27,7 +27,7 @@ mklink /D %HOMEPATH%\vimfiles %CD%
 
 ```vim
 :InstallMinpac
-:ReloadVimrc
+" Restart Vim.
 :PackUpdate
-:ReloadVimrc
+" Restart Vim.
 ```

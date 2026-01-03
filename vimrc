@@ -416,10 +416,6 @@ command! -bang -bar -nargs=1 -complete=file OpenHelper {
 
 g:DefineOpener('Vimrc', $MYVIMRC)
 
-command! ReloadVimrc {
-  source $MYVIMRC
-}
-
 # Run commands to refresh something.
 command! Refresh {
   doautocmd <nomodeline> User Refresh
@@ -1619,20 +1615,11 @@ maxpac.End()
 # }}}
 
 # Filetypes {{{
-filetype off
-filetype plugin indent off
 filetype plugin indent on
 # }}}
 
 # Syntax {{{
-syntax off
 syntax enable
-# }}}
-
-# Fire VimEnter manually on reload {{{
-if !has('vim_starting')
-  doautocmd <nomodeline> VimEnter
-endif
 # }}}
 
 # =============================================================================
