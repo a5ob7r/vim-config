@@ -4,15 +4,8 @@ vim9script
 
 var maxpac = {}
 
-# Whether or not the plugin is loadable.
-def Loadable(uri: string): bool
-  return uri =~# '^\%(file://\)\=/'
-    ? !substitute(uri, '^file://', '', '')->glob()->empty()
-    : !globpath(&packpath, $'pack/*/opt/{Plugname(uri)}')->empty()
-enddef
-
 # Whether or not the plugin is loaded.
-def Loaded(name: string): bool
+export def Loaded(name: string): bool
   return !globpath(&runtimepath, $'pack/*/opt/{name}')->empty()
 enddef
 
@@ -34,8 +27,6 @@ enddef
 export def Plugconf(name: string): dict<any>
   return {
     config: {},
-    pre: () => null,
-    post: () => null,
     fallback: () => null
   }
 enddef
@@ -62,17 +53,11 @@ export def End()
   for name in maxpac.names
     var conf = maxpac.confs[name]
 
-    if Loadable(name)
-      conf.pre()
-    endif
-
-    if !Load(name, conf.config)
-      conf.fallback()
-
+    if Load(name, conf.config)
       continue
     endif
 
-    conf.post()
+    conf.fallback()
   endfor
 enddef
 
@@ -121,9 +106,11 @@ export def Load(uri: string, config: dict<any> = {}): bool
       execute $'set runtimepath+={fnameescape(after)}'
     endif
 
-    for plugin in globpath(path, 'plugin/**/*.vim', 0, 1)
-      execute 'source' fnameescape(plugin)
-    endfor
+    if v:vim_did_init
+      for plugin in globpath(path, 'plugin/**/*.vim', 0, 1)
+        execute 'source' fnameescape(plugin)
+      endfor
+    endif
 
     return true
   else
@@ -132,9 +119,12 @@ export def Load(uri: string, config: dict<any> = {}): bool
     # Register the plugin to minpac to update.
     minpac#add(uri, minpac_add_config)
 
-    # Load the plugin instantly.
     try
-      execute 'packadd' name
+      if v:vim_did_init
+        execute 'packadd' name
+      else
+        execute 'packadd!' name
+      endif
     catch
       # Ignore any errors.
     endtry
