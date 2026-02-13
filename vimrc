@@ -576,9 +576,7 @@ class Maxpac
 
     minpac#init(this.init)
 
-    for url in this.urls
-      minpac#add(url, this.add[url])
-    endfor
+    foreach(this.urls, (_, url) => minpac#add(url, this.add[url]))
 
     this.minpacabled = true
   enddef
