@@ -590,10 +590,10 @@ class Maxpac
   enddef
 
   def _Register(url: string, config: dict<any>)
-    const minpac = get(config, 'minpac', {})->extend(this.DEFAULT_ADD, 'keep')
+    const add = extendnew(this.DEFAULT_ADD, config)
 
     add(this.urls, url)
-    this.add[url] = minpac
+    this.add[url] = add
   enddef
 
   def _Load(uri: string): bool
@@ -1897,7 +1897,7 @@ g:maxpac.Add('machakann/vim-sandwich')
 g:maxpac.Add('machakann/vim-swap')
 g:maxpac.Add('maximbaz/lightline-ale')
 g:maxpac.Add('monaqa/modesearch.vim')
-g:maxpac.Add('psliwka/vim-dirtytalk', { minpac: { do: VimDirtytalkPostUpdate } })
+g:maxpac.Add('psliwka/vim-dirtytalk', { do: VimDirtytalkPostUpdate })
 g:maxpac.Add('rafamadriz/friendly-snippets')
 g:maxpac.Add('rhysd/git-messenger.vim')
 g:maxpac.Add('thinca/vim-localrc')
