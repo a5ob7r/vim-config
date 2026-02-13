@@ -543,6 +543,7 @@ source $VIMRUNTIME/ftplugin/man.vim
 packadd! comment
 packadd! editorconfig
 packadd! hlyank
+packadd! matchit
 # }}}
 
 # =============================================================================
@@ -551,7 +552,6 @@ packadd! hlyank
 # maxpac {{{
 class Maxpac
   const DEFAULT_ADD = { type: 'opt' }
-  const DEFAULT_FALLBACK = () => null
 
   # "{config}"s of "minpac#init()".
   const init = {}
@@ -561,8 +561,6 @@ class Maxpac
 
   # "{config}"s of "minpac#add()".
   final add = {}
-
-  final fallbacks = {}
 
   var minpacabled = false
 
@@ -588,21 +586,14 @@ class Maxpac
   def Add(url: string, config = {}): bool
     this._Register(url, config)
 
-    if this._Load(url)
-      return true
-    endif
-
-    this.fallbacks[url]()
-    return false
+    return this._Load(url)
   enddef
 
   def _Register(url: string, config: dict<any>)
     const minpac = get(config, 'minpac', {})->extend(this.DEFAULT_ADD, 'keep')
-    const fallback = get(config, 'fallback', this.DEFAULT_FALLBACK)
 
     add(this.urls, url)
     this.add[url] = minpac
-    this.fallbacks[url] = fallback
   enddef
 
   def _Load(uri: string): bool
@@ -658,6 +649,22 @@ class Maxpac
 endclass
 
 g:maxpac = Maxpac.new()
+
+command! InstallMinpac {
+  # A root directory path of vim packages.
+  const packhome = Pathname.new($MYVIMDIR).Join('pack')
+
+  const repository = 'https://github.com/k-takata/minpac.git'
+  const directory =  packhome.Join('minpac/opt/minpac').Value()
+
+  const command = $'git clone {repository} {directory}'
+
+  execute 'terminal' command
+}
+
+command! Minpacable {
+  g:maxpac.Minpacable()
+}
 # }}}
 
 # Plugin hooks {{{
@@ -670,28 +677,30 @@ augroup vimrc:hooks:minpac
 augroup END
 
 def Minpac()
+  delcommand InstallMinpac
+
   command! -bar -nargs=1 PackInstall {
-    g:maxpac.Minpacable()
+    Minpacable
 
     minpac#add(<q-args>, { type: 'opt' })
     minpac#update(g:maxpac.Plugname(<q-args>), { do: $'packadd {g:maxpac.Plugname(<q-args>)}' })
   }
 
   command! -bar -nargs=? -complete=custom,PackComplete PackUpdate {
-    g:maxpac.Minpacable()
+    Minpacable
 
     call('minpac#update', map([<f-args>], (_, v) => g:maxpac.Plugname(v)))
   }
 
   command! -bar -nargs=? -complete=custom,PackComplete PackClean {
-    g:maxpac.Minpacable()
+    Minpacable
 
     call('minpac#clean', map([<f-args>], (_, v) => g:maxpac.Plugname(v)))
   }
 
   # This command is from the minpac help file.
   command! -nargs=1 -complete=custom,PackComplete PackOpenDir {
-    g:maxpac.Minpacable()
+    Minpacable
 
     const plugname = g:maxpac.Plugname(<q-args>)
     const pluginfo = minpac#getpluginfo(plugname)
@@ -700,26 +709,8 @@ def Minpac()
   }
 enddef
 
-def MinpacFallback()
-  command! InstallMinpac {
-    # A root directory path of vim packages.
-    const packhome = Pathname.new($MYVIMDIR).Join('pack')
-
-    const repository = 'https://github.com/k-takata/minpac.git'
-    const directory =  packhome.Join('minpac/opt/minpac').Value()
-
-    const command = $'git clone {repository} {directory}'
-
-    execute 'terminal' command
-  }
-
-  command! Minpacable {
-    g:maxpac.Minpacable()
-  }
-enddef
-
 def PackComplete(..._): string
-  g:maxpac.Minpacable()
+  Minpacable
 
   return minpac#getpluglist()->keys()->sort()->join("\n")
 enddef
@@ -1359,15 +1350,6 @@ def OpenLocalrc(bang: string, mods: string, dir: string)
 enddef
 # }}}
 
-# andymass/vim-matchup {{{
-def VimMatchupFallback()
-  # The enhanced "%", to find many extra matchings and jump the cursor to them.
-  #
-  # NOTE: "matchit" isn't a standard plugin, but it's bundled in Vim by default.
-  packadd! matchit
-enddef
-# }}}
-
 # Eliot00/git-lens.vim {{{
 augroup vimrc:hooks:git-lens.vim
   autocmd!
@@ -1891,7 +1873,7 @@ g:maxpac.Add('a5ob7r/chmod.vim')
 g:maxpac.Add('a5ob7r/linefeed.vim')
 g:maxpac.Add('a5ob7r/rspec-daemon.vim')
 g:maxpac.Add('airblade/vim-gitgutter')
-g:maxpac.Add('andymass/vim-matchup', { fallback: VimMatchupFallback })
+g:maxpac.Add('andymass/vim-matchup')
 g:maxpac.Add('azabiong/vim-highlighter')
 g:maxpac.Add('bfrg/vim-qf-history')
 g:maxpac.Add('bfrg/vim-qf-preview')
@@ -1906,7 +1888,7 @@ g:maxpac.Add('itchyny/screensaver.vim')
 g:maxpac.Add('junegunn/goyo.vim')
 g:maxpac.Add('junegunn/vader.vim')
 g:maxpac.Add('junegunn/vim-easy-align')
-g:maxpac.Add('k-takata/minpac', { fallback: MinpacFallback })
+g:maxpac.Add('k-takata/minpac')
 g:maxpac.Add('kannokanno/previm')
 g:maxpac.Add('kyoh86/vim-ripgrep')
 g:maxpac.Add('lambdalisue/vital-Whisky')
