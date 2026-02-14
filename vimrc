@@ -641,8 +641,12 @@ class Maxpac
 
   # Convert an URI into a plugin (directory) name.
   def Plugname(uri: string): string
-    const tail = split(uri, '/')[-1]
-    return uri =~# '^https\=://' ? substitute(tail, '\C\.git$', '', '') : tail
+    if get(this.configs, uri, {})->has_key('name')
+      return this.configs[uri]['name']
+    else
+      const tail = split(uri, '/')[-1]
+      return uri =~# '^https\=://' ? substitute(tail, '\C\.git$', '', '') : tail
+    endif
   enddef
 endclass
 
