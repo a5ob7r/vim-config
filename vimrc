@@ -643,9 +643,10 @@ class Maxpac
   def Plugname(uri: string): string
     if get(this.configs, uri, {})->has_key('name')
       return this.configs[uri]['name']
+    elseif uri =~# '\C^https\=://.*\.git$' # NOTE: a naive regexp, but probably no problem in practice.
+      return fnamemodify(uri, ':t:r')
     else
-      const tail = split(uri, '/')[-1]
-      return uri =~# '^https\=://' ? substitute(tail, '\C\.git$', '', '') : tail
+      return fnamemodify(uri, ':t')
     endif
   enddef
 endclass
