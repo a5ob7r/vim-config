@@ -1820,8 +1820,8 @@ if has('clientserver')
   g:maxpac.Add('thinca/vim-singleton')
 endif
 
-g:maxpac.Add('a5ob7r/lightline-otf')
 g:maxpac.Add('itchyny/lightline.vim')
+g:maxpac.Add('a5ob7r/lightline-otf') # Load lightline-otf earlier than lightline.vim.
 
 # Operators.
 g:maxpac.Add('kana/vim-operator-user')
