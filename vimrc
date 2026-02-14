@@ -583,9 +583,13 @@ class Maxpac
   enddef
 
   def Add(url: string, config = {}): bool
-    this._Register(url, config)
-
-    return this._Load(url)
+    # TODO: Support drive letters for MS-Windows.
+    if url =~# '^\%(/\|\~\)'
+      return this._LoadLocal(url)
+    else
+      this._Register(url, config)
+      return this._Load(url)
+    endif
   enddef
 
   def _Register(url: string, config: dict<any>)
@@ -593,44 +597,41 @@ class Maxpac
     this.configs[url] = extendnew(this.DEFAULT_CONFIG, config)
   enddef
 
-  def _Load(uri: string): bool
-    # TODO: Support drive letters for MS-Windows.
-    if uri =~# '^\%(file://\)\=/'
-      const path = substitute(uri, '^file://', '', '')
-
-      if glob(path)->empty()
-        return false
-      endif
-
-      execute $'set runtimepath^={fnameescape(path)}'
-
-      const after = globpath(path, 'after')
-      if !empty(after)
-        execute $'set runtimepath+={fnameescape(after)}'
-      endif
-
-      if v:vim_did_init
-        for plugin in globpath(path, 'plugin/**/*.vim', 0, 1)
-          execute 'source' fnameescape(plugin)
-        endfor
-      endif
-
-      return true
-    else
-      const name = this.Plugname(uri)
-
-      try
-        if v:vim_did_init
-          execute 'packadd' name
-        else
-          execute 'packadd!' name
-        endif
-      catch
-        # Ignore any errors.
-      endtry
-
-      return this.Loaded(name)
+  def _LoadLocal(path: string): bool
+    if glob(path)->empty()
+      return false
     endif
+
+    final rtp = split(&runtimepath, ',')
+    insert(rtp, path, 1)
+    if !globpath(path, 'after', true)->empty()
+      insert(rtp, $'{path}/after', -1)
+    endif
+    &runtimepath = join(rtp, ',')
+
+    if v:vim_did_init
+      globpath(path, 'plugin/**/*.vim', true, true)->foreach((_, plugin) => {
+        execute 'source' fnameescape(plugin)
+      })
+    endif
+
+    return true
+  enddef
+
+  def _Load(uri: string): bool
+    const name = this.Plugname(uri)
+
+    try
+      if v:vim_did_init
+        execute 'packadd' name
+      else
+        execute 'packadd!' name
+      endif
+    catch
+      # Ignore any errors.
+    endtry
+
+    return this.Loaded(name)
   enddef
 
   # Whether or not the plugin is loaded.
