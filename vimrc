@@ -793,7 +793,7 @@ def LightlineVim()
   }
 
   # The original version is from the help file of "lightline".
-  command! -bar -nargs=1 -complete=customlist,LightlineColorschemes LightlineColorscheme {
+  command! -bar -nargs=1 -complete=custom,LightlineColorschemes LightlineColorscheme {
     if exists('g:loaded_lightline')
       SetLightlineColorscheme(<q-args>)
       UpdateLightline()
@@ -817,8 +817,10 @@ def UpdateLightline()
   lightline#update()
 enddef
 
-def LightlineColorschemes(..._): list<string>
-  return globpath(&runtimepath, 'autoload/lightline/colorscheme/*.vim', 1, 1)->map((_, val) => fnamemodify(val, ':t:r'))
+def LightlineColorschemes(..._): string
+  return globpath(&runtimepath, 'autoload/lightline/colorscheme/*.vim', true, true)
+    ->map((_, val) => fnamemodify(val, ':t:r'))
+    ->join("\n")
 enddef
 # }}}
 

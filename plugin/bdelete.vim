@@ -62,7 +62,7 @@ def DeleteBuffers(args: list<string>, opts: dict<any>)
   })
 enddef
 
-def DeleteBuffersComplete(_A: string, _C: string, _P: number): list<string>
+def DeleteBuffersComplete(..._): string
   return [
     '--any',
     '--displayed',
@@ -73,7 +73,7 @@ def DeleteBuffersComplete(_A: string, _C: string, _P: number): list<string>
     '--normal',
     '--special',
     '--unlisted',
-  ]
+  ]->join("\n")
 enddef
 
 command! -bang -bar Bdelete {
@@ -82,7 +82,7 @@ command! -bang -bar Bdelete {
 
 # :DeleteBuffers --listed --hidden --normal
 # :silent 1,10DeleteBuffers! --any
-command! -bang -bar -nargs=+ -range=% -addr=loaded_buffers -complete=customlist,DeleteBuffersComplete DeleteBuffers {
+command! -bang -bar -nargs=+ -range=% -addr=loaded_buffers -complete=custom,DeleteBuffersComplete DeleteBuffers {
   DeleteBuffers([<f-args>], { bang: <q-bang>, mods: <q-mods>, line1: <line1>, line2: <line2> })
 }
 
