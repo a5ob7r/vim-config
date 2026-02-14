@@ -551,7 +551,8 @@ packadd! matchit
 # Plugins {{{
 # maxpac {{{
 class Maxpac
-  const DEFAULT_ADD = { type: 'opt' }
+  # The default value for "{config}" of "minpac#add()".
+  const DEFAULT_CONFIG = { type: 'opt' }
 
   # "{config}"s of "minpac#init()".
   const init = {}
@@ -560,7 +561,7 @@ class Maxpac
   final urls = []
 
   # "{config}"s of "minpac#add()".
-  final add = {}
+  final configs = {}
 
   var minpacabled = false
 
@@ -576,7 +577,7 @@ class Maxpac
 
     minpac#init(this.init)
 
-    foreach(this.urls, (_, url) => minpac#add(url, this.add[url]))
+    foreach(this.urls, (_, url) => minpac#add(url, this.configs[url]))
 
     this.minpacabled = true
   enddef
@@ -588,10 +589,8 @@ class Maxpac
   enddef
 
   def _Register(url: string, config: dict<any>)
-    const add = extendnew(this.DEFAULT_ADD, config)
-
     add(this.urls, url)
-    this.add[url] = add
+    this.configs[url] = extendnew(this.DEFAULT_CONFIG, config)
   enddef
 
   def _Load(uri: string): bool
