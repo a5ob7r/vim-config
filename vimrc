@@ -680,28 +680,29 @@ def Minpac()
   command! -bar -nargs=1 PackInstall {
     Minpacable
 
+    const plugname = g:maxpac.Plugname(<q-args>)
+
     minpac#add(<q-args>, { type: 'opt' })
-    minpac#update(g:maxpac.Plugname(<q-args>), { do: $'packadd {g:maxpac.Plugname(<q-args>)}' })
+    minpac#update(plugname, { do: $'packadd {plugname}' })
   }
 
   command! -bar -nargs=? -complete=custom,PackComplete PackUpdate {
     Minpacable
 
-    call('minpac#update', map([<f-args>], (_, v) => g:maxpac.Plugname(v)))
+    minpac#update(<f-args>)
   }
 
   command! -bar -nargs=? -complete=custom,PackComplete PackClean {
     Minpacable
 
-    call('minpac#clean', map([<f-args>], (_, v) => g:maxpac.Plugname(v)))
+    minpac#clean(<f-args>)
   }
 
   # This command is from the minpac help file.
   command! -nargs=1 -complete=custom,PackComplete PackOpenDir {
     Minpacable
 
-    const plugname = g:maxpac.Plugname(<q-args>)
-    const pluginfo = minpac#getpluginfo(plugname)
+    const pluginfo = minpac#getpluginfo(<q-args>)
 
     term_start(&shell, { cwd: pluginfo['dir'], term_finish: 'close' })
   }
