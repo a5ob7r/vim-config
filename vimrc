@@ -892,34 +892,30 @@ enddef
 # a5ob7r/shellcheckrc.vim {{{
 augroup vimrc:hooks:shellcheckrc.vim
   autocmd!
-  autocmd VimEnter * ++once {
-    if g:maxpac.Loaded('shellcheckrc.vim')
-      ShellcheckrcVim()
-    endif
+  autocmd SourcePre */shellcheckrc.vim/*.vim ++once {
+    ShellcheckrcVim()
   }
 augroup END
 
 def ShellcheckrcVim()
-  g:shellcheck_directive_highlight = 1
+  g:shellcheck_directive_highlight = get(g:, 'shellcheck_directive_highlight', 1)
 enddef
 # }}}
 
 # preservim/vim-markdown {{{
 augroup vimrc:hooks:vim-markdown
   autocmd!
-  autocmd VimEnter * ++once {
-    if g:maxpac.Loaded('vim-markdown')
-      VimMarkdown()
-    endif
+  autocmd SourcePre */vim-markdown/*.vim ++once {
+    VimMarkdown()
   }
 augroup END
 
 def VimMarkdown()
   # No need to insert any indent preceding a new list item after inserting a
   # newline.
-  g:vim_markdown_new_list_item_indent = 0
+  g:vim_markdown_new_list_item_indent = get(g:, 'vim_markdown_new_list_item_indent', 0)
 
-  g:vim_markdown_folding_disabled = 1
+  g:vim_markdown_folding_disabled = get(g:, 'vim_markdown_folding_disabled', 1)
 enddef
 # }}}
 
@@ -953,6 +949,7 @@ enddef
 # kyoh86/vim-ripgrep {{{
 augroup vimrc:hooks:vim-ripgrep
   autocmd!
+  # TODO: Find an appropriate hook event.
   autocmd VimEnter * ++once {
     if g:maxpac.Loaded('vim-ripgrep') && g:maxpac.Loaded('vim-operator-user')
       VimRipgrep()
