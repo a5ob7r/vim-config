@@ -269,8 +269,8 @@ set tabclose=left
 set tabpanel=%!TabPanel()
 set tabpanelopt=columns:30,vert
 set virtualedit=block
-set wildmenu wildoptions+=pum,fuzzy
 set wildmode=longest:full,full
+set wildoptions+=pum,fuzzy
 
 if IsInTruecolorSupportedTerminal()
   set termguicolors
