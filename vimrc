@@ -261,7 +261,6 @@ set pastetoggle=<F12>
 set pumheight=16
 set scrolloff=5
 set shortmess-=S
-set showcmd
 set showmatch
 set smoothscroll
 set spelllang+=cjk
