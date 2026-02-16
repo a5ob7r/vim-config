@@ -192,30 +192,17 @@ def XdgCacheHome(): string
   return $XDG_CACHE_HOME ?? Pathname.new($HOME).Join('.cache').Value()
 enddef
 
-# Re-detect a filetype for '~/.local.xxx' as '~/.xxx'.
-def RedetectFiletype4DotLocal(afile: string)
-  const head = fnamemodify(afile, ':p:h')
-  const tail = fnamemodify(afile, ':t')
-
-  if head !=# $HOME || tail !~# '^\.local'
-    return
-  endif
-
-  const not_dotlocal_tail = tail[6 :] # strip '.local'(6 chars) prefix.
-  const fname = fnameescape($'{head}/{not_dotlocal_tail}')
-
-  execute $'doautocmd filetypedetect BufRead,BufNewFile {fname}'
-enddef
-
 def FiletypeRedetection4DotLocal(enable: bool)
   augroup vimrc:FiletypeRedetection4DotLocal
     autocmd!
 
     if enable
-      # Re-detect a filetype for '~/.local.xxx' if filetype detection is unsuccessful.
-      autocmd BufRead,BufNewFile ~/.local.* {
+      # Re-detect a filetype for '~/.local.xxx' as '~/.xxx' if filetype detection is unsuccessful.
+      autocmd BufRead,BufNewFile ~/.local.[^/]\+ {
         if empty(&filetype)
-          expand('<afile>')->RedetectFiletype4DotLocal()
+          const parent = expand('<afile>:h')
+          const virtual_filename = expand('<afile>:t:s?\.local??') # A virtual filename to re-detect filetypes.
+          execute $'doautocmd filetypedetect BufRead {fnameescape($'{parent}/{virtual_filename}')}'
         endif
       }
     endif
