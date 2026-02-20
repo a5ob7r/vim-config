@@ -493,6 +493,18 @@ command! DisableFiletypeRedetection4DotLocal {
   FiletypeRedetection4DotLocal(false)
   ReregisterFiletypeRedetection4DotLocal(false)
 }
+
+command! -bar Writable {
+  setlocal noreadonly modifiable swapfile
+}
+command! -bang -bar -nargs=? -complete=file RO {
+  if !empty(<q-args>)
+    # NOTE: Cause "E471" when no argument is specified if ":OpenHelper <args>".
+    execute <q-mods> 'OpenHelper<bang>' <q-args>
+  endif
+
+  setlocal readonly nomodifiable noswapfile
+}
 # }}}
 
 # Auto commands {{{
