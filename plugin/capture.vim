@@ -26,16 +26,14 @@ def MakeBufferReadonly()
   setlocal nomodifiable
 enddef
 
-def SetOption(name: string, value: any)
-  execute $'&{name} = {value}'
-enddef
-
 # A wrapper for "execute()".
 def Redirect(command: string): list<string>
-  defer SetOption('list', &list)
+  defer (v) => {
+    &l:list = v
+  }(&l:list)
 
   # Do not output extra characters displayed by the "list" option.
-  set nolist
+  noautocmd setlocal nolist
 
   return execute(command)->split('\n')
 enddef
