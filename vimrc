@@ -223,6 +223,32 @@ def ReregisterFiletypeRedetection4DotLocal(enable: bool)
     endif
   augroup END
 enddef
+
+def Assign2ClipboardRegisters(value: string)
+  @" = value
+  @* = value
+  @+ = value
+enddef
+
+def YankCurrentFilename(opts = {})
+  const filename = expand('%')
+
+  if empty(filename)
+    echohl WarningMsg
+    echomsg 'No filename for the current buffer.'
+    echohl None
+    return
+  endif
+
+  const o_lineno = get(opts, 'lineno')
+
+  if o_lineno
+    const lineno = getpos('.')[1]
+    Assign2ClipboardRegisters($'{filename}:{lineno}')
+  else
+    Assign2ClipboardRegisters(filename)
+  endif
+enddef
 # }}}
 
 # Options {{{
@@ -504,6 +530,10 @@ command! -bang -bar -nargs=? -complete=file RO {
   endif
 
   setlocal readonly nomodifiable noswapfile
+}
+
+command! -bang YankCurrentFilename {
+  YankCurrentFilename({ lineno: <bang>false })
 }
 # }}}
 
