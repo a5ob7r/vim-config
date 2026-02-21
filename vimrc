@@ -327,6 +327,8 @@ set nowrapscan
   # CVE-2017-1000382.
   #
   # https://github.com/archlinux/svntogit-packages/blob/68635a69f0c5525210adca6ff277dc13c590399b/trunk/archlinux.vim#L22
+  #
+  # TODO: Switch from "$XDG_CACHE_HOME" to "$XDG_DATA_HOME" or "$XDG_STATE_HOME".
   const vim_cache_home = Pathname.new(XdgCacheHome()).Join('vim')
 
   &backupdir = $'{vim_cache_home.Join('backup').Value()}//'
