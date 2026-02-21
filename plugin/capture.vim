@@ -57,7 +57,7 @@ def Capture(command: string, opts = {})
     execute mods 'new'
     MakeBufferScratch()
 
-    call setline('.', lines)
+    setline('.', lines)
 
     MakeBufferReadonly()
   finally
