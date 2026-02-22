@@ -3,7 +3,7 @@ vim9script
 #
 # vimrc
 #
-# - The minimal requirement version is 9.1.1761 with default huge features.
+# - The minimal requirement version is 9.1.1892 with default huge features.
 # - Nowadays we are always in UTF-8 environment, aren't we?
 # - Work well even if no (non-default) plugin is installed.
 # - Support Unix and Windows.
