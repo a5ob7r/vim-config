@@ -1862,7 +1862,7 @@ enddef
 # psliwka/vim-dirtytalk {{{
 augroup vimrc:hooks:vim-dirtytalk
   autocmd!
-  autocmd SourcePre */vim-dirtytalk/*.vim ++once {
+  autocmd SourcePost */vim-dirtytalk/*.vim ++once {
     VimDirtytalk()
   }
 augroup END
