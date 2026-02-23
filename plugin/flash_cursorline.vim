@@ -1,5 +1,9 @@
 vim9script
 
+#
+# This joke plugin is inspired from https://github.com/inside/vim-search-pulse.
+#
+
 var timer_id = -1
 var idx = 0
 var original_cursorline_highlight = null_string
