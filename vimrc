@@ -279,6 +279,21 @@ def Bdelete(bang: string)
 
   execute $'bdelete{bang} {current_bufnr}'
 enddef
+
+# Toggle the netrw window.
+def ToggleNetrw(opts = {})
+  const bang = get(opts, 'bang', '')
+
+  const cwd = empty(bang) ? getcwd() : expand('%:p:h')
+
+  if get(b:, 'netrw_curdir', '') !=# cwd
+    execute 'Explore' cwd
+  elseif exists(':Rexplore') == 2 && exists('w:netrw_rexlocal')
+    execute 'Rexplore'
+  else
+    execute 'Explore'
+  endif
+enddef
 # }}}
 
 # Options {{{
@@ -574,6 +589,10 @@ command! -bang -bar -count -addr=windows Close {
 
 command! -bang -bar Bdelete {
   Bdelete(<q-bang>)
+}
+
+command! -bar -bang ToggleNetrw {
+  ToggleNetrw({ bang: <q-bang> })
 }
 # }}}
 
