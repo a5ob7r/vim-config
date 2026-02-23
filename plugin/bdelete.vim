@@ -1,18 +1,5 @@
 vim9script
 
-# Execute ":bdelete", but this command try to keep at least one window or a
-# normal buffer in the current tabpage.
-def Bdelete(bang: string)
-  const current_bufnr = bufnr()
-  const normal_buffers = tabpagebuflist()->filter((i, v) => getbufvar(v, '&buftype')->empty())
-
-  if empty(&buftype) ? len(normal_buffers) <= 1 : winnr('$') <= 1
-    execute $'enew{bang}'
-  endif
-
-  execute $'bdelete{bang} {current_bufnr}'
-enddef
-
 # Whether or not the buffer is the same as a new, unnamed and empty buffer.
 def IsEmptyBuffer(bufinfo: dict<any>): bool
   return !empty(bufinfo)
@@ -75,10 +62,6 @@ def DeleteBuffersComplete(..._): string
     '--unlisted',
   ]->join("\n")
 enddef
-
-command! -bang -bar Bdelete {
-  Bdelete(<q-bang>)
-}
 
 # :DeleteBuffers --listed --hidden --normal
 # :silent 1,10DeleteBuffers! --any

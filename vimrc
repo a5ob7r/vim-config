@@ -266,6 +266,19 @@ def Close(bang: string, count: string)
 
   execute $':{window_number}close{bang}'
 enddef
+
+# Execute ":bdelete", but this command try to keep at least one window or a
+# normal buffer in the current tabpage.
+def Bdelete(bang: string)
+  const current_bufnr = bufnr()
+  const normal_buffers = tabpagebuflist()->filter((i, v) => getbufvar(v, '&buftype')->empty())
+
+  if empty(&buftype) ? len(normal_buffers) <= 1 : winnr('$') <= 1
+    execute $'enew{bang}'
+  endif
+
+  execute $'bdelete{bang} {current_bufnr}'
+enddef
 # }}}
 
 # Options {{{
@@ -557,6 +570,10 @@ command! -bang YankCurrentFilename {
 
 command! -bang -bar -count -addr=windows Close {
   Close(<q-bang>, <q-count>)
+}
+
+command! -bang -bar Bdelete {
+  Bdelete(<q-bang>)
 }
 # }}}
 
