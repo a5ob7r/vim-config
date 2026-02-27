@@ -91,5 +91,5 @@ function! s:xminimize() abort
 endfunction
 
 " Minimize the current window, and make other window's height equally.
-nnoremap <Plug>(xminimize) :<C-U>call <SID>xminimize()<CR>
-tnoremap <Plug>(xminimize) <C-W>:<C-U>call <SID>xminimize()<CR>
+nnoremap <Plug>(xminimize) <ScriptCmd>call s:xminimize()<CR>
+tnoremap <Plug>(xminimize) <ScriptCmd>call s:xminimize()<CR>

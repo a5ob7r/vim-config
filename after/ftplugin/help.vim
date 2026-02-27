@@ -1,1 +1,1 @@
-nnoremap <buffer> <silent> q :<C-U>close<CR>
+nnoremap <buffer> <silent> q <Cmd>close<CR>
