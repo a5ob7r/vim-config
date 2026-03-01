@@ -1683,6 +1683,9 @@ def GinVim()
     autocmd!
     autocmd FileType gin-buffer {
       setlocal nomodeline
+
+      b:undo_ftplugin = get(b:, 'undo_ftplugin', 'execute')
+      b:undo_ftplugin ..= '| setlocal modeline<'
     }
     autocmd BufReadCmd gin{branch,diff,edit,log,status,}://* {
       setlocal nobuflisted
@@ -1922,6 +1925,9 @@ enddef
 
 def VimQfPreviewFtplugin()
   nnoremap <buffer> p <Plug>(qf-preview-open)
+
+  b:undo_ftplugin = get(b:, 'undo_ftplugin', 'execute')
+  b:undo_ftplugin ..= '| nunmap <buffer> p'
 enddef
 # }}}
 
