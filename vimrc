@@ -1901,8 +1901,13 @@ enddef
 # bfrg/vim-qf-preview {{{
 augroup vimrc:hooks:vim-qf-preview
   autocmd!
-  autocmd SourcePre */vim-qf-preview/*.vim ++once {
-    VimQfPreview()
+  # ":runtime", which ftplugin loading uses it, doesn't fire
+  # "Source{Pre,Post}" events because perhaps it's not a ":source".
+  autocmd FileType qf ++once {
+    if g:maxpac.Loaded('vim-qf-preview')
+      VimQfPreviewFtplugin()
+      VimQfPreview()
+    endif
   }
 augroup END
 
@@ -1910,9 +1915,13 @@ def VimQfPreview()
   augroup vimrc:VimQfPreview
     autocmd!
     autocmd FileType qf {
-      nnoremap <buffer> p <Plug>(qf-preview-open)
+      VimQfPreviewFtplugin()
     }
   augroup END
+enddef
+
+def VimQfPreviewFtplugin()
+  nnoremap <buffer> p <Plug>(qf-preview-open)
 enddef
 # }}}
 
