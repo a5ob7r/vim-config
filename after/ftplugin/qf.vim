@@ -1,4 +1,4 @@
-nnoremap <buffer> <silent> q <C-W>c
+nnoremap <buffer> <silent> q <Cmd>close<CR>
 nnoremap <buffer> <silent> <C-X> <C-W><CR>
 
 " Reset the following key mappings.
