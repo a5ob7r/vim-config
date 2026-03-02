@@ -833,16 +833,25 @@ def Minpac()
     minpac#update(plugname, { do: $'packadd {plugname}' })
   }
 
+  # ":PackUpdate": Update all registered plugins.
+  # ":PackUpdate {plugin_name} ...": Update specified and registered plugins.
   command! -bar -nargs=? -complete=custom,PackComplete PackUpdate {
     Minpacable
 
-    minpac#update(<f-args>)
+    if empty(<q-args>)
+      minpac#update()
+    else
+      minpac#update([<f-args>])
+    endif
   }
 
+  # ":PackClean": Clean unregistered plugins.
+  # ":PackClean {plugin_name} ...": Clean specified and registered plugins.
+  # ":PackClean *": Clean all plugins.
   command! -bar -nargs=? -complete=custom,PackComplete PackClean {
     Minpacable
 
-    minpac#clean(<f-args>)
+    minpac#clean([<f-args>])
   }
 
   # This command is from the minpac help file.
