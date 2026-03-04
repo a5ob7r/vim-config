@@ -1696,10 +1696,13 @@ def GinVim()
       b:undo_ftplugin = get(b:, 'undo_ftplugin', 'execute')
       b:undo_ftplugin ..= '| setlocal modeline<'
     }
-    autocmd BufReadCmd gin{branch,diff,edit,log,status,}://* {
+    autocmd FileType gin-{branch,buffer,diff,edit,log,status} {
       setlocal nobuflisted
 
       nnoremap <buffer> q <Cmd>Close<CR>
+
+      b:undo_ftplugin = get(b:, 'undo_ftplugin', 'execute')
+      b:undo_ftplugin ..= '| setlocal buflisted< | nunmap <buffer> q'
     }
   augroup END
 enddef
