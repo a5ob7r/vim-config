@@ -659,12 +659,6 @@ augroup END
 # }}}
 
 # Standard plugins {{{
-# Avoid loading some standard plugins. {{{
-# These two plugins provide plugin management, but they are already obsolete.
-g:loaded_getscriptPlugin = 1
-g:loaded_vimballPlugin = 1
-# }}}
-
 # netrw configurations {{{
 # WIP: Must match to line not but filename when `g:netrw_liststyle = 1`, on
 # the commit hash of vim/vim: a452b808b4da2d272ca4a50865eb8ca89a58f239
