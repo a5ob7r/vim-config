@@ -1679,6 +1679,11 @@ def GinVim()
     g:gin_diff_persistent_args += ['++processor=diff-highlight']
   endif
 
+  # "git changes" is defined in my gitconfig.
+  command! -nargs=* -complete=file GinChanges {
+    GinBuffer changes <args>
+  }
+
   # Add a number argument to limit the number of commits because ":GinLog"
   # is too slow in a large repository.
   #
