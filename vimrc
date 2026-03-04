@@ -1696,6 +1696,12 @@ def GinVim()
       b:undo_ftplugin = get(b:, 'undo_ftplugin', 'execute')
       b:undo_ftplugin ..= '| setlocal modeline<'
     }
+    autocmd FileType gin-log {
+      nnoremap <buffer> <C-W><CR> <Plug>(gin-action-show:split)
+
+      b:undo_ftplugin = get(b:, 'undo_ftplugin', 'execute')
+      b:undo_ftplugin ..= '| nunmap <buffer> <C-W><CR>'
+    }
     autocmd FileType gin-{branch,buffer,diff,edit,log,status} {
       setlocal nobuflisted
 
