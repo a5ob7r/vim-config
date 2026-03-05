@@ -462,7 +462,7 @@ nnoremap <C-G><C-P> <Cmd>execute $'{v:count1}lprevious'<CR>
 
 # Clear the highlightings for pattern searching and run a command to refresh
 # something.
-nnoremap <C-L> <Cmd>nohlsearch<CR><Cmd>Refresh<CR>
+nnoremap <C-L> <Cmd>nohlsearch<CR><Cmd>checktime %<CR><Cmd>Refresh<CR>
 
 noremap <C-C> <Cmd>Interrupt<CR><C-C>
 inoremap <C-C> <Cmd>Interrupt<CR><C-C>
