@@ -609,10 +609,20 @@ augroup END
 
 augroup vimrc:MakeParentDirectories
   autocmd!
-  # Make parent directories of the file which the written buffer is corresponing
-  # if these directories are missing.
+  # Create a parent directory of the file to which Vim write the buffer if
+  # missing.
   autocmd BufWritePre * {
-    silent expand('<afile>:p:h')->mkdir('p')
+    const parent = expand('<afile>:p:h')
+
+    if !isdirectory(parent)
+      echohl WarningMsg
+      const reply = input($'"{fnamemodify(parent, ':~:.')->fnameescape()}/" does not exist. Create? [y/n] ')
+      echohl None
+
+      if reply ==# 'y'
+        mkdir(parent, 'p')
+      endif
+    endif
   }
 augroup END
 
