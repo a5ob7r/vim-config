@@ -357,6 +357,17 @@ def DeleteBuffersComplete(..._): string
     '--unlisted',
   ]->join("\n")
 enddef
+
+def Gcd(query: string, bang: string, mods: string, cder = 'cd')
+  # Use "systemlist()" to strip a trailing "^@" instead of "system()".
+  const [directory] = systemlist($'ghq list --exact --full-path {shellescape(query)}')
+
+  execute mods $'{cder}{bang}' fnameescape(directory)
+enddef
+
+def GcdComplete(_ArgLead: string, _CmdLine: string, _CursorPos: number): string
+  return system('ghq list')
+enddef
 # }}}
 
 # Options {{{
@@ -662,6 +673,23 @@ command! -bar -bang ToggleNetrw {
 # :silent 1,10DeleteBuffers! --any
 command! -bang -bar -nargs=+ -range=% -addr=loaded_buffers -complete=custom,DeleteBuffersComplete DeleteBuffers {
   DeleteBuffers([<f-args>], { bang: <q-bang>, mods: <q-mods>, line1: <line1>, line2: <line2> })
+}
+
+# ":cd" to a VCS repository managed by "ghq" using only the sub-path.
+#
+# ":Gcd vim-config"
+command! -bang -nargs=1 -complete=custom,GcdComplete Gcd {
+  Gcd(<q-args>, <q-bang>, <q-mods>)
+}
+
+# A ":tcd" version of ":Gcd".
+command! -bang -nargs=1 -complete=custom,GcdComplete Gtcd {
+  Gcd(<q-args>, <q-bang>, <q-mods>, 'tcd')
+}
+
+# A ":lcd" version of ":Gcd".
+command! -bang -nargs=1 -complete=custom,GcdComplete Glcd {
+  Gcd(<q-args>, <q-bang>, <q-mods>, 'lcd')
 }
 # }}}
 
