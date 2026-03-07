@@ -1,19 +1,19 @@
 vim9script
 
-# Whether or not the buffer is the same as a new, unnamed and empty buffer.
-def IsEmptyBuffer(bufinfo: dict<any>): bool
-  return !empty(bufinfo)
-    && empty(bufinfo.name)
-    && bufinfo.lnum <= 1
-    && empty(getbufline(bufinfo.bufnr, 1)[0])
-    && !bufinfo.changed
-enddef
-
 def DeleteBuffers(args: list<string>, opts: dict<any>)
   const bang = get(opts, 'bang', '')
   const mods = get(opts, 'mods', '')
   const line1 = get(opts, 'line1', 1)
   const line2 = get(opts, 'line2', v:numbermax)
+
+  # Whether or not the buffer is the same as a new, unnamed and empty buffer.
+  const IsEmptyBuffer = (bufinfo: dict<any>): bool => {
+    return !empty(bufinfo)
+      && empty(bufinfo.name)
+      && bufinfo.lnum <= 1
+      && empty(getbufline(bufinfo.bufnr, 1)[0])
+      && !bufinfo.changed
+  }
 
   const PREDICATES = {
     any: (_bufinfo) => true,
