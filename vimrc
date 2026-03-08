@@ -487,11 +487,13 @@ set nowrapscan
   &backupdir = $'{vim_cache_home.Join('backup').Value()}//'
   &directory = $'{vim_cache_home.Join('swap').Value()}//'
   &undodir = $'{vim_cache_home.Join('undo').Value()}//'
-}
 
-silent expand(&backupdir)->mkdir('p', 0o700)
-silent expand(&directory)->mkdir('p', 0o700)
-silent expand(&undodir)->mkdir('p', 0o700)
+  [&backupdir, &directory, &undodir]->foreach((_, path) => {
+    if !isdirectory(path)
+      mkdir(path, 'p', 0o700)
+    endif
+  })
+}
 # }}}
 
 # Key mappings {{{
