@@ -746,7 +746,7 @@ command! -bang -bar -nargs=* Ls {
 # Auto commands {{{
 augroup vimrc:OpenQuickFixWindow
   autocmd!
-  autocmd QuickFixCmdPost {,vim,help}grep*,make {
+  autocmd QuickFixCmdPost {,vim,help}grep*,make,Files,Buffers,Ls {
     cwindow
   }
   autocmd QuickFixCmdPost l{,vim,help}grep*,lmake {
