@@ -1,64 +1,53 @@
-" ":buffers" as a dictionary.
-function! s:buffers(bang, flags) abort
-  let l:items = []
+vim9script
 
-  for l:line in split(execute(printf('buffers%s %s', a:bang, a:flags)), '\n')
-    let l:item = {}
-    let l:matches = matchlist(l:line, '^\s*\([1-9]\d*\)\(.\{5}\) "\(.*\)" \s*line \(\d\+\)$')
+def DictionarizedLsLine(line: string): dict<any>
+  const matches = matchlist(line, '^\s*\([1-9]\d*\)\(.\{5}\) "\(.*\)" \s*line \(\d\+\)$')
 
-    let l:item['bufnr'] = str2nr(l:matches[1])
-    let l:item['indicators'] = l:matches[2]
-    let l:item['filename'] = l:matches[3]
-    let l:item['lnum'] = str2nr(l:matches[4])
+  return {
+    bufnr: matches[1]->str2nr(),
+    indicators: matches[2],
+    filename: matches[3],
+    lnum: matches[4]->str2nr(),
+  }
+enddef
 
-    call add(l:items, l:item)
-  endfor
+def QfLs(opts: dict<any>)
+  const bang = get(opts, 'bang', '')
+  const flags = get(opts, 'flags', '')
 
-  return l:items
-endfunction
+  const buffers = execute($'ls{bang} {flags}')->split('\n')->map((_, line) => DictionarizedLsLine(line))
+  const max_bufnr_ndigits = mapnew(buffers, (_, buffer) => buffer['bufnr']->len())->insert(3)->max()
 
-function! s:qfbuflines(info) abort
-  let l:buffers = {}
+  setqflist([], ' ', {
+    items: buffers,
+    title: 'Buffer lists',
+    quickfixtextfunc: (_info) => mapnew(buffers, (_, buffer) => {
+      const bufnr = buffer['bufnr']
+      const indicators = buffer['indicators']
+      const filename = buffer['filename']
+      const lnum = buffer['lnum']
+      const text = getbufline(bufnr, lnum)->get(0, '')
 
-  for l:buf in s:buffers('!', '')
-    let l:buffers[l:buf['bufnr']] = l:buf
-  endfor
+      return printf($'%{max_bufnr_ndigits}d%s %-30S | {lnum} col 0 | %s', bufnr, indicators, $'"{filename}"', text)
+    }),
+  })
+enddef
 
-  let l:items = getqflist({ 'id': a:info['id'], 'items': v:true }).items
-  let l:ndigits = max([3] + map(copy(l:items), { _, val -> len(val['bufnr']) }))
+# "files", "buffers" and "ls", but view the outputs in a quickfix window.
+command! -bang -bar -nargs=* Files {
+  silent doautocmd QuickFixCmdPre Files
+  QfLs({ bang: <q-bang>, flags: <q-args> })
+  silent doautocmd QuickFixCmdPost Files
+}
+command! -bang -bar -nargs=* Buffers {
+  silent doautocmd QuickFixCmdPre Buffers
+  QfLs({ bang: <q-bang>, flags: <q-args> })
+  silent doautocmd QuickFixCmdPost Buffers
+}
+command! -bang -bar -nargs=* Ls {
+  silent doautocmd QuickFixCmdPre Ls
+  QfLs({ bang: <q-bang>, flags: <q-args> })
+  silent doautocmd QuickFixCmdPost Ls
+}
 
-  let l:lines = []
-
-  for l:item in l:items[a:info['start_idx'] - 1 : a:info['end_idx'] - 1]
-    let l:buffer = l:buffers[l:item['bufnr']]
-
-    let l:line = printf(
-      \ '%' . l:ndigits . 'd%s "%s"%s | %d col %d | %s', l:item['bufnr'],
-      \ l:buffer['indicators'],
-      \ l:buffer['filename'],
-      \ join(map(range(max([0, 30 - 2 - len(l:buffer['filename'])])), "' '"), ''),
-      \ l:item['lnum'],
-      \ l:item['col'],
-      \ l:item['text']
-      \ )
-    call add(l:lines, l:line)
-  endfor
-
-  return l:lines
-endfunction
-
-function! s:qfbuffers(bang, flags) abort
-  let l:bufs = s:buffers(a:bang, a:flags)
-
-  for l:buf in l:bufs
-    let l:buf['text'] = get(getbufline(l:buf['bufnr'], l:buf['lnum']), 0, '')
-  endfor
-
-  call setqflist([], ' ', { 'items': l:bufs, 'title': 'Buffer Lists', 'quickfixtextfunc': 's:qfbuflines' })
-  copen
-endfunction
-
-" "files", "buffers" and "ls", but view the outputs in a quickfix window.
-command! -bang -bar -nargs=* Files call s:qfbuffers(<q-bang>, <q-args>)
-command! -bang -bar -nargs=* Buffers call s:qfbuffers(<q-bang>, <q-args>)
-command! -bang -bar -nargs=* Ls call s:qfbuffers(<q-bang>, <q-args>)
+# vim: set expandtab tabstop=2 shiftwidth=2 foldmethod=marker:
