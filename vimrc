@@ -385,7 +385,8 @@ def QfLs(opts: dict<any>)
   const flags = get(opts, 'flags', '')
 
   const buffers = execute($'ls{bang} {flags}')->split('\n')->map((_, line) => DictionarizedLsLine(line))
-  const max_bufnr_ndigits = mapnew(buffers, (_, buffer) => buffer['bufnr']->len())->insert(3)->max()
+  const max_bufnr = mapnew(buffers, (_, buffer) => buffer['bufnr'])->max()
+  const bufnr_ndigits = [len(max_bufnr), 3]->max()
 
   setqflist([], ' ', {
     items: buffers,
@@ -397,7 +398,7 @@ def QfLs(opts: dict<any>)
       const lnum = buffer['lnum']
       const text = getbufline(bufnr, lnum)->get(0, '')
 
-      return printf($'%{max_bufnr_ndigits}d%s %-30S | {lnum} col 0 | %s', bufnr, indicators, $'"{filename}"', text)
+      return printf($'%{bufnr_ndigits}d%s %-30S | {lnum} col 0 | %s', bufnr, indicators, $'"{filename}"', text)
     }),
   })
 enddef
