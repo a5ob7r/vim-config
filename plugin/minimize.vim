@@ -1,37 +1,13 @@
-" Get window-IDs using "winlayout()".
-function! s:windowids(...) abort
-  let l:ids = []
-  let l:stack = call('winlayout', a:000)
-
-  while !empty(l:stack)
-    let l:item = remove(l:stack, 0)
-
-    if type(l:item) == type([])
-      let l:stack += l:item
-    elseif type(l:item) == type('') && l:item ==# 'leaf'
-      let l:ids += [remove(l:stack, 0)]
-    elseif type(l:item) == type('') && l:item =~# 'col\|row'
-      let l:stack += remove(l:stack, 0)
-    else
-      throw 'windowids(): An unknown item.'
-    endif
-  endwhile
-
-  return l:ids
-endfunction
-
 " Minimize the current window and distribute the window's height equally to
 " other windows.
 "
 " FIXME: Resize complicated layouts well.
 function! s:xwinminimize() abort
   let l:cur_winid = win_getid()
-  let l:winids = s:windowids()
-  let l:heights = {}
 
-  for l:id in l:winids
-    let l:heights[l:id] = winheight(l:id)
-  endfor
+  const l:heights = getwininfo()
+    \ ->filter({ _, v -> v['tabnr'] == tabpagenr() })
+    \ ->reduce({ acc, v -> extend(acc, { v['winid']: v['height'] }) }, {})
 
   let l:stack = [[winlayout(), winheight(0) - &winminheight]]
 
@@ -93,3 +69,5 @@ endfunction
 " Minimize the current window, and make other window's height equally.
 nnoremap <Plug>(xminimize) <ScriptCmd>call s:xminimize()<CR>
 tnoremap <Plug>(xminimize) <ScriptCmd>call s:xminimize()<CR>
+
+" vim: set expandtab tabstop=2 shiftwidth=2 foldmethod=marker:
