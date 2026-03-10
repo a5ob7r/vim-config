@@ -1,3 +1,10 @@
+function! s:divmod(a, b) abort
+  const l:q = a:a / a:b
+  const l:r = a:a % a:b
+
+  return (l:q, l:r)
+endfunction
+
 " Minimize the current window and distribute the window's height equally to
 " other windows.
 "
@@ -20,8 +27,7 @@ function! s:xwinminimize() abort
 
     if l:layout[0] ==# 'col'
       let l:len = len(l:layout[1])
-      let l:height = l:diffheight / (l:len - 1)
-      let l:height_remain = l:diffheight % (l:len - 1)
+      let [l:height, l:height_remain] = s:divmod(l:diffheight, l:len - 1)
 
       " If the window height fraction exists, distribute it to each of lower
       " windows in order.
