@@ -9,10 +9,10 @@ enddef
 
 # Minimize the current window and distribute the window's height equally to
 # other windows.
-#
-# FIXME: Resize complicated layouts well.
 def Xwinminimize()
   const cur_winid = win_getid()
+
+  wincmd =
 
   const heights = getwininfo()
     ->reduce((acc, v) => {
@@ -48,11 +48,8 @@ def Xwinminimize()
 
       stack += layout[1]
     elseif layout[0] ==# 'row'
-      if index(layout[1], ['leaf', cur_winid]) >= 0
-        continue
-      endif
-
-      stack += map(layout[1], (_, v) => [v, diffheight])
+      # TODO: Support vertical layouts.
+      throw 'vimrc:Xwinminimize(): No verical layout support yet.'
     elseif layout[0] ==# 'leaf'
       const wid = layout[1]
 
@@ -75,10 +72,17 @@ def Xminimize()
   # Suppress view flickering caused by window resizing.
   set lazyredraw
 
-  # NOTE: I'm not sure that why calling this in "Xwinminimize()" does
-  # nothing.
-  wincmd =
-  Xwinminimize()
+  const winrestcmd = winrestcmd()
+
+  try
+    Xwinminimize()
+  catch
+    echohl WarningMsg
+    echomsg v:exception
+    echohl None
+
+    execute winrestcmd
+  endtry
 enddef
 
 # Minimize the current window, and make other window's height equally.
