@@ -2110,6 +2110,7 @@ def DduVim()
       nnoremap <buffer> <CR> <ScriptCmd>ddu#ui#do_action('itemAction')<CR>
       nnoremap <buffer> <C-X> <ScriptCmd>ddu#ui#do_action('itemAction', { name: 'open', params: { command: 'split' } })<CR>
       nnoremap <buffer> i <ScriptCmd>ddu#ui#do_action('openFilterWindow')<CR>
+      nnoremap <buffer> I <ScriptCmd>ddu#ui#do_action('openFilterWindow')<CR><C-B>
       nnoremap <buffer> <Space> <ScriptCmd>ddu#ui#do_action('toggleSelectItem')<CR>
       nnoremap <buffer> q <ScriptCmd>ddu#ui#do_action('quit')<CR>
     }
