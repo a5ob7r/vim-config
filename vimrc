@@ -896,6 +896,15 @@ command! -range -register YankComments {
     ->ParagraphUnlines()
     ->setreg(v:register)
 }
+
+# ":tabclose" with range support.
+command! -bar -bang -range -addr=tabs -nargs=? Tabclose {
+  if empty(<q-args>)
+    range(<line1>, <line2>)->reverse()->foreach((_, v) => execute($'<mods> :{v}tabclose<bang>') )
+  else
+    <mods> :<args>tabclose<bang>
+  endif
+}
 # }}}
 
 # Auto commands {{{
