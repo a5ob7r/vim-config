@@ -296,6 +296,7 @@ def ToggleNetrw(opts = {})
 enddef
 
 def DeleteBuffers(args: list<string>, opts: dict<any>)
+  const arguments = args ?? ['--normal', '--listed', '--hidden']
   const bang = get(opts, 'bang', '')
   const mods = get(opts, 'mods', '')
   const line1 = get(opts, 'line1', 1)
@@ -324,7 +325,7 @@ def DeleteBuffers(args: list<string>, opts: dict<any>)
 
   const predicates =
     reduce(
-      args,
+      arguments,
       (acc, arg) => {
         const k = arg =~# '^--' ? arg[2 :] : arg
 
@@ -852,7 +853,7 @@ command! -bar -bang ToggleNetrw {
 
 # :DeleteBuffers --listed --hidden --normal
 # :silent 1,10DeleteBuffers! --any
-command! -bang -bar -nargs=+ -range=% -addr=loaded_buffers -complete=custom,DeleteBuffersComplete DeleteBuffers {
+command! -bang -bar -nargs=* -range=% -addr=loaded_buffers -complete=custom,DeleteBuffersComplete DeleteBuffers {
   DeleteBuffers([<f-args>], { bang: <q-bang>, mods: <q-mods>, line1: <line1>, line2: <line2> })
 }
 
