@@ -766,7 +766,7 @@ nnoremap <F10> <ScriptCmd>echo FormatSyntaxNamesAt(line('.'), col('.'))<CR>
 nnoremap <C-S> <Cmd>update<CR>
 inoremap <C-S> <Cmd>update<CR>
 
-nnoremap <Leader>t <Cmd>tabnew<CR>
+nnoremap <Leader>t <Cmd>execute $'{v:count ?? ''}tabnew'<CR>
 
 # Like default configurations of Tmux.
 nnoremap <Leader>" <Cmd>terminal<CR>
