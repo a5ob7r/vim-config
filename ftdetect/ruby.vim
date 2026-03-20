@@ -1,2 +1,2 @@
-autocmd BufRead,BufNewFile Steepfile set filetype=ruby
-autocmd BufRead,BufNewFile *.jb set filetype=ruby
+autocmd BufRead,BufNewFile Steepfile setlocal filetype=ruby
+autocmd BufRead,BufNewFile *.jb setlocal filetype=ruby

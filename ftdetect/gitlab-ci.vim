@@ -1,1 +1,1 @@
-autocmd BufRead,BufNewFile */.gitlab-ci.yml set filetype=yaml.gitlab-ci
+autocmd BufRead,BufNewFile */.gitlab-ci.yml setlocal filetype=yaml.gitlab-ci
