@@ -2076,6 +2076,19 @@ def GinVim()
       b:undo_ftplugin = get(b:, 'undo_ftplugin', 'execute')
       b:undo_ftplugin ..= '| nunmap <buffer> <C-W><CR>'
     }
+    autocmd FileType gin-status {
+      nnoremap <buffer> gf <Plug>(gin-action-edit:local)
+      nnoremap <buffer> <C-W>f <Plug>(gin-action-edit:local:split)
+      nnoremap <buffer> <C-W>gf <Plug>(gin-action-edit:local:tabedit)
+
+      const undos =<< trim eval END
+        {get(b:, 'undo_ftplugin', 'execute')}
+        silent! execute 'nunmap <buffer> gf'
+        silent! execute 'nunmap <buffer> <C-W>f'
+        silent! execute 'nunmap <buffer> <C-W>gf'
+      END
+      b:undo_ftplugin = join(undos, '|')
+    }
     autocmd FileType gin-{branch,buffer,diff,edit,log,status} {
       setlocal nobuflisted
 
