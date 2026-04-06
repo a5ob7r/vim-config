@@ -15,6 +15,18 @@ def UnlockExecution()
   is_execution_locked = false
 enddef
 
+def WithExecutionLock(Proc: func)
+  if IsExecutionLocked()
+    throw ':Capture does not capture itself.'
+  endif
+
+  defer UnlockExecution()
+
+  LockExecution()
+
+  call(Proc, [])
+enddef
+
 def MakeBufferScratch()
   setlocal buftype=nofile
   setlocal bufhidden=hide
@@ -44,17 +56,11 @@ def Capture(command: string, opts = {})
   const mods = get(opts, 'mods', '')
   const raw = get(opts, 'raw', false)
 
-  if IsExecutionLocked()
-    throw ':Capture does not capture itself.'
-  endif
-
   if empty(command)
     throw 'Not found a capturable command. Run with arguments or run a command which you want to capture before run :Capture.'
   endif
 
-  try
-    LockExecution()
-
+  WithExecutionLock(() => {
     const lines = Redirect(command, raw)
 
     execute mods 'new'
@@ -63,10 +69,7 @@ def Capture(command: string, opts = {})
     setline('.', lines)
 
     MakeBufferReadonly()
-  finally
-    # TODO: Switch to ":defer".
-    UnlockExecution()
-  endtry
+  })
 enddef
 
 # Capture Ex command outputs and write it to a new scratch buffer.
