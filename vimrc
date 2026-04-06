@@ -2122,6 +2122,11 @@ def DduVim()
       },
     },
     ui: 'ff',
+    uiParams: {
+      ff: {
+        cursorPos: 1,
+      },
+    },
   })
 
   ddu#custom#patch_local('file', {
