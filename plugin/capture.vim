@@ -27,19 +27,22 @@ def MakeBufferReadonly()
 enddef
 
 # A wrapper for "execute()".
-def Redirect(command: string): list<string>
-  defer (v) => {
-    &l:list = v
-  }(&l:list)
+def Redirect(command: string, raw: bool): list<string>
+  if !raw
+    defer (v) => {
+      &l:list = v
+    }(&l:list)
 
-  # Do not output extra characters displayed by the "list" option.
-  noautocmd setlocal nolist
+    # Do not output extra characters displayed by the "list" option.
+    noautocmd setlocal nolist
+  endif
 
   return execute(command)->split('\n')
 enddef
 
 def Capture(command: string, opts = {})
   const mods = get(opts, 'mods', '')
+  const raw = get(opts, 'raw', false)
 
   if IsExecutionLocked()
     throw ':Capture does not capture itself.'
@@ -52,7 +55,7 @@ def Capture(command: string, opts = {})
   try
     LockExecution()
 
-    const lines = Redirect(command)
+    const lines = Redirect(command, raw)
 
     execute mods 'new'
     MakeBufferScratch()
@@ -67,8 +70,8 @@ def Capture(command: string, opts = {})
 enddef
 
 # Capture Ex command outputs and write it to a new scratch buffer.
-command! -nargs=* -complete=command Capture {
-  Capture(<q-args> ?? @:, { mods: <q-mods> })
+command! -bang -nargs=* -complete=command Capture {
+  Capture(<q-args> ?? @:, { mods: <q-mods>, raw: <bang>false })
 }
 
 # vim: set expandtab tabstop=2 shiftwidth=2 foldmethod=marker:
