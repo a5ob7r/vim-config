@@ -1,31 +1,34 @@
 vim9script
 
-# A lock to avoid nested ":Capture" executions.
-var is_execution_locked = false
+class WithLocker
+  var lock = false
 
-def IsExecutionLocked(): bool
-  return is_execution_locked
-enddef
+  def Call(Proc: func, args: list<any>): any
+    if this._IsLocked()
+      throw "WithLocker.Call(): Cannot get a lock."
+    endif
 
-def LockExecution()
-  is_execution_locked = true
-enddef
+    defer this._Unlock()
 
-def UnlockExecution()
-  is_execution_locked = false
-enddef
+    this._Lock()
 
-def WithExecutionLock(Proc: func)
-  if IsExecutionLocked()
-    throw ':Capture does not capture itself.'
-  endif
+    return call(Proc, args)
+  enddef
 
-  defer UnlockExecution()
+  def _IsLocked(): bool
+    return this.lock
+  enddef
 
-  LockExecution()
+  def _Lock()
+    this.lock = true
+  enddef
 
-  call(Proc, [])
-enddef
+  def _Unlock()
+    this.lock = false
+  enddef
+endclass
+
+const capture_with_locker = WithLocker.new()
 
 def MakeBufferScratch()
   setlocal buftype=nofile
@@ -60,16 +63,19 @@ def Capture(command: string, opts = {})
     throw 'Not found a capturable command. Run with arguments or run a command which you want to capture before run :Capture.'
   endif
 
-  WithExecutionLock(() => {
-    const lines = Redirect(command, raw)
+  capture_with_locker.Call(
+    () => {
+      const lines = Redirect(command, raw)
 
-    execute mods 'new'
-    MakeBufferScratch()
+      execute mods 'new'
+      MakeBufferScratch()
 
-    setline('.', lines)
+      setline('.', lines)
 
-    MakeBufferReadonly()
-  })
+      MakeBufferReadonly()
+    },
+    []
+  )
 enddef
 
 # Capture Ex command outputs and write it to a new scratch buffer.
