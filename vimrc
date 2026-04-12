@@ -702,6 +702,31 @@ def SubstituteJapanesePunctuations(bang: string, line1: number, line2: number)
   execute $'silent keepjumps keeppatterns :{line1},{line2}substitute/{period[lang_from]}/{period[lang_to]}/eg'
   execute $'silent keepjumps keeppatterns :{line1},{line2}substitute/{comma[lang_from]}/{comma[lang_to]}/eg'
 enddef
+
+# Read/Write the binary format, but are these configurations really
+# comfortable? Maybe we should use a binary editor insated.
+def BinaryEditableByXxd(enable: bool)
+  augroup vimrc:xxd
+    autocmd! * <buffer>
+
+    if enable
+      autocmd BufReadPost <buffer> {
+        execute 'silent :%!xxd -g 1'
+        set filetype=xxd
+      }
+      autocmd BufWritePre <buffer> {
+        b:cursorpos = getcurpos()
+        execute ':%!xxd -r'
+      }
+      autocmd BufWritePost <buffer> {
+        execute 'silent :%!xxd -g 1'
+        set nomodified
+        cursor(b:cursorpos[1], b:cursorpos[2], b:cursorpos[3])
+        unlet b:cursorpos
+      }
+    endif
+  augroup END
+enddef
 # }}}
 
 # Options {{{
@@ -1155,6 +1180,13 @@ augroup vimrc:refresh:Checktime
   autocmd!
   autocmd User Refresh {
     checktime %
+  }
+augroup END
+
+augroup vimrc:binary
+  autocmd!
+  autocmd OptionSet binary {
+    BinaryEditableByXxd(v:option_new ==# '1')
   }
 augroup END
 # }}}
