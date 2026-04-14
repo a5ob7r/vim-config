@@ -57,7 +57,9 @@ def FlashCursorLineHandler(_tid: number)
 enddef
 
 def SetFlashCursorLineTimer()
-  timer_id = timer_start(2, FlashCursorLineHandler, { repeat: len(bw_colors) * 2 })
+  if timer_id == -1
+    timer_id = timer_start(2, FlashCursorLineHandler, { repeat: len(bw_colors) * 2 })
+  endif
 enddef
 
 def ResetFlashCursorLine()
