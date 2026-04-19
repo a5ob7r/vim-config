@@ -289,7 +289,10 @@ class Highlight
   def Apply()
     const args = items(this.attributes)->map((_, v) => join(v, '='))
 
-    execute $'highlight {this.group} {join(args)}'
+    if !empty(args)
+      execute $'highlight {this.group} NONE'
+      execute $'highlight {this.group} {join(args)}'
+    endif
   enddef
 endclass
 
