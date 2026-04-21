@@ -327,14 +327,9 @@ class FlashingCursorLineState
   var idx = 0
 
   def Next(): object<Highlight>
-    const hl = this.FLASH_HIGHLIGHTS[this._Idx(this.idx)]
-
-    if this.idx < len(this.FLASH_HIGHLIGHTS)
-      ++this.idx
-      return hl
-    else
-      return null_object
-    endif
+    const hl = get(this.FLASH_HIGHLIGHTS, this._Idx(this.idx), null_object)
+    ++this.idx
+    return hl
   enddef
 
   def Reset()
