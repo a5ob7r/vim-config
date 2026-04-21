@@ -141,9 +141,11 @@ class WithLocker
 endclass
 
 class Xnewline
-  static const _NEWLINE_KEYSTROKES = () => {
-    return map($'xnewline{rand()}', (_, c) => c .. "\<BS>") .. "\n"
-  }()
+  const NEWLINE_KEYSTROKES: string
+
+  def new()
+    this.NEWLINE_KEYSTROKES = this._MakeNewlineKeystrokes()
+  enddef
 
   def Call(): string
     # Work as just a "<CR>" if not on a normal window.
@@ -155,7 +157,7 @@ class Xnewline
       # Merge undo sequences of multiple newline insertions which are caused by
       # sequential invocation of this function if the current line is blank and
       # no cursor movement since the last newline insersion.
-      if getreg('.') ==# _NEWLINE_KEYSTROKES
+      if getreg('.') ==# this.NEWLINE_KEYSTROKES
           && getline('.') =~# '^\s*$'
           # A naive detection of whether or not the cursor moved since the last
           # Insert mode leaving.
@@ -168,7 +170,11 @@ class Xnewline
     endtry
 
     # Insert a newline.
-    return $"A{_NEWLINE_KEYSTROKES}\<Esc>"
+    return $"A{this.NEWLINE_KEYSTROKES}\<Esc>"
+  enddef
+
+  def _MakeNewlineKeystrokes(): string
+    return map($'xnewline{rand()}', (_, c) => c .. "\<BS>") .. "\n"
   enddef
 endclass
 
@@ -1137,7 +1143,8 @@ nnoremap <Leader>N <Cmd>ToggleNetrw!<CR>
 
 # Create a newline instantly even if in Normal mode, but work as just a "<CR>"
 # if in a "command-line-window".
-nnoremap <expr> <Plug>(newline) Xnewline.new().Call()
+const xnewline = Xnewline.new()
+nnoremap <expr> <Plug>(newline) xnewline.Call()
 # }}}
 
 # Commands {{{
