@@ -173,8 +173,6 @@ class Xnewline
 endclass
 
 class Capture
-  static const _LOCKER = WithLocker.new()
-
   const mods: string
   const raw: bool
 
@@ -188,19 +186,14 @@ class Capture
       throw 'Not found a capturable command. Run with arguments or run a command which you want to capture before run :Capture.'
     endif
 
-    _LOCKER.Call(
-      () => {
-        const lines = this._Redirect(command, this.raw)
+    const lines = this._Redirect(command, this.raw)
 
-        execute this.mods 'new'
-        this._MakeBufferScratch()
+    execute this.mods 'new'
+    this._MakeBufferScratch()
 
-        setline('.', lines)
+    setline('.', lines)
 
-        this._MakeBufferReadonly()
-      },
-      []
-    )
+    this._MakeBufferReadonly()
   enddef
 
   def _MakeBufferScratch()
@@ -1292,9 +1285,14 @@ command! -bar -range BreakJapaneseSentences {
   keeppatterns :<line1>,<line2>substitute/\([。．]\)/\1\r/eg
 }
 
+const capture_locker = WithLocker.new()
+
 # Capture Ex command outputs and write it to a new scratch buffer.
 command! -bang -nargs=* -complete=command Capture {
-  Capture.new({ mods: <q-mods>, raw: <bang>false }).Call(<q-args> ?? @:)
+  capture_locker.Call(
+    () => Capture.new({ mods: <q-mods>, raw: <bang>false }).Call(<q-args> ?? @:),
+    []
+  )
 }
 
 # Joke commands inspired by https://github.com/inside/vim-search-pulse.
