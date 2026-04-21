@@ -1294,7 +1294,7 @@ command! -bar -range BreakJapaneseSentences {
 
 # Capture Ex command outputs and write it to a new scratch buffer.
 command! -bang -nargs=* -complete=command Capture {
-  Capture.new({ mods: <q-mods>, raw: <bang>false }).Call(<q-args> ?? @:, )
+  Capture.new({ mods: <q-mods>, raw: <bang>false }).Call(<q-args> ?? @:)
 }
 
 # Joke commands inspired by https://github.com/inside/vim-search-pulse.
