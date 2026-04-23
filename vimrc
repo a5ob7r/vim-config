@@ -178,6 +178,28 @@ class Xnewline
   enddef
 endclass
 
+# A wrapper for "execute()".
+class Redirect
+  const o_raw: bool
+
+  def new(opts = {})
+    this.o_raw = get(opts, 'raw', false)
+  enddef
+
+  def Call(command: string): list<string>
+    if !this.o_raw
+      defer (v) => {
+        &l:list = v
+      }(&l:list)
+
+      # Do not output extra characters displayed by the "list" option.
+      noautocmd setlocal nolist
+    endif
+
+    return execute(command)->split('\n')
+  enddef
+endclass
+
 class Capture
   const mods: string
   const raw: bool
@@ -192,7 +214,7 @@ class Capture
       throw 'Not found a capturable command. Run with arguments or run a command which you want to capture before run :Capture.'
     endif
 
-    const lines = this._Redirect(command, this.raw)
+    const lines = Redirect.new({ raw: this.raw }).Call(command)
 
     execute this.mods 'new'
     this._MakeBufferScratch()
@@ -211,20 +233,6 @@ class Capture
   def _MakeBufferReadonly()
     setlocal readonly
     setlocal nomodifiable
-  enddef
-
-  # A wrapper for "execute()".
-  def _Redirect(command: string, raw: bool): list<string>
-    if !raw
-      defer (v) => {
-        &l:list = v
-      }(&l:list)
-
-      # Do not output extra characters displayed by the "list" option.
-      noautocmd setlocal nolist
-    endif
-
-    return execute(command)->split('\n')
   enddef
 endclass
 
