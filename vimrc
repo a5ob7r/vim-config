@@ -2801,9 +2801,14 @@ g:maxpac.Add('preservim/vim-markdown')
 g:maxpac.Add('yasuhiroki/github-actions-yaml.vim')
 g:maxpac.Add('zorab47/procfile.vim')
 
+# Colorschemes.
+g:maxpac.Add('KeitaNakamura/neodark.vim')
+g:maxpac.Add('catppuccin/vim', { name: 'catppuccin' })
+g:maxpac.Add('dracula/vim', { name: 'dracula' })
+g:maxpac.Add('yasukotelin/shirotelin')
+
 # Misc.
 g:maxpac.Add('Eliot00/git-lens.vim')
-g:maxpac.Add('KeitaNakamura/neodark.vim')
 g:maxpac.Add('a5ob7r/chmod.vim')
 g:maxpac.Add('a5ob7r/linefeed.vim')
 g:maxpac.Add('a5ob7r/rspec-daemon.vim')
