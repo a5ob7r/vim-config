@@ -398,6 +398,26 @@ class CursorLine
     this.default_highlight = Highlight.Current('CursorLine')
   enddef
 endclass
+
+class UnderlyingTerminal
+  # A naive truecolor support terminal detection in the two ways.
+  #
+  # 1. Check $COLORTERM if it is defined.
+  # 2. Assume almost all the current major terminals without some exception like
+  #    below support truecolor.
+  #
+  #     - Terminal.app
+  #     - Linux console
+  #
+  # https://github.com/termstandard/colors
+  def IsTruecolorable(): bool
+    if exists('$COLORTERM')
+      return index(['truecolor', '24bit'], $COLORTERM) >= 0
+    endif
+
+    return $TERM_PROGRAM !=# 'Apple_Terminal' && &term !=# 'linux'
+  enddef
+endclass
 # }}}
 
 # Functions {{{
@@ -420,24 +440,6 @@ def Terminal()
     cwd: cwd,
     term_finish: 'close'
   })
-enddef
-
-# A naive truecolor support terminal detection in the two ways.
-#
-# 1. Check $COLORTERM if it is defined.
-# 2. Assume almost all the current major terminals without some exception like
-#    below support truecolor.
-#
-#     - Terminal.app
-#     - Linux console
-#
-# https://github.com/termstandard/colors
-def IsInTruecolorSupportedTerminal(): bool
-  if exists('$COLORTERM')
-    return index(['truecolor', '24bit'], $COLORTERM) >= 0
-  endif
-
-  return $TERM_PROGRAM !=# 'Apple_Terminal' && &term !=# 'linux'
 enddef
 
 # Define a simple command to open a specific file using ":DefineOpener".
@@ -958,7 +960,7 @@ set virtualedit=block
 set wildmode=longest:full,full
 set wildoptions+=pum,fuzzy
 
-if IsInTruecolorSupportedTerminal()
+if UnderlyingTerminal.new().IsTruecolorable()
   set termguicolors
 endif
 
