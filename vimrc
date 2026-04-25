@@ -353,7 +353,7 @@ class CursorLine
   const state: object<FlashingCursorLineState>
   const timer: object<Timer>
 
-  var default_highlight: object<Highlight>
+  var remembered_highlight: object<Highlight>
 
   def new()
     this.state = FlashingCursorLineState.new()
@@ -385,17 +385,17 @@ class CursorLine
       this.state.Reset()
 
       if this._IsHighlightRemembered()
-        this.default_highlight.Apply()
+        this.remembered_highlight.Apply()
       endif
     endif
   enddef
 
   def _IsHighlightRemembered(): bool
-    return this.default_highlight != null
+    return this.remembered_highlight != null
   enddef
 
   def _RememberCurrentHighlight()
-    this.default_highlight = Highlight.Current('CursorLine')
+    this.remembered_highlight = Highlight.Current('CursorLine')
   enddef
 endclass
 
@@ -519,6 +519,8 @@ def ReregisterFiletypeRedetection4DotLocal(enable: bool)
     endif
   augroup END
 enddef
+
+# RegisterMassAssignment.new(['"', '*', '+']).Call(value)
 
 def Assign2ClipboardRegisters(value: string)
   @" = value
