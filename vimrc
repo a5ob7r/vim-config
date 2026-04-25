@@ -19,7 +19,7 @@ endtry
 
 # =============================================================================
 
-# Classes {{{
+# Classes/Enums {{{
 class Pathname
   const value: string
 
@@ -418,6 +418,20 @@ class UnderlyingTerminal
     return $TERM_PROGRAM !=# 'Apple_Terminal' && &term !=# 'linux'
   enddef
 endclass
+
+# XDG Base Directory Specification
+#
+# https://specifications.freedesktop.org/basedir-spec/latest/
+enum XDG
+  CacheHome('XDG_CACHE_HOME', $'{$HOME}/.cache')
+
+  const environment_variable_name: string
+  const default_value: string
+
+  def Value(): string
+    return getenv(this.environment_variable_name) ?? this.default_value
+  enddef
+endenum
 # }}}
 
 # Functions {{{
@@ -472,13 +486,6 @@ def FormatTabPanel(actual_curtabpage: number): string
   })
 
   return $"({g:actual_curtabpage})\n{buffers->join("\n")}"
-enddef
-
-# XDG Base Directory Specification
-#
-# https://specifications.freedesktop.org/basedir-spec/latest/
-def XdgCacheHome(): string
-  return $XDG_CACHE_HOME ?? Pathname.new($HOME).Join('.cache').Value()
 enddef
 
 def FiletypeRedetection4DotLocal(enable: bool)
@@ -1004,7 +1011,7 @@ set nowrapscan
   # https://github.com/archlinux/svntogit-packages/blob/68635a69f0c5525210adca6ff277dc13c590399b/trunk/archlinux.vim#L22
   #
   # TODO: Switch from "$XDG_CACHE_HOME" to "$XDG_DATA_HOME" or "$XDG_STATE_HOME".
-  const vim_cache_home = Pathname.new(XdgCacheHome()).Join('vim')
+  const vim_cache_home = Pathname.new(XDG.CacheHome.Value()).Join('vim')
 
   &backupdir = $'{vim_cache_home.Join('backup').Value()}//'
   &directory = $'{vim_cache_home.Join('swap').Value()}//'
