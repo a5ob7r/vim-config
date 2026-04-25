@@ -424,6 +424,79 @@ enum XDG
     return getenv(this.environment_variable_name) ?? this.default_value
   enddef
 endenum
+
+class DeleteBuffers
+  static def Complete(..._): string
+    return [
+      '--any',
+      '--displayed',
+      '--empty',
+      '--filled',
+      '--hidden',
+      '--listed',
+      '--normal',
+      '--special',
+      '--unlisted',
+    ]->join("\n")
+  enddef
+
+  const PREDICATES = {
+    any: (_bufinfo) => true,
+    displayed: (bufinfo) => !bufinfo.hidden,
+    empty: (bufinfo) => this._IsEmptyBuffer(bufinfo),
+    filled: (bufinfo) => !this._IsEmptyBuffer(bufinfo),
+    hidden: (bufinfo) => bufinfo.hidden,
+    listed: (bufinfo) => bufinfo.listed,
+    normal: (bufinfo) => getbufvar(bufinfo.bufnr, '&buftype')->empty(),
+    special: (bufinfo) => !getbufvar(bufinfo.bufnr, '&buftype')->empty(),
+    unlisted: (bufinfo) => !bufinfo.listed,
+  }
+
+  const bang: string
+  const mods: string
+  const line1: number
+  const line2: number
+
+  def new(opts = {})
+    this.bang = get(opts, 'bang', '')
+    this.mods = get(opts, 'mods', '')
+    this.line1 = get(opts, 'line1', 1)
+    this.line2 = get(opts, 'line2', v:numbermax)
+  enddef
+
+  def Call(...args: list<string>)
+    const arguments = args ?? ['--normal', '--listed', '--hidden']
+    const predicates =
+      reduce(
+        arguments,
+        (acc, arg) => {
+          const k = arg =~# '^--' ? arg[2 :] : arg
+
+          if !this.PREDICATES->has_key(k)
+            throw $':DeleteBuffers: ''{arg}'' is an invalid option.'
+          endif
+
+          return add(acc, this.PREDICATES[k])
+        },
+        []
+      )
+
+    getbufinfo({ bufloaded: true })->foreach((_i, bufinfo) => {
+      if bufinfo.bufnr >= this.line1 && bufinfo.bufnr <= this.line2 && reduce(predicates, (acc, predicate) => acc && call(predicate, [bufinfo]), true)
+        execute this.mods $'bdelete{this.bang}' bufinfo.bufnr
+      endif
+    })
+  enddef
+
+  # Whether or not the buffer is the same as a new, unnamed and empty buffer.
+  def _IsEmptyBuffer(bufinfo: dict<any>): bool
+    return !empty(bufinfo)
+      && empty(bufinfo.name)
+      && bufinfo.lnum <= 1
+      && empty(getbufline(bufinfo.bufnr, 1)[0])
+      && !bufinfo.changed
+  enddef
+endclass
 # }}}
 
 # Functions {{{
@@ -583,70 +656,6 @@ def ToggleNetrw(opts = {})
   else
     execute 'Explore'
   endif
-enddef
-
-def DeleteBuffers(args: list<string>, opts: dict<any>)
-  const arguments = args ?? ['--normal', '--listed', '--hidden']
-  const bang = get(opts, 'bang', '')
-  const mods = get(opts, 'mods', '')
-  const line1 = get(opts, 'line1', 1)
-  const line2 = get(opts, 'line2', v:numbermax)
-
-  # Whether or not the buffer is the same as a new, unnamed and empty buffer.
-  const IsEmptyBuffer = (bufinfo: dict<any>): bool => {
-    return !empty(bufinfo)
-      && empty(bufinfo.name)
-      && bufinfo.lnum <= 1
-      && empty(getbufline(bufinfo.bufnr, 1)[0])
-      && !bufinfo.changed
-  }
-
-  const PREDICATES = {
-    any: (_bufinfo) => true,
-    displayed: (bufinfo) => !bufinfo.hidden,
-    empty: (bufinfo) => IsEmptyBuffer(bufinfo),
-    filled: (bufinfo) => !IsEmptyBuffer(bufinfo),
-    hidden: (bufinfo) => bufinfo.hidden,
-    listed: (bufinfo) => bufinfo.listed,
-    normal: (bufinfo) => getbufvar(bufinfo.bufnr, '&buftype')->empty(),
-    special: (bufinfo) => !getbufvar(bufinfo.bufnr, '&buftype')->empty(),
-    unlisted: (bufinfo) => !bufinfo.listed,
-  }
-
-  const predicates =
-    reduce(
-      arguments,
-      (acc, arg) => {
-        const k = arg =~# '^--' ? arg[2 :] : arg
-
-        if !PREDICATES->has_key(k)
-          throw $':DeleteBuffers: ''{arg}'' is an invalid option.'
-        endif
-
-        return add(acc, PREDICATES[k])
-      },
-      []
-    )
-
-  getbufinfo({ bufloaded: true })->foreach((_i, bufinfo) => {
-    if bufinfo.bufnr >= line1 && bufinfo.bufnr <= line2 && reduce(predicates, (acc, predicate) => acc && call(predicate, [bufinfo]), true)
-      execute mods $'bdelete{bang}' bufinfo.bufnr
-    endif
-  })
-enddef
-
-def DeleteBuffersComplete(..._): string
-  return [
-    '--any',
-    '--displayed',
-    '--empty',
-    '--filled',
-    '--hidden',
-    '--listed',
-    '--normal',
-    '--special',
-    '--unlisted',
-  ]->join("\n")
 enddef
 
 def Gcd(query: string, bang: string, mods: string, cder = 'cd')
@@ -1235,8 +1244,12 @@ command! -bar -bang ToggleNetrw {
 
 # :DeleteBuffers --listed --hidden --normal
 # :silent 1,10DeleteBuffers! --any
+const DeleteBuffersComplete = (..._) => DeleteBuffers.Complete()
 command! -bang -bar -nargs=* -range=% -addr=loaded_buffers -complete=custom,DeleteBuffersComplete DeleteBuffers {
-  DeleteBuffers([<f-args>], { bang: <q-bang>, mods: <q-mods>, line1: <line1>, line2: <line2> })
+  call(
+    DeleteBuffers.new({ bang: <q-bang>, mods: <q-mods>, line1: <line1>, line2: <line2> }).Call,
+    [<f-args>]
+  )
 }
 
 # ":cd" to a VCS repository managed by "ghq" using only the sub-path.
