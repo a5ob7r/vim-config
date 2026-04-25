@@ -374,7 +374,7 @@ class CursorLine
 
   def Flash()
     if this.timer.IsStopped()
-      this._RememberCurrentHighlight()
+      this.remembered_highlight = Highlight.Current('CursorLine')
       this.timer.Start()
     endif
   enddef
@@ -384,18 +384,10 @@ class CursorLine
       this.timer.Stop()
       this.state.Reset()
 
-      if this._IsHighlightRemembered()
+      if this.remembered_highlight != null
         this.remembered_highlight.Apply()
       endif
     endif
-  enddef
-
-  def _IsHighlightRemembered(): bool
-    return this.remembered_highlight != null
-  enddef
-
-  def _RememberCurrentHighlight()
-    this.remembered_highlight = Highlight.Current('CursorLine')
   enddef
 endclass
 
