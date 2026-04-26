@@ -425,6 +425,59 @@ enum XDG
   enddef
 endenum
 
+enum BoundaryType
+  Inclusive,
+  Exclusive
+endenum
+
+class Boundary
+  const value: number
+  const boundary_type: object<BoundaryType>
+
+  def new(this.value, this.boundary_type)
+  enddef
+
+  def newInclusive(this.value)
+    this.boundary_type = BoundaryType.Inclusive
+  enddef
+
+  def newExclusive(this.value)
+    this.boundary_type = BoundaryType.Exclusive
+  enddef
+
+  def IsInclusive(): bool
+    return this.boundary_type == BoundaryType.Inclusive
+  enddef
+
+  def IsExclusive(): bool
+    return !this.IsInclusive()
+  enddef
+endclass
+
+class Range
+  const lower: object<Boundary>
+  const upper: object<Boundary>
+
+  def new(this.lower, this.upper)
+  enddef
+
+  def IsInclude(n: number): bool
+    if this.lower.IsInclusive()
+      if this.upper.IsInclusive()
+        return this.lower.value <= n && this.upper.value >= n
+      else
+        return this.lower.value <= n && this.upper.value > n
+      endif
+    else
+      if this.upper.IsInclusive()
+        return this.lower.value < n && this.upper.value >= n
+      else
+        return this.lower.value < n && this.upper.value > n
+      endif
+    endif
+  enddef
+endclass
+
 class DeleteBuffers
   static def Complete(..._): string
     return [
@@ -482,7 +535,8 @@ class DeleteBuffers
       )
 
     getbufinfo({ bufloaded: true })->foreach((_i, bufinfo) => {
-      if bufinfo.bufnr >= this.line1 && bufinfo.bufnr <= this.line2 && reduce(predicates, (acc, predicate) => acc && call(predicate, [bufinfo]), true)
+      if Range.new(Boundary.newInclusive(this.line1), Boundary.newInclusive(this.line2)).IsInclude(bufinfo.bufnr)
+          && reduce(predicates, (acc, predicate) => acc && call(predicate, [bufinfo]), true)
         execute this.mods $'bdelete{this.bang}' bufinfo.bufnr
       endif
     })
@@ -1381,10 +1435,7 @@ augroup vimrc:RestoreCursor
   autocmd!
   # See "restore-cursor".
   autocmd BufReadPost * {
-    const line = line("'\"")
-
-    if line >= 1
-        && line <= line("$")
+    if Range.new(Boundary.newInclusive(1), Boundary.newInclusive(line("$"))).IsInclude(line("'\""))
         && &filetype !~# 'commit'
         && index(['xxd', 'gitrebase'], &filetype) == -1
       execute "normal! g`\""
