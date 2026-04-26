@@ -536,15 +536,16 @@ class DeleteBuffers
   def Call(...args: list<string>)
     const arguments = args ?? ['--normal', '--listed', '--hidden']
     const predicates =
-      reduce(
-        arguments,
-        (acc, arg) => {
-          const k = arg =~# '^--' ? arg[2 :] : arg
-
-          if !this.PREDICATES->has_key(k)
-            throw $':DeleteBuffers: ''{arg}'' is an invalid option.'
-          endif
-
+      mapnew(arguments, (_, arg) => (arg, arg[2 :]))
+      ->foreach((_, v) => {
+        const [arg, k] = v
+        if !(arg =~# '^--' && has_key(this.PREDICATES, k))
+          throw $':DeleteBuffers: {string(arg)} is an invalid option.'
+        endif
+      })
+      ->reduce(
+        (acc, v) => {
+          const [_, k] = v
           return add(acc, this.PREDICATES[k])
         },
         []
