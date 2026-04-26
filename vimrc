@@ -478,6 +478,22 @@ class Range
   enddef
 endclass
 
+class BufInfo
+  const info: dict<any>
+
+  def new(this.info)
+  enddef
+
+  # Whether or not the buffer is the same as a new, unnamed and empty buffer.
+  def IsEmptyBuffer(): bool
+    return !empty(this.info)
+      && empty(this.info.name)
+      && this.info.lnum <= 1
+      && empty(getbufline(this.info.bufnr, 1)[0])
+      && !this.info.changed
+  enddef
+endclass
+
 class DeleteBuffers
   static def Complete(..._): string
     return [
@@ -496,8 +512,8 @@ class DeleteBuffers
   const PREDICATES = {
     any: (_bufinfo) => true,
     displayed: (bufinfo) => !bufinfo.hidden,
-    empty: (bufinfo) => this._IsEmptyBuffer(bufinfo),
-    filled: (bufinfo) => !this._IsEmptyBuffer(bufinfo),
+    empty: (bufinfo) => BufInfo.new(bufinfo).IsEmptyBuffer(),
+    filled: (bufinfo) => !BufInfo.new(bufinfo).IsEmptyBuffer(),
     hidden: (bufinfo) => bufinfo.hidden,
     listed: (bufinfo) => bufinfo.listed,
     normal: (bufinfo) => getbufvar(bufinfo.bufnr, '&buftype')->empty(),
@@ -540,15 +556,6 @@ class DeleteBuffers
         execute this.mods $'bdelete{this.bang}' bufinfo.bufnr
       endif
     })
-  enddef
-
-  # Whether or not the buffer is the same as a new, unnamed and empty buffer.
-  def _IsEmptyBuffer(bufinfo: dict<any>): bool
-    return !empty(bufinfo)
-      && empty(bufinfo.name)
-      && bufinfo.lnum <= 1
-      && empty(getbufline(bufinfo.bufnr, 1)[0])
-      && !bufinfo.changed
   enddef
 endclass
 # }}}
