@@ -559,6 +559,48 @@ class DeleteBuffers
     })
   enddef
 endclass
+
+# Ref: https://mattn.kaoriya.net/software/vim/20090826003359.htm
+export class OverrideFunction
+  const FunctionA: func
+  const FunctionB: func
+
+  def new(this.FunctionA, this.FunctionB)
+  enddef
+
+  def Call()
+    const lines =<< eval trim END
+      function! {get(this.FunctionA, 'name')}(...) abort
+        return call({get(this.FunctionB, 'name')->string()}, a:000)
+      endfunction
+    END
+
+    execute 'legacy' join(lines, "\n")
+  enddef
+endclass
+
+export class Script
+  const info: dict<any>
+
+  def new(this.info)
+  enddef
+
+  def newFromPath(filepath: string)
+    const infos = getscriptinfo({ name: filepath })
+
+    if empty(infos)
+      throw $'vimrc:Script: No script found: {string(filepath)}'
+    elseif len(infos) >= 2
+      throw $'vimrc:Script: Ambiguous filepath: {string(filepath)}'
+    endif
+
+    this.info = infos[0]
+  enddef
+
+  def FetchFunction(function_name: string): func
+    return function($'<SNR>{this.info.sid}_{function_name}')
+  enddef
+endclass
 # }}}
 
 # Functions {{{
