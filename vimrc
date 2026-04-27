@@ -1007,6 +1007,7 @@ set chistory=100
 set colorcolumn=81,101,121
 set completeopt=menuone,longest,popup,fuzzy
 set cursorline
+set diffopt+=algorithm:histogram
 set display=lastline
 set fileformats=unix,dos,mac
 set hidden
