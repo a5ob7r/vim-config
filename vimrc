@@ -584,7 +584,7 @@ def Terminal()
 enddef
 
 # Define a simple command to open a specific file using ":DefineOpener".
-def! g:DefineOpener(name: string, filename: string)
+export def DefineOpener(name: string, filename: string)
   const lines =<< trim eval END
     command! -bang -bar {name} {{
       <mods> OpenHelper<bang> {filename}
@@ -1236,7 +1236,7 @@ command! -bang -bar -nargs=1 -complete=file OpenHelper {
   execute <q-mods> opener <q-args>
 }
 
-g:DefineOpener('Vimrc', $MYVIMRC)
+DefineOpener('Vimrc', $MYVIMRC)
 
 # Run commands to refresh something.
 command! Refresh {
