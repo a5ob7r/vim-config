@@ -1603,7 +1603,7 @@ class Maxpac
   enddef
 endclass
 
-g:maxpac = Maxpac.new()
+export const maxpac = Maxpac.new()
 
 command! InstallMinpac {
   # A root directory path of vim packages.
@@ -1618,7 +1618,7 @@ command! InstallMinpac {
 }
 
 command! Minpacable {
-  g:maxpac.Minpacable()
+  maxpac.Minpacable()
 }
 # }}}
 
@@ -1637,7 +1637,7 @@ def Minpac()
   command! -bar -nargs=1 PackInstall {
     Minpacable
 
-    const plugname = g:maxpac.Plugname(<q-args>)
+    const plugname = maxpac.Plugname(<q-args>)
 
     minpac#add(<q-args>, { type: 'opt' })
     minpac#update(plugname, { do: $'packadd {plugname}' })
@@ -1917,7 +1917,7 @@ augroup vimrc:hooks:vim-ripgrep
   autocmd!
   # TODO: Find an appropriate hook event.
   autocmd VimEnter * ++once {
-    if g:maxpac.Loaded('vim-ripgrep') && g:maxpac.Loaded('vim-operator-user')
+    if maxpac.Loaded('vim-ripgrep') && maxpac.Loaded('vim-operator-user')
       VimRipgrep()
     endif
   }
@@ -2759,7 +2759,7 @@ augroup vimrc:hooks:vim-qf-preview
   # ":runtime", which ftplugin loading uses it, doesn't fire
   # "Source{Pre,Post}" events because perhaps it's not a ":source".
   autocmd FileType qf ++once {
-    if g:maxpac.Loaded('vim-qf-preview')
+    if maxpac.Loaded('vim-qf-preview')
       VimQfPreviewFtplugin()
       VimQfPreview()
     endif
@@ -2832,121 +2832,121 @@ enddef
 # NOTE: Maybe "+clientserver" is disabled in macOS even if a Vim is compiled
 # with "--with-features=huge".
 if has('clientserver')
-  g:maxpac.Add('thinca/vim-singleton')
+  maxpac.Add('thinca/vim-singleton')
 endif
 
-g:maxpac.Add('itchyny/lightline.vim')
-g:maxpac.Add('a5ob7r/lightline-otf') # Load lightline-otf earlier than lightline.vim.
+maxpac.Add('itchyny/lightline.vim')
+maxpac.Add('a5ob7r/lightline-otf') # Load lightline-otf earlier than lightline.vim.
 
 # Operators.
-g:maxpac.Add('kana/vim-operator-user')
-g:maxpac.Add('kana/vim-operator-replace')
+maxpac.Add('kana/vim-operator-user')
+maxpac.Add('kana/vim-operator-replace')
 
 # Text objects.
-g:maxpac.Add('kana/vim-textobj-user')
-g:maxpac.Add('D4KU/vim-textobj-chainmember')
-g:maxpac.Add('Julian/vim-textobj-variable-segment')
-g:maxpac.Add('deris/vim-textobj-enclosedsyntax')
-g:maxpac.Add('kana/vim-textobj-datetime')
-g:maxpac.Add('kana/vim-textobj-entire')
-g:maxpac.Add('kana/vim-textobj-indent')
-g:maxpac.Add('kana/vim-textobj-line')
-g:maxpac.Add('kana/vim-textobj-syntax')
-g:maxpac.Add('mattn/vim-textobj-url')
-g:maxpac.Add('osyo-manga/vim-textobj-blockwise')
-g:maxpac.Add('saaguero/vim-textobj-pastedtext')
-g:maxpac.Add('sgur/vim-textobj-parameter')
-g:maxpac.Add('thinca/vim-textobj-comment')
+maxpac.Add('kana/vim-textobj-user')
+maxpac.Add('D4KU/vim-textobj-chainmember')
+maxpac.Add('Julian/vim-textobj-variable-segment')
+maxpac.Add('deris/vim-textobj-enclosedsyntax')
+maxpac.Add('kana/vim-textobj-datetime')
+maxpac.Add('kana/vim-textobj-entire')
+maxpac.Add('kana/vim-textobj-indent')
+maxpac.Add('kana/vim-textobj-line')
+maxpac.Add('kana/vim-textobj-syntax')
+maxpac.Add('mattn/vim-textobj-url')
+maxpac.Add('osyo-manga/vim-textobj-blockwise')
+maxpac.Add('saaguero/vim-textobj-pastedtext')
+maxpac.Add('sgur/vim-textobj-parameter')
+maxpac.Add('thinca/vim-textobj-comment')
 
-g:maxpac.Add('machakann/vim-textobj-delimited')
-g:maxpac.Add('machakann/vim-textobj-functioncall')
+maxpac.Add('machakann/vim-textobj-delimited')
+maxpac.Add('machakann/vim-textobj-functioncall')
 
 # Filetype plugins.
-g:maxpac.Add('Einenlum/yaml-revealer')
-g:maxpac.Add('LumaKernel/coqpit.vim')
-g:maxpac.Add('Vftdan/vim-syntax-libconfig')
-g:maxpac.Add('a5ob7r/shellcheckrc.vim')
-g:maxpac.Add('a5ob7r/tig.vim')
-g:maxpac.Add('aliou/bats.vim')
-g:maxpac.Add('chrisbra/csv.vim')
-g:maxpac.Add('fladson/vim-kitty')
-g:maxpac.Add('kchmck/vim-coffee-script')
-g:maxpac.Add('keith/rspec.vim')
-g:maxpac.Add('kyoh86/vim-jsonl')
-g:maxpac.Add('neovimhaskell/haskell-vim')
-g:maxpac.Add('pocke/rbs.vim')
-g:maxpac.Add('preservim/vim-markdown')
-g:maxpac.Add('yasuhiroki/github-actions-yaml.vim')
-g:maxpac.Add('zorab47/procfile.vim')
+maxpac.Add('Einenlum/yaml-revealer')
+maxpac.Add('LumaKernel/coqpit.vim')
+maxpac.Add('Vftdan/vim-syntax-libconfig')
+maxpac.Add('a5ob7r/shellcheckrc.vim')
+maxpac.Add('a5ob7r/tig.vim')
+maxpac.Add('aliou/bats.vim')
+maxpac.Add('chrisbra/csv.vim')
+maxpac.Add('fladson/vim-kitty')
+maxpac.Add('kchmck/vim-coffee-script')
+maxpac.Add('keith/rspec.vim')
+maxpac.Add('kyoh86/vim-jsonl')
+maxpac.Add('neovimhaskell/haskell-vim')
+maxpac.Add('pocke/rbs.vim')
+maxpac.Add('preservim/vim-markdown')
+maxpac.Add('yasuhiroki/github-actions-yaml.vim')
+maxpac.Add('zorab47/procfile.vim')
 
 # Colorschemes.
-g:maxpac.Add('KeitaNakamura/neodark.vim')
-g:maxpac.Add('catppuccin/vim', { name: 'catppuccin' })
-g:maxpac.Add('dracula/vim', { name: 'dracula' })
-g:maxpac.Add('yasukotelin/shirotelin')
+maxpac.Add('KeitaNakamura/neodark.vim')
+maxpac.Add('catppuccin/vim', { name: 'catppuccin' })
+maxpac.Add('dracula/vim', { name: 'dracula' })
+maxpac.Add('yasukotelin/shirotelin')
 
 # Misc.
-g:maxpac.Add('Eliot00/git-lens.vim')
-g:maxpac.Add('a5ob7r/chmod.vim')
-g:maxpac.Add('a5ob7r/linefeed.vim')
-g:maxpac.Add('a5ob7r/rspec-daemon.vim')
-g:maxpac.Add('airblade/vim-gitgutter')
-g:maxpac.Add('andymass/vim-matchup')
-g:maxpac.Add('azabiong/vim-highlighter')
-g:maxpac.Add('bfrg/vim-qf-history')
-g:maxpac.Add('bfrg/vim-qf-preview')
-g:maxpac.Add('bronson/vim-trailing-whitespace')
-g:maxpac.Add('dstein64/vim-startuptime')
-g:maxpac.Add('girishji/vimbits') # For ":h vimtips".
-g:maxpac.Add('gpanders/vim-oldfiles')
-g:maxpac.Add('haya14busa/vim-asterisk')
-g:maxpac.Add('hrsh7th/vim-vsnip')
-g:maxpac.Add('hrsh7th/vim-vsnip-integ')
-g:maxpac.Add('itchyny/screensaver.vim')
-g:maxpac.Add('junegunn/goyo.vim')
-g:maxpac.Add('junegunn/vader.vim')
-g:maxpac.Add('junegunn/vim-easy-align')
-g:maxpac.Add('k-takata/minpac')
-g:maxpac.Add('kannokanno/previm')
-g:maxpac.Add('kyoh86/vim-ripgrep')
-g:maxpac.Add('lambdalisue/vital-Whisky')
-g:maxpac.Add('liuchengxu/vista.vim')
-g:maxpac.Add('machakann/vim-sandwich')
-g:maxpac.Add('machakann/vim-swap')
-g:maxpac.Add('maximbaz/lightline-ale')
-g:maxpac.Add('monaqa/modesearch.vim')
-g:maxpac.Add('psliwka/vim-dirtytalk', { do: VimDirtytalkPostUpdate })
-g:maxpac.Add('rafamadriz/friendly-snippets')
-g:maxpac.Add('rhysd/git-messenger.vim')
-g:maxpac.Add('thinca/vim-localrc')
-g:maxpac.Add('thinca/vim-prettyprint')
-g:maxpac.Add('thinca/vim-themis')
-g:maxpac.Add('tpope/vim-endwise')
-g:maxpac.Add('tyru/eskk.vim')
-g:maxpac.Add('tyru/open-browser.vim')
-g:maxpac.Add('vim-jp/vital.vim')
-g:maxpac.Add('w0rp/ale')
-g:maxpac.Add('yegappan/lsp')
+maxpac.Add('Eliot00/git-lens.vim')
+maxpac.Add('a5ob7r/chmod.vim')
+maxpac.Add('a5ob7r/linefeed.vim')
+maxpac.Add('a5ob7r/rspec-daemon.vim')
+maxpac.Add('airblade/vim-gitgutter')
+maxpac.Add('andymass/vim-matchup')
+maxpac.Add('azabiong/vim-highlighter')
+maxpac.Add('bfrg/vim-qf-history')
+maxpac.Add('bfrg/vim-qf-preview')
+maxpac.Add('bronson/vim-trailing-whitespace')
+maxpac.Add('dstein64/vim-startuptime')
+maxpac.Add('girishji/vimbits') # For ":h vimtips".
+maxpac.Add('gpanders/vim-oldfiles')
+maxpac.Add('haya14busa/vim-asterisk')
+maxpac.Add('hrsh7th/vim-vsnip')
+maxpac.Add('hrsh7th/vim-vsnip-integ')
+maxpac.Add('itchyny/screensaver.vim')
+maxpac.Add('junegunn/goyo.vim')
+maxpac.Add('junegunn/vader.vim')
+maxpac.Add('junegunn/vim-easy-align')
+maxpac.Add('k-takata/minpac')
+maxpac.Add('kannokanno/previm')
+maxpac.Add('kyoh86/vim-ripgrep')
+maxpac.Add('lambdalisue/vital-Whisky')
+maxpac.Add('liuchengxu/vista.vim')
+maxpac.Add('machakann/vim-sandwich')
+maxpac.Add('machakann/vim-swap')
+maxpac.Add('maximbaz/lightline-ale')
+maxpac.Add('monaqa/modesearch.vim')
+maxpac.Add('psliwka/vim-dirtytalk', { do: VimDirtytalkPostUpdate })
+maxpac.Add('rafamadriz/friendly-snippets')
+maxpac.Add('rhysd/git-messenger.vim')
+maxpac.Add('thinca/vim-localrc')
+maxpac.Add('thinca/vim-prettyprint')
+maxpac.Add('thinca/vim-themis')
+maxpac.Add('tpope/vim-endwise')
+maxpac.Add('tyru/eskk.vim')
+maxpac.Add('tyru/open-browser.vim')
+maxpac.Add('vim-jp/vital.vim')
+maxpac.Add('w0rp/ale')
+maxpac.Add('yegappan/lsp')
 
 # =============================================================================
 
 # denops.vim
 
 if executable('deno')
-  g:maxpac.Add('vim-denops/denops.vim')
+  maxpac.Add('vim-denops/denops.vim')
 
-  g:maxpac.Add('lambdalisue/gin.vim')
-  g:maxpac.Add('Shougo/ddu.vim')
+  maxpac.Add('lambdalisue/gin.vim')
+  maxpac.Add('Shougo/ddu.vim')
 
-  g:maxpac.Add('Shougo/ddu-ui-ff')
+  maxpac.Add('Shougo/ddu-ui-ff')
 
-  g:maxpac.Add('4513ECHO/ddu-source-ghq')
-  g:maxpac.Add('Shougo/ddu-source-file_rec')
-  g:maxpac.Add('shun/ddu-source-buffer')
+  maxpac.Add('4513ECHO/ddu-source-ghq')
+  maxpac.Add('Shougo/ddu-source-file_rec')
+  maxpac.Add('shun/ddu-source-buffer')
 
-  g:maxpac.Add('matsui54/ddu-filter-fzy')
+  maxpac.Add('matsui54/ddu-filter-fzy')
 
-  g:maxpac.Add('Shougo/ddu-kind-file')
+  maxpac.Add('Shougo/ddu-kind-file')
 endif
 # }}}
 # }}}
