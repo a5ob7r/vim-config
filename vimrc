@@ -1019,6 +1019,7 @@ set keywordprg=:Man
 set laststatus=2
 set list listchars+=tab:>\ \|,extends:>,precedes:<
 set nrformats-=octal nrformats+=unsigned
+set omnifunc=syntaxcomplete#Complete
 set pastetoggle=<F12>
 set pumheight=16
 set scrolloff=5
