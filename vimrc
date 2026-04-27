@@ -1003,6 +1003,7 @@ set autoindent smartindent
 set autoread
 set breakindent breakindentopt=shift:2,sbr
 set cdhome
+set chistory=100
 set colorcolumn=81,101,121
 set completeopt=menuone,longest,popup,fuzzy
 set cursorline
