@@ -625,7 +625,7 @@ def Terminal()
   })
 enddef
 
-# Define a simple command to open a specific file using ":DefineOpener".
+# Define a simple command to open a specific file using ":OpenHelper".
 export def DefineOpener(name: string, filename: string)
   const lines =<< trim eval END
     command! -bang -bar {name} {{
