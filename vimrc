@@ -1423,7 +1423,7 @@ const capture_locker = WithLocker.new()
 # Capture Ex command outputs and write it to a new scratch buffer.
 command! -bang -nargs=* -complete=command Capture {
   capture_locker.Call(
-    () => Capture.new({ mods: <q-mods>, raw: <bang>false }).Call(<q-args> ?? @:),
+    () => Capture.new({ mods: <q-mods>, raw: <bang>false }).Call($'legacy {<q-args> ?? @:}'),
     []
   )
 }
