@@ -2846,6 +2846,28 @@ def VimDirtytalkPostUpdate(_hooktype: string, _name: string)
     execute 'silent DirtytalkUpdate'
   endif
 enddef
+
+# The original "spellfile#WritableSpellDir()" always returns ~/.vim/spell if unix.
+#
+# TODO: Send a patch to upstream.
+def Overrided_spellfile_WritableSpellDir(): string
+  return Pathname.new($MYVIMDIR).Join('spell').Value()
+enddef
+
+def Override_spellfile_WritableSpellDir()
+  if !exists('*spellfile#WritableSpellDir()')
+    runtime autoload/spellfile.vim
+  endif
+
+  OverrideFunction.new(
+    spellfile#WritableSpellDir,
+    Overrided_spellfile_WritableSpellDir
+  ).Call()
+enddef
+
+if has('unix')
+  Override_spellfile_WritableSpellDir()
+endif
 # }}}
 
 # bfrg/vim-qf-history {{{
