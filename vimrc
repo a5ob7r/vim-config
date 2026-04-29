@@ -689,8 +689,6 @@ def ReregisterFiletypeRedetection4DotLocal(enable: bool)
   augroup END
 enddef
 
-# RegisterMassAssignment.new(['"', '*', '+']).Call(value)
-
 def Assign2ClipboardRegisters(value: string)
   @" = value
   @* = value
