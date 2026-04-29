@@ -654,7 +654,7 @@ def FormatTabPanel(actual_curtabpage: number): string
     return $"{marker} {name}"
   })
 
-  return $"({g:actual_curtabpage})\n{buffers->join("\n")}"
+  return $"({actual_curtabpage})\n{buffers->join("\n")}"
 enddef
 
 def FiletypeRedetection4DotLocal(enable: bool)
