@@ -1039,6 +1039,8 @@ enddef
 # }}}
 
 # Options {{{
+set autocomplete
+set autocompletedelay=150
 set autoindent smartindent
 set autoread
 set breakindent breakindentopt=shift:2,sbr
@@ -3148,6 +3150,39 @@ def VimQfHistory()
       lwindow
     }
   augroup END
+enddef
+# }}}
+
+# tyru/eskk.vim {{{
+augroup vimrc:hooks:eskk.vim
+  autocmd!
+  autocmd SourcePre */eskk.vim/*.vim ++once {
+    EskkVim()
+  }
+augroup END
+
+def EskkVim()
+  augroup vimrc:eskk:autocomplete:switch:disable
+    autocmd!
+    autocmd User eskk-enable-pre {
+      if &l:autocomplete
+        NoAutocompleteTemporary(bufnr())
+      endif
+    }
+  augroup END
+enddef
+
+def NoAutocompleteTemporary(bufnr: number)
+  setlocal noautocomplete
+
+  autocmd_add([{
+    cmd: $'if bufnr() == {bufnr} | setlocal autocomplete | endif',
+    event: 'User',
+    group: 'vimrc:eskk:autocomplete:switch:reenable',
+    once: true,
+    pattern: 'eskk-disable-post',
+    replace: true,
+  }])
 enddef
 # }}}
 # }}}
