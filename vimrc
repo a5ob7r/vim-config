@@ -1351,10 +1351,7 @@ command! -bar -bang ToggleNetrw {
 # :silent 1,10DeleteBuffers! --any
 const DeleteBuffersComplete = (..._) => DeleteBuffers.Complete()
 command! -bang -bar -nargs=* -range=% -addr=loaded_buffers -complete=custom,DeleteBuffersComplete DeleteBuffers {
-  call(
-    DeleteBuffers.new({ bang: <q-bang>, mods: <q-mods>, line1: <line1>, line2: <line2> }).Call,
-    [<f-args>]
-  )
+  DeleteBuffers.new({ bang: <q-bang>, mods: <q-mods>, line1: <line1>, line2: <line2> }).Call(<f-args>)
 }
 
 # ":cd" to a VCS repository managed by "ghq" using only the sub-path.
