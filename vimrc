@@ -2849,19 +2849,11 @@ def Overrided_spellfile_WritableSpellDir(): string
   return Pathname.new($MYVIMDIR).Join('spell').Value()
 enddef
 
-def Override_spellfile_WritableSpellDir()
-  if !exists('*spellfile#WritableSpellDir()')
-    runtime autoload/spellfile.vim
-  endif
-
+if has('unix')
   OverrideFunction.new(
     spellfile#WritableSpellDir,
     Overrided_spellfile_WritableSpellDir
   ).Call()
-enddef
-
-if has('unix')
-  Override_spellfile_WritableSpellDir()
 endif
 # }}}
 
