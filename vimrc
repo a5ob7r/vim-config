@@ -3185,6 +3185,66 @@ def NoAutocompleteTemporary(bufnr: number)
   }])
 enddef
 # }}}
+
+# vim-scripts/CursorLineCurrentWindow {{{
+augroup vimrc:hooks:CursorLineCurrentWindow
+  autocmd!
+  autocmd SourcePre */CursorLineCurrentWindow/*.vim ++once {
+    g:loaded_CursorLineCurrentWindow = 1
+
+    CursorLineCurrentWindow()
+  }
+augroup END
+
+def CursorLineCurrentWindow()
+  command! CursorLineCurrentWindow {
+    if !IsCursorLineCurrentWindowEnabled()
+      unlet! g:loaded_CursorLineCurrentWindow
+
+      runtime plugin/CursorLineCurrentWindow.vim
+
+      RunCursorLineCurrentWindowAutocmdOnEachWindows()
+    endif
+  }
+
+  command! NoCursorLineCurrentWindow {
+    if IsCursorLineCurrentWindowEnabled()
+      unlet! g:loaded_CursorLineCurrentWindow
+
+      augroup CursorLine
+        autocmd!
+      augroup END
+
+      ResetEachWindowCursorLineOption()
+    endif
+  }
+enddef
+
+def IsCursorLineCurrentWindowEnabled(): bool
+  augroup CursorLine
+  augroup END
+
+  return !autocmd_get({ group: 'CursorLine' })->empty()
+enddef
+
+def AllWindowIDs(): list<number>
+  return getwininfo()->map((_, v) => v.winid)
+enddef
+
+def ResetEachWindowCursorLineOption()
+  AllWindowIDs()->foreach((_, wid) => {
+    win_execute(wid, $'setlocal cursorline<')
+  })
+enddef
+
+def RunCursorLineCurrentWindowAutocmdOnEachWindows()
+  AllWindowIDs()->foreach((_, wid) => {
+    win_execute(wid, 'doautocmd <nomodeline> CursorLine WinLeave')
+  })
+
+  doautocmd <nomodeline> CursorLine WinEnter
+enddef
+# }}}
 # }}}
 
 # Plugin registrations. {{{
@@ -3284,6 +3344,7 @@ maxpac.Add('tpope/vim-endwise')
 maxpac.Add('tyru/eskk.vim')
 maxpac.Add('tyru/open-browser.vim')
 maxpac.Add('vim-jp/vital.vim')
+maxpac.Add('vim-scripts/CursorLineCurrentWindow')
 maxpac.Add('w0rp/ale')
 maxpac.Add('yegappan/lsp')
 
