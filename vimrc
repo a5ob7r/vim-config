@@ -1983,7 +1983,7 @@ def VimRipgrep()
     }
   augroup END
 
-  ripgrep#observe#add_observer(g:ripgrep#event#other, 'RipgrepContextObserver')
+  ripgrep#observe#add_observer(g:ripgrep#event#other, RipgrepContextObserver)
 
   command! -bang -count -nargs=+ -complete=customlist,RgComplete Rg {
     const arguments = RgArgsParser.new(<q-args>, { filename_expand: true }).Call()
@@ -2000,7 +2000,7 @@ def VimRipgrep()
   operator#user#define('ripgrep-g', 'Op_ripgrep_g')
 enddef
 
-def! g:RipgrepContextObserver(message: dict<any>)
+def RipgrepContextObserver(message: dict<any>)
   if message['type'] !=# 'context'
     return
   endif
