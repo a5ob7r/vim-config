@@ -1975,8 +1975,7 @@ def VimRipgrep()
 
   command! -bang -count -nargs=+ -complete=customlist,RgComplete Rg {
     const arguments = RgArgsParser.new(<q-args>, { filename_expand: true }).Call()
-      ->copy()
-      ->map((_, arg) => arg.Value())
+      ->mapnew((_, arg) => arg.Value())
 
     Ripgrep.new({ case: <bang>true, count: <count>, escape: <bang>true }).Call(arguments)
   }
@@ -2026,7 +2025,7 @@ class Ripgrep
 
     if this.o_escape
       # Escape the strings for "string" type of "{command}" of "job_start()".
-      arguments += copy(args)->map(( _, val) => escape(val, ' "\'))
+      arguments += mapnew(args, ( _, val) => escape(val, ' "\'))
     else
       arguments += args
     endif
@@ -2283,7 +2282,7 @@ def OperatorRipgrep(motion_wiseness: string, opts = {})
   endif
 
   if match(buflines, '[ "'']') >= 0
-    add(words, $"'{copy(buflines)->map((_, val) => substitute(val, "'", "''", 'g'))->join("\n")}'")
+    add(words, $"'{mapnew(buflines, (_, val) => substitute(val, "'", "''", 'g'))->join("\n")}'")
   else
     add(words, join(buflines, "\n"))
   endif
