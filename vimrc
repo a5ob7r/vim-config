@@ -601,6 +601,29 @@ export class Script
     return function($'<SNR>{this.info.sid}_{function_name}')
   enddef
 endclass
+
+class Gcd
+  const bang: string
+  const mods: string
+  const cder: string
+
+  static def Complete(..._): string
+    return system('ghq list')
+  enddef
+
+  def new(opts = {})
+    this.bang = get(opts, 'bang', '')
+    this.mods = get(opts, 'mods', '')
+    this.cder = get(opts, 'cder', 'cd')
+  enddef
+
+  def Call(query: string)
+    # Use "systemlist()" to strip a trailing "^@" instead of "system()".
+    const [directory] = systemlist($'ghq list --exact --full-path {shellescape(query)}')
+
+    execute this.mods $'{this.cder}{this.bang}' fnameescape(directory)
+  enddef
+endclass
 # }}}
 
 # Functions {{{
@@ -758,17 +781,6 @@ def ToggleNetrw(opts = {})
   else
     execute 'Explore'
   endif
-enddef
-
-def Gcd(query: string, bang: string, mods: string, cder = 'cd')
-  # Use "systemlist()" to strip a trailing "^@" instead of "system()".
-  const [directory] = systemlist($'ghq list --exact --full-path {shellescape(query)}')
-
-  execute mods $'{cder}{bang}' fnameescape(directory)
-enddef
-
-def GcdComplete(_ArgLead: string, _CmdLine: string, _CursorPos: number): string
-  return system('ghq list')
 enddef
 
 def DictionarizedLsLine(line: string): dict<any>
@@ -1359,18 +1371,19 @@ command! -bang -bar -nargs=* -range=% -addr=loaded_buffers -complete=custom,Dele
 # ":cd" to a VCS repository managed by "ghq" using only the sub-path.
 #
 # ":Gcd vim-config"
+const GcdComplete = (..._) => Gcd.Complete()
 command! -bang -nargs=1 -complete=custom,GcdComplete Gcd {
-  Gcd(<q-args>, <q-bang>, <q-mods>)
+  Gcd.new({ bang: <q-bang>, mods: <q-mods> }).Call(<q-args>)
 }
 
 # A ":tcd" version of ":Gcd".
 command! -bang -nargs=1 -complete=custom,GcdComplete Gtcd {
-  Gcd(<q-args>, <q-bang>, <q-mods>, 'tcd')
+  Gcd.new({ bang: <q-bang>, mods: <q-mods>, cder: 'tcd' }).Call(<q-args>)
 }
 
 # A ":lcd" version of ":Gcd".
 command! -bang -nargs=1 -complete=custom,GcdComplete Glcd {
-  Gcd(<q-args>, <q-bang>, <q-mods>, 'lcd')
+  Gcd.new({ bang: <q-bang>, mods: <q-mods>, cder: 'lcd' }).Call(<q-args>)
 }
 
 # "files", "buffers" and "ls", but view the outputs in a quickfix window.
