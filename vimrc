@@ -271,65 +271,53 @@ class Timer
   enddef
 endclass
 
-# TODO: Support ":hi-link"
 class Highlight
-  static def Current(group: string): object<Highlight>
-    const current_highlight = execute($'highlight {group}')
-    const current_attributes = current_highlight
-      ->substitute($'\n\|{group}\s\+xxx\s', '', 'g')
-      ->split()
-      ->reduce((acc, v) => {
-          const [k, attrs] = split(v, '=')
-          acc[k] = attrs
-          return acc
-        }, {})
+  const name: string
+  const attributes: dict<any>
 
-    return Highlight.new(group, current_attributes)
+  def new(this.attributes)
+    this.name = this.attributes.name
   enddef
 
-  const group: string
-  const attributes: dict<string>
-
-  def new(this.group, this.attributes)
+  def newCurrent(this.name)
+    [this.attributes] = hlget(name)
   enddef
 
   def Apply()
-    const args = items(this.attributes)->map((_, v) => join(v, '='))
-
-    if !empty(args)
-      execute $'highlight {this.group} NONE'
-      execute $'highlight {this.group} {join(args)}'
-    endif
+    hlset([
+      { name: this.name, cleared: true },
+      this.attributes
+    ])
   enddef
 endclass
 
 class FlashingCursorLineState
   const FLASH_HIGHLIGHTS = [
-    Highlight.new('CursorLine', { ctermbg:  '16', guibg: '#000000' }),
-    Highlight.new('CursorLine', { ctermbg: '232', guibg: '#080808' }),
-    Highlight.new('CursorLine', { ctermbg: '233', guibg: '#121212' }),
-    Highlight.new('CursorLine', { ctermbg: '234', guibg: '#1c1c1c' }),
-    Highlight.new('CursorLine', { ctermbg: '235', guibg: '#262626' }),
-    Highlight.new('CursorLine', { ctermbg: '236', guibg: '#303030' }),
-    Highlight.new('CursorLine', { ctermbg: '237', guibg: '#3a3a3a' }),
-    Highlight.new('CursorLine', { ctermbg: '238', guibg: '#444444' }),
-    Highlight.new('CursorLine', { ctermbg: '239', guibg: '#4e4e4e' }),
-    Highlight.new('CursorLine', { ctermbg: '240', guibg: '#585858' }),
-    Highlight.new('CursorLine', { ctermbg: '241', guibg: '#626262' }),
-    Highlight.new('CursorLine', { ctermbg: '242', guibg: '#6c6c6c' }),
-    Highlight.new('CursorLine', { ctermbg: '243', guibg: '#767676' }),
-    Highlight.new('CursorLine', { ctermbg: '244', guibg: '#808080' }),
-    Highlight.new('CursorLine', { ctermbg: '245', guibg: '#8a8a8a' }),
-    Highlight.new('CursorLine', { ctermbg: '246', guibg: '#949494' }),
-    Highlight.new('CursorLine', { ctermbg: '247', guibg: '#9e9e9e' }),
-    Highlight.new('CursorLine', { ctermbg: '248', guibg: '#a8a8a8' }),
-    Highlight.new('CursorLine', { ctermbg: '249', guibg: '#b2b2b2' }),
-    Highlight.new('CursorLine', { ctermbg: '250', guibg: '#bcbcbc' }),
-    Highlight.new('CursorLine', { ctermbg: '251', guibg: '#c6c6c6' }),
-    Highlight.new('CursorLine', { ctermbg: '252', guibg: '#d0d0d0' }),
-    Highlight.new('CursorLine', { ctermbg: '253', guibg: '#dadada' }),
-    Highlight.new('CursorLine', { ctermbg: '254', guibg: '#e4e4e4' }),
-    Highlight.new('CursorLine', { ctermbg: '231', guibg: '#ffffff' }),
+    Highlight.new({ name: 'CursorLine', ctermbg:  '16', guibg: '#000000' }),
+    Highlight.new({ name: 'CursorLine', ctermbg: '232', guibg: '#080808' }),
+    Highlight.new({ name: 'CursorLine', ctermbg: '233', guibg: '#121212' }),
+    Highlight.new({ name: 'CursorLine', ctermbg: '234', guibg: '#1c1c1c' }),
+    Highlight.new({ name: 'CursorLine', ctermbg: '235', guibg: '#262626' }),
+    Highlight.new({ name: 'CursorLine', ctermbg: '236', guibg: '#303030' }),
+    Highlight.new({ name: 'CursorLine', ctermbg: '237', guibg: '#3a3a3a' }),
+    Highlight.new({ name: 'CursorLine', ctermbg: '238', guibg: '#444444' }),
+    Highlight.new({ name: 'CursorLine', ctermbg: '239', guibg: '#4e4e4e' }),
+    Highlight.new({ name: 'CursorLine', ctermbg: '240', guibg: '#585858' }),
+    Highlight.new({ name: 'CursorLine', ctermbg: '241', guibg: '#626262' }),
+    Highlight.new({ name: 'CursorLine', ctermbg: '242', guibg: '#6c6c6c' }),
+    Highlight.new({ name: 'CursorLine', ctermbg: '243', guibg: '#767676' }),
+    Highlight.new({ name: 'CursorLine', ctermbg: '244', guibg: '#808080' }),
+    Highlight.new({ name: 'CursorLine', ctermbg: '245', guibg: '#8a8a8a' }),
+    Highlight.new({ name: 'CursorLine', ctermbg: '246', guibg: '#949494' }),
+    Highlight.new({ name: 'CursorLine', ctermbg: '247', guibg: '#9e9e9e' }),
+    Highlight.new({ name: 'CursorLine', ctermbg: '248', guibg: '#a8a8a8' }),
+    Highlight.new({ name: 'CursorLine', ctermbg: '249', guibg: '#b2b2b2' }),
+    Highlight.new({ name: 'CursorLine', ctermbg: '250', guibg: '#bcbcbc' }),
+    Highlight.new({ name: 'CursorLine', ctermbg: '251', guibg: '#c6c6c6' }),
+    Highlight.new({ name: 'CursorLine', ctermbg: '252', guibg: '#d0d0d0' }),
+    Highlight.new({ name: 'CursorLine', ctermbg: '253', guibg: '#dadada' }),
+    Highlight.new({ name: 'CursorLine', ctermbg: '254', guibg: '#e4e4e4' }),
+    Highlight.new({ name: 'CursorLine', ctermbg: '231', guibg: '#ffffff' }),
   ]
 
   var idx = 0
@@ -374,7 +362,7 @@ class CursorLine
 
   def Flash()
     if this.timer.IsStopped()
-      this.remembered_highlight = Highlight.Current('CursorLine')
+      this.remembered_highlight = Highlight.newCurrent('CursorLine')
       this.timer.Start()
     endif
   enddef
