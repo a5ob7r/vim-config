@@ -2097,7 +2097,7 @@ class RgFilenameArg extends RgArg
 endclass
 
 def StripLeadingWhitespaces(s: string): string
-  return substitute(s, '^\s\+', '', '')
+  return trim(s, '', 1)
 enddef
 
 class RgCmdLineParser
