@@ -1978,7 +1978,7 @@ def VimRipgrep()
       ->copy()
       ->map((_, arg) => arg.Value())
 
-    Ripgrep(['-C<count>'] + arguments, { case: <bang>1, escape: <bang>1 })
+    Ripgrep.new({ case: <bang>true, count: <count>, escape: <bang>true }).Call(arguments)
   }
 
   noremap <Leader>f <Plug>(operator-ripgrep-g)
@@ -2004,25 +2004,36 @@ def RipgrepContextObserver(message: dict<any>)
   setqflist([item], 'a')
 enddef
 
-def Ripgrep(args: list<string>, opts = {})
-  const o_case = get(opts, 'case')
-  const o_escape = get(opts, 'escape')
+class Ripgrep
+  const o_case: bool
+  const o_count: number
+  const o_escape: bool
 
-  var arguments = []
+  def new(opts = {})
+    this.o_case = get(opts, 'case')
+    this.o_count = get(opts, 'count', 0)
+    this.o_escape = get(opts, 'escape')
+  enddef
 
-  if o_case
-    arguments += [&ignorecase ? &smartcase ? '--smart-case' : '--ignore-case' : '--case-sensitive']
-  endif
+  def Call(args: list<string>)
+    var arguments = []
 
-  if o_escape
-    # Escape the strings for "string" type of "{command}" of "job_start()".
-    arguments += copy(args)->map(( _, val) => escape(val, ' "\'))
-  else
-    arguments += args
-  endif
+    arguments += [$'-C{this.o_count}']
 
-  ripgrep#search(join(arguments))
-enddef
+    if this.o_case
+      arguments += [&ignorecase ? &smartcase ? '--smart-case' : '--ignore-case' : '--case-sensitive']
+    endif
+
+    if this.o_escape
+      # Escape the strings for "string" type of "{command}" of "job_start()".
+      arguments += copy(args)->map(( _, val) => escape(val, ' "\'))
+    else
+      arguments += args
+    endif
+
+    ripgrep#search(join(arguments))
+  enddef
+endclass
 
 def RgComplete(ArgLead: string, CmdLine: string, CursorPos: number): list<string>
   const cmd_line_lead = slice(CmdLine, 0, CursorPos)
