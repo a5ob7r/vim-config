@@ -1512,6 +1512,14 @@ augroup vimrc:binary
     BinaryEditableByXxd(v:option_new ==# '1')
   }
 augroup END
+
+# Some "*/ftdetect/*.vim" call ":augroup {name}" inside them.
+augroup vimrc:ftdetect:restore_filetypedetect_augroup
+  autocmd!
+  autocmd SourcePre */ftdetect/*.vim {
+    augroup filetypedetect
+  }
+augroup END
 # }}}
 
 # Standard plugins {{{
