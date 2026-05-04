@@ -612,6 +612,34 @@ class Gcd
     execute this.mods $'{this.cder}{this.bang}' fnameescape(directory)
   enddef
 endclass
+
+class AutocmdGroup
+  const name: string
+
+  def new(this.name)
+    if this.name =~# '\s'
+      throw $'AutocmdGroup: A group name can not contains any whitespaces. ({string(this.name)})'
+    endif
+  enddef
+
+  def newCurrent()
+    const dummy_autocmd = {
+      cmd: ':',
+      event: 'User',
+      pattern: rand()->string(),
+    }
+
+    autocmd_add([dummy_autocmd])
+    const [autocmd] = autocmd_get(dummy_autocmd)
+    autocmd_delete([dummy_autocmd])
+
+    this.name = autocmd.group
+  enddef
+
+  def Apply()
+    execute $'augroup {this.name}'
+  enddef
+endclass
 # }}}
 
 # Functions {{{
