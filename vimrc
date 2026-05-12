@@ -2538,7 +2538,7 @@ augroup END
 
 def VimTrailingWhitespace()
   g:extra_whitespace_ignored_filetypes = get(g:, 'extra_whitespace_ignored_filetypes', [])
-  g:extra_whitespace_ignored_filetypes += ['screensaver']
+  g:extra_whitespace_ignored_filetypes += ['screensaver', 'ddu-ff']
 enddef
 # }}}
 
