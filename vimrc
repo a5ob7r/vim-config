@@ -12,7 +12,12 @@ vim9script
 # thinca/vim-singleton {{{
 try
   packadd! vim-singleton
-  singleton#enable()
+
+  # Disable "singleton" if Vim is executed as a manpager to view a manual
+  # on the original terminal.
+  if index(v:argv, '+MANPAGER') == -1
+    singleton#enable()
+  endif
 catch
 endtry
 # }}}
