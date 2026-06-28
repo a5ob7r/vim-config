@@ -708,7 +708,7 @@ def FiletypeRedetection4DotLocal(enable: bool)
     if enable
       # Re-detect a filetype for '~/.local.xxx' as '~/.xxx' if filetype detection is unsuccessful.
       autocmd BufRead,BufNewFile ~/.local.[^/]\+ {
-        if empty(&filetype)
+        if !did_filetype()
           const parent = expand('<afile>:h')
           const virtual_filename = expand('<afile>:t:s?\.local??') # A virtual filename to re-detect filetypes.
           execute $'doautocmd filetypedetect BufRead {fnameescape($'{parent}/{virtual_filename}')}'
