@@ -1966,7 +1966,7 @@ def VimMarkdown()
 enddef
 # }}}
 
-# w0rp/ale {{{
+# dense-analysis/ale {{{
 augroup vimrc:hooks:ale
   autocmd!
   autocmd SourcePre */ale/*.vim ++once {
@@ -2563,10 +2563,10 @@ def Vimbits()
 enddef
 # }}}
 
-# lambdalisue/gin.vim {{{
-augroup vimrc:hooks:gin.vim
+# lambdalisue/vim-gin {{{
+augroup vimrc:hooks:vim-gin
   autocmd!
-  autocmd SourcePre */gin.vim/*.vim ++once {
+  autocmd SourcePre */vim-gin/*.vim ++once {
     GinVim()
   }
 augroup END
@@ -2588,7 +2588,7 @@ def GinVim()
   # Add a number argument to limit the number of commits because ":GinLog"
   # is too slow in a large repository.
   #
-  # https://github.com/lambdalisue/gin.vim/issues/116
+  # https://github.com/lambdalisue/vim-gin/issues/116
   nnoremap <Leader>gl <Cmd>GinLog --graph --oneline --all -500<CR>
   nnoremap <Leader>gs <Cmd>GinStatus<CR>
   nnoremap <Leader>gb <Cmd>GinBranch<CR>
@@ -3337,7 +3337,7 @@ maxpac.Add('Einenlum/yaml-revealer')
 maxpac.Add('LumaKernel/coqpit.vim')
 maxpac.Add('Vftdan/vim-syntax-libconfig')
 maxpac.Add('a5ob7r/shellcheckrc.vim')
-maxpac.Add('a5ob7r/tig.vim')
+maxpac.Add('a5ob7r/tigrc.vim')
 maxpac.Add('aliou/bats.vim')
 maxpac.Add('chrisbra/csv.vim')
 maxpac.Add('fladson/vim-kitty')
@@ -3367,6 +3367,7 @@ maxpac.Add('azabiong/vim-highlighter')
 maxpac.Add('bfrg/vim-qf-history')
 maxpac.Add('bfrg/vim-qf-preview')
 maxpac.Add('bronson/vim-trailing-whitespace')
+maxpac.Add('dense-analysis/ale')
 maxpac.Add('dstein64/vim-startuptime')
 maxpac.Add('girishji/vimbits') # For ":h vimtips".
 maxpac.Add('gpanders/vim-oldfiles')
@@ -3397,7 +3398,6 @@ maxpac.Add('tyru/eskk.vim')
 maxpac.Add('tyru/open-browser.vim')
 maxpac.Add('vim-jp/vital.vim')
 maxpac.Add('vim-scripts/CursorLineCurrentWindow')
-maxpac.Add('w0rp/ale')
 maxpac.Add('yegappan/lsp')
 
 # =============================================================================
@@ -3407,7 +3407,7 @@ maxpac.Add('yegappan/lsp')
 if executable('deno')
   maxpac.Add('vim-denops/denops.vim')
 
-  maxpac.Add('lambdalisue/gin.vim')
+  maxpac.Add('lambdalisue/vim-gin')
   maxpac.Add('Shougo/ddu.vim')
 
   maxpac.Add('Shougo/ddu-ui-ff')
