@@ -39,7 +39,6 @@ xln () {
 }
 
 xln "$PWD" "$XDG_CONFIG_HOME/vim"
-xln "$PWD/.ctags.d" ~/.ctags.d
 xln "$PWD/bin/xvim" ~/bin/xvim
 xln "$PWD/bin/vimrc" ~/bin/vimrc
 xln "$PWD/bin/build" ~/bin/vimbuild
