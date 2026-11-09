@@ -1814,7 +1814,7 @@ def LightlineVim()
       left: [
         ['mode', 'binary', 'paste'],
         ['readonly', 'relativepath', 'modified'],
-        ['linter_checking', 'linter_errors', 'linter_warnings', 'linter_infos', 'linter_ok'],
+        ['diagnostics_errors', 'diagnostics_warnings', 'diagnostics_hints', 'diagnostics_infos', 'diagnostics_ok'],
       ]
     },
     component: {
@@ -1824,18 +1824,18 @@ def LightlineVim()
       binary: '&binary'
     },
     component_expand: {
-      linter_checking: 'lightline#ale#checking',
-      linter_errors: 'lightline#ale#errors',
-      linter_warnings: 'lightline#ale#warnings',
-      linter_infos: 'lightline#ale#infos',
-      linter_ok: 'lightline#ale#ok',
+      diagnostics_errors: 'lightline#diagnostics#errors',
+      diagnostics_warnings: 'lightline#diagnostics#warns',
+      diagnostics_hints: 'lightline#diagnostics#hints',
+      diagnostics_infos: 'lightline#diagnostics#infos',
+      diagnostics_ok: 'lightline#diagnostics#ok',
     },
     component_type: {
-      linter_checking: 'left',
-      linter_errors: 'error',
-      linter_warnings: 'warning',
-      linter_infos: 'left',
-      linter_ok: 'left',
+      diagnostics_errors: 'error',
+      diagnostics_warnings: 'warning',
+      diagnostics_hints: 'left',
+      diagnostics_infos: 'left',
+      diagnostics_ok: 'left',
     }
   }
 
@@ -3358,6 +3358,7 @@ maxpac.Add('yasukotelin/shirotelin')
 # Misc.
 maxpac.Add('Eliot00/git-lens.vim')
 maxpac.Add('a5ob7r/chmod.vim')
+maxpac.Add('a5ob7r/lightline-diagnostics')
 maxpac.Add('a5ob7r/linefeed.vim')
 maxpac.Add('a5ob7r/rspec-daemon.vim')
 maxpac.Add('airblade/vim-gitgutter')
@@ -3384,7 +3385,6 @@ maxpac.Add('lambdalisue/vital-Whisky')
 maxpac.Add('liuchengxu/vista.vim')
 maxpac.Add('machakann/vim-sandwich')
 maxpac.Add('machakann/vim-swap')
-maxpac.Add('maximbaz/lightline-ale')
 maxpac.Add('monaqa/modesearch.vim')
 maxpac.Add('psliwka/vim-dirtytalk', { do: VimDirtytalkPostUpdate })
 maxpac.Add('rafamadriz/friendly-snippets')
