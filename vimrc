@@ -2238,9 +2238,11 @@ class RgArgsParser
 
     while !empty(remains)
       if remains[0] ==# '"'
-        [matched, _, end] = matchstrpos(remains, '^""\|^"[^\\"]*"\|^"\%([^\\"]*\\.[^\\"]*\)\{-}"')
+        matched = matchstr(remains, '^""\|^"[^\\"]*"\|^"\%([^\\"]*\\.[^\\"]*\)\{-}"')
+        end = strchars(matched)
 
-        if end == -1
+        # TODO: Should be failed?
+        if end == 0
           add(args, remains)
           remains = ''
         else
@@ -2248,9 +2250,11 @@ class RgArgsParser
           remains = StripLeadingWhitespaces(remains[end :])
         endif
       elseif remains[0] ==# "'"
-        [matched, _, end] = matchstrpos(remains, '^''\%([^'']*\%(''''\)\=\)\+''')
+        matched = matchstr(remains, '^''\%([^'']*\%(''''\)\=\)\+''')
+        end = strchars(matched)
 
-        if end == -1
+        # TODO: Should be failed?
+        if end == 0
           add(args, remains)
           remains = ''
         else
@@ -2258,7 +2262,8 @@ class RgArgsParser
           remains = StripLeadingWhitespaces(remains[end :])
         endif
       else
-        [matched, _, end] = matchstrpos(remains, '\%(\\.\|\S\)\+')
+        matched = matchstr(remains, '\%(\\.\|\S\)\+')
+        end = strchars(matched)
         add(args, matched)
         remains = StripLeadingWhitespaces(remains[end :])
       endif
