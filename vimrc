@@ -2205,7 +2205,7 @@ class RgArgsParser
     var pattern_found = false
 
     var word: string
-    var remains = this._SplitIntoWords(this.args)
+    var remains = Tokenizer.new().Call(this.args)
 
     while !empty(remains)
       [word; remains] = remains
@@ -2227,8 +2227,10 @@ class RgArgsParser
 
     return arguments
   enddef
+endclass
 
-  def _SplitIntoWords(s: string): list<string>
+class Tokenizer
+  def Call(s: string): list<string>
     var remains = StripLeadingWhitespaces(s)
 
     final args = []
