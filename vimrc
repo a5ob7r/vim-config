@@ -2233,7 +2233,7 @@ class Tokenizer
   def Call(s: string): list<string>
     var remains = StripLeadingWhitespaces(s)
 
-    final args = []
+    final tokens = []
 
     var matched: string
     var end: number
@@ -2245,10 +2245,10 @@ class Tokenizer
 
         # TODO: Should be failed?
         if end == 0
-          add(args, remains)
+          add(tokens, remains)
           remains = ''
         else
-          add(args, slice(matched, 1, -1)->substitute('\\\(.\)', '\1', 'g'))
+          add(tokens, slice(matched, 1, -1)->substitute('\\\(.\)', '\1', 'g'))
           remains = StripLeadingWhitespaces(remains[end :])
         endif
       elseif remains[0] ==# "'"
@@ -2257,21 +2257,21 @@ class Tokenizer
 
         # TODO: Should be failed?
         if end == 0
-          add(args, remains)
+          add(tokens, remains)
           remains = ''
         else
-          add(args, slice(matched, 1, -1)->substitute("''", "'", 'g'))
+          add(tokens, slice(matched, 1, -1)->substitute("''", "'", 'g'))
           remains = StripLeadingWhitespaces(remains[end :])
         endif
       else
         matched = matchstr(remains, '\%(\\.\|\S\)\+')
         end = strchars(matched)
-        add(args, matched)
+        add(tokens, matched)
         remains = StripLeadingWhitespaces(remains[end :])
       endif
     endwhile
 
-    return args
+    return tokens
   enddef
 endclass
 
