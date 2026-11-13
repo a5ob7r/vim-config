@@ -3079,6 +3079,15 @@ def AddLspServers()
     })
   endif
 
+  if executable('zizmor')
+    add(servers, {
+      name: 'zizmor',
+      filetype: ['yaml'],
+      path: 'zizmor',
+      args: ['--lsp'],
+    })
+  endif
+
   g:LspAddServer(servers)
 enddef
 # }}}
