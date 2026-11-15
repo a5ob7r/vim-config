@@ -645,6 +645,64 @@ class AutocmdGroup
     execute $'augroup {this.name}'
   enddef
 endclass
+
+class Directory
+  const path: string
+
+  def new(path: string)
+    if !isabsolutepath(path)
+      throw 'Directory.new(): ''path'' must be an absolute path.'
+    endif
+
+    this.path = simplify(path)
+  enddef
+
+  def IsHome(): bool
+    return simplify($'{this.path}/') ==# simplify($'{$HOME}/')
+  enddef
+
+  def IsInsideHome(): bool
+    return IsStrStartWith(this.path, $HOME)
+  enddef
+endclass
+
+class Find
+  var is_cached = false
+  var cache: list<string>
+
+  def Call(query: string): list<string>
+    if !this.IsCached()
+      this.DoCache()
+    endif
+
+    return empty(query) ? this.cache : matchfuzzy(this.cache, query)
+  enddef
+
+  def IsCached(): bool
+    return this.is_cached
+  enddef
+
+  def ClearCache()
+    this.is_cached = false
+  enddef
+
+  def DoCache()
+    this.is_cached = true
+    this.cache = this._GetCompletion('')
+  enddef
+
+  def _GetCompletion(_query: string): list<string>
+    if executable('fd')
+      return systemlist('fd')
+    elseif executable('rg')
+      return systemlist('rg --files')
+    elseif executable('git')
+      return systemlist('git ls-files')
+    else
+      return expand('**', 1, 1)
+    endif
+  enddef
+endclass
 # }}}
 
 # Functions {{{
@@ -1069,6 +1127,26 @@ def FlashCursorLine(enable: bool)
     endif
   augroup END
 enddef
+
+const find = Find.new()
+
+# Ref: "fuzzy-file-picker".
+def FindFunc(cmdarg: string, _cmdcomplete: bool): list<string>
+  const cwd = Directory.new(getcwd())
+
+  if !cwd.IsInsideHome() || cwd.IsHome()
+    return getcompletion(cmdarg, 'file')
+  endif
+
+  if !find.IsCached()
+    autocmd CmdlineLeave : ++once {
+      find.ClearCache()
+    }
+    find.DoCache()
+  endif
+
+  return find.Call(cmdarg)
+enddef
 # }}}
 
 # Options {{{
@@ -1085,6 +1163,7 @@ set cursorline
 set diffopt+=algorithm:histogram
 set display=lastline
 set fileformats=unix,dos,mac
+set findfunc=FindFunc
 set hidden
 set history=10000
 set hlsearch
