@@ -59,7 +59,7 @@ class Pathname
   enddef
 
   def IsAbsolute(): bool
-    return this.value =~# '^/'
+    return isabsolutepath(this.value)
   enddef
 endclass
 
