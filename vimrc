@@ -2630,7 +2630,7 @@ augroup END
 
 def VimTrailingWhitespace()
   g:extra_whitespace_ignored_filetypes = get(g:, 'extra_whitespace_ignored_filetypes', [])
-  g:extra_whitespace_ignored_filetypes += ['screensaver', 'ddu-ff']
+  g:extra_whitespace_ignored_filetypes += ['screensaver']
 enddef
 # }}}
 
@@ -2990,95 +2990,6 @@ def Patched_list_colors(): list<string>
   else
     return XTERM_256_COLORS
   endif
-enddef
-# }}}
-
-# Shougo/ddu.vim {{{
-augroup vimrc:hooks:ddu.vim
-  autocmd!
-  autocmd User DenopsReady ++once {
-    DduVim()
-  }
-augroup END
-
-def DduVim()
-  ddu#custom#patch_global({
-    kindOptions: {
-      file: {
-        defaultAction: 'open',
-      },
-    },
-    sourceOptions: {
-      _: {
-        matchers: ['matcher_fzy'],
-      },
-    },
-    ui: 'ff',
-    uiParams: {
-      ff: {
-        cursorPos: 1,
-      },
-    },
-  })
-
-  ddu#custom#patch_local('file', {
-    sourceOptions: {
-      file_rec: {
-        defaultAction: 'mopen',
-      },
-    },
-    sources: ['file_rec'],
-  })
-
-  ddu#custom#patch_local('buffer', {
-    sourceOptions: {
-      buffer: {
-        defaultAction: 'mopen',
-      },
-    },
-    sources: ['buffer'],
-  })
-
-  ddu#custom#patch_local('ghq', {
-    actionParams: {
-      execute: {
-        command: 'tcd'
-      },
-    },
-    sourceOptions: {
-      ghq: {
-        defaultAction: 'execute',
-      },
-    },
-    sources: ['ghq'],
-  })
-
-  ddu#custom#action('kind', 'file', 'mopen', (args) => {
-    foreach(args.items, (idx, item) => {
-      const opener = idx == 0 ? 'edit' : 'split'
-
-      execute opener item.action.path
-    })
-
-    return 0
-  })
-
-  nnoremap <C-Space> <ScriptCmd>ddu#start({ name: 'file' })<CR>
-  nnoremap <Leader>b <ScriptCmd>ddu#start({ name: 'buffer' })<CR>
-  nnoremap <Leader>gq <ScriptCmd>ddu#start({ name: 'ghq' })<CR>
-
-  augroup vimrc:ddu
-    autocmd!
-
-    autocmd FileType ddu-ff {
-      nnoremap <buffer> <CR> <ScriptCmd>ddu#ui#do_action('itemAction')<CR>
-      nnoremap <buffer> <C-X> <ScriptCmd>ddu#ui#do_action('itemAction', { name: 'open', params: { command: 'split' } })<CR>
-      nnoremap <buffer> i <ScriptCmd>ddu#ui#do_action('openFilterWindow')<CR>
-      nnoremap <buffer> I <ScriptCmd>ddu#ui#do_action('openFilterWindow')<CR><C-B>
-      nnoremap <buffer> <Space> <ScriptCmd>ddu#ui#do_action('toggleSelectItem')<CR>
-      nnoremap <buffer> q <ScriptCmd>ddu#ui#do_action('quit')<CR>
-    }
-  augroup END
 enddef
 # }}}
 
@@ -3503,17 +3414,6 @@ if executable('deno')
   maxpac.Add('vim-denops/denops.vim')
 
   maxpac.Add('lambdalisue/vim-gin')
-  maxpac.Add('Shougo/ddu.vim')
-
-  maxpac.Add('Shougo/ddu-ui-ff')
-
-  maxpac.Add('4513ECHO/ddu-source-ghq')
-  maxpac.Add('Shougo/ddu-source-file_rec')
-  maxpac.Add('shun/ddu-source-buffer')
-
-  maxpac.Add('matsui54/ddu-filter-fzy')
-
-  maxpac.Add('Shougo/ddu-kind-file')
 endif
 # }}}
 # }}}
