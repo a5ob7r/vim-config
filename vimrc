@@ -1175,6 +1175,7 @@ set list listchars+=tab:>\ \|,extends:>,precedes:<
 set nrformats-=octal nrformats+=unsigned
 set omnifunc=syntaxcomplete#Complete
 set pastetoggle=<F12>
+set pumborder=round
 set pumheight=16
 set scrolloff=5
 set shortmess-=S
