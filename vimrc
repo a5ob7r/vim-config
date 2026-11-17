@@ -1187,7 +1187,7 @@ set tabclose=left
 set tabpanel=%!TabPanel()
 set tabpanelopt=columns:30,vert
 set virtualedit=block
-set wildmode=longest:full,full
+set wildmode=noinsert:lastused,full
 set wildoptions+=pum,fuzzy
 
 if UnderlyingTerminal.new().IsTruecolorable()
@@ -1631,6 +1631,14 @@ augroup vimrc:ftdetect:restore_filetypedetect_augroup
   autocmd!
   autocmd SourcePre */ftdetect/*.vim {
     augroup filetypedetect
+  }
+augroup END
+
+# See "cmdline-autocompletion".
+augroup vimrc:cmdline-autocompletion
+  autocmd!
+  autocmd CmdlineChanged : {
+    wildtrigger()
   }
 augroup END
 # }}}
